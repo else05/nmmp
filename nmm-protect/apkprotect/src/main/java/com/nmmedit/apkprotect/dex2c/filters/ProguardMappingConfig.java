@@ -9,6 +9,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.nmmedit.apkprotect.deobfus.MappingProcessor;
 import com.nmmedit.apkprotect.deobfus.MappingReader;
+import com.nmmedit.apkprotect.dex2c.converter.MyMethodUtil;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -21,12 +22,16 @@ import java.util.Set;
  * 读取proguard的mapping.txt文件,根据它得到class和方法名混淆前后映射关系,然后再执行过滤规则
  */
 
-public class ProguardMappingConfig implements ClassAndMethodFilter, MappingProcessor {
+public class ProguardMappingConfig implements ClassAndMethodFilter, MappingProcessor, MethodConversionReporter {
     private final ClassAndMethodFilter filter;
     private final Map<String, String> newTypeOldTypeMap = Maps.newHashMap();
     private final Map<String, String> oldTypeNewTypeMap = Maps.newHashMap();
-    private final Set<MethodMapping> methodSet = Sets.newHashSet();
+    private final List<MethodMapping> methodMappings = new ArrayList<>();
     private final HashMultimap<MethodReference, MethodReference> newMethodRefMap = HashMultimap.create();
+    private final Map<MethodReference, MethodReference> newMethodResidualRefMap = Maps.newHashMap();
+    private final HashMultimap<MethodReference, MethodReference> convertedInlineMatches = HashMultimap.create();
+    private final Set<MethodReference> convertedInlineSourceMethods = Sets.newHashSet();
+    private final Set<MethodReference> convertedInlineResidualMethods = Sets.newHashSet();
     private final SimpleRules simpleRules;
 
     public ProguardMappingConfig(ClassAndMethodFilter filter,
@@ -36,25 +41,50 @@ public class ProguardMappingConfig implements ClassAndMethodFilter, MappingProce
         this.simpleRules = simpleRules;
         mappingReader.parse(this);
 
-        for (MethodMapping methodMapping : methodSet) {
-            final List<String> args = parseArgs(methodMapping.args);
-            final ImmutableMethodReference oldMethodRef = new ImmutableMethodReference(
-                    javaType2jvm(methodMapping.className),
-                    methodMapping.methodName, args,
-                    javaType2jvm(methodMapping.returnType));
-
-            final List<String> newArgs = getNewArgs(args);
-            final String oldRetType = javaType2jvm(methodMapping.returnType);
-            String newRetType = oldTypeNewTypeMap.get(oldRetType);
-            if (newRetType == null) {
-                newRetType = oldRetType;
+        final Map<MethodGroupKey, List<MethodMapping>> methodGroups = Maps.newLinkedHashMap();
+        for (MethodMapping methodMapping : methodMappings) {
+            if (methodMapping.hasNewLineRange()) {
+                final MethodGroupKey groupKey = new MethodGroupKey(methodMapping);
+                List<MethodMapping> group = methodGroups.get(groupKey);
+                if (group == null) {
+                    group = new ArrayList<>();
+                    methodGroups.put(groupKey, group);
+                }
+                group.add(methodMapping);
+            } else {
+                addMethodMapping(methodMapping, methodMapping);
             }
-            final ImmutableMethodReference newMethodRef = new ImmutableMethodReference(
-                    javaType2jvm(methodMapping.newClassName),
-                    methodMapping.newMethodName,
-                    newArgs,
-                    newRetType);
-            newMethodRefMap.put(newMethodRef, oldMethodRef);
+        }
+        for (List<MethodMapping> group : methodGroups.values()) {
+            final MethodMapping residualMethod = group.get(group.size() - 1);
+            for (MethodMapping originalMethod : group) {
+                addMethodMapping(residualMethod, originalMethod);
+            }
+        }
+    }
+
+    private void addMethodMapping(MethodMapping residualMethod, MethodMapping originalMethod) {
+        final List<String> originalArgs = parseArgs(originalMethod.args);
+        final ImmutableMethodReference oldMethodRef = new ImmutableMethodReference(
+                javaType2jvm(originalMethod.className),
+                originalMethod.methodName,
+                originalArgs,
+                javaType2jvm(originalMethod.returnType));
+
+        final List<String> residualArgs = getNewArgs(parseArgs(residualMethod.args));
+        final String oldRetType = javaType2jvm(residualMethod.returnType);
+        String newRetType = oldTypeNewTypeMap.get(oldRetType);
+        if (newRetType == null) {
+            newRetType = oldRetType;
+        }
+        final ImmutableMethodReference newMethodRef = new ImmutableMethodReference(
+                javaType2jvm(residualMethod.newClassName),
+                residualMethod.newMethodName,
+                residualArgs,
+                newRetType);
+        newMethodRefMap.put(newMethodRef, oldMethodRef);
+        if (residualMethod == originalMethod) {
+            newMethodResidualRefMap.put(newMethodRef, oldMethodRef);
         }
     }
 
@@ -120,6 +150,58 @@ public class ProguardMappingConfig implements ClassAndMethodFilter, MappingProce
         }
 
         return simpleRules != null && simpleRules.matchMethod(method.getName());
+    }
+
+    @Override
+    public void onMethodConverted(Method method) {
+        if (simpleRules == null) {
+            return;
+        }
+        final MethodReference residualOriginalRef = newMethodResidualRefMap.get(method);
+        if (residualOriginalRef == null) {
+            return;
+        }
+        final String oldType = getOriginClassType(method.getDefiningClass());
+        final ImmutableMethodReference residualRef = new ImmutableMethodReference(
+                method.getDefiningClass(),
+                method.getName(),
+                method.getParameterTypes(),
+                method.getReturnType());
+        for (MethodReference originalRef : newMethodRefMap.get(method)) {
+            if (!oldType.equals(originalRef.getDefiningClass())
+                    || residualOriginalRef.equals(originalRef)
+                    || !simpleRules.matchMethod(originalRef.getName())) {
+                continue;
+            }
+            if (convertedInlineMatches.put(residualRef, originalRef)) {
+                convertedInlineSourceMethods.add(originalRef);
+                convertedInlineResidualMethods.add(residualRef);
+                System.out.printf("[nmmp] R8 内联命中: %s => %s%n",
+                        formatMethod(originalRef), formatMethod(residualRef));
+            }
+        }
+    }
+
+    @Override
+    public void printReport() {
+        System.out.printf("[nmmp] R8 inline:     source methods=%d, residual methods=%d%n",
+                getInlineSourceMethodCount(), getInlineResidualMethodCount());
+    }
+
+    int getInlineSourceMethodCount() {
+        return convertedInlineSourceMethods.size();
+    }
+
+    int getInlineResidualMethodCount() {
+        return convertedInlineResidualMethods.size();
+    }
+
+    private static String formatMethod(MethodReference method) {
+        return method.getDefiningClass()
+                + "->"
+                + method.getName()
+                + MyMethodUtil.getMethodSignature(
+                        method.getParameterTypes(), method.getReturnType());
     }
 
     private static String classNameToType(String className) {
@@ -197,28 +279,58 @@ public class ProguardMappingConfig implements ClassAndMethodFilter, MappingProce
                                            String newClassName,
                                            int newFirstLineNumber, int newLastLineNumber,
                                            String newMethodName) {
-        final MethodMapping mapping = new MethodMapping(className, methodName, newClassName, newMethodName, methodArguments, methodReturnType);
-        methodSet.add(mapping);
+        final MethodMapping mapping = new MethodMapping(
+                className,
+                methodName,
+                newClassName,
+                newMethodName,
+                methodArguments,
+                methodReturnType,
+                newFirstLineNumber,
+                newLastLineNumber);
+        methodMappings.add(mapping);
     }
 
-    private static class MethodMapping {
+    private static final class MethodMapping {
         private final String className;
         private final String methodName;
-
         private final String newClassName;
         private final String newMethodName;
         private final String args;
         private final String returnType;
+        private final int newFirstLineNumber;
+        private final int newLastLineNumber;
 
-        public MethodMapping(String className, String methodName,
-                             String newClassName, String newMethodName,
-                             String args, String returnType) {
+        private MethodMapping(String className, String methodName,
+                              String newClassName, String newMethodName,
+                              String args, String returnType,
+                              int newFirstLineNumber, int newLastLineNumber) {
             this.className = className;
             this.methodName = methodName;
             this.newClassName = newClassName;
             this.newMethodName = newMethodName;
             this.args = args;
             this.returnType = returnType;
+            this.newFirstLineNumber = newFirstLineNumber;
+            this.newLastLineNumber = newLastLineNumber;
+        }
+
+        private boolean hasNewLineRange() {
+            return newFirstLineNumber != 0 || newLastLineNumber != 0;
+        }
+    }
+
+    private static final class MethodGroupKey {
+        private final String newClassName;
+        private final String newMethodName;
+        private final int newFirstLineNumber;
+        private final int newLastLineNumber;
+
+        private MethodGroupKey(MethodMapping methodMapping) {
+            this.newClassName = methodMapping.newClassName;
+            this.newMethodName = methodMapping.newMethodName;
+            this.newFirstLineNumber = methodMapping.newFirstLineNumber;
+            this.newLastLineNumber = methodMapping.newLastLineNumber;
         }
 
         @Override
@@ -226,24 +338,20 @@ public class ProguardMappingConfig implements ClassAndMethodFilter, MappingProce
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
 
-            MethodMapping that = (MethodMapping) o;
+            MethodGroupKey that = (MethodGroupKey) o;
 
-            if (!className.equals(that.className)) return false;
-            if (!methodName.equals(that.methodName)) return false;
+            if (newFirstLineNumber != that.newFirstLineNumber) return false;
+            if (newLastLineNumber != that.newLastLineNumber) return false;
             if (!newClassName.equals(that.newClassName)) return false;
-            if (!newMethodName.equals(that.newMethodName)) return false;
-            if (!args.equals(that.args)) return false;
-            return returnType.equals(that.returnType);
+            return newMethodName.equals(that.newMethodName);
         }
 
         @Override
         public int hashCode() {
-            int result = className.hashCode();
-            result = 31 * result + methodName.hashCode();
-            result = 31 * result + newClassName.hashCode();
+            int result = newClassName.hashCode();
             result = 31 * result + newMethodName.hashCode();
-            result = 31 * result + args.hashCode();
-            result = 31 * result + returnType.hashCode();
+            result = 31 * result + newFirstLineNumber;
+            result = 31 * result + newLastLineNumber;
             return result;
         }
     }

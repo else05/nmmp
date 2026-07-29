@@ -20,6 +20,7 @@ import com.nmmedit.apkprotect.dex2c.converter.structs.MethodConverter;
 import com.nmmedit.apkprotect.dex2c.converter.structs.MyClassDef;
 import com.nmmedit.apkprotect.dex2c.converter.structs.RegisterNativesCallerClassDef;
 import com.nmmedit.apkprotect.dex2c.filters.ClassAndMethodFilter;
+import com.nmmedit.apkprotect.dex2c.filters.MethodConversionReporter;
 import com.nmmedit.apkprotect.util.Pair;
 
 import javax.annotation.Nonnull;
@@ -80,6 +81,7 @@ public class Dex2c {
         }
         printConversionStats(matchedClassCount, matchedMethodCount, skippedEmptyMethodCount,
                 convertedClassCount, convertedMethodCount);
+        printConversionReport(filter);
         globalConfig.generateJniInitCode();
         return globalConfig;
     }
@@ -94,6 +96,12 @@ public class Dex2c {
         System.out.printf("[nmmp] Skipped empty: methods=%d%n", skippedEmptyMethodCount);
         System.out.printf("[nmmp] Converted:     classes=%d, methods=%d%n",
                 convertedClassCount, convertedMethodCount);
+    }
+
+    private static void printConversionReport(ClassAndMethodFilter filter) {
+        if (filter instanceof MethodConversionReporter) {
+            ((MethodConversionReporter) filter).printReport();
+        }
     }
 
     /**
@@ -132,6 +140,7 @@ public class Dex2c {
         printConversionStats(dexConfig.getMatchedClassCount(), dexConfig.getMatchedMethodCount(),
                 dexConfig.getSkippedEmptyMethodCount(),
                 dexConfig.getShellMethods().keySet().size(), dexConfig.getShellMethods().size());
+        printConversionReport(filter);
 
         globalDexConfig.generateJniInitCode();
         return dexConfig;
@@ -232,6 +241,9 @@ public class Dex2c {
 
                         //记录当前类，所有需要被修改的方法
                         shellMethods.put(classDef.getType(), pair.first);
+                        if (filter instanceof MethodConversionReporter) {
+                            ((MethodConversionReporter) filter).onMethodConverted(method);
+                        }
 
                         //只有一个具体实现
                         addMethod(implDirectMethods, implVirtualMethods, pair.second);

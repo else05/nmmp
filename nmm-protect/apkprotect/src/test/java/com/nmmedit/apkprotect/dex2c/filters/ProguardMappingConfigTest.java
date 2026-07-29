@@ -13,12 +13,15 @@ import com.nmmedit.apkprotect.deobfus.MappingReader;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -182,5 +185,28 @@ public class ProguardMappingConfigTest {
         assertTrue(filter.acceptClass(classDef));
         assertTrue(filter.acceptMethod(callback));
         assertFalse(filter.acceptMethod(other));
+
+        final ByteArrayOutputStream output = new ByteArrayOutputStream();
+        final PrintStream originalOut = System.out;
+        try {
+            System.setOut(new PrintStream(output, true, StandardCharsets.UTF_8.name()));
+            filter.onMethodConverted(callback);
+            filter.onMethodConverted(callback);
+            filter.printReport();
+        } finally {
+            System.setOut(originalOut);
+        }
+
+        final String log = output.toString(StandardCharsets.UTF_8.name());
+        final String detailPrefix = "[nmmp] R8 内联命中:";
+        assertTrue(log.contains(
+                detailPrefix
+                        + " Lorg/example/Receiver;->target(II)V"
+                        + " => La/b;->d(Landroid/content/Context;Landroid/content/Intent;)V"));
+        assertEquals(log.indexOf(detailPrefix), log.lastIndexOf(detailPrefix));
+        assertTrue(log.contains(
+                "[nmmp] R8 inline:     source methods=1, residual methods=1"));
+        assertEquals(1, filter.getInlineSourceMethodCount());
+        assertEquals(1, filter.getInlineResidualMethodCount());
     }
 }

@@ -44,7 +44,7 @@ public class SimpleRules {
             String line;
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
-                if ("".equals(line)) {//empty line
+                if ("".equals(line) || line.startsWith("//") || line.startsWith("#")) {
                     lineNumb++;
                     continue;
                 }

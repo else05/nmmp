@@ -8,6 +8,7 @@ import junit.framework.TestCase;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Collections;
 
 public class SimpleRulesTest extends TestCase {
 
@@ -34,5 +35,23 @@ public class SimpleRulesTest extends TestCase {
             }
         }
 
+    }
+
+    public void testParseComments() throws IOException {
+        final SimpleRules rules = new SimpleRules();
+        rules.parse(new StringReader(
+                "  // 顶层注释\n" +
+                        "\t# 顶层注释\n" +
+                        "class com.example.Test {\n" +
+                        "  // 方法块注释\n" +
+                        "\t# 方法块注释\n" +
+                        "run;\n" +
+                        "}"));
+
+        assertTrue(rules.matchClass(
+                "Lcom/example/Test;",
+                "Ljava/lang/Object;",
+                Collections.<String>emptyList()));
+        assertTrue(rules.matchMethod("run"));
     }
 }

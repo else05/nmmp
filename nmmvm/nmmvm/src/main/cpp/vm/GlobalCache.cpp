@@ -27,11 +27,9 @@ static jobject getPrimitiveTypeClass(JNIEnv *env, const char *classname) {
 }
 
 //全局异常class
-__attribute__((visibility("default")))
 vmGlobals gVm;
 
 //缓存一些常用的class对象,比如基本类型class对象
-__attribute__((visibility("default")))
 void cacheInitial(JNIEnv *env) {
     {
         ScopedLocalRef<jobject> obj(env, getPrimitiveTypeClass(env, "java/lang/Boolean"));
@@ -118,7 +116,6 @@ void cacheInitial(JNIEnv *env) {
     }
 }
 
-__attribute__((visibility("default")))
 jclass getCacheClass(JNIEnv *env, const char *type) {
     switch (*type) {
         case 'Z':

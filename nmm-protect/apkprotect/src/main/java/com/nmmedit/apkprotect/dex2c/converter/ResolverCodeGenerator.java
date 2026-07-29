@@ -4,12 +4,15 @@ import com.android.tools.smali.dexlib2.dexbacked.DexBackedDexFile;
 import com.android.tools.smali.dexlib2.iface.reference.FieldReference;
 import com.android.tools.smali.dexlib2.iface.reference.MethodReference;
 import com.android.tools.smali.dexlib2.util.MethodUtil;
+import com.nmmedit.apkprotect.dex2c.MethodCodec;
+import com.nmmedit.apkprotect.dex2c.ProtectionContext;
 import com.nmmedit.apkprotect.util.ModifiedUtf8;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.io.UTFDataFormatException;
 import java.io.Writer;
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,12 +24,18 @@ public class ResolverCodeGenerator {
 
 
     private final References references;
+    private final ProtectionContext protectionContext;
+    private final long dexId;
 
     public ResolverCodeGenerator(DexBackedDexFile dexFile,
-                                 @Nonnull ClassAnalyzer analyzer
+                                 @Nonnull ClassAnalyzer analyzer,
+                                 @Nonnull ProtectionContext protectionContext,
+                                 long dexId
     ) {
 
         references = new References(dexFile, analyzer);
+        this.protectionContext = protectionContext;
+        this.dexId = dexId;
     }
 
     public References getReferences() {
@@ -35,8 +44,11 @@ public class ResolverCodeGenerator {
 
     public void generate(Writer writer) throws IOException {
         writer.write("#include \"GlobalCache.h\"\n");
-        writer.write("#include \"ConstantPool.h\"\n\n");
-        writer.write("#include <pthread.h>\n\n\n");
+        writer.write("#include \"ConstantPool.h\"\n");
+        writer.write("#include \"VmCodec.h\"\n");
+        writer.write("#include \"VmCodecConfig.h\"\n\n");
+        writer.write("#include <pthread.h>\n");
+        writer.write("#include <string.h>\n\n");
 
         generateStringPool(writer);
         generateTypePool(writer);
@@ -74,23 +86,42 @@ public class ResolverCodeGenerator {
                         "} ConstStringId;\n"
         );
 
-        writer.write("static const ConstStringId gStringConstantIds[] = {\n");
+        writer.write(String.format(
+                "static const ConstStringId gStringConstantIds[%d] = {\n",
+                Math.max(1, constStringIds.length)));
         for (int offset : constStringIds) {
             writer.write(String.format("    {.idx=0x%04x},\n", offset));
         }
         writer.write("};\n");
 
-        writer.write(String.format("static jstring gStringConstants[%d];\n\n", constStringIds.length));
+        writer.write(String.format(
+                "static jstring gStringConstants[%d];\n",
+                Math.max(1, constStringIds.length)));
+        writer.write(String.format(
+                "static u1 gStringReady[%d];\n\n",
+                Math.max(1, constStringIds.length)));
     }
 
     private void generateResolver(Writer writer) throws IOException {
-        writer.write("static void resolver_init(JNIEnv *env) {\n" +
-                "    if(sizeof(gFields) == 0) return;\n" +
-                "    if(sizeof(gMethods) == 0) return;\n" +
-                "    if(sizeof(gStringConstants) == 0) return;\n" +
-                "    memset(gFields, 0, sizeof(gFields));\n" +
-                "    memset(gMethods, 0, sizeof(gMethods));\n" +
-                "    memset(gStringConstants, 0, sizeof(gStringConstants));\n" +
+        writer.write("static pthread_mutex_t gResolverPublishMutex = PTHREAD_MUTEX_INITIALIZER;\n" +
+                "\n" +
+                "static void decodeStringPool(void) {\n" +
+                "    if (gStringPoolCodecVersion != NMMP_VM_CODEC_VERSION) return;\n" +
+                "    vmCodecTransform(gBaseStrPtr,\n" +
+                "                     gStringPoolByteSize,\n" +
+                "                     gStringPoolDexId,\n" +
+                "                     NMMP_VM_DOMAIN_STRING);\n" +
+                "    if (vmCodecHash(gBaseStrPtr, gStringPoolByteSize) != gStringPoolHash) return;\n" +
+                "    gStringPoolReady = true;\n" +
+                "}\n" +
+                "\n" +
+                "static bool resolver_init(JNIEnv *env) {\n" +
+                "    int result = pthread_once(&gStringPoolOnce, decodeStringPool);\n" +
+                "    if (result != 0 || !gStringPoolReady) {\n" +
+                "        (*env)->ThrowNew(env, gVm.exInternalError, \"string pool decode failed\");\n" +
+                "        return false;\n" +
+                "    }\n" +
+                "    return true;\n" +
                 "}\n" +
                 "\n" +
                 "#define STRING_BY_ID(_idx) ((const char *) (gBaseStrPtr + gStringIds[_idx].off))\n" +
@@ -125,99 +156,104 @@ public class ResolverCodeGenerator {
                 "\n" +
                 "static const vmField *dvmResolveField(JNIEnv *env, u4 idx, bool isStatic) {\n" +
                 "    vmField *field = &gFields[idx];\n" +
-                "    if (field->fieldId == NULL) {\n" +
-                "        FieldId fieldId = gFieldIds[idx];\n" +
+                "    if (__atomic_load_n(&gFieldReady[idx], __ATOMIC_ACQUIRE)) return field;\n" +
                 "\n" +
-                "        jclass clazz;\n" +
-                "        FIND_CLASS_BY_NAME(STRING_BY_CLASS_ID(fieldId.classIdx));\n" +
+                "    FieldId fieldId = gFieldIds[idx];\n" +
+                "    jclass clazz;\n" +
+                "    FIND_CLASS_BY_NAME(STRING_BY_CLASS_ID(fieldId.classIdx));\n" +
                 "\n" +
-                "        const char *type = STRING_BY_TYPE_ID(fieldId.typeIdx);\n" +
-                "        const char *name = STRING_BY_ID(fieldId.nameIdx);\n" +
-                "\n" +
-                "        field->classIdx = fieldId.classIdx;\n" +
-                "        field->type = (*type == '[') ? 'L' : *type;\n" +
-                "\n" +
-                "        //和方法解析同理,最后赋值fieldId\n" +
-                "        jfieldID fid;\n" +
-                "        if (isStatic) {\n" +
-                "            fid = (*env)->GetStaticFieldID(env, clazz, name, type);\n" +
-                "        } else {\n" +
-                "            fid = (*env)->GetFieldID(env, clazz, name, type);\n" +
-                "        }\n" +
-                "        if (fid == NULL) {\n" +
-                "            (*env)->DeleteLocalRef(env, clazz);\n" +
-                "\n" +
-                "            (*env)->ExceptionClear(env);\n" +
-                "            vmThrowNoSuchFieldError(env, name);\n" +
-                "            return NULL;\n" +
-                "        }\n" +
-                "        (*env)->DeleteLocalRef(env, clazz);\n" +
-                "\n" +
-                "\n" +
-                "        field->fieldId = fid;\n" +
-                "\n" +
+                "    const char *type = STRING_BY_TYPE_ID(fieldId.typeIdx);\n" +
+                "    const char *name = STRING_BY_ID(fieldId.nameIdx);\n" +
+                "    vmField candidate = {\n" +
+                "            .classIdx = fieldId.classIdx,\n" +
+                "            .type = (*type == '[') ? 'L' : *type,\n" +
+                "            .fieldId = NULL\n" +
+                "    };\n" +
+                "    if (isStatic) {\n" +
+                "        candidate.fieldId = (*env)->GetStaticFieldID(env, clazz, name, type);\n" +
+                "    } else {\n" +
+                "        candidate.fieldId = (*env)->GetFieldID(env, clazz, name, type);\n" +
                 "    }\n" +
+                "    if (candidate.fieldId == NULL) {\n" +
+                "        (*env)->DeleteLocalRef(env, clazz);\n" +
+                "        (*env)->ExceptionClear(env);\n" +
+                "        vmThrowNoSuchFieldError(env, name);\n" +
+                "        return NULL;\n" +
+                "    }\n" +
+                "    (*env)->DeleteLocalRef(env, clazz);\n" +
+                "\n" +
+                "    pthread_mutex_lock(&gResolverPublishMutex);\n" +
+                "    if (!__atomic_load_n(&gFieldReady[idx], __ATOMIC_RELAXED)) {\n" +
+                "        *field = candidate;\n" +
+                "        __atomic_store_n(&gFieldReady[idx], 1, __ATOMIC_RELEASE);\n" +
+                "    }\n" +
+                "    pthread_mutex_unlock(&gResolverPublishMutex);\n" +
                 "    return field;\n" +
                 "}\n" +
                 "\n" +
                 "static const vmMethod *dvmResolveMethod(JNIEnv *env, u4 idx, bool isStatic) {\n" +
                 "    vmMethod *method = &gMethods[idx];\n" +
-                "    if (method->methodId == NULL) {\n" +
-                "        MethodId methodId = gMethodIds[idx];\n" +
+                "    if (__atomic_load_n(&gMethodReady[idx], __ATOMIC_ACQUIRE)) return method;\n" +
                 "\n" +
-                "        jclass clazz;\n" +
-                "        FIND_CLASS_BY_NAME(STRING_BY_CLASS_ID(methodId.classIdx));\n" +
+                "    MethodId methodId = gMethodIds[idx];\n" +
+                "    jclass clazz;\n" +
+                "    FIND_CLASS_BY_NAME(STRING_BY_CLASS_ID(methodId.classIdx));\n" +
                 "\n" +
-                "        method->shorty = STRING_BY_ID(methodId.shortyIdx);\n" +
-                "\n" +
-                "        method->classIdx = methodId.classIdx;\n" +
-                "\n" +
-                "        const char *name = STRING_BY_ID(methodId.nameIdx);\n" +
-                "        const char *sig = STRING_BY_SIGNATURE_ID(methodId.sigIdx);\n" +
-                "\n" +
-                "        jmethodID mid;\n" +
-                "        if (isStatic) {\n" +
-                "            mid = (*env)->GetStaticMethodID(env, clazz, name, sig);\n" +
-                "        } else {\n" +
-                "            mid = (*env)->GetMethodID(env, clazz, name, sig);\n" +
-                "        }\n" +
-                "        if (mid == NULL) {\n" +
-                "            (*env)->DeleteLocalRef(env, clazz);\n" +
-                "\n" +
-                "            (*env)->ExceptionClear(env);\n" +
-                "            vmThrowNoSuchMethodError(env, name);\n" +
-                "            return NULL;\n" +
-                "        }\n" +
-                "        (*env)->DeleteLocalRef(env, clazz);\n" +
-                "\n" +
-                "        //只根据method->methodId判断是否需要解析,最后赋值为了防止结构体解析一半被其他线程使用从而导致错误\n" +
-                "        //todo 赋值需为原子操作\n" +
-                "\n" +
-                "        method->methodId = mid;\n" +
-                "\n" +
+                "    const char *name = STRING_BY_ID(methodId.nameIdx);\n" +
+                "    const char *sig = STRING_BY_SIGNATURE_ID(methodId.sigIdx);\n" +
+                "    vmMethod candidate = {\n" +
+                "            .classIdx = methodId.classIdx,\n" +
+                "            .shorty = STRING_BY_ID(methodId.shortyIdx),\n" +
+                "            .methodId = NULL\n" +
+                "    };\n" +
+                "    if (isStatic) {\n" +
+                "        candidate.methodId = (*env)->GetStaticMethodID(env, clazz, name, sig);\n" +
+                "    } else {\n" +
+                "        candidate.methodId = (*env)->GetMethodID(env, clazz, name, sig);\n" +
                 "    }\n" +
+                "    if (candidate.methodId == NULL) {\n" +
+                "        (*env)->DeleteLocalRef(env, clazz);\n" +
+                "        (*env)->ExceptionClear(env);\n" +
+                "        vmThrowNoSuchMethodError(env, name);\n" +
+                "        return NULL;\n" +
+                "    }\n" +
+                "    (*env)->DeleteLocalRef(env, clazz);\n" +
+                "\n" +
+                "    pthread_mutex_lock(&gResolverPublishMutex);\n" +
+                "    if (!__atomic_load_n(&gMethodReady[idx], __ATOMIC_RELAXED)) {\n" +
+                "        *method = candidate;\n" +
+                "        __atomic_store_n(&gMethodReady[idx], 1, __ATOMIC_RELEASE);\n" +
+                "    }\n" +
+                "    pthread_mutex_unlock(&gResolverPublishMutex);\n" +
                 "    return method;\n" +
                 "}\n" +
                 "\n" +
-                "static pthread_mutex_t str_mutex = PTHREAD_MUTEX_INITIALIZER;\n" +
-
                 "static jstring dvmConstantString(JNIEnv *env, u4 idx) {\n" +
-                "    //先查找索引位置是否存在缓存,不用频繁创建string对象\n" +
-                "    if (gStringConstants[idx] == NULL) {\n" +
-                "        pthread_mutex_lock(&str_mutex);\n" +
-                "        jstring str;\n" +
-                "        if (gStringConstants[idx] == NULL) {\n" +
-                "            str = (*env)->NewStringUTF(env, STRING_BY_ID(gStringConstantIds[idx].idx));\n" +
-                "            gStringConstants[idx] = (*env)->NewGlobalRef(env, str);\n" +
-                "        } else {\n" +
-                "            str = (*env)->NewLocalRef(env, gStringConstants[idx]);\n" +
-                "        }\n" +
-                "        pthread_mutex_unlock(&str_mutex);\n" +
-                "\n" +
-                "        return str;\n" +
-                "    } else {\n" +
-                "        return (*env)->NewLocalRef(env, gStringConstants[idx]);\n" +
+                "    if (__atomic_load_n(&gStringReady[idx], __ATOMIC_ACQUIRE)) {\n" +
+                "        return (jstring) (*env)->NewLocalRef(env, gStringConstants[idx]);\n" +
                 "    }\n" +
+                "\n" +
+                "    jstring local = (*env)->NewStringUTF(env, STRING_BY_ID(gStringConstantIds[idx].idx));\n" +
+                "    if (local == NULL) return NULL;\n" +
+                "    jstring candidate = (jstring) (*env)->NewGlobalRef(env, local);\n" +
+                "    if (candidate == NULL) {\n" +
+                "        (*env)->DeleteLocalRef(env, local);\n" +
+                "        return NULL;\n" +
+                "    }\n" +
+                "\n" +
+                "    jstring published;\n" +
+                "    pthread_mutex_lock(&gResolverPublishMutex);\n" +
+                "    if (!__atomic_load_n(&gStringReady[idx], __ATOMIC_RELAXED)) {\n" +
+                "        gStringConstants[idx] = candidate;\n" +
+                "        candidate = NULL;\n" +
+                "        __atomic_store_n(&gStringReady[idx], 1, __ATOMIC_RELEASE);\n" +
+                "    }\n" +
+                "    published = gStringConstants[idx];\n" +
+                "    pthread_mutex_unlock(&gResolverPublishMutex);\n" +
+                "\n" +
+                "    if (candidate != NULL) (*env)->DeleteGlobalRef(env, candidate);\n" +
+                "    (*env)->DeleteLocalRef(env, local);\n" +
+                "    return (jstring) (*env)->NewLocalRef(env, published);\n" +
                 "}\n" +
                 "\n" +
                 "\n" +
@@ -280,9 +316,10 @@ public class ResolverCodeGenerator {
                         "    u4 shortyIdx;\n" +
                         "    u4 sigIdx;\n" +
                         "} MethodId;\n\n");
-        writer.write("static const MethodId gMethodIds[] = {\n");
-
         final List<MethodReference> methodPool = references.getMethodPool();
+        writer.write(String.format(
+                "static const MethodId gMethodIds[%d] = {\n",
+                Math.max(1, methodPool.size())));
         for (MethodReference methodReference : methodPool) {
             String definingClass = methodReference.getDefiningClass();
             String className;
@@ -316,7 +353,12 @@ public class ResolverCodeGenerator {
         }
         writer.write("};\n");
         writer.write("//ends method data\n\n");
-        writer.write(String.format("static vmMethod gMethods[%d];\n", methodPool.size()));
+        writer.write(String.format(
+                "static vmMethod gMethods[%d];\n",
+                Math.max(1, methodPool.size())));
+        writer.write(String.format(
+                "static u1 gMethodReady[%d];\n",
+                Math.max(1, methodPool.size())));
         writer.write("\n");
     }
 
@@ -329,9 +371,10 @@ public class ResolverCodeGenerator {
                         "    u4 nameIdx;\n" +
                         "    u2 typeIdx;\n" +
                         "} FieldId;\n\n");
-        writer.write("static const FieldId gFieldIds[] = {\n");
-
         final List<FieldReference> fieldPool = references.getFieldPool();
+        writer.write(String.format(
+                "static const FieldId gFieldIds[%d] = {\n",
+                Math.max(1, fieldPool.size())));
         for (FieldReference reference : fieldPool) {
             String definingClass = reference.getDefiningClass();
             String className;
@@ -359,32 +402,62 @@ public class ResolverCodeGenerator {
         }
         writer.write("};\n");
         writer.write("//ends field id\n\n");
-        writer.write(String.format("static vmField gFields[%d];\n", fieldPool.size()));
+        writer.write(String.format(
+                "static vmField gFields[%d];\n",
+                Math.max(1, fieldPool.size())));
+        writer.write(String.format(
+                "static u1 gFieldReady[%d];\n",
+                Math.max(1, fieldPool.size())));
     }
 
 
     private void generateStringPool(Writer writer) throws IOException {
-        writer.write("static const u1 gBaseStrPtr[]={\n");
-
-        ArrayList<Long> strOffsets = new ArrayList<>();
-        long strOffset = 0;
-
+        final ArrayList<Long> strOffsets = new ArrayList<>();
+        final ByteArrayOutputStream plainPool = new ByteArrayOutputStream();
         final List<String> stringPool = references.getStringPool();
         for (String string : stringPool) {
-
-            //必须使用modified utf8，不然jni的NewStringUtf函数可能出问题.issue #3
-            byte[] bytes = ModifiedUtf8.encode(string);
-
-            writer.write("    ");
-            for (byte aByte : bytes) {
-                writer.write(String.format("0x%02x,", aByte & 0xFF));
-            }
-            writer.write("0x00,\n");
-
-            strOffsets.add(strOffset);
-            strOffset += bytes.length + 1;
+            final byte[] bytes = ModifiedUtf8.encode(string);
+            strOffsets.add((long) plainPool.size());
+            plainPool.write(bytes, 0, bytes.length);
+            plainPool.write(0);
         }
-        writer.write("};\n\n");
+        final byte[] plainBytes = plainPool.toByteArray();
+        final byte[] encodedBytes = protectionContext.getMethodCodec().transform(
+                plainBytes,
+                dexId,
+                MethodCodec.DOMAIN_STRING);
+
+        writer.write(String.format(
+                "static u1 gBaseStrPtr[%d] = {\n",
+                Math.max(1, encodedBytes.length)));
+        if (encodedBytes.length == 0) {
+            writer.write("    0x00,\n");
+        } else {
+            for (int i = 0; i < encodedBytes.length; i++) {
+                if (i % 12 == 0) {
+                    writer.write("    ");
+                }
+                writer.write(String.format("0x%02x,", encodedBytes[i] & 0xff));
+                if (i % 12 == 11 || i == encodedBytes.length - 1) {
+                    writer.write("\n");
+                }
+            }
+        }
+        writer.write("};\n");
+        writer.write(String.format(
+                "static const u4 gStringPoolByteSize = %d;\n",
+                plainBytes.length));
+        writer.write(String.format(
+                "static const u4 gStringPoolDexId = 0x%08x;\n",
+                dexId));
+        writer.write(String.format(
+                "static const u4 gStringPoolHash = 0x%08x;\n",
+                MethodCodec.hash(plainBytes)));
+        writer.write(String.format(
+                "static const u2 gStringPoolCodecVersion = %d;\n",
+                ProtectionContext.CODEC_VERSION));
+        writer.write("static pthread_once_t gStringPoolOnce = PTHREAD_ONCE_INIT;\n");
+        writer.write("static bool gStringPoolReady;\n\n");
 
         writer.write(
                 "\n" +
@@ -392,7 +465,9 @@ public class ResolverCodeGenerator {
                         "    u4 off;\n" +
                         "} StringId;\n");
 
-        writer.write("static const StringId gStringIds[] = {\n");
+        writer.write(String.format(
+                "static const StringId gStringIds[%d] = {\n",
+                Math.max(1, strOffsets.size())));
         for (Long offset : strOffsets) {
             if (offset > 0xFFFFFFFFL) {
                 throw new RuntimeException("string offset too long");
@@ -422,8 +497,10 @@ public class ResolverCodeGenerator {
                         "    u4 idx;\n" +
                         "} TypeId;\n");
 
-        writer.write("static const TypeId gTypeIds[] = {\n");
         final References references = this.references;
+        writer.write(String.format(
+                "static const TypeId gTypeIds[%d] = {\n",
+                Math.max(1, references.getTypePool().size())));
         for (String type : references.getTypePool()) {
             writer.write(String.format("    {.idx=%d},\n", references.getStringItemIndex(type)));
         }
@@ -441,9 +518,10 @@ public class ResolverCodeGenerator {
                         "} ClassId;\n");
 
 
-        writer.write("static const ClassId gClassIds[] = {\n");
-
         final References references = this.references;
+        writer.write(String.format(
+                "static const ClassId gClassIds[%d] = {\n",
+                Math.max(1, references.getClassNamePool().size())));
         for (String className : references.getClassNamePool()) {
             int classNameIdx = references.getStringItemIndex(className);
             if (classNameIdx < 0) {
@@ -462,9 +540,10 @@ public class ResolverCodeGenerator {
                         "    u4 idx;\n" +
                         "} SignatureId;\n");
 
-        writer.write("static const SignatureId gSignatureIds[] = {\n");
-
         final References references = this.references;
+        writer.write(String.format(
+                "static const SignatureId gSignatureIds[%d] = {\n",
+                Math.max(1, references.getSignaturePool().size())));
         for (String sig : references.getSignaturePool()) {
             int sigIdx = references.getStringItemIndex(sig);
             if (sigIdx < 0) {

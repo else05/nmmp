@@ -19,7 +19,7 @@ public class MappingReader {
 
     private Reader getMappingReader() throws IOException {
         if (mappingFile != null) {
-            return new FileReader(mappingFile);
+            return new InputStreamReader(new FileInputStream(mappingFile), StandardCharsets.UTF_8);
         }
         if (mappingInput != null) {
             return new InputStreamReader(mappingInput, StandardCharsets.UTF_8);

@@ -1,0 +1,41 @@
+#include <cstddef>
+#include <cstdint>
+#include <cstring>
+
+#include "../../main/cpp/vm/include/VmCodec.h"
+
+int main() {
+    uint8_t data[] = {
+            0x12, 0x34, 0x56, 0x78, 0x9a, 0xbc, 0xde, 0xf0,
+            0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77,
+            0x88, 0x99, 0xaa, 0xbb
+    };
+    const uint8_t plain[] = {
+            0x12, 0x34, 0x56, 0x78, 0x9a, 0xbc, 0xde, 0xf0,
+            0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77,
+            0x88, 0x99, 0xaa, 0xbb
+    };
+    const uint8_t expected[] = {
+            0xca, 0x23, 0xf2, 0xdb, 0xda, 0xc1, 0xe3, 0x62,
+            0x05, 0xba, 0x48, 0x23, 0xb0, 0x88, 0xf7, 0x26,
+            0x75, 0x55, 0x7b, 0x80
+    };
+
+    if (vmCodecHash(data, sizeof(data)) != UINT32_C(0x104656e9)) return 1;
+
+    vmCodecTransform(
+            data,
+            static_cast<uint32_t>(sizeof(data)),
+            UINT32_C(0x10203040),
+            NMMP_VM_DOMAIN_CODE);
+    if (memcmp(data, expected, sizeof(data)) != 0) return 2;
+
+    vmCodecTransform(
+            data,
+            static_cast<uint32_t>(sizeof(data)),
+            UINT32_C(0x10203040),
+            NMMP_VM_DOMAIN_CODE);
+    if (memcmp(data, plain, sizeof(data)) != 0) return 3;
+
+    return 0;
+}

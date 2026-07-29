@@ -4,12 +4,13 @@ import com.android.tools.smali.dexlib2.AccessFlags;
 import com.android.tools.smali.dexlib2.dexbacked.DexBackedClassDef;
 import com.android.tools.smali.dexlib2.dexbacked.DexBackedDexFile;
 import com.android.tools.smali.dexlib2.dexbacked.DexBackedMethod;
-import com.android.tools.smali.dexlib2.dexbacked.DexBuffer;
 import com.android.tools.smali.dexlib2.iface.Method;
 import com.android.tools.smali.dexlib2.iface.MethodImplementation;
 import com.android.tools.smali.dexlib2.util.MethodUtil;
 import com.google.common.collect.HashMultimap;
 import com.nmmedit.apkprotect.dex2c.DexConfig;
+import com.nmmedit.apkprotect.dex2c.MethodCodec;
+import com.nmmedit.apkprotect.dex2c.ProtectionContext;
 import com.nmmedit.apkprotect.dex2c.converter.instructionrewriter.InstructionRewriter;
 
 import javax.annotation.Nonnull;
@@ -34,14 +35,22 @@ public class JniCodeGenerator {
     private final ResolverCodeGenerator resolverCodeGenerator;
     private final InstructionRewriter instructionRewriter;
     private final DexBackedDexFile dexFile;
+    private final ProtectionContext protectionContext;
 
     public JniCodeGenerator(@Nonnull DexBackedDexFile dexFile,
                             @Nonnull ClassAnalyzer analyzer,
-                            @Nonnull InstructionRewriter instructionRewriter) {
+                            @Nonnull InstructionRewriter instructionRewriter,
+                            @Nonnull ProtectionContext protectionContext,
+                            long dexId) {
         this.dexFile = dexFile;
+        this.protectionContext = protectionContext;
 
 //      根据dex里字符串常量,类型常量等生成符号解析代码,给vm提供符号信息
-        resolverCodeGenerator = new ResolverCodeGenerator(dexFile, analyzer);
+        resolverCodeGenerator = new ResolverCodeGenerator(
+                dexFile,
+                analyzer,
+                protectionContext,
+                dexId);
 
         this.instructionRewriter = instructionRewriter;
 
@@ -54,6 +63,7 @@ public class JniCodeGenerator {
         if (implementation == null) {
             return;
         }
+        final long methodId = protectionContext.nextMethodId();
 
         final boolean isStatic = AccessFlags.STATIC.isSet(method.getAccessFlags());
 
@@ -158,57 +168,51 @@ public class JniCodeGenerator {
         writer.append("\n");
 //        -----------结束----------------
 
-        writer.append("    static const u2 insns[] = {");
-
         final byte[] instructionData = instructionRewriter.rewriteInstructions(implementation);
-        final int dataLength = instructionData.length;
-        //生成字节码数组
-        final DexBuffer instructionBuf = new DexBuffer(instructionData);
-        for (int offset = 0; offset < dataLength; offset += 2) {
-            if (offset % 20 == 0) {
-                writer.append("\n");
-            }
-            writer.append(String.format("0x%04x, ", instructionBuf.readUshort(offset)));
-        }
-
-        writer.append("\n    };\n");
-
+        final byte[] encodedInstructions = protectionContext.getMethodCodec().transform(
+                instructionData,
+                methodId,
+                MethodCodec.DOMAIN_CODE);
+        writeByteArray(writer, "encodedInsns", encodedInstructions);
 
         final byte[] tries = instructionRewriter.handleTries(implementation);
-        StringBuilder triesBuilder = new StringBuilder();
+        final byte[] encodedTries = protectionContext.getMethodCodec().transform(
+                tries,
+                methodId,
+                MethodCodec.DOMAIN_TRIES);
         if (tries.length == 0) {
-            triesBuilder.append("    const u1 *tries = NULL;\n");
+            writer.write("    const u1 *encodedTries = NULL;\n");
         } else {
-
-            triesBuilder.append("    static const u1 tries[] = {");
-            for (int i = 0; i < tries.length; i++) {
-                if (i % 10 == 0) {//每行10个元素
-                    triesBuilder.append("\n");
-                }
-                triesBuilder.append(String.format("0x%02x, ", tries[i] & 0xFF));
-
-            }
-            triesBuilder.append("\n    };\n");
+            writeByteArray(writer, "encodedTries", encodedTries);
         }
-        writer.write(triesBuilder.toString());
-
 
         //调用解释器
         writer.write(String.format("\n" +
-                        "    const vmCode code = {\n" +
-                        "            .insns=insns,\n" +
-                        "            .insnsSize=%d,\n" +
+                        "    const vmEncodedCode code = {\n" +
+                        "            .encodedInsns=encodedInsns,\n" +
+                        "            .encodedInsnsByteSize=%d,\n" +
                         "            .regs=regs,\n" +
                         "            .reg_flags=reg_flags,\n" +
-                        "            .triesHandlers=tries\n" +
+                        "            .encodedTries=encodedTries,\n" +
+                        "            .encodedTriesByteSize=%d,\n" +
+                        "            .methodId=0x%08x,\n" +
+                        "            .plainCodeHash=0x%08x,\n" +
+                        "            .plainTriesHash=0x%08x,\n" +
+                        "            .codecVersion=%d\n" +
                         "    };\n" +
                         "\n"
-                , dataLength / 2));
+                ,
+                instructionData.length,
+                tries.length,
+                methodId,
+                MethodCodec.hash(instructionData),
+                MethodCodec.hash(tries),
+                ProtectionContext.CODEC_VERSION));
 
         final boolean hasReturnValue = !returnType.equals("V");
         if (hasReturnValue) {
             writer.write("\n" +
-                    "    volatile jvalue value = vmInterpret(env,\n" +
+                    "    volatile jvalue value = vmExecute(env,\n" +
                     "                                &code,\n" +
                     "                                &dvmResolver);\n"
             );
@@ -216,7 +220,7 @@ public class JniCodeGenerator {
         } else {
 
             writer.write("\n" +
-                    "    vmInterpret(env,\n" +
+                    "    vmExecute(env,\n" +
                     "              &code,\n" +
                     "              &dvmResolver);\n"
             );
@@ -236,6 +240,19 @@ public class JniCodeGenerator {
             );
         }
         writer.append("}\n\n");
+    }
+
+    private static void writeByteArray(Writer writer,
+                                       String name,
+                                       byte[] data) throws IOException {
+        writer.write(String.format("    static const u1 %s[] = {", name));
+        for (int i = 0; i < data.length; i++) {
+            if (i % 12 == 0) {
+                writer.write("\n");
+            }
+            writer.write(String.format("0x%02x, ", data[i] & 0xff));
+        }
+        writer.write("\n    };\n");
     }
 
     public Set<String> getHandledNativeClasses() {
@@ -284,7 +301,7 @@ public class JniCodeGenerator {
         codeWriter.write(String.format("void %s(JNIEnv *env) {\n", config.getHeaderFileAndSetupFunc().setupFunctionName));
 
         codeWriter.write("\n    //符号解析器初始化\n");
-        codeWriter.write("    resolver_init(env);\n\n");
+        codeWriter.write("    if (!resolver_init(env)) return;\n\n");
 
         if (isRegisterNative) {
             codeWriter.write("    //注册\n");

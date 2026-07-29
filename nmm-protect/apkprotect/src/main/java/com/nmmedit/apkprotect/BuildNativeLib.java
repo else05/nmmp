@@ -13,11 +13,7 @@ import java.util.Map;
 
 public class BuildNativeLib {
     //库名称
-    public static final String NMMP_NAME = "nmmp";
-
-    //
-    //虚拟机库名称,如果cmake里配置为静态库,这个可以忽略
-    public static final String VM_NAME = "nmmvm";
+    public static final String NMMP_NAME = "c++_en";
 
     public static Map<String, Map<File, File>> generateNativeLibs(@Nonnull File outDir,
                                                                   @Nonnull final List<String> abis) throws IOException {
@@ -237,19 +233,6 @@ public class BuildNativeLib {
 
             final File stripOutputDir = new File(getLibStripOutputDir());
             if (!stripOutputDir.exists()) stripOutputDir.mkdirs();
-
-            final String vm = "lib" + VM_NAME + ".so";
-
-            File vmFile = new File(libSymOutputDir, vm);
-            if (!vmFile.exists()) {
-                //windows
-                vmFile = new File(getBuildPath(), "vm/" + vm);
-            }
-            if (!vmFile.exists()) {
-                throw new RuntimeException("Not Found so: " + vmFile.getAbsolutePath());
-            }
-
-            map.put(vmFile, new File(stripOutputDir, vm));
 
             final String vmp = "lib" + NMMP_NAME + ".so";
             File vmpFile = new File(libSymOutputDir, vmp);

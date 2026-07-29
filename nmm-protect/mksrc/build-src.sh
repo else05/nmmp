@@ -1,16 +1,17 @@
 #!/bin/sh
 
-#以存储模式创建vmsrc.zip
+# 以存储模式重新创建 vmsrc.zip，避免旧条目残留
 
-VM_DIR="`pwd`/../../nmmvm/nmmvm/src/main/cpp"
+SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+VM_DIR="${SCRIPT_DIR}/../../nmmvm/nmmvm/src/main/cpp"
 
 VM_SRC="vm cutils ConstantPool.c ConstantPool.h"
 
-OUT="`pwd`/../apkprotect/src/main/resources/vmsrc.zip"
+OUT="${SCRIPT_DIR}/../apkprotect/src/main/resources/vmsrc.zip"
 
-pushd ${VM_DIR}&&zip -0 -r -D ${OUT} ${VM_SRC}&&popd
+rm -f "${OUT}"
 
-zip -0 -u -D ${OUT}  vm/CMakeLists.txt
+(cd "${VM_DIR}" && zip -0 -r -D "${OUT}" ${VM_SRC})
 
-zip -0 -u -D ${OUT}  CMakeLists.txt
+(cd "${SCRIPT_DIR}" && zip -0 -u -D "${OUT}" vm/CMakeLists.txt CMakeLists.txt)
 

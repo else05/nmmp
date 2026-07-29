@@ -33,6 +33,19 @@ typedef struct {
 } vmCode;
 
 typedef struct {
+    const u1 *encodedInsns;
+    u4 encodedInsnsByteSize;
+    regptr_t *regs;
+    u1 *reg_flags;
+    const u1 *encodedTries;
+    u4 encodedTriesByteSize;
+    u4 methodId;
+    u4 plainCodeHash;
+    u4 plainTriesHash;
+    u2 codecVersion;
+} vmEncodedCode;
+
+typedef struct {
 
     const vmField *(*dvmResolveField)(JNIEnv *env, u4 idx, bool isStatic);
 
@@ -56,6 +69,12 @@ typedef struct {
 jvalue vmInterpret(
         JNIEnv *env,
         const vmCode *code,
+        const vmResolver *dvmResolver
+);
+
+jvalue vmExecute(
+        JNIEnv *env,
+        const vmEncodedCode *code,
         const vmResolver *dvmResolver
 );
 

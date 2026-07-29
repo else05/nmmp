@@ -47,10 +47,3 @@ dependencies {
 //    implementation 'org.smali:dexlib2:2.5.2'
 }
 
-// Optionally, disable tests specifically in apkprotect to speed up the build
-project(':apkprotect') {
-    tasks.withType(Test) {
-        enabled = false // Uncomment to disable all tests for apkprotect if exclusion fails
-    }
-}
-

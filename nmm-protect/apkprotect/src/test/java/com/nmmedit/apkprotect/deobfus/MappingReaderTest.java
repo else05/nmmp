@@ -8,6 +8,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class MappingReaderTest {
 
@@ -16,11 +20,15 @@ public class MappingReaderTest {
         final File tempFile = getMappingFile();
 
         final MappingReader reader = new MappingReader(tempFile);
+        final AtomicBoolean unicodeClassSeen = new AtomicBoolean();
 
         reader.parse(new MappingProcessor() {
             @Override
             public void processClassMapping(String className, String newClassName) {
-//                System.out.println("className "+className+"  "+newClassName);
+                if ("org.example.Original".equals(className)) {
+                    assertEquals("ڴ.ݚ", newClassName);
+                    unicodeClassSeen.set(true);
+                }
             }
 
             @Override
@@ -33,6 +41,7 @@ public class MappingReaderTest {
                 System.out.println(methodArguments);
             }
         });
+        assertTrue(unicodeClassSeen.get());
         tempFile.delete();
 
     }

@@ -1,6 +1,7 @@
 package com.nmmedit.dex2c;
 
 import com.nmmedit.apkprotect.dex2c.Dex2c;
+import com.nmmedit.apkprotect.dex2c.ProtectionContext;
 import com.nmmedit.apkprotect.dex2c.converter.ClassAnalyzer;
 import com.nmmedit.apkprotect.dex2c.converter.MyMethodUtil;
 import com.nmmedit.apkprotect.dex2c.converter.instructionrewriter.InstructionRewriter;
@@ -19,6 +20,13 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.charset.CodingErrorAction;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class Dex2cTest {
 
@@ -41,7 +49,17 @@ public class Dex2cTest {
                 testFilter,
                 classAnalyzer,
                 instructionRewriter,
-                outdir);
+                outdir,
+                new ProtectionContext(0x0123456789abcdefL));
+
+        final String resolverSource = StandardCharsets.UTF_8.newDecoder()
+                .onMalformedInput(CodingErrorAction.REPORT)
+                .onUnmappableCharacter(CodingErrorAction.REPORT)
+                .decode(ByteBuffer.wrap(
+                        Files.readAllBytes(new File(outdir, "classes_resolver.c").toPath())))
+                .toString();
+        assertFalse(resolverSource.contains("Exception.h"));
+        assertTrue(resolverSource.contains("ThrowNew(env, gVm.exInternalError"));
     }
 
     public static ClassAndMethodFilter testFilter = new ClassAndMethodFilter() {

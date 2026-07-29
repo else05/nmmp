@@ -3,6 +3,7 @@
 # min_api: 21
 # pg_map_id: c4afa28
 # common_typos_disable
+org.example.Original -> ڴ.ݚ:
 android.support.v4.app.RemoteActionCompatParcelizer -> android.support.v4.app.RemoteActionCompatParcelizer:
     1:1:void <init>():11:11 -> <init>
     1:1:androidx.core.app.RemoteActionCompat read(androidx.versionedparcelable.VersionedParcel):13:13 -> read

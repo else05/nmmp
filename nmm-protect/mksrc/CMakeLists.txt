@@ -22,4 +22,9 @@ set(LIBNAME_PLACEHOLDER "nmmp")
 add_library(${LIBNAME_PLACEHOLDER} SHARED ConstantPool.c ${GEN_SOURCES} )
 
 target_link_libraries(${LIBNAME_PLACEHOLDER} ${LIBNMMVM_NAME} log)
+set_target_properties(${LIBNAME_PLACEHOLDER} PROPERTIES
+        LINKER_LANGUAGE CXX
+        C_VISIBILITY_PRESET hidden
+        CXX_VISIBILITY_PRESET hidden
+        VISIBILITY_INLINES_HIDDEN YES)
 

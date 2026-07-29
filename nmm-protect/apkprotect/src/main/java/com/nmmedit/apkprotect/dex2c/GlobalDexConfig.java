@@ -1,9 +1,11 @@
 package com.nmmedit.apkprotect.dex2c;
 
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +33,8 @@ public class GlobalDexConfig {
 
     public void generateJniInitCode() throws IOException {
         try (
-                final FileWriter writer = new FileWriter(getInitCodeFile());
+                final Writer writer = new OutputStreamWriter(
+                        new FileOutputStream(getInitCodeFile()), StandardCharsets.UTF_8);
         ) {
             generateJniInitCode(writer);
         }
@@ -45,7 +48,10 @@ public class GlobalDexConfig {
         for (DexConfig config : configs) {
             final DexConfig.HeaderFileAndSetupFuncName setupFunc = config.getHeaderFileAndSetupFunc();
             includeStaOrExternFunc.append(String.format("extern void %s(JNIEnv *env);\n", setupFunc.setupFunctionName));
-            initCallSta.append(String.format("    %s(env);\n", setupFunc.setupFunctionName));
+            initCallSta.append(String.format(
+                    "    %s(env);\n"
+                            + "    if ((*env)->ExceptionCheck(env)) return JNI_ERR;\n",
+                    setupFunc.setupFunctionName));
         }
 
         writer.write(String.format(
@@ -62,6 +68,7 @@ public class GlobalDexConfig {
                         "        return -1;\n" +
                         "    }\n" +
                         "    cacheInitial(env);\n" +
+                        "    if ((*env)->ExceptionCheck(env)) return JNI_ERR;\n" +
                         "\n" +
                         "\n" +
                         "    //auto generated setup function\n" +

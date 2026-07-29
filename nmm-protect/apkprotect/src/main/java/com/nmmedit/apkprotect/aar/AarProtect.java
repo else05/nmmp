@@ -11,6 +11,7 @@ import com.nmmedit.apkprotect.aar.asm.InjectStaticBlockVisitor;
 import com.nmmedit.apkprotect.aar.asm.MethodToNativeVisitor;
 import com.nmmedit.apkprotect.dex2c.Dex2c;
 import com.nmmedit.apkprotect.dex2c.DexConfig;
+import com.nmmedit.apkprotect.dex2c.ProtectionContext;
 import com.nmmedit.apkprotect.dex2c.converter.ClassAnalyzer;
 import com.nmmedit.apkprotect.dex2c.converter.MyMethodUtil;
 import com.nmmedit.apkprotect.dex2c.converter.instructionrewriter.InstructionRewriter;
@@ -45,6 +46,7 @@ public class AarProtect {
 
     public void run() throws IOException {
         final File aar = aarFolders.getAar();
+        final ProtectionContext protectionContext = ProtectionContext.create();
         if (!aar.exists()) {
             throw new FileNotFoundException(aar.getAbsolutePath());
         }
@@ -54,7 +56,10 @@ public class AarProtect {
         try {
             final File classesDex = getClassesDex(dexJar, zipExtractTempDir);
 
-            CmakeUtils.generateCSources(aarFolders.apkFolders.getDex2cSrcDir(), instructionRewriter);
+            CmakeUtils.generateCSources(
+                    aarFolders.apkFolders.getDex2cSrcDir(),
+                    instructionRewriter,
+                    protectionContext);
 
 
             //
@@ -65,7 +70,8 @@ public class AarProtect {
                     filter,
                     classAnalyzer,
                     instructionRewriter,
-                    aarFolders.apkFolders.getCodeGeneratedDir());
+                    aarFolders.apkFolders.getCodeGeneratedDir(),
+                    protectionContext);
 
             //根据处理过的dex信息修改转换前的class文件
             final File newClassesJar = modifyClassFiles(dexConfig);

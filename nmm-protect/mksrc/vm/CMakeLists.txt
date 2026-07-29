@@ -12,6 +12,7 @@ set(VM_SRC_FILES
         Interp.cpp
         InterpC-portable.cpp
         GlobalCache.cpp
+        Codec.cpp
         JNIWrapper.c
 
         )
@@ -24,8 +25,13 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -fvisibility=hidden -DND
 set(LIBNMMVM_NAME "nmmvm" CACHE INTERNAL "lib nmmvm name")
 
 
-add_library(${LIBNMMVM_NAME} SHARED ${VM_SRC_FILES})
+add_library(${LIBNMMVM_NAME} STATIC ${VM_SRC_FILES})
 
 target_link_libraries(${LIBNMMVM_NAME} log)
 
 target_include_directories(${LIBNMMVM_NAME} PUBLIC include)
+set_target_properties(${LIBNMMVM_NAME} PROPERTIES
+        POSITION_INDEPENDENT_CODE ON
+        C_VISIBILITY_PRESET hidden
+        CXX_VISIBILITY_PRESET hidden
+        VISIBILITY_INLINES_HIDDEN YES)

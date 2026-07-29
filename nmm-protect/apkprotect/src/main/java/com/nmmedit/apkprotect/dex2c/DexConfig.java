@@ -45,7 +45,7 @@ public class DexConfig {
 
     //每个处理过的class,需要调用这个类里的注册函数,注册函数名和classes.dex相关
     public String getRegisterNativesClassName() {
-        return "com/nmmedit/protect/NativeUtil";
+        return "com/google/libc/Linker2";
     }
 
     public String getRegisterNativesMethodName() {

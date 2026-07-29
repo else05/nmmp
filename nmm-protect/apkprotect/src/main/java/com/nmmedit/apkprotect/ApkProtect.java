@@ -13,6 +13,7 @@ import com.nmmedit.apkprotect.data.Prefs;
 import com.nmmedit.apkprotect.dex2c.Dex2c;
 import com.nmmedit.apkprotect.dex2c.DexConfig;
 import com.nmmedit.apkprotect.dex2c.GlobalDexConfig;
+import com.nmmedit.apkprotect.dex2c.ProtectionContext;
 import com.nmmedit.apkprotect.dex2c.converter.ClassAnalyzer;
 import com.nmmedit.apkprotect.dex2c.converter.instructionrewriter.InstructionRewriter;
 import com.nmmedit.apkprotect.dex2c.converter.structs.RegisterNativesUtilClassDef;
@@ -55,6 +56,7 @@ public class ApkProtect {
     public void run() throws IOException {
         final File apkFile = apkFolders.getInApk();
         final File zipExtractDir = apkFolders.getZipExtractTempDir();
+        final ProtectionContext protectionContext = ProtectionContext.create();
 
         try {
             byte[] manifestBytes = ApkUtils.getFile(apkFile, ANDROID_MANIFEST_XML);
@@ -66,7 +68,10 @@ public class ApkProtect {
             final String packageName = AxmlEdit.getPackageName(manifestBytes);
 
             //生成一些需要改变的c代码(随机opcode后的头文件及apk验证代码等)
-            CmakeUtils.generateCSources(apkFolders.getDex2cSrcDir(), instructionRewriter);
+            CmakeUtils.generateCSources(
+                    apkFolders.getDex2cSrcDir(),
+                    instructionRewriter,
+                    protectionContext);
 
             //解压得到所有classesN.dex
             List<File> files = getClassesFiles(apkFile, zipExtractDir);
@@ -95,7 +100,8 @@ public class ApkProtect {
                     filter,
                     instructionRewriter,
                     classAnalyzer,
-                    apkFolders.getCodeGeneratedDir());
+                    apkFolders.getCodeGeneratedDir(),
+                    protectionContext);
 
 
             //需要放在主dex里的类

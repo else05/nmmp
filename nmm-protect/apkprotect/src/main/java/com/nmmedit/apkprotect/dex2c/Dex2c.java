@@ -1,14 +1,18 @@
 package com.nmmedit.apkprotect.dex2c;
 
+import com.android.tools.smali.dexlib2.Opcode;
 import com.android.tools.smali.dexlib2.dexbacked.DexBackedDexFile;
 import com.android.tools.smali.dexlib2.iface.ClassDef;
 import com.android.tools.smali.dexlib2.iface.Method;
+import com.android.tools.smali.dexlib2.iface.MethodImplementation;
+import com.android.tools.smali.dexlib2.iface.instruction.Instruction;
 import com.android.tools.smali.dexlib2.util.MethodUtil;
 import com.android.tools.smali.dexlib2.writer.io.FileDataStore;
 import com.android.tools.smali.dexlib2.writer.pool.DexPool;
 import com.google.common.collect.HashMultimap;
 import com.nmmedit.apkprotect.dex2c.converter.ClassAnalyzer;
 import com.nmmedit.apkprotect.dex2c.converter.JniCodeGenerator;
+import com.nmmedit.apkprotect.dex2c.converter.MyMethodUtil;
 import com.nmmedit.apkprotect.dex2c.converter.instructionrewriter.InstructionRewriter;
 import com.nmmedit.apkprotect.dex2c.converter.structs.MethodConverter;
 import com.nmmedit.apkprotect.dex2c.converter.structs.MyClassDef;
@@ -18,6 +22,7 @@ import com.nmmedit.apkprotect.util.Pair;
 
 import javax.annotation.Nonnull;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -41,12 +46,19 @@ public class Dex2c {
                                                @Nonnull ClassAndMethodFilter filter,
                                                @Nonnull InstructionRewriter instructionRewriter,
                                                @Nonnull ClassAnalyzer classAnalyzer,
-                                               @Nonnull File outDir) throws IOException {
+                                               @Nonnull File outDir,
+                                               @Nonnull ProtectionContext protectionContext) throws IOException {
         if (!outDir.exists()) outDir.mkdirs();
         final GlobalDexConfig globalConfig = new GlobalDexConfig(outDir);
 
         for (File file : dexFiles) {
-            final DexConfig config = handleDex(file, filter, classAnalyzer, instructionRewriter, outDir);
+            final DexConfig config = handleDex(
+                    file,
+                    filter,
+                    classAnalyzer,
+                    instructionRewriter,
+                    outDir,
+                    protectionContext);
 
             //不需要给外部
             config.setShellMethods(null);
@@ -64,22 +76,31 @@ public class Dex2c {
                                       @Nonnull ClassAndMethodFilter filter,
                                       @Nonnull ClassAnalyzer classAnalyzer,
                                       @Nonnull InstructionRewriter instructionRewriter,
-                                      @Nonnull File outDir) throws IOException {
+                                      @Nonnull File outDir,
+                                      @Nonnull ProtectionContext protectionContext) throws IOException {
         return handleDex(new BufferedInputStream(new FileInputStream(dexFile)),
                 dexFile.getName(),
                 filter,
                 classAnalyzer,
                 instructionRewriter,
-                outDir);
+                outDir,
+                protectionContext);
     }
 
     public static DexConfig handleModuleDex(@Nonnull File dexFile,
                                             @Nonnull ClassAndMethodFilter filter,
                                             @Nonnull ClassAnalyzer classAnalyzer,
                                             @Nonnull InstructionRewriter instructionRewriter,
-                                            @Nonnull File outDir) throws IOException {
+                                            @Nonnull File outDir,
+                                            @Nonnull ProtectionContext protectionContext) throws IOException {
         final GlobalDexConfig globalDexConfig = new GlobalDexConfig(outDir);
-        final DexConfig dexConfig = handleDex(dexFile, filter, classAnalyzer, instructionRewriter, outDir);
+        final DexConfig dexConfig = handleDex(
+                dexFile,
+                filter,
+                classAnalyzer,
+                instructionRewriter,
+                outDir,
+                protectionContext);
         globalDexConfig.addDexConfig(dexConfig);
 
         globalDexConfig.generateJniInitCode();
@@ -94,7 +115,8 @@ public class Dex2c {
                                       @Nonnull ClassAndMethodFilter filter,
                                       @Nonnull ClassAnalyzer classAnalyzer,
                                       @Nonnull InstructionRewriter instructionRewriter,
-                                      @Nonnull File outDir) throws IOException {
+                                      @Nonnull File outDir,
+                                      @Nonnull ProtectionContext protectionContext) throws IOException {
         if (!outDir.exists()) outDir.mkdirs();
         DexConfig config = splitDex(dex, dexFileName, filter, classAnalyzer, outDir);
 
@@ -103,12 +125,17 @@ public class Dex2c {
                 new BufferedInputStream(new FileInputStream(config.getImplDexFile())));
 
         //根据符号dex生成c代码
-        try (FileWriter nativeCodeWriter = new FileWriter(config.getNativeFunctionsFile());
-             FileWriter resolverWriter = new FileWriter(config.getResolverFile());
+        try (Writer nativeCodeWriter = new OutputStreamWriter(
+                new FileOutputStream(config.getNativeFunctionsFile()), StandardCharsets.UTF_8);
+             Writer resolverWriter = new OutputStreamWriter(
+                     new FileOutputStream(config.getResolverFile()), StandardCharsets.UTF_8);
         ) {
+            final long dexId = protectionContext.nextDexId();
             JniCodeGenerator codeGenerator = new JniCodeGenerator(nativeImplDexFile,
                     classAnalyzer,
-                    instructionRewriter);
+                    instructionRewriter,
+                    protectionContext,
+                    dexId);
 
             codeGenerator.generate(
                     config,
@@ -151,7 +178,11 @@ public class Dex2c {
 
                 // 处理所有需要转换的方法
                 for (Method method : classDef.getMethods()) {
-                    if (filter.acceptMethod(method)
+                    final boolean accepted = filter.acceptMethod(method);
+                    final Opcode unsupportedOpcode = accepted
+                            ? findUnsupportedOpcode(method)
+                            : null;
+                    if (accepted && unsupportedOpcode == null
                         // 有直接调用jna方法的指令,则不能进行native化
                         // 感觉很少会发生,默认就把这个判断注释掉了,谁需要再去掉注释
 //                            && !classAnalyzer.hasCallJnaMethod(method)
@@ -166,6 +197,16 @@ public class Dex2c {
                         //只有一个具体实现
                         addMethod(implDirectMethods, implVirtualMethods, pair.second);
                     } else {
+                        if (unsupportedOpcode != null) {
+                            System.err.printf(
+                                    "跳过不支持的 DEX 指令: %s->%s%s，opcode=%s%n",
+                                    method.getDefiningClass(),
+                                    method.getName(),
+                                    MyMethodUtil.getMethodSignature(
+                                            method.getParameterTypes(),
+                                            method.getReturnType()),
+                                    unsupportedOpcode.name());
+                        }
                         //不需要进行处理
                         addMethod(shellDirectMethods, shellVirtualMethods, method);
                     }
@@ -189,6 +230,27 @@ public class Dex2c {
         //写入符号dex
         nativeImplDexPool.writeTo(new FileDataStore(config.getImplDexFile()));
         return config;
+    }
+
+    private static Opcode findUnsupportedOpcode(Method method) {
+        final MethodImplementation implementation = method.getImplementation();
+        if (implementation == null) {
+            return null;
+        }
+        for (Instruction instruction : implementation.getInstructions()) {
+            switch (instruction.getOpcode()) {
+                case INVOKE_POLYMORPHIC:
+                case INVOKE_POLYMORPHIC_RANGE:
+                case INVOKE_CUSTOM:
+                case INVOKE_CUSTOM_RANGE:
+                case CONST_METHOD_HANDLE:
+                case CONST_METHOD_TYPE:
+                    return instruction.getOpcode();
+                default:
+                    break;
+            }
+        }
+        return null;
     }
 
     private static void addMethods(List<Method> directMethods,

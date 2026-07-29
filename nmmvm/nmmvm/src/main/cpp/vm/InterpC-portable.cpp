@@ -1061,14 +1061,13 @@ extern "C" {
 #endif
 
 
-__attribute__((visibility("default")))
 jvalue vmInterpret(
         JNIEnv *env,
         const vmCode *code,
         const vmResolver *dvmResolver
 ) {
     jvalue args_tmp[5];//方法调用时参数传递(参数数量小于等于5)
-    jvalue retval;
+    jvalue retval = {};
     regptr_t *fp = code->regs;//寄存器
     u1 *fp_flags = code->reg_flags;//寄存器类型标识
     const u2 *pc = code->insns;

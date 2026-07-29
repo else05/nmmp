@@ -1,14 +1,12 @@
 package com.nmmedit.apkprotect.aar.asm;
 
-import com.nmmedit.apkprotect.util.FileUtils;
 import org.junit.Test;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 
-import java.io.*;
-import java.nio.file.Files;
-import java.util.Arrays;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class AsmUtilsTest {
 
@@ -24,13 +22,7 @@ public class AsmUtilsTest {
 
         cls1.accept(cv, ClassReader.SKIP_DEBUG);
 
-        final File file = new File("/home/mao/adbi/t2.class");
-
-        try (
-                final FileOutputStream out = new FileOutputStream(file);
-        ) {
-            FileUtils.copyStream(new ByteArrayInputStream(cw.toByteArray()), out);
-        }
+        new ClassReader(cw.toByteArray());
 
     }
 

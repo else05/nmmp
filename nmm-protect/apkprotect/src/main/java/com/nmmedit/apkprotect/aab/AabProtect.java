@@ -6,6 +6,7 @@ import com.nmmedit.apkprotect.BuildNativeLib;
 import com.nmmedit.apkprotect.aab.proto.ProtoUtils;
 import com.nmmedit.apkprotect.dex2c.Dex2c;
 import com.nmmedit.apkprotect.dex2c.GlobalDexConfig;
+import com.nmmedit.apkprotect.dex2c.ProtectionContext;
 import com.nmmedit.apkprotect.dex2c.converter.ClassAnalyzer;
 import com.nmmedit.apkprotect.dex2c.converter.instructionrewriter.InstructionRewriter;
 import com.nmmedit.apkprotect.dex2c.filters.ClassAndMethodFilter;
@@ -50,6 +51,7 @@ public class AabProtect {
     public void run() throws IOException {
         final File inAab = aabFolders.getInAab();
         final File zipExtractDir = aabFolders.getZipExtractTempDir();
+        final ProtectionContext protectionContext = ProtectionContext.create();
 
 
         try {
@@ -64,7 +66,10 @@ public class AabProtect {
 
 
             //生成一些需要改变的c代码(随机opcode后的头文件及apk验证代码等)
-            CmakeUtils.generateCSources(aabFolders.getDex2cSrcDir(), instructionRewriter);
+            CmakeUtils.generateCSources(
+                    aabFolders.getDex2cSrcDir(),
+                    instructionRewriter,
+                    protectionContext);
 
             //解压得到所有classesN.dex
             List<File> files = getClassesFiles(inAab, zipExtractDir);
@@ -82,7 +87,8 @@ public class AabProtect {
                     filter,
                     instructionRewriter,
                     classAnalyzer,
-                    aabFolders.getCodeGeneratedDir());
+                    aabFolders.getCodeGeneratedDir(),
+                    protectionContext);
 
 
             //需要放在主dex里的类

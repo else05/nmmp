@@ -1,6 +1,8 @@
 package com.nmmedit.apkprotect.util;
 
 import com.nmmedit.apkprotect.BuildNativeLib;
+import com.nmmedit.apkprotect.dex2c.MethodCodec;
+import com.nmmedit.apkprotect.dex2c.ProtectionContext;
 import com.nmmedit.apkprotect.dex2c.converter.instructionrewriter.InstructionRewriter;
 import com.nmmedit.apkprotect.sign.ApkVerifyCodeGenerator;
 
@@ -8,10 +10,13 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 public class CmakeUtils {
 
@@ -39,7 +44,8 @@ public class CmakeUtils {
                 .matcher(headerContent)
                 .replaceAll(String.format("_name[kNumPackedOpcodes] = {        \\\\\n%s};\n", gotoTableContent));
 
-        try (FileWriter fileWriter = new FileWriter(source)) {
+        try (Writer fileWriter = new OutputStreamWriter(
+                new FileOutputStream(source), StandardCharsets.UTF_8)) {
             fileWriter.write(headerContent);
         }
     }
@@ -58,7 +64,8 @@ public class CmakeUtils {
         String content = lines.replaceAll(dataPlaceHolder, dataPlaceHolder + apkVerifyCodeGenerator.generate());
         content = content.replaceAll("(#define PACKAGE_NAME) .*\n", "$1 \"" + packageName + "\"\n");
 
-        try (FileWriter fileWriter = new FileWriter(source)) {
+        try (Writer fileWriter = new OutputStreamWriter(
+                new FileOutputStream(source), StandardCharsets.UTF_8)) {
             fileWriter.write(content);
         }
     }
@@ -74,13 +81,16 @@ public class CmakeUtils {
         //替换原本libname
         lines = lines.replaceAll(String.format(libNameFormat, "nmmp"), String.format(libNameFormat, libName));
 
-        try (FileWriter fileWriter = new FileWriter(cmakeTemp)) {
+        try (Writer fileWriter = new OutputStreamWriter(
+                new FileOutputStream(cmakeTemp), StandardCharsets.UTF_8)) {
             fileWriter.write(lines);
         }
     }
 
 
-    public static void generateCSources(File srcDir, InstructionRewriter instructionRewriter) throws IOException {
+    public static void generateCSources(File srcDir,
+                                        InstructionRewriter instructionRewriter,
+                                        ProtectionContext protectionContext) throws IOException {
         final File vmsrcFile = new File(FileUtils.getHomePath(), "tools/vmsrc.zip");
         if (!vmsrcFile.exists()) {
             //警告：如果外部源码存在不会复制内部vmsrc.zip出去，需要删除外部源码文件才能保证vmsrc.zip正确更新
@@ -93,7 +103,9 @@ public class CmakeUtils {
                 FileUtils.copyStream(inputStream, outputStream);
             }
         }
+        validateVmTemplate(vmsrcFile);
         final List<File> cSources = ApkUtils.extractFiles(vmsrcFile, ".*", srcDir);
+        writeCodecConfig(new File(srcDir, "vm/include/VmCodecConfig.h"), protectionContext);
 
         //处理指令及apk验证,生成新的c文件
         for (File source : cSources) {
@@ -108,6 +120,80 @@ public class CmakeUtils {
             } else if (source.getName().endsWith("JNIWrapper.h")) {
                 writeRandomJNIWrapper(source);
             }
+        }
+    }
+
+    private static void validateVmTemplate(File vmsrcFile) throws IOException {
+        try (ZipFile zipFile = new ZipFile(vmsrcFile)) {
+            requireZipEntry(zipFile, "vm/Codec.cpp", vmsrcFile);
+            requireZipEntry(zipFile, "vm/include/VmCodec.h", vmsrcFile);
+            final ZipEntry configEntry = requireZipEntry(
+                    zipFile,
+                    "vm/include/VmCodecConfig.h",
+                    vmsrcFile);
+            final String config;
+            try (InputStream inputStream = zipFile.getInputStream(configEntry);
+                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+                FileUtils.copyStream(inputStream, outputStream);
+                config = new String(outputStream.toByteArray(), StandardCharsets.UTF_8);
+            }
+            final Pattern pattern = Pattern.compile(
+                    "#define\\s+NMMP_VM_TEMPLATE_VERSION\\s+(\\d+)");
+            final Matcher matcher = pattern.matcher(config);
+            if (!matcher.find()
+                    || Integer.parseInt(matcher.group(1)) != ProtectionContext.TEMPLATE_VERSION) {
+                throw new IOException(String.format(
+                        Locale.ROOT,
+                        "VM 模板版本不匹配: %s，期望版本 %d",
+                        vmsrcFile.getAbsolutePath(),
+                        ProtectionContext.TEMPLATE_VERSION));
+            }
+        }
+    }
+
+    private static ZipEntry requireZipEntry(ZipFile zipFile,
+                                            String entryName,
+                                            File vmsrcFile) throws IOException {
+        final ZipEntry entry = zipFile.getEntry(entryName);
+        if (entry == null) {
+            throw new IOException(String.format(
+                    Locale.ROOT,
+                    "VM 模板缺少 %s: %s，期望版本 %d",
+                    entryName,
+                    vmsrcFile.getAbsolutePath(),
+                    ProtectionContext.TEMPLATE_VERSION));
+        }
+        return entry;
+    }
+
+    private static void writeCodecConfig(File configFile,
+                                         ProtectionContext protectionContext) throws IOException {
+        final File parent = configFile.getParentFile();
+        if (!parent.exists() && !parent.mkdirs()) {
+            throw new IOException("无法创建 VM 配置目录: " + parent.getAbsolutePath());
+        }
+        final String content = String.format(
+                Locale.ROOT,
+                "#ifndef NMMP_VM_CODEC_CONFIG_H\n"
+                        + "#define NMMP_VM_CODEC_CONFIG_H\n\n"
+                        + "#include <stdint.h>\n\n"
+                        + "#define NMMP_VM_TEMPLATE_VERSION %d\n"
+                        + "#define NMMP_VM_CODEC_VERSION %d\n"
+                        + "#define NMMP_VM_BUILD_SEED UINT64_C(0x%016x)\n"
+                        + "#define NMMP_VM_DOMAIN_CODE UINT32_C(0x%08x)\n"
+                        + "#define NMMP_VM_DOMAIN_TRIES UINT32_C(0x%08x)\n"
+                        + "#define NMMP_VM_DOMAIN_STRING UINT32_C(0x%08x)\n\n"
+                        + "#endif\n",
+                ProtectionContext.TEMPLATE_VERSION,
+                ProtectionContext.CODEC_VERSION,
+                protectionContext.getBuildSeed(),
+                MethodCodec.DOMAIN_CODE,
+                MethodCodec.DOMAIN_TRIES,
+                MethodCodec.DOMAIN_STRING);
+        try (Writer writer = new OutputStreamWriter(
+                new FileOutputStream(configFile),
+                StandardCharsets.UTF_8)) {
+            writer.write(content);
         }
     }
 
@@ -128,7 +214,8 @@ public class CmakeUtils {
             }
 
 
-            try (FileWriter fileWriter = new FileWriter(source)) {
+            try (Writer fileWriter = new OutputStreamWriter(
+                    new FileOutputStream(source), StandardCharsets.UTF_8)) {
                 final String doc = matcherResolver.replaceAll("typedef struct {\n" +
                         randomList(funcs) +
                         "} vmResolver;");
@@ -154,7 +241,8 @@ public class CmakeUtils {
             }
 
 
-            try (FileWriter fileWriter = new FileWriter(file)) {
+            try (Writer fileWriter = new OutputStreamWriter(
+                    new FileOutputStream(file), StandardCharsets.UTF_8)) {
                 final String doc = matcherWrapper.replaceAll("typedef struct {\n" +
                         randomList(funcs) +
                         "} JNIWrapper;");

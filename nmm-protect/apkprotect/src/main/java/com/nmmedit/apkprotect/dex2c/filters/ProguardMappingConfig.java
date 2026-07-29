@@ -44,14 +44,16 @@ public class ProguardMappingConfig implements ClassAndMethodFilter, MappingProce
                     javaType2jvm(methodMapping.returnType));
 
             final List<String> newArgs = getNewArgs(args);
-            String newRetType = oldTypeNewTypeMap.get(methodMapping.returnType);
+            final String oldRetType = javaType2jvm(methodMapping.returnType);
+            String newRetType = oldTypeNewTypeMap.get(oldRetType);
             if (newRetType == null) {
-                newRetType = methodMapping.returnType;
+                newRetType = oldRetType;
             }
-            final ImmutableMethodReference newMethodRef = new ImmutableMethodReference(javaType2jvm(
-                    methodMapping.newClassName),
-                    methodMapping.newMethodName, newArgs,
-                    javaType2jvm(newRetType));
+            final ImmutableMethodReference newMethodRef = new ImmutableMethodReference(
+                    javaType2jvm(methodMapping.newClassName),
+                    methodMapping.newMethodName,
+                    newArgs,
+                    newRetType);
             newMethodRefMap.put(newMethodRef, oldMethodRef);
         }
     }

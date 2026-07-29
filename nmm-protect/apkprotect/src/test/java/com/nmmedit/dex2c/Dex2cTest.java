@@ -1,6 +1,7 @@
 package com.nmmedit.dex2c;
 
 import com.nmmedit.apkprotect.dex2c.Dex2c;
+import com.nmmedit.apkprotect.dex2c.DexConfig;
 import com.nmmedit.apkprotect.dex2c.ProtectionContext;
 import com.nmmedit.apkprotect.dex2c.converter.ClassAnalyzer;
 import com.nmmedit.apkprotect.dex2c.converter.MyMethodUtil;
@@ -49,13 +50,16 @@ public class Dex2cTest {
         final DexBackedDexFile dexFile = DexBackedDexFile.fromInputStream(null, new BufferedInputStream(this.getClass().getResourceAsStream("/classes2.dex")));
         classAnalyzer.loadDexFile(dexFile);
 
-        Dex2c.handleDex(this.getClass().getResourceAsStream("/classes2.dex"),
+        final DexConfig config = Dex2c.handleDex(this.getClass().getResourceAsStream("/classes2.dex"),
                 "classes.dex",
                 testFilter,
                 classAnalyzer,
                 instructionRewriter,
                 outdir,
                 new ProtectionContext(0x0123456789abcdefL));
+
+        assertTrue(config.getMatchedClassCount() >= config.getShellMethods().keySet().size());
+        assertTrue(config.getMatchedMethodCount() >= config.getShellMethods().size());
 
         final String resolverSource = StandardCharsets.UTF_8.newDecoder()
                 .onMalformedInput(CodingErrorAction.REPORT)

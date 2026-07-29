@@ -25,6 +25,10 @@ public class DexConfig {
     private Set<String> handledNativeClasses;
     private Map<String, Integer> nativeMethodOffsets;
 
+    private int matchedClassCount;
+    private int matchedMethodCount;
+    private int skippedEmptyMethodCount;
+
     public DexConfig(File outputDir, String dexFileName) {
         this.outputDir = outputDir;
         int i = dexFileName.lastIndexOf('.');
@@ -43,13 +47,17 @@ public class DexConfig {
         return dexName;
     }
 
-    //每个处理过的class,需要调用这个类里的注册函数,注册函数名和classes.dex相关
+    // 每个处理过的类都通过这个类调用本地方法注册入口
     public String getRegisterNativesClassName() {
-        return "com/google/libc/Linker2";
+        return "com/google/libc/ReactNative";
     }
 
     public String getRegisterNativesMethodName() {
-        return getDexName() + "Init0";
+        final String dexName = getDexName();
+        if (dexName.startsWith("classes")) {
+            return "js" + dexName.substring("classes".length());
+        }
+        return "js" + dexName;
     }
 
     @Nonnull
@@ -73,6 +81,27 @@ public class DexConfig {
 
     public HashMultimap<String, List<? extends Method>> getShellMethods() {
         return shellMethods;
+    }
+
+    public void setMatchedStats(int matchedClassCount, int matchedMethodCount) {
+        this.matchedClassCount = matchedClassCount;
+        this.matchedMethodCount = matchedMethodCount;
+    }
+
+    public int getMatchedClassCount() {
+        return matchedClassCount;
+    }
+
+    public int getMatchedMethodCount() {
+        return matchedMethodCount;
+    }
+
+    public void setSkippedEmptyMethodCount(int skippedEmptyMethodCount) {
+        this.skippedEmptyMethodCount = skippedEmptyMethodCount;
+    }
+
+    public int getSkippedEmptyMethodCount() {
+        return skippedEmptyMethodCount;
     }
 
     /**

@@ -30,7 +30,7 @@ public class MappingReader {
     public void parse(MappingProcessor processor) throws IOException {
         try (BufferedReader reader = new BufferedReader(getMappingReader())
         ) {
-            String className = null;
+            ClassMapping classMapping = null;
             String line;
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
@@ -38,9 +38,13 @@ public class MappingReader {
                     continue;
                 }
                 if (line.endsWith(":")) {
-                    className = processClassMapping(line, processor);
-                } else if (className != null) {
-                    processClassMemberMapping(className, line, processor);
+                    classMapping = processClassMapping(line, processor);
+                } else if (classMapping != null) {
+                    processClassMemberMapping(
+                            classMapping.className,
+                            classMapping.newClassName,
+                            line,
+                            processor);
                 }
             }
 
@@ -48,12 +52,10 @@ public class MappingReader {
     }
 
     /**
-     * Parses the given line with a class mapping and processes the
-     * results with the given mapping processor. Returns the old class name,
-     * or null if any subsequent class member lines can be ignored.
+     * 解析类映射并保留原类名和混淆后类名；格式无效时返回 null。
      */
-    private String processClassMapping(String line,
-                                       MappingProcessor mappingProcessor) {
+    private ClassMapping processClassMapping(String line,
+                                             MappingProcessor mappingProcessor) {
         // See if we can parse "___ -> ___:", containing the original
         // class name and the new class name.
 
@@ -74,7 +76,7 @@ public class MappingReader {
         // Process this class name mapping.
         mappingProcessor.processClassMapping(className, newClassName);
 
-        return className;
+        return new ClassMapping(className, newClassName);
     }
 
     /**
@@ -82,6 +84,7 @@ public class MappingReader {
      * results with the given mapping processor.
      */
     private void processClassMemberMapping(String className,
+                                           String newClassName,
                                            String line,
                                            MappingProcessor mappingProcessor) {
         // See if we can parse one of
@@ -117,7 +120,6 @@ public class MappingReader {
         String newName = line.substring(arrowIndex + 2).trim();
 
         // Does the method name contain an explicit original class name?
-        String newClassName = className;
         int dotIndex = name.lastIndexOf('.');
         if (dotIndex >= 0) {
             className = name.substring(0, dotIndex);
@@ -165,6 +167,16 @@ public class MappingReader {
                         newLastLineNumber,
                         newName);
             }
+        }
+    }
+
+    private static final class ClassMapping {
+        private final String className;
+        private final String newClassName;
+
+        private ClassMapping(String className, String newClassName) {
+            this.className = className;
+            this.newClassName = newClassName;
         }
     }
 }

@@ -40,7 +40,7 @@ public class AsmUtils {
         mv.visitEnd();
 
 
-        //native void classInit0(int idx);
+        // native void js(int idx);
         for (String methodName : initMethodNames) {
             cw.visitMethod(Opcodes.ACC_PUBLIC | Opcodes.ACC_STATIC | Opcodes.ACC_NATIVE, methodName, "(I)V", null, null);
         }

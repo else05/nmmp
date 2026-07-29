@@ -52,6 +52,11 @@ public class Dex2c {
                                                @Nonnull ProtectionContext protectionContext) throws IOException {
         if (!outDir.exists()) outDir.mkdirs();
         final GlobalDexConfig globalConfig = new GlobalDexConfig(outDir);
+        int matchedClassCount = 0;
+        int matchedMethodCount = 0;
+        int skippedEmptyMethodCount = 0;
+        int convertedClassCount = 0;
+        int convertedMethodCount = 0;
 
         for (File file : dexFiles) {
             final DexConfig config = handleDex(
@@ -62,13 +67,33 @@ public class Dex2c {
                     outDir,
                     protectionContext);
 
+            matchedClassCount += config.getMatchedClassCount();
+            matchedMethodCount += config.getMatchedMethodCount();
+            skippedEmptyMethodCount += config.getSkippedEmptyMethodCount();
+            convertedClassCount += config.getShellMethods().keySet().size();
+            convertedMethodCount += config.getShellMethods().size();
+
             //不需要给外部
             config.setShellMethods(null);
 
             globalConfig.addDexConfig(config);
         }
+        printConversionStats(matchedClassCount, matchedMethodCount, skippedEmptyMethodCount,
+                convertedClassCount, convertedMethodCount);
         globalConfig.generateJniInitCode();
         return globalConfig;
+    }
+
+    private static void printConversionStats(int matchedClassCount,
+                                             int matchedMethodCount,
+                                             int skippedEmptyMethodCount,
+                                             int convertedClassCount,
+                                             int convertedMethodCount) {
+        System.out.printf("[nmmp] Matched:       classes=%d, methods=%d%n",
+                matchedClassCount, matchedMethodCount);
+        System.out.printf("[nmmp] Skipped empty: methods=%d%n", skippedEmptyMethodCount);
+        System.out.printf("[nmmp] Converted:     classes=%d, methods=%d%n",
+                convertedClassCount, convertedMethodCount);
     }
 
     /**
@@ -104,6 +129,9 @@ public class Dex2c {
                 outDir,
                 protectionContext);
         globalDexConfig.addDexConfig(dexConfig);
+        printConversionStats(dexConfig.getMatchedClassCount(), dexConfig.getMatchedMethodCount(),
+                dexConfig.getSkippedEmptyMethodCount(),
+                dexConfig.getShellMethods().keySet().size(), dexConfig.getShellMethods().size());
 
         globalDexConfig.generateJniInitCode();
         return dexConfig;
@@ -169,9 +197,13 @@ public class Dex2c {
         final MethodConverter methodConverter = new MethodConverter(classAnalyzer);
 
         HashMultimap<String, List<? extends Method>> shellMethods = HashMultimap.create();
+        int matchedClassCount = 0;
+        int matchedMethodCount = 0;
+        int skippedEmptyMethodCount = 0;
 
         for (final ClassDef classDef : originDexFile.getClasses()) {
             if (filter.acceptClass(classDef)) {
+                matchedClassCount++;
                 final ArrayList<Method> shellDirectMethods = new ArrayList<>();
                 final ArrayList<Method> shellVirtualMethods = new ArrayList<>();
 
@@ -181,10 +213,15 @@ public class Dex2c {
                 // 处理所有需要转换的方法
                 for (Method method : classDef.getMethods()) {
                     final boolean accepted = filter.acceptMethod(method);
-                    final Opcode unsupportedOpcode = accepted
+                    if (accepted) {
+                        matchedMethodCount++;
+                    }
+                    final boolean emptyVoidMethod = accepted
+                            && MyMethodUtil.isEmptyVoidMethod(method);
+                    final Opcode unsupportedOpcode = accepted && !emptyVoidMethod
                             ? findUnsupportedOpcode(method, classAnalyzer)
                             : null;
-                    if (accepted && unsupportedOpcode == null
+                    if (accepted && !emptyVoidMethod && unsupportedOpcode == null
                         // 有直接调用jna方法的指令,则不能进行native化
                         // 感觉很少会发生,默认就把这个判断注释掉了,谁需要再去掉注释
 //                            && !classAnalyzer.hasCallJnaMethod(method)
@@ -199,7 +236,16 @@ public class Dex2c {
                         //只有一个具体实现
                         addMethod(implDirectMethods, implVirtualMethods, pair.second);
                     } else {
-                        if (unsupportedOpcode != null) {
+                        if (emptyVoidMethod) {
+                            skippedEmptyMethodCount++;
+                            System.out.printf(
+                                    "[nmmp] 跳过空方法（保留 DEX）: %s->%s%s%n",
+                                    method.getDefiningClass(),
+                                    method.getName(),
+                                    MyMethodUtil.getMethodSignature(
+                                            method.getParameterTypes(),
+                                            method.getReturnType()));
+                        } else if (unsupportedOpcode != null) {
                             System.err.printf(
                                     "跳过不支持的 DEX 指令: %s->%s%s，opcode=%s%n",
                                     method.getDefiningClass(),
@@ -226,6 +272,8 @@ public class Dex2c {
         DexConfig config = new DexConfig(outDir, dexFileName);
 
         config.setShellMethods(shellMethods);
+        config.setMatchedStats(matchedClassCount, matchedMethodCount);
+        config.setSkippedEmptyMethodCount(skippedEmptyMethodCount);
 
         //写入需要运行的dex
         shellDexPool.writeTo(new FileDataStore(config.getShellDexFile()));

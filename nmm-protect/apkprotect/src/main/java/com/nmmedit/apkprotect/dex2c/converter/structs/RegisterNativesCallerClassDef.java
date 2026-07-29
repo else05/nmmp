@@ -228,7 +228,7 @@ public class RegisterNativesCallerClassDef extends BaseTypeReference implements 
             }
         }
 
-        //classesInit0(classIdx);
+        // js(classIdx);
         private List<BuilderInstruction> getCallRegisterNativesMethod() {
             final List<BuilderInstruction> insns = new ArrayList<>();
             insns.add(buildConstInst(0, classIdx));

@@ -2,10 +2,14 @@ package com.nmmedit.apkprotect.dex2c.converter;
 
 
 import com.android.tools.smali.dexlib2.AccessFlags;
+import com.android.tools.smali.dexlib2.Opcode;
 import com.android.tools.smali.dexlib2.iface.Method;
+import com.android.tools.smali.dexlib2.iface.MethodImplementation;
+import com.android.tools.smali.dexlib2.iface.instruction.Instruction;
 import com.android.tools.smali.util.Hex;
 
 import javax.annotation.Nonnull;
+import java.util.Iterator;
 import java.util.List;
 
 public class MyMethodUtil {
@@ -24,6 +28,23 @@ public class MyMethodUtil {
         int flags = method.getAccessFlags();
         return AccessFlags.BRIDGE.isSet(flags) ||
                 AccessFlags.SYNTHETIC.isSet(flags);
+    }
+
+    public static boolean isEmptyVoidMethod(Method method) {
+        if (!"V".equals(method.getReturnType())) {
+            return false;
+        }
+        final MethodImplementation implementation = method.getImplementation();
+        if (implementation == null || !implementation.getTryBlocks().isEmpty()) {
+            return false;
+        }
+
+        // 只接受唯一一条 return-void，避免忽略编译器插入的参数校验、父类调用等逻辑
+        final Iterator<? extends Instruction> iterator = implementation.getInstructions().iterator();
+        if (!iterator.hasNext() || iterator.next().getOpcode() != Opcode.RETURN_VOID) {
+            return false;
+        }
+        return !iterator.hasNext();
     }
 
     @Nonnull

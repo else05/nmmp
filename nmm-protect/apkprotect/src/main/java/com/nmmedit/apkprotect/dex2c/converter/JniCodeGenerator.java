@@ -168,7 +168,7 @@ public class JniCodeGenerator {
         writer.append("\n");
 //        -----------结束----------------
 
-        final byte[] instructionData = instructionRewriter.rewriteInstructions(implementation);
+        final byte[] instructionData = instructionRewriter.rewriteInstructions(method);
         final byte[] encodedInstructions = protectionContext.getMethodCodec().transform(
                 instructionData,
                 methodId,

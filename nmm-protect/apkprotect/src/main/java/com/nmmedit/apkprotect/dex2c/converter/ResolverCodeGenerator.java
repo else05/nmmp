@@ -135,9 +135,9 @@ public class ResolverCodeGenerator {
                 "#define FIND_CLASS_BY_NAME(_className)                          \\\n" +
                 "    clazz = (*env)->FindClass(env, _className);                 \\\n" +
                 "    if (clazz == NULL) {                                        \\\n" +
-                "        /*转换异常类型,保持和正常java抛一样异常*/                   \\\n" +
-                "        (*env)->ExceptionClear(env);                            \\\n" +
-                "        vmThrowNoClassDefFoundError(env, _className);           \\\n" +
+                "        if (!(*env)->ExceptionCheck(env)) {                     \\\n" +
+                "            vmThrowNoClassDefFoundError(env, _className);       \\\n" +
+                "        }                                                       \\\n" +
                 "        return NULL;                                            \\\n" +
                 "    }\n" +
                 "\n" +
@@ -176,8 +176,9 @@ public class ResolverCodeGenerator {
                 "    }\n" +
                 "    if (candidate.fieldId == NULL) {\n" +
                 "        (*env)->DeleteLocalRef(env, clazz);\n" +
-                "        (*env)->ExceptionClear(env);\n" +
-                "        vmThrowNoSuchFieldError(env, name);\n" +
+                "        if (!(*env)->ExceptionCheck(env)) {\n" +
+                "            vmThrowNoSuchFieldError(env, name);\n" +
+                "        }\n" +
                 "        return NULL;\n" +
                 "    }\n" +
                 "    (*env)->DeleteLocalRef(env, clazz);\n" +
@@ -213,8 +214,9 @@ public class ResolverCodeGenerator {
                 "    }\n" +
                 "    if (candidate.methodId == NULL) {\n" +
                 "        (*env)->DeleteLocalRef(env, clazz);\n" +
-                "        (*env)->ExceptionClear(env);\n" +
-                "        vmThrowNoSuchMethodError(env, name);\n" +
+                "        if (!(*env)->ExceptionCheck(env)) {\n" +
+                "            vmThrowNoSuchMethodError(env, name);\n" +
+                "        }\n" +
                 "        return NULL;\n" +
                 "    }\n" +
                 "    (*env)->DeleteLocalRef(env, clazz);\n" +

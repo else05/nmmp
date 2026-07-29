@@ -13,6 +13,9 @@ import com.android.tools.smali.dexlib2.Opcodes;
 import com.android.tools.smali.dexlib2.dexbacked.DexBackedDexFile;
 import com.android.tools.smali.dexlib2.iface.ClassDef;
 import com.android.tools.smali.dexlib2.iface.Method;
+import com.android.tools.smali.dexlib2.iface.reference.MethodReference;
+import com.android.tools.smali.dexlib2.immutable.ImmutableClassDef;
+import com.android.tools.smali.dexlib2.immutable.reference.ImmutableMethodReference;
 import com.android.tools.smali.dexlib2.writer.pool.DexPool;
 import org.junit.Test;
 
@@ -24,7 +27,9 @@ import java.nio.ByteBuffer;
 import java.nio.charset.CodingErrorAction;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.Collections;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -60,6 +65,35 @@ public class Dex2cTest {
                 .toString();
         assertFalse(resolverSource.contains("Exception.h"));
         assertTrue(resolverSource.contains("ThrowNew(env, gVm.exInternalError"));
+        assertFalse(resolverSource.contains("ExceptionClear(env)"));
+        assertTrue(resolverSource.contains("if (!(*env)->ExceptionCheck(env))"));
+    }
+
+    @Test
+    public void testClassInvokeSuperUsesDirectSuperclass() {
+        final ImmutableClassDef callerClass = new ImmutableClassDef(
+                "Ltests/Child;",
+                AccessFlags.PUBLIC.getValue(),
+                "Ljava/util/LinkedHashSet;",
+                Collections.<String>emptyList(),
+                null,
+                Collections.emptyList(),
+                Collections.emptyList(),
+                Collections.emptyList());
+        final MethodReference originalReference = new ImmutableMethodReference(
+                "Ljava/util/AbstractCollection;",
+                "add",
+                Collections.singletonList("Ljava/lang/Object;"),
+                "Z");
+
+        final MethodReference rewrittenReference = ClassAnalyzer.createClassInvokeSuperReference(
+                callerClass,
+                originalReference);
+
+        assertEquals("Ljava/util/LinkedHashSet;", rewrittenReference.getDefiningClass());
+        assertEquals(originalReference.getName(), rewrittenReference.getName());
+        assertEquals(originalReference.getParameterTypes(), rewrittenReference.getParameterTypes());
+        assertEquals(originalReference.getReturnType(), rewrittenReference.getReturnType());
     }
 
     public static ClassAndMethodFilter testFilter = new ClassAndMethodFilter() {

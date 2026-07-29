@@ -1459,9 +1459,11 @@ jvalue vmInterpret(
         obj = GET_REGISTER_AS_OBJECT(vsrc1);
         if (obj == NULL) {
             dvmThrowNullPointerException(env, NULL);
+            pc += 1;
             GOTO_exceptionThrown();
         }
         if (wrapper->MonitorExit(env, obj) != JNI_OK) {
+            pc += 1;
             GOTO_exceptionThrown();
         }
         ILOGV("+ unlocking %p", obj);
@@ -2964,10 +2966,10 @@ HANDLE_OP_SHX_INT_LIT8(OP_USHR_INT_LIT8, "ushr", (u4), >>)
             dvmThrowRuntimeException(env,
                                      "bad filled array req");
             GOTO_exceptionThrown();
-        } else if (typeCh != 'L' && typeCh != '[' && typeCh != 'I') {
-            ALOGV("non-int primitives not implemented");
-            dvmThrowInternalError(env,
-                                  "filled-new-array not implemented for anything but 'int'");
+        } else if (typeCh != 'Z' && typeCh != 'B' && typeCh != 'C'
+                && typeCh != 'S' && typeCh != 'I' && typeCh != 'F'
+                && typeCh != 'L' && typeCh != '[') {
+            dvmThrowInternalError(env, "bad filled array type");
             GOTO_exceptionThrown();
         }
         NEW_ARRAY(typeCh, type + 1, vsrc1);
@@ -2984,20 +2986,36 @@ HANDLE_OP_SHX_INT_LIT8(OP_USHR_INT_LIT8, "ushr", (u4), >>)
         if (methodCallRange) {
             for (i = 0; i < vsrc1; i++) {
                 SET_ARRAY_ELEMENT(typeCh, newArray, i, vdst + i);
+                if (wrapper->ExceptionCheck(env)) {
+                    wrapper->DeleteLocalRef(env, newArray);
+                    GOTO_exceptionThrown();
+                }
             }
         } else {
             assert(vsrc1 <= 5);
             if (vsrc1 == 5) {
                 SET_ARRAY_ELEMENT(typeCh, newArray, 4, arg5);
+                if (wrapper->ExceptionCheck(env)) {
+                    wrapper->DeleteLocalRef(env, newArray);
+                    GOTO_exceptionThrown();
+                }
                 vsrc1--;
             }
             for (i = 0; i < vsrc1; i++) {
                 SET_ARRAY_ELEMENT(typeCh, newArray, i, vdst & 0x0f);
+                if (wrapper->ExceptionCheck(env)) {
+                    wrapper->DeleteLocalRef(env, newArray);
+                    GOTO_exceptionThrown();
+                }
                 vdst >>= 4;
             }
         }
 
         retval.l = newArray;
+        if (INST_INST(FETCH(3)) != OP_MOVE_RESULT_OBJECT) {
+            wrapper->DeleteLocalRef(env, retval.l);
+            retval.l = NULL;
+        }
     }
     FINISH(3);
     GOTO_TARGET_END

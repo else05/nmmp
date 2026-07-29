@@ -1,5 +1,6 @@
 package com.nmmedit.apkprotect.dex2c.converter;
 
+import com.android.tools.smali.dexlib2.AccessFlags;
 import com.android.tools.smali.dexlib2.dexbacked.DexBackedClassDef;
 import com.android.tools.smali.dexlib2.dexbacked.DexBackedDexFile;
 import com.android.tools.smali.dexlib2.iface.ClassDef;
@@ -11,6 +12,7 @@ import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction;
 import com.android.tools.smali.dexlib2.iface.reference.FieldReference;
 import com.android.tools.smali.dexlib2.iface.reference.MethodReference;
 import com.android.tools.smali.dexlib2.immutable.reference.ImmutableFieldReference;
+import com.android.tools.smali.dexlib2.immutable.reference.ImmutableMethodReference;
 import com.google.common.collect.Maps;
 
 import javax.annotation.Nonnull;
@@ -19,8 +21,10 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 //目前用于分析接口静态域，后面可能其他用途
 //需要添加多个dex文件,以便完整分析class
@@ -158,6 +162,67 @@ public class ClassAnalyzer {
     @Nullable
     public ClassDef getClassDef(@Nonnull String className) {
         return allClasses.get(className);
+    }
+
+    public boolean isInterfaceInvokeSuper(@Nonnull String callerType,
+                                          @Nonnull MethodReference reference) {
+        final ClassDef targetClass = allClasses.get(reference.getDefiningClass());
+        if (targetClass != null) {
+            return AccessFlags.INTERFACE.isSet(targetClass.getAccessFlags());
+        }
+
+        final ClassDef callerClass = allClasses.get(callerType);
+        if (callerClass == null) {
+            return false;
+        }
+        if (AccessFlags.INTERFACE.isSet(callerClass.getAccessFlags())) {
+            return true;
+        }
+        return hasInterface(callerClass, reference.getDefiningClass(), new HashSet<String>());
+    }
+
+    private boolean hasInterface(@Nullable ClassDef classDef,
+                                 @Nonnull String interfaceType,
+                                 @Nonnull Set<String> visited) {
+        if (classDef == null || !visited.add(classDef.getType())) {
+            return false;
+        }
+        for (String currentInterface : classDef.getInterfaces()) {
+            if (interfaceType.equals(currentInterface)
+                    || hasInterface(allClasses.get(currentInterface), interfaceType, visited)) {
+                return true;
+            }
+        }
+        return hasInterface(allClasses.get(classDef.getSuperclass()), interfaceType, visited);
+    }
+
+    @Nullable
+    public MethodReference getInvokeSuperReference(@Nonnull String callerType,
+                                                   @Nonnull MethodReference reference) {
+        if (isInterfaceInvokeSuper(callerType, reference)) {
+            return null;
+        }
+        final ClassDef callerClass = allClasses.get(callerType);
+        if (callerClass == null || callerClass.getSuperclass() == null) {
+            return null;
+        }
+        return createClassInvokeSuperReference(callerClass, reference);
+    }
+
+    @Nonnull
+    public static MethodReference createClassInvokeSuperReference(
+            @Nonnull ClassDef callerClass,
+            @Nonnull MethodReference reference) {
+        final String superclass = callerClass.getSuperclass();
+        if (superclass == null) {
+            throw new IllegalArgumentException("invoke-super caller has no superclass: "
+                    + callerClass.getType());
+        }
+        return new ImmutableMethodReference(
+                superclass,
+                reference.getName(),
+                reference.getParameterTypes(),
+                reference.getReturnType());
     }
 
     //先查找当前类的direct method,找不到则查找超类的direct method

@@ -6,6 +6,8 @@ import com.android.tools.smali.dexlib2.iface.ClassDef;
 import com.android.tools.smali.dexlib2.iface.Method;
 import com.android.tools.smali.dexlib2.iface.MethodImplementation;
 import com.android.tools.smali.dexlib2.iface.instruction.Instruction;
+import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction;
+import com.android.tools.smali.dexlib2.iface.reference.MethodReference;
 import com.android.tools.smali.dexlib2.util.MethodUtil;
 import com.android.tools.smali.dexlib2.writer.io.FileDataStore;
 import com.android.tools.smali.dexlib2.writer.pool.DexPool;
@@ -180,7 +182,7 @@ public class Dex2c {
                 for (Method method : classDef.getMethods()) {
                     final boolean accepted = filter.acceptMethod(method);
                     final Opcode unsupportedOpcode = accepted
-                            ? findUnsupportedOpcode(method)
+                            ? findUnsupportedOpcode(method, classAnalyzer)
                             : null;
                     if (accepted && unsupportedOpcode == null
                         // 有直接调用jna方法的指令,则不能进行native化
@@ -232,13 +234,22 @@ public class Dex2c {
         return config;
     }
 
-    private static Opcode findUnsupportedOpcode(Method method) {
+    private static Opcode findUnsupportedOpcode(Method method, ClassAnalyzer classAnalyzer) {
         final MethodImplementation implementation = method.getImplementation();
         if (implementation == null) {
             return null;
         }
         for (Instruction instruction : implementation.getInstructions()) {
             switch (instruction.getOpcode()) {
+                case INVOKE_SUPER:
+                case INVOKE_SUPER_RANGE: {
+                    final MethodReference reference = (MethodReference)
+                            ((ReferenceInstruction) instruction).getReference();
+                    if (classAnalyzer.isInterfaceInvokeSuper(method.getDefiningClass(), reference)) {
+                        return instruction.getOpcode();
+                    }
+                    break;
+                }
                 case INVOKE_POLYMORPHIC:
                 case INVOKE_POLYMORPHIC_RANGE:
                 case INVOKE_CUSTOM:

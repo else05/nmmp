@@ -4,6 +4,7 @@ import com.android.tools.smali.dexlib2.Opcode;
 import com.android.tools.smali.dexlib2.Opcodes;
 import com.android.tools.smali.dexlib2.ReferenceType;
 import com.android.tools.smali.dexlib2.iface.ExceptionHandler;
+import com.android.tools.smali.dexlib2.iface.Method;
 import com.android.tools.smali.dexlib2.iface.MethodImplementation;
 import com.android.tools.smali.dexlib2.iface.TryBlock;
 import com.android.tools.smali.dexlib2.iface.instruction.Instruction;
@@ -38,6 +39,7 @@ public abstract class InstructionRewriter {
     // 指令重写需要的引用信息
     private References references;
     private ClassAnalyzer classAnalyzer;
+    private String currentDefiningClass;
 
 
     public InstructionRewriter(@Nonnull Opcodes opcodes) {
@@ -84,10 +86,12 @@ public abstract class InstructionRewriter {
         }
     }
 
-    public final byte[] rewriteInstructions(MethodImplementation methodImp) {
+    public final byte[] rewriteInstructions(Method method) {
+        final MethodImplementation methodImp = method.getImplementation();
         if (methodImp == null) {
             throw new RuntimeException("No methodImp");
         }
+        currentDefiningClass = method.getDefiningClass();
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         final DexDataWriter writer = new DexDataWriter(out, 0);
         for (Instruction instruction : methodImp.getInstructions()) {
@@ -708,6 +712,18 @@ public abstract class InstructionRewriter {
 
     private int getReferenceIndex(ReferenceInstruction referenceInstruction) {
         switch (referenceInstruction.getOpcode()) {
+            case INVOKE_SUPER:
+            case INVOKE_SUPER_RANGE: {
+                final MethodReference reference = (MethodReference) referenceInstruction.getReference();
+                final MethodReference superReference = classAnalyzer.getInvokeSuperReference(
+                        currentDefiningClass,
+                        reference);
+                if (superReference == null) {
+                    throw new IllegalStateException("Unsupported interface invoke-super or unknown caller: "
+                            + currentDefiningClass + " -> " + reference);
+                }
+                return getReferenceIndex(referenceInstruction.getReferenceType(), superReference);
+            }
             case SGET:
             case SGET_BOOLEAN:
             case SGET_BYTE:

@@ -16,6 +16,8 @@ package tests.omnibus;/*
 
 import tests.common.MyAssert;
 
+import java.util.LinkedHashSet;
+
 /**
  * Try different kinds of method calls.
  */
@@ -59,6 +61,10 @@ public class MethodCall extends MethodCallBase {
         base.tryThing();
         inst.tryThing();
 
+        MethodCallLinkedHashSet set = new MethodCallLinkedHashSet();
+        MyAssert.myassert(set.add("first"));
+        MyAssert.myassert(set.size() == 1);
+
         inst = null;
         try {
             inst.directly();
@@ -70,6 +76,13 @@ public class MethodCall extends MethodCallBase {
         manyArgs(0, 1L, 2, 3L, 4, 5L, 6, 7, 8.0, 9.0f, 10.0, (short)11, 12,
             (char)13, 14, 15, (byte)-16, true, 18, 19, 20L, 21L, 22, 23, 24,
             25, 26, null, null, "twenty nine");
+    }
+}
+
+class MethodCallLinkedHashSet extends LinkedHashSet<String> {
+    @Override
+    public boolean add(String value) {
+        return super.add(value);
     }
 }
 

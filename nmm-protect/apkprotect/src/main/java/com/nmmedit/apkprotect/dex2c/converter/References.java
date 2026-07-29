@@ -164,7 +164,7 @@ public class References {
                 if (implementation == null) {
                     continue;
                 }
-                collectReferences(implementation);
+                collectReferences(classDef.getType(), implementation);
             }
         }
 
@@ -191,7 +191,7 @@ public class References {
     }
 
     //解析所有引用指令,得到各种引用信息或者检测不支持指令
-    private void collectReferences(MethodImplementation implementation) {
+    private void collectReferences(String callerType, MethodImplementation implementation) {
         for (Instruction instruction : implementation.getInstructions()) {
             switch (instruction.getOpcode()) {
                 //iget_x
@@ -274,10 +274,19 @@ public class References {
                     addMethodRef(reference, true);
                     break;
                 }
+                case INVOKE_SUPER:
+                case INVOKE_SUPER_RANGE: {
+                    final MethodReference reference = (MethodReference) ((ReferenceInstruction) instruction).getReference();
+                    final MethodReference superReference = analyzer.getInvokeSuperReference(callerType, reference);
+                    if (superReference == null) {
+                        throw new IllegalStateException("Unsupported interface invoke-super or unknown caller: "
+                                + callerType + " -> " + reference);
+                    }
+                    addMethodRef(superReference, false);
+                    break;
+                }
                 case INVOKE_DIRECT:
                 case INVOKE_DIRECT_RANGE:
-                case INVOKE_SUPER:
-                case INVOKE_SUPER_RANGE:
                 case INVOKE_INTERFACE:
                 case INVOKE_INTERFACE_RANGE:
                 case INVOKE_VIRTUAL:

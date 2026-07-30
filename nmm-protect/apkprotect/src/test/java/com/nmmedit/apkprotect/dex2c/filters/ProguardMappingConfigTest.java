@@ -122,10 +122,10 @@ public class ProguardMappingConfigTest {
     public void testMatchesR8InlinedMethodByOriginalRule() throws IOException {
         final String mapping =
                 "org.example.Receiver -> a.b:\n"
-                        + "    1:10:void target(int,int):12:12 -> d\n"
-                        + "    1:10:void onReceive(android.content.Context,android.content.Intent):20 -> d\n"
-                        + "    11:20:void ignored():30:30 -> d\n"
-                        + "    11:20:void other(java.lang.String):40 -> d\n";
+                        + "    1:10:void target(int,int):12:12 -> \u8bdc\u5766\n"
+                        + "    1:10:void onReceive(android.content.Context,android.content.Intent):20 -> \u8bdc\u5766\n"
+                        + "    11:20:void ignored():30:30 -> \u8bdc\u5766\n"
+                        + "    11:20:void other(java.lang.String):40 -> \u8bdc\u5766\n";
         final SimpleRules rules = new SimpleRules();
         rules.parse(new StringReader(
                 "class org.example.Receiver {\n"
@@ -139,7 +139,7 @@ public class ProguardMappingConfigTest {
 
         final ImmutableMethod callback = new ImmutableMethod(
                 "La/b;",
-                "d",
+                "\u8bdc\u5766",
                 Arrays.asList(
                         new ImmutableMethodParameter(
                                 "Landroid/content/Context;", Collections.emptySet(), null),
@@ -158,7 +158,7 @@ public class ProguardMappingConfigTest {
                         Collections.emptyList()));
         final ImmutableMethod other = new ImmutableMethod(
                 "La/b;",
-                "d",
+                "\u8bdc\u5766",
                 Collections.singletonList(new ImmutableMethodParameter(
                         "Ljava/lang/String;", Collections.emptySet(), null)),
                 "V",
@@ -198,14 +198,19 @@ public class ProguardMappingConfigTest {
         }
 
         final String log = output.toString(StandardCharsets.UTF_8.name());
-        final String detailPrefix = "[nmmp] R8 内联命中:";
+        final String detailPrefix = "[nmmp] R8 inline match:";
         assertTrue(log.contains(
                 detailPrefix
                         + " Lorg/example/Receiver;->target(II)V"
-                        + " => La/b;->d(Landroid/content/Context;Landroid/content/Intent;)V"));
+                        + " => La/b;->\\u8bdc\\u5766"
+                        + "(Landroid/content/Context;Landroid/content/Intent;)V"));
         assertEquals(log.indexOf(detailPrefix), log.lastIndexOf(detailPrefix));
         assertTrue(log.contains(
                 "[nmmp] R8 inline:     source methods=1, residual methods=1"));
+        for (int i = 0; i < log.length(); i++) {
+            final char c = log.charAt(i);
+            assertTrue(c == '\r' || c == '\n' || c >= 0x20 && c <= 0x7e);
+        }
         assertEquals(1, filter.getInlineSourceMethodCount());
         assertEquals(1, filter.getInlineResidualMethodCount());
     }

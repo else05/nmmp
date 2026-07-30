@@ -13,6 +13,7 @@ set(VM_SRC_FILES
         InterpC-portable.cpp
         GlobalCache.cpp
         Codec.cpp
+        VmCodec.cpp
         JNIWrapper.c
 
         )
@@ -26,6 +27,11 @@ set(LIBNMMVM_NAME "nmmvm" CACHE INTERNAL "lib nmmvm name")
 
 
 add_library(${LIBNMMVM_NAME} STATIC ${VM_SRC_FILES})
+
+if (NMMP_OMVLL_ENABLED)
+    target_compile_options(${LIBNMMVM_NAME}
+            PRIVATE "-fpass-plugin=${NMMP_OMVLL_PLUGIN}")
+endif ()
 
 target_link_libraries(${LIBNMMVM_NAME} log)
 

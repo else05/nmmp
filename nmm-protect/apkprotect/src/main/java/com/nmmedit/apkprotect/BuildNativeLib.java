@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -22,15 +23,29 @@ public class BuildNativeLib {
             System.err.println("No CMAKE_PATH");
             cmakePath = Prefs.cmakePath();
         }
-        String sdkHome = System.getenv("ANDROID_SDK_HOME");
+        String sdkHome = System.getenv("ANDROID_HOME");
+        if (isEmpty(sdkHome)) {
+            sdkHome = System.getenv("ANDROID_SDK_HOME");
+        }
         if (isEmpty(sdkHome)) {
             sdkHome = Prefs.sdkPath();
-            System.err.println("No ANDROID_SDK_HOME. Default is " + sdkHome);
+            System.err.println("No ANDROID_HOME or ANDROID_SDK_HOME. Default is " + sdkHome);
         }
         String ndkHome = System.getenv("ANDROID_NDK_HOME");
         if (isEmpty(ndkHome)) {
             ndkHome = Prefs.ndkPath();
             System.err.println("No ANDROID_NDK_HOME. Default is " + ndkHome);
+        }
+        String omvllPlugin = System.getenv("OMVLL_PLUGIN");
+        if (!isEmpty(omvllPlugin)) {
+            final File pluginFile = new File(omvllPlugin);
+            if (!pluginFile.isFile()) {
+                throw new IOException("O-MVLL plugin not found: " + pluginFile.getAbsolutePath());
+            }
+            omvllPlugin = pluginFile.getAbsolutePath();
+            System.out.println("[nmmp] O-MVLL: enabled, plugin=" + omvllPlugin);
+        } else {
+            System.out.println("[nmmp] O-MVLL: disabled");
         }
 
 
@@ -42,7 +57,8 @@ public class BuildNativeLib {
                     ndkHome, 21,
                     outDir.getAbsolutePath(),
                     BuildNativeLib.CMakeOptions.BuildType.RELEASE,
-                    abi);
+                    abi,
+                    omvllPlugin);
 
             //删除上次创建的目录
             FileUtils.deleteFile(new File(cmakeOptions.getBuildPath()));
@@ -91,12 +107,12 @@ public class BuildNativeLib {
     private static void execCmd(List<String> cmds) throws IOException {
         System.out.println(cmds);
         final ProcessBuilder builder = new ProcessBuilder()
-                .command(cmds);
+                .command(cmds)
+                .redirectErrorStream(true);
 
         final Process process = builder.start();
 
         printOutput(process.getInputStream());
-        printOutput(process.getErrorStream());
 
         try {
             final int exitStatus = process.waitFor();
@@ -132,13 +148,16 @@ public class BuildNativeLib {
 
         private final String abi;
 
+        private final String omvllPlugin;
+
         public CMakeOptions(String cmakePath,
                             String sdkHome,
                             String ndkHome,
                             int apiLevel,
                             String projectHome,
                             BuildType buildType,
-                            String abi) {
+                            String abi,
+                            String omvllPlugin) {
             this.cmakePath = cmakePath;
             this.sdkHome = sdkHome;
             this.ndkHome = ndkHome;
@@ -146,6 +165,7 @@ public class BuildNativeLib {
             this.projectHome = projectHome;
             this.buildType = buildType;
             this.abi = abi;
+            this.omvllPlugin = omvllPlugin;
         }
 
         public String getCmakePath() {
@@ -174,6 +194,10 @@ public class BuildNativeLib {
 
         public String getAbi() {
             return abi;
+        }
+
+        public String getOmvllPlugin() {
+            return omvllPlugin;
         }
 
         @Nonnull
@@ -206,7 +230,7 @@ public class BuildNativeLib {
         }
 
         public List<String> getCmakeArguments() {
-            return Arrays.asList(
+            final List<String> arguments = new ArrayList<>(Arrays.asList(
                     getCmakeBinaryPath(),
                     String.format("-H%s", new File(getProjectHome(), "dex2c").getAbsoluteFile()),
                     String.format("-DCMAKE_TOOLCHAIN_FILE=%s", new File(getNdkHome(), "/build/cmake/android.toolchain.cmake").getAbsoluteFile()),
@@ -222,7 +246,11 @@ public class BuildNativeLib {
                     "-DCMAKE_SYSTEM_NAME=Android",
                     String.format("-DCMAKE_SYSTEM_VERSION=%d", getApiLevel()),
                     String.format("-B%s", getBuildPath()),
-                    "-GNinja");
+                    "-GNinja"));
+            if (!isEmpty(getOmvllPlugin())) {
+                arguments.add(String.format("-DNMMP_OMVLL_PLUGIN=%s", getOmvllPlugin()));
+            }
+            return arguments;
         }
 
         //未strip的so跟strip之后的so，

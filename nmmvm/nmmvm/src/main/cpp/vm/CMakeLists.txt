@@ -13,6 +13,7 @@ set(VM_SRC_FILES
         InterpC-portable.cpp
         GlobalCache.cpp
         Codec.cpp
+        VmCodec.cpp
         JNIWrapper.c
 
         )

@@ -126,6 +126,7 @@ public class CmakeUtils {
     private static void validateVmTemplate(File vmsrcFile) throws IOException {
         try (ZipFile zipFile = new ZipFile(vmsrcFile)) {
             requireZipEntry(zipFile, "vm/Codec.cpp", vmsrcFile);
+            requireZipEntry(zipFile, "vm/VmCodec.cpp", vmsrcFile);
             requireZipEntry(zipFile, "vm/include/VmCodec.h", vmsrcFile);
             final ZipEntry configEntry = requireZipEntry(
                     zipFile,

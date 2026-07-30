@@ -65,10 +65,7 @@ $jar = Get-ChildItem .\vm-protect-*.jar |
     Sort-Object LastWriteTime -Descending |
     Select-Object -First 1
 
-java -jar $jar.FullName apk `
-    D:\path\input.apk `
-    D:\AndroidProjects\sync-ui\app\convertRules.txt `
-    D:\AndroidProjects\sync-ui\app\build\outputs\mapping\release\mapping.txt
+ java -jar $jar.FullName apk D:\AndroidProjects\sync-ui\app\build\outputs\apk\release\MdoHelper_v1.4.0M_202607282311_release.apk  D:\AndroidProjects\sync-ui\app\convertRules.txt D:\AndroidProjects\sync-ui\app\build\outputs\mapping\release\mapping.txt
 ```
 
 如果没有 mapping 文件，请按原有 NMMP 命令参数执行。处理结果默认位于输入 APK 目录下的 `build` 目录。
@@ -124,6 +121,7 @@ nmm-protect\mksrc\build-src.sh
 执行后应确认以下文件已进入 `vmsrc.zip`：
 
 - `vm/Codec.cpp`
+- `vm/VmCodec.cpp`
 - `vm/include/VmCodec.h`
 - `vm/include/VmCodecConfig.h`
 - 更新后的生产 `CMakeLists.txt`

@@ -176,7 +176,7 @@ public class ProguardMappingConfig implements ClassAndMethodFilter, MappingProce
             if (convertedInlineMatches.put(residualRef, originalRef)) {
                 convertedInlineSourceMethods.add(originalRef);
                 convertedInlineResidualMethods.add(residualRef);
-                System.out.printf("[nmmp] R8 内联命中: %s => %s%n",
+                System.out.printf("[nmmp] R8 inline match: %s => %s%n",
                         formatMethod(originalRef), formatMethod(residualRef));
             }
         }
@@ -197,11 +197,29 @@ public class ProguardMappingConfig implements ClassAndMethodFilter, MappingProce
     }
 
     private static String formatMethod(MethodReference method) {
-        return method.getDefiningClass()
+        final String value = method.getDefiningClass()
                 + "->"
                 + method.getName()
                 + MyMethodUtil.getMethodSignature(
                         method.getParameterTypes(), method.getReturnType());
+        return escapeNonAscii(value);
+    }
+
+    private static String escapeNonAscii(String value) {
+        final StringBuilder escaped = new StringBuilder(value.length());
+        for (int i = 0; i < value.length(); i++) {
+            final char c = value.charAt(i);
+            if (c >= 0x20 && c <= 0x7e) {
+                escaped.append(c);
+            } else {
+                escaped.append("\\u")
+                        .append(Character.forDigit(c >>> 12 & 0xf, 16))
+                        .append(Character.forDigit(c >>> 8 & 0xf, 16))
+                        .append(Character.forDigit(c >>> 4 & 0xf, 16))
+                        .append(Character.forDigit(c & 0xf, 16));
+            }
+        }
+        return escaped.toString();
     }
 
     private static String classNameToType(String className) {

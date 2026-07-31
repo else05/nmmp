@@ -42,6 +42,7 @@ class NmmpConfig(omvll.ObfuscationConfig):
         demangled_name = function.demangled_name or ""
         return (
             raw_name == name
+            or raw_name.startswith(name + ".__omvll_body")
             or demangled_name == name
             or demangled_name.startswith(name + "(")
         )

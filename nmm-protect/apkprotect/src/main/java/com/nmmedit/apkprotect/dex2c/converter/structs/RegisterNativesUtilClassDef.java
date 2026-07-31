@@ -2,9 +2,19 @@ package com.nmmedit.apkprotect.dex2c.converter.structs;
 
 import com.android.tools.smali.dexlib2.AccessFlags;
 import com.android.tools.smali.dexlib2.HiddenApiRestriction;
+import com.android.tools.smali.dexlib2.Opcode;
+import com.android.tools.smali.dexlib2.base.reference.BaseFieldReference;
 import com.android.tools.smali.dexlib2.base.reference.BaseMethodReference;
 import com.android.tools.smali.dexlib2.base.reference.BaseTypeReference;
+import com.android.tools.smali.dexlib2.builder.MutableMethodImplementation;
+import com.android.tools.smali.dexlib2.builder.instruction.BuilderInstruction10x;
+import com.android.tools.smali.dexlib2.builder.instruction.BuilderInstruction11n;
+import com.android.tools.smali.dexlib2.builder.instruction.BuilderInstruction21c;
+import com.android.tools.smali.dexlib2.builder.instruction.BuilderInstruction35c;
 import com.android.tools.smali.dexlib2.iface.*;
+import com.android.tools.smali.dexlib2.immutable.reference.ImmutableFieldReference;
+import com.android.tools.smali.dexlib2.immutable.reference.ImmutableMethodReference;
+import com.android.tools.smali.dexlib2.iface.value.EncodedValue;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -20,6 +30,8 @@ import java.util.Set;
  * 静态初始化方法里增加加载本地库代码
  */
 public class RegisterNativesUtilClassDef extends BaseTypeReference implements ClassDef {
+    public static final String CONTEXT_FIELD_NAME = "a";
+    public static final String CONTEXT_TYPE = "Landroid/content/Context;";
     @Nonnull
     private final String type;
     @Nonnull
@@ -74,7 +86,7 @@ public class RegisterNativesUtilClassDef extends BaseTypeReference implements Cl
     @Nonnull
     @Override
     public Iterable<? extends Field> getStaticFields() {
-        return Collections.emptyList();
+        return Collections.singletonList(new ContextField());
     }
 
     @Nonnull
@@ -86,7 +98,7 @@ public class RegisterNativesUtilClassDef extends BaseTypeReference implements Cl
     @Nonnull
     @Override
     public Iterable<? extends Field> getFields() {
-        return Collections.emptyList();
+        return getStaticFields();
     }
 
     @Nonnull
@@ -100,6 +112,7 @@ public class RegisterNativesUtilClassDef extends BaseTypeReference implements Cl
         for (String methodName : nativeMethodNames) {
             methods.add(new NativeMethod(type, methodName));
         }
+        methods.add(new ContextInitMethod(type, nativeMethodNames.get(0)));
         return methods;
     }
 
@@ -116,6 +129,48 @@ public class RegisterNativesUtilClassDef extends BaseTypeReference implements Cl
         return getDirectMethods();
     }
 
+    private class ContextField extends BaseFieldReference implements Field {
+        @Nonnull
+        @Override
+        public String getDefiningClass() {
+            return type;
+        }
+
+        @Nonnull
+        @Override
+        public String getName() {
+            return CONTEXT_FIELD_NAME;
+        }
+
+        @Nonnull
+        @Override
+        public String getType() {
+            return CONTEXT_TYPE;
+        }
+
+        @Override
+        public int getAccessFlags() {
+            return AccessFlags.PRIVATE.getValue() | AccessFlags.STATIC.getValue();
+        }
+
+        @Nullable
+        @Override
+        public EncodedValue getInitialValue() {
+            return null;
+        }
+
+        @Nonnull
+        @Override
+        public Set<? extends Annotation> getAnnotations() {
+            return Collections.emptySet();
+        }
+
+        @Nonnull
+        @Override
+        public Set<HiddenApiRestriction> getHiddenApiRestrictions() {
+            return Collections.emptySet();
+        }
+    }
 
     private static class NativeMethod extends BaseMethodReference implements Method {
 
@@ -181,6 +236,50 @@ public class RegisterNativesUtilClassDef extends BaseTypeReference implements Cl
         @Override
         public String getReturnType() {
             return "V";
+        }
+    }
+
+    private static class ContextInitMethod extends NativeMethod {
+        private final String type;
+        private final String nativeMethodName;
+
+        ContextInitMethod(String type, String nativeMethodName) {
+            super(type, nativeMethodName);
+            this.type = type;
+            this.nativeMethodName = nativeMethodName;
+        }
+
+        @Override
+        public int getAccessFlags() {
+            return AccessFlags.STATIC.getValue() | AccessFlags.PUBLIC.getValue();
+        }
+
+        @Nonnull
+        @Override
+        public List<? extends CharSequence> getParameterTypes() {
+            return Collections.singletonList(CONTEXT_TYPE);
+        }
+
+        @Override
+        public MethodImplementation getImplementation() {
+            final MutableMethodImplementation implementation =
+                    new MutableMethodImplementation(2);
+            implementation.addInstruction(new BuilderInstruction21c(
+                    Opcode.SPUT_OBJECT,
+                    1,
+                    new ImmutableFieldReference(type, CONTEXT_FIELD_NAME, CONTEXT_TYPE)));
+            implementation.addInstruction(new BuilderInstruction11n(Opcode.CONST_4, 0, 0));
+            implementation.addInstruction(new BuilderInstruction35c(
+                    Opcode.INVOKE_STATIC,
+                    1,
+                    0, 0, 0, 0, 0,
+                    new ImmutableMethodReference(
+                            type,
+                            nativeMethodName,
+                            Collections.singletonList("I"),
+                            "V")));
+            implementation.addInstruction(new BuilderInstruction10x(Opcode.RETURN_VOID));
+            return implementation;
         }
     }
 

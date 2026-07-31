@@ -13,5 +13,5 @@ export OMVLL_PYTHONPATH="$OMVLL_HOME/Python-3.10.7/Lib"
 export CMAKE_BUILD_PARALLEL_LEVEL=6
 export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$CMAKE_PATH/bin:$PATH"
 
-# O-MVLL 依赖 NDK 随附的 Linux libc++ 运行库。
-export LD_LIBRARY_PATH="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/lib64${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+# O-MVLL 依赖 NDK 附带的 Linux libc++ 运行库。
+export LD_LIBRARY_PATH="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"

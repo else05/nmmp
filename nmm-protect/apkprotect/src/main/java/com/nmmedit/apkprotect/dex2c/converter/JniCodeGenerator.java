@@ -12,6 +12,7 @@ import com.nmmedit.apkprotect.dex2c.DexConfig;
 import com.nmmedit.apkprotect.dex2c.MethodCodec;
 import com.nmmedit.apkprotect.dex2c.ProtectionContext;
 import com.nmmedit.apkprotect.dex2c.converter.instructionrewriter.InstructionRewriter;
+import com.nmmedit.apkprotect.dex2c.converter.structs.RegisterNativesUtilClassDef;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -272,6 +273,7 @@ public class JniCodeGenerator {
                         "#include <string.h>\n" +
                         "#include <malloc.h>\n" +
                         "#include <jni.h>\n" +
+                        "#include <stdbool.h>\n" +
                         "#include \"vm.h\"\n" +
                         "#include \"%s\"\n" +
                         "\n" +
@@ -301,7 +303,9 @@ public class JniCodeGenerator {
         codeWriter.write(String.format("void %s(JNIEnv *env) {\n", config.getHeaderFileAndSetupFunc().setupFunctionName));
 
         codeWriter.write("\n    //符号解析器初始化\n");
-        codeWriter.write("    if (!resolver_init(env)) return;\n\n");
+        if (!protectionContext.isSignatureBound()) {
+            codeWriter.write("    if (!resolver_init(env)) return;\n\n");
+        }
 
         if (isRegisterNative) {
             codeWriter.write("    //注册\n");
@@ -384,13 +388,19 @@ public class JniCodeGenerator {
             final String className = entry.getKey();
             int classIdx = references.getClassNameItemIndex(className);
             writer.write(String.format("    {.classIdx = %d, .offset = %d, .count = %d},\n", classIdx, ranger.start, ranger.count));
-            nativeMethodOffsets.put(className, dataOff++);
+            nativeMethodOffsets.put(
+                    className,
+                    dataOff++ + (protectionContext.isSignatureBound() ? 1 : 0));
         }
         writer.write("};\n\n");
 
         //当前dex下所有处理过的class对应的本地方法注册
         final String funName = MyMethodUtil.getJniFunctionName(config.getRegisterNativesClassName(),
                 config.getRegisterNativesMethodName(), Collections.singletonList("I"), "V");
+        if (protectionContext.isSignatureBound()) {
+            generateBoundRegisterCode(config, writer, funName, dataOff);
+            return;
+        }
         writer.write(String.format(
                 "static void %s(JNIEnv *env, jclass jcls, jint dataIdx){\n" +
                         "#define MAX_METHOD 8\n" +
@@ -427,6 +437,90 @@ public class JniCodeGenerator {
                         "}\n\n"
                 , funName)
         );
+    }
+
+    private void generateBoundRegisterCode(DexConfig config,
+                                           Writer writer,
+                                           String funName,
+                                           int registerCount) throws IOException {
+        final String activateFunction =
+                config.getHeaderFileAndSetupFunc().setupFunctionName + "_activate";
+        writer.write(String.format(
+                "#define NMMP_REGISTER_COUNT %d\\n"
+                        + "static u1 gNmmpPending[NMMP_REGISTER_COUNT > 0 ? NMMP_REGISTER_COUNT : 1];\\n"
+                        + "static bool gNmmpResolverReady = false;\\n"
+                        + "extern bool nmmp_vm_is_ready(void);\\n"
+                        + "extern bool nmmp_vm_activate(JNIEnv *env, jobject context);\\n\\n",
+                registerCount));
+        writer.write(
+                "static bool nmmp_register_class(JNIEnv *env, u4 dataIdx) {\\n"
+                        + "#define MAX_METHOD 8\\n"
+                        + "    JNINativeMethod methodBuf[MAX_METHOD];\\n"
+                        + "    JNINativeMethod *methods;\\n"
+                        + "    const NativeMethodData data = gNativeRegisterData[dataIdx];\\n");
+        writer.write(
+                "    if (data.count > MAX_METHOD) {\\n"
+                        + "        methods = (JNINativeMethod *) malloc(sizeof(JNINativeMethod) * data.count);\\n"
+                        + "        if (methods == NULL) return false;\\n"
+                        + "    } else {\\n"
+                        + "        methods = methodBuf;\\n"
+                        + "    }\\n"
+                        + "    jclass clazz = (*env)->FindClass(env, STRING_BY_CLASS_ID(data.classIdx));\\n"
+                        + "    if (clazz == NULL) {\\n"
+                        + "        if (methods != methodBuf) free(methods);\\n"
+                        + "        return false;\\n"
+                        + "    }\\n"
+                        + "    for (int midx = 0; midx < data.count; ++midx) {\\n"
+                        + "        MyNativeMethod value = gNativeMethods[data.offset + midx];\\n"
+                        + "        methods[midx].name = STRING_BY_ID(value.nameIdx);\\n"
+                        + "        methods[midx].signature = STRING_BY_ID(value.sigIdx);\\n"
+                        + "        methods[midx].fnPtr = value.fnPtr;\\n"
+                        + "    }\\n");
+        writer.write(
+                "    const jint result = (*env)->RegisterNatives(env, clazz, methods, data.count);\\n"
+                        + "    (*env)->DeleteLocalRef(env, clazz);\\n"
+                        + "    if (methods != methodBuf) free(methods);\\n"
+                        + "    return result == 0 && !(*env)->ExceptionCheck(env);\\n"
+                        + "}\\n\\n");
+        writer.write(String.format(
+                "static void %s(JNIEnv *env, jclass jcls, jint dataIdx) {\\n"
+                        + "    if (dataIdx == 0) {\\n"
+                        + "        jfieldID field = (*env)->GetStaticFieldID(env, jcls, \"%s\", \"%s\");\\n"
+                        + "        if (field == NULL) {\\n"
+                        + "            if ((*env)->ExceptionCheck(env)) (*env)->ExceptionClear(env);\\n"
+                        + "            return;\\n"
+                        + "        }\\n"
+                        + "        jobject context = (*env)->GetStaticObjectField(env, jcls, field);\\n"
+                        + "        if (context == NULL) return;\\n"
+                        + "        nmmp_vm_activate(env, context);\\n"
+                        + "        (*env)->DeleteLocalRef(env, context);\\n"
+                        + "        return;\\n"
+                        + "    }\\n",
+                funName,
+                RegisterNativesUtilClassDef.CONTEXT_FIELD_NAME,
+                RegisterNativesUtilClassDef.CONTEXT_TYPE));
+        writer.write(
+                "    if ((u4) dataIdx > NMMP_REGISTER_COUNT) return;\\n"
+                        + "    const u4 registerIdx = (u4) dataIdx - 1;\\n"
+                        + "    if (!nmmp_vm_is_ready()) {\\n"
+                        + "        gNmmpPending[registerIdx] = 1;\\n"
+                        + "        return;\\n"
+                        + "    }\\n"
+                        + "    nmmp_register_class(env, registerIdx);\\n"
+                        + "}\\n\\n");
+        writer.write(String.format(
+                "bool %s(JNIEnv *env) {\\n"
+                        + "    if (gNmmpResolverReady) return true;\\n"
+                        + "    if (!resolver_init(env)) return false;\\n"
+                        + "    gNmmpResolverReady = true;\\n"
+                        + "    for (u4 i = 0; i < NMMP_REGISTER_COUNT; ++i) {\\n"
+                        + "        if (!gNmmpPending[i]) continue;\\n"
+                        + "        if (!nmmp_register_class(env, i)) return false;\\n"
+                        + "        gNmmpPending[i] = 0;\\n"
+                        + "    }\\n"
+                        + "    return true;\\n"
+                        + "}\\n\\n",
+                activateFunction));
     }
 
     public static String getJNIType(String type) {

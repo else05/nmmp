@@ -17,7 +17,9 @@ import com.nmmedit.apkprotect.dex2c.ProtectionContext;
 import com.nmmedit.apkprotect.dex2c.converter.ClassAnalyzer;
 import com.nmmedit.apkprotect.dex2c.converter.instructionrewriter.InstructionRewriter;
 import com.nmmedit.apkprotect.dex2c.converter.structs.RegisterNativesUtilClassDef;
+import com.nmmedit.apkprotect.dex2c.converter.structs.ApplicationInitClassDef;
 import com.nmmedit.apkprotect.dex2c.filters.ClassAndMethodFilter;
+import com.nmmedit.apkprotect.sign.SignatureBinding;
 import com.nmmedit.apkprotect.util.ApkUtils;
 import com.nmmedit.apkprotect.util.CmakeUtils;
 import com.nmmedit.apkprotect.util.FileUtils;
@@ -33,6 +35,7 @@ public class ApkProtect {
 
     public static final String ANDROID_MANIFEST_XML = "AndroidManifest.xml";
     public static final String ANDROID_APP_APPLICATION = "android.app.Application";
+    private static final String GENERATED_APPLICATION = "com.google.libc.NativeApplication";
     private final ApkFolders apkFolders;
     private final InstructionRewriter instructionRewriter;
     private final ClassAndMethodFilter filter;
@@ -56,8 +59,6 @@ public class ApkProtect {
     public void run() throws IOException {
         final File apkFile = apkFolders.getInApk();
         final File zipExtractDir = apkFolders.getZipExtractTempDir();
-        final ProtectionContext protectionContext = ProtectionContext.create();
-
         try {
             byte[] manifestBytes = ApkUtils.getFile(apkFile, ANDROID_MANIFEST_XML);
             if (manifestBytes == null) {
@@ -66,6 +67,9 @@ public class ApkProtect {
             }
 
             final String packageName = AxmlEdit.getPackageName(manifestBytes);
+            final ProtectionContext protectionContext = ProtectionContext.createBound(
+                    packageName,
+                    SignatureBinding.readSingleSignerCertificate(apkFile));
 
             //生成一些需要改变的c代码(随机opcode后的头文件及apk验证代码等)
             CmakeUtils.generateCSources(
@@ -94,6 +98,20 @@ public class ApkProtect {
                 classAnalyzer.loadDexFile(file);
             }
 
+            String applicationName = AxmlEdit.getApplicationName(manifestBytes);
+            final boolean generateApplication = applicationName.isEmpty();
+            if (generateApplication) {
+                applicationName = GENERATED_APPLICATION;
+                requireClassAbsent(files, classDotNameToType(applicationName));
+                manifestBytes = AxmlEdit.renameApplicationName(manifestBytes, applicationName);
+                if (manifestBytes == null) {
+                    throw new IOException("Unable to set generated Application in AndroidManifest.xml");
+                }
+            } else {
+                applicationName = normalizeApplicationName(packageName, applicationName);
+                requireClassInDexFiles(files, classDotNameToType(applicationName));
+            }
+
 
             //globalConfig里面configs顺序和classesN.dex文件列表一样
             final GlobalDexConfig globalConfig = Dex2c.handleAllDex(files,
@@ -118,7 +136,8 @@ public class ApkProtect {
                     globalConfig,
                     mainDexClassTypeSet,
                     60000,
-                    apkFolders.getTempDexDir());
+                    apkFolders.getTempDexDir(),
+                    generateApplication ? null : classDotNameToType(applicationName));
 
 
             final List<String> abis = getAbis(apkFile);
@@ -130,7 +149,8 @@ public class ApkProtect {
             final File newManDex = internNativeUtilClassDef(
                     mainDex,
                     globalConfig,
-                    BuildNativeLib.NMMP_NAME);
+                    BuildNativeLib.NMMP_NAME,
+                    generateApplication ? classDotNameToType(applicationName) : null);
             //替换为新的dex
             outDexFiles.set(0, newManDex);
 
@@ -302,7 +322,16 @@ public class ApkProtect {
     public static ArrayList<File> injectInstructionAndWriteToFile(GlobalDexConfig globalConfig,
                                                                   Set<String> mainClassSet,
                                                                   int maxPoolSize,
-                                                                  File dexOutDir
+                                                                  File dexOutDir) throws IOException {
+        return injectInstructionAndWriteToFile(
+                globalConfig, mainClassSet, maxPoolSize, dexOutDir, null);
+    }
+
+    public static ArrayList<File> injectInstructionAndWriteToFile(GlobalDexConfig globalConfig,
+                                                                  Set<String> mainClassSet,
+                                                                  int maxPoolSize,
+                                                                  File dexOutDir,
+                                                                  String applicationType
     ) throws IOException {
 
         final ArrayList<File> dexFiles = new ArrayList<>();
@@ -312,6 +341,8 @@ public class ApkProtect {
         Opcodes opcodes = null;
 
         final List<DexConfig> configs = globalConfig.getConfigs();
+        final String initClass = "L" + configs.get(0).getRegisterNativesClassName() + ";";
+        final String initMethod = configs.get(0).getRegisterNativesMethodName();
         //第一个dex为main dex
         //提前处理主dex里的类
         for (DexConfig config : configs) {
@@ -327,7 +358,8 @@ public class ApkProtect {
             for (ClassDef classDef : dexNativeFile.getClasses()) {
                 if (mainClassSet.contains(classDef.getType())) {
                     //可能保留的类太多,导超出致dex引用,又没再接收返回的dex而导致丢失class
-                    Dex2c.injectCallRegisterNativeInsns(config, lastDexPool, mainClassSet, maxPoolSize);
+                    Dex2c.injectCallRegisterNativeInsns(config, lastDexPool, mainClassSet,
+                            maxPoolSize, applicationType, initClass, initMethod);
                 }
             }
 
@@ -335,7 +367,9 @@ public class ApkProtect {
 
         for (int i = 0; i < configs.size(); i++) {
             DexConfig config = configs.get(i);
-            final List<DexPool> retPools = Dex2c.injectCallRegisterNativeInsns(config, lastDexPool, mainClassSet, maxPoolSize);
+            final List<DexPool> retPools = Dex2c.injectCallRegisterNativeInsns(
+                    config, lastDexPool, mainClassSet, maxPoolSize,
+                    applicationType, initClass, initMethod);
             if (retPools.isEmpty()) {
                 throw new RuntimeException("Dex inject instruction error");
             }
@@ -382,6 +416,13 @@ public class ApkProtect {
     public static File internNativeUtilClassDef(@Nonnull File mainDex,
                                                 @Nonnull GlobalDexConfig globalConfig,
                                                 @Nonnull String libName) throws IOException {
+        return internNativeUtilClassDef(mainDex, globalConfig, libName, null);
+    }
+
+    public static File internNativeUtilClassDef(@Nonnull File mainDex,
+                                                @Nonnull GlobalDexConfig globalConfig,
+                                                @Nonnull String libName,
+                                                String generatedApplicationType) throws IOException {
 
 
         DexFile mainDexFile = DexBackedDexFile.fromInputStream(
@@ -399,9 +440,13 @@ public class ApkProtect {
         }
 
 
-        newDex.internClass(
-                new RegisterNativesUtilClassDef("L" + globalConfig.getConfigs().get(0).getRegisterNativesClassName() + ";",
-                        nativeMethodNames, libName));
+        final String utilType =
+                "L" + globalConfig.getConfigs().get(0).getRegisterNativesClassName() + ";";
+        newDex.internClass(new RegisterNativesUtilClassDef(utilType, nativeMethodNames, libName));
+        if (generatedApplicationType != null) {
+            newDex.internClass(new ApplicationInitClassDef(
+                    generatedApplicationType, utilType, nativeMethodNames.get(0)));
+        }
 
         final File injectLoadLib = new File(mainDex.getParent(), "injectLoadLib");
         if (!injectLoadLib.exists()) injectLoadLib.mkdirs();
@@ -437,6 +482,34 @@ public class ApkProtect {
 
     private static String classDotNameToType(String classDotName) {
         return "L" + classDotName.replace('.', '/') + ";";
+    }
+
+    private static String normalizeApplicationName(String packageName, String applicationName) {
+        if (applicationName.startsWith(".")) return packageName + applicationName;
+        if (applicationName.indexOf('.') < 0) return packageName + "." + applicationName;
+        return applicationName;
+    }
+
+    private static void requireClassInDexFiles(List<File> dexFiles, String type) throws IOException {
+        if (!containsClass(dexFiles, type)) {
+            throw new IOException("Application class is not in the base APK dex files: " + type);
+        }
+    }
+
+    private static void requireClassAbsent(List<File> dexFiles, String type) throws IOException {
+        if (containsClass(dexFiles, type)) {
+            throw new IOException("Generated Application class already exists: " + type);
+        }
+    }
+
+    private static boolean containsClass(List<File> dexFiles, String type) throws IOException {
+        for (File dexFile : dexFiles) {
+            try (InputStream input = new BufferedInputStream(new FileInputStream(dexFile))) {
+                final DexBackedDexFile dex = DexBackedDexFile.fromInputStream(null, input);
+                if (getClassDefFromType(dex.getClasses(), type) != null) return true;
+            }
+        }
+        return false;
     }
 
 

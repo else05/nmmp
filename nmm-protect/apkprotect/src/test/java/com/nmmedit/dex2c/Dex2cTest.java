@@ -2,6 +2,7 @@ package com.nmmedit.dex2c;
 
 import com.nmmedit.apkprotect.dex2c.Dex2c;
 import com.nmmedit.apkprotect.dex2c.DexConfig;
+import com.nmmedit.apkprotect.dex2c.GlobalDexConfig;
 import com.nmmedit.apkprotect.dex2c.ProtectionContext;
 import com.nmmedit.apkprotect.dex2c.converter.ClassAnalyzer;
 import com.nmmedit.apkprotect.dex2c.converter.MyMethodUtil;
@@ -29,6 +30,7 @@ import java.nio.charset.CodingErrorAction;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Collections;
+import java.util.Iterator;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -71,6 +73,41 @@ public class Dex2cTest {
         assertTrue(resolverSource.contains("ThrowNew(env, gVm.exInternalError"));
         assertFalse(resolverSource.contains("ExceptionClear(env)"));
         assertTrue(resolverSource.contains("if (!(*env)->ExceptionCheck(env))"));
+    }
+
+    @Test
+    public void testSignatureBoundRegistrationUsesInitSlotZero() throws IOException {
+        final File outDir = Files.createTempDirectory("nmmp-bound").toFile();
+        final ClassAnalyzer analyzer = new ClassAnalyzer();
+        try (InputStream input = getClass().getResourceAsStream("/classes2.dex")) {
+            analyzer.loadDexFile(DexBackedDexFile.fromInputStream(null, input));
+        }
+        final ProtectionContext context = ProtectionContext.createBound(
+                "com.example.app", new byte[]{1, 2, 3});
+        final DexConfig config;
+        try (InputStream input = getClass().getResourceAsStream("/classes2.dex")) {
+            config = Dex2c.handleDex(input, "classes.dex", testFilter, analyzer,
+                    new NoneInstructionRewriter(), outDir, context);
+        }
+        final Iterator<String> classes = config.getHandledNativeClasses().iterator();
+        assertTrue(classes.hasNext());
+        assertTrue(config.getOffsetFromClassName(classes.next()) >= 1);
+
+        final String nativeSource = new String(
+                Files.readAllBytes(config.getNativeFunctionsFile().toPath()),
+                StandardCharsets.UTF_8);
+        assertTrue(nativeSource.contains("if (dataIdx == 0)"));
+        assertTrue(nativeSource.contains("gNmmpPending[registerIdx] = 1"));
+        assertTrue(nativeSource.contains("bool classes_setup_activate(JNIEnv *env)"));
+
+        final GlobalDexConfig global = new GlobalDexConfig(outDir, true);
+        global.addDexConfig(config);
+        global.generateJniInitCode();
+        final String initSource = new String(
+                Files.readAllBytes(global.getInitCodeFile().toPath()),
+                StandardCharsets.UTF_8);
+        assertTrue(initSource.contains("vmBindingActivate(env, context)"));
+        assertTrue(initSource.contains("classes_setup_activate(env)"));
     }
 
     @Test

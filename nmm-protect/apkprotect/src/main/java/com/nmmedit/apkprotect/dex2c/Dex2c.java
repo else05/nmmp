@@ -19,6 +19,7 @@ import com.nmmedit.apkprotect.dex2c.converter.instructionrewriter.InstructionRew
 import com.nmmedit.apkprotect.dex2c.converter.structs.MethodConverter;
 import com.nmmedit.apkprotect.dex2c.converter.structs.MyClassDef;
 import com.nmmedit.apkprotect.dex2c.converter.structs.RegisterNativesCallerClassDef;
+import com.nmmedit.apkprotect.dex2c.converter.structs.ApplicationInitClassDef;
 import com.nmmedit.apkprotect.dex2c.filters.ClassAndMethodFilter;
 import com.nmmedit.apkprotect.dex2c.filters.MethodConversionReporter;
 import com.nmmedit.apkprotect.util.Pair;
@@ -52,7 +53,8 @@ public class Dex2c {
                                                @Nonnull File outDir,
                                                @Nonnull ProtectionContext protectionContext) throws IOException {
         if (!outDir.exists()) outDir.mkdirs();
-        final GlobalDexConfig globalConfig = new GlobalDexConfig(outDir);
+        final GlobalDexConfig globalConfig =
+                new GlobalDexConfig(outDir, protectionContext.isSignatureBound());
         int matchedClassCount = 0;
         int matchedMethodCount = 0;
         int skippedEmptyMethodCount = 0;
@@ -128,7 +130,8 @@ public class Dex2c {
                                             @Nonnull InstructionRewriter instructionRewriter,
                                             @Nonnull File outDir,
                                             @Nonnull ProtectionContext protectionContext) throws IOException {
-        final GlobalDexConfig globalDexConfig = new GlobalDexConfig(outDir);
+        final GlobalDexConfig globalDexConfig =
+                new GlobalDexConfig(outDir, protectionContext.isSignatureBound());
         final DexConfig dexConfig = handleDex(
                 dexFile,
                 filter,
@@ -347,6 +350,17 @@ public class Dex2c {
                                                               DexPool lastDexPool,
                                                               Set<String> mainClassSet,
                                                               int maxPoolSize) throws IOException {
+        return injectCallRegisterNativeInsns(
+                config, lastDexPool, mainClassSet, maxPoolSize, null, null, null);
+    }
+
+    public static List<DexPool> injectCallRegisterNativeInsns(DexConfig config,
+                                                              DexPool lastDexPool,
+                                                              Set<String> mainClassSet,
+                                                              int maxPoolSize,
+                                                              String applicationType,
+                                                              String initClass,
+                                                              String initMethod) throws IOException {
 
         DexBackedDexFile dexNativeFile = DexBackedDexFile.fromInputStream(
                 null,
@@ -360,7 +374,7 @@ public class Dex2c {
             if (mainClassSet.contains(classDef.getType())) {//提前处理过的class,不用再处理
                 continue;
             }
-            internClass(config, lastDexPool, classDef);
+            internClass(config, lastDexPool, classDef, applicationType, initClass, initMethod);
 
             if (lastDexPool.hasOverflowed(maxPoolSize)) {
                 lastDexPool = new DexPool(dexNativeFile.getOpcodes());
@@ -370,20 +384,27 @@ public class Dex2c {
         return dexPools;
     }
 
-    private static void internClass(DexConfig config, DexPool dexPool, ClassDef classDef) {
+    private static void internClass(DexConfig config,
+                                    DexPool dexPool,
+                                    ClassDef classDef,
+                                    String applicationType,
+                                    String initClass,
+                                    String initMethod) {
         final Set<String> classes = config.getHandledNativeClasses();
         final String type = classDef.getType();
         final String className = type.substring(1, type.length() - 1);
+        ClassDef outputClass = classDef;
         if (classes.contains(className)) {
-            final RegisterNativesCallerClassDef nativeClassDef = new RegisterNativesCallerClassDef(
-                    classDef,
+            outputClass = new RegisterNativesCallerClassDef(
+                    outputClass,
                     config.getOffsetFromClassName(className),
                     "L" + config.getRegisterNativesClassName() + ";",
                     config.getRegisterNativesMethodName());
-            dexPool.internClass(nativeClassDef);
-        } else {
-            dexPool.internClass(classDef);
         }
+        if (type.equals(applicationType)) {
+            outputClass = new ApplicationInitClassDef(outputClass, initClass, initMethod);
+        }
+        dexPool.internClass(outputClass);
     }
 
 }

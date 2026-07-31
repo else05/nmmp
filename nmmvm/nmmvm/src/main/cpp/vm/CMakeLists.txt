@@ -14,6 +14,7 @@ set(VM_SRC_FILES
         GlobalCache.cpp
         Codec.cpp
         VmCodec.cpp
+        VmBinding.cpp
         JNIWrapper.c
 
         )

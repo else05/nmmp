@@ -127,7 +127,9 @@ public class CmakeUtils {
         try (ZipFile zipFile = new ZipFile(vmsrcFile)) {
             requireZipEntry(zipFile, "vm/Codec.cpp", vmsrcFile);
             requireZipEntry(zipFile, "vm/VmCodec.cpp", vmsrcFile);
+            requireZipEntry(zipFile, "vm/VmBinding.cpp", vmsrcFile);
             requireZipEntry(zipFile, "vm/include/VmCodec.h", vmsrcFile);
+            requireZipEntry(zipFile, "vm/include/VmBinding.h", vmsrcFile);
             final ZipEntry configEntry = requireZipEntry(
                     zipFile,
                     "vm/include/VmCodecConfig.h",
@@ -180,14 +182,20 @@ public class CmakeUtils {
                         + "#include <stdint.h>\n\n"
                         + "#define NMMP_VM_TEMPLATE_VERSION %d\n"
                         + "#define NMMP_VM_CODEC_VERSION %d\n"
-                        + "#define NMMP_VM_BUILD_SEED UINT64_C(0x%016x)\n"
+                        + "#define NMMP_VM_SIGNATURE_BINDING %d\n"
+                        + "#define NMMP_VM_SEED_DATA UINT64_C(0x%016x)\n"
+                        + "#define NMMP_VM_BUILD_ID UINT64_C(0x%016x)\n"
+                        + "#define NMMP_VM_PACKAGE_NAME \"%s\"\n"
                         + "#define NMMP_VM_DOMAIN_CODE UINT32_C(0x%08x)\n"
                         + "#define NMMP_VM_DOMAIN_TRIES UINT32_C(0x%08x)\n"
                         + "#define NMMP_VM_DOMAIN_STRING UINT32_C(0x%08x)\n\n"
                         + "#endif\n",
                 ProtectionContext.TEMPLATE_VERSION,
                 ProtectionContext.CODEC_VERSION,
-                protectionContext.getBuildSeed(),
+                protectionContext.isSignatureBound() ? 1 : 0,
+                protectionContext.getSeedData(),
+                protectionContext.getBuildId(),
+                protectionContext.getPackageName(),
                 MethodCodec.DOMAIN_CODE,
                 MethodCodec.DOMAIN_TRIES,
                 MethodCodec.DOMAIN_STRING);

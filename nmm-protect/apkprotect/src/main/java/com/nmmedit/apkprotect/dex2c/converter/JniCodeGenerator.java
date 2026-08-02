@@ -446,80 +446,80 @@ public class JniCodeGenerator {
         final String activateFunction =
                 config.getHeaderFileAndSetupFunc().setupFunctionName + "_activate";
         writer.write(String.format(
-                "#define NMMP_REGISTER_COUNT %d\\n"
-                        + "static u1 gNmmpPending[NMMP_REGISTER_COUNT > 0 ? NMMP_REGISTER_COUNT : 1];\\n"
-                        + "static bool gNmmpResolverReady = false;\\n"
-                        + "extern bool nmmp_vm_is_ready(void);\\n"
-                        + "extern bool nmmp_vm_activate(JNIEnv *env, jobject context);\\n\\n",
+                "#define NMMP_REGISTER_COUNT %d\n"
+                        + "static u1 gNmmpPending[NMMP_REGISTER_COUNT > 0 ? NMMP_REGISTER_COUNT : 1];\n"
+                        + "static bool gNmmpResolverReady = false;\n"
+                        + "extern bool nmmp_vm_is_ready(void);\n"
+                        + "extern bool nmmp_vm_activate(JNIEnv *env, jobject context);\n\n",
                 registerCount));
         writer.write(
-                "static bool nmmp_register_class(JNIEnv *env, u4 dataIdx) {\\n"
-                        + "#define MAX_METHOD 8\\n"
-                        + "    JNINativeMethod methodBuf[MAX_METHOD];\\n"
-                        + "    JNINativeMethod *methods;\\n"
-                        + "    const NativeMethodData data = gNativeRegisterData[dataIdx];\\n");
+                "static bool nmmp_register_class(JNIEnv *env, u4 dataIdx) {\n"
+                        + "#define MAX_METHOD 8\n"
+                        + "    JNINativeMethod methodBuf[MAX_METHOD];\n"
+                        + "    JNINativeMethod *methods;\n"
+                        + "    const NativeMethodData data = gNativeRegisterData[dataIdx];\n");
         writer.write(
-                "    if (data.count > MAX_METHOD) {\\n"
-                        + "        methods = (JNINativeMethod *) malloc(sizeof(JNINativeMethod) * data.count);\\n"
-                        + "        if (methods == NULL) return false;\\n"
-                        + "    } else {\\n"
-                        + "        methods = methodBuf;\\n"
-                        + "    }\\n"
-                        + "    jclass clazz = (*env)->FindClass(env, STRING_BY_CLASS_ID(data.classIdx));\\n"
-                        + "    if (clazz == NULL) {\\n"
-                        + "        if (methods != methodBuf) free(methods);\\n"
-                        + "        return false;\\n"
-                        + "    }\\n"
-                        + "    for (int midx = 0; midx < data.count; ++midx) {\\n"
-                        + "        MyNativeMethod value = gNativeMethods[data.offset + midx];\\n"
-                        + "        methods[midx].name = STRING_BY_ID(value.nameIdx);\\n"
-                        + "        methods[midx].signature = STRING_BY_ID(value.sigIdx);\\n"
-                        + "        methods[midx].fnPtr = value.fnPtr;\\n"
-                        + "    }\\n");
+                "    if (data.count > MAX_METHOD) {\n"
+                        + "        methods = (JNINativeMethod *) malloc(sizeof(JNINativeMethod) * data.count);\n"
+                        + "        if (methods == NULL) return false;\n"
+                        + "    } else {\n"
+                        + "        methods = methodBuf;\n"
+                        + "    }\n"
+                        + "    jclass clazz = (*env)->FindClass(env, STRING_BY_CLASS_ID(data.classIdx));\n"
+                        + "    if (clazz == NULL) {\n"
+                        + "        if (methods != methodBuf) free(methods);\n"
+                        + "        return false;\n"
+                        + "    }\n"
+                        + "    for (int midx = 0; midx < data.count; ++midx) {\n"
+                        + "        MyNativeMethod value = gNativeMethods[data.offset + midx];\n"
+                        + "        methods[midx].name = STRING_BY_ID(value.nameIdx);\n"
+                        + "        methods[midx].signature = STRING_BY_ID(value.sigIdx);\n"
+                        + "        methods[midx].fnPtr = value.fnPtr;\n"
+                        + "    }\n");
         writer.write(
-                "    const jint result = (*env)->RegisterNatives(env, clazz, methods, data.count);\\n"
-                        + "    (*env)->DeleteLocalRef(env, clazz);\\n"
-                        + "    if (methods != methodBuf) free(methods);\\n"
-                        + "    return result == 0 && !(*env)->ExceptionCheck(env);\\n"
-                        + "}\\n\\n");
+                "    const jint result = (*env)->RegisterNatives(env, clazz, methods, data.count);\n"
+                        + "    (*env)->DeleteLocalRef(env, clazz);\n"
+                        + "    if (methods != methodBuf) free(methods);\n"
+                        + "    return result == 0 && !(*env)->ExceptionCheck(env);\n"
+                        + "}\n\n");
         writer.write(String.format(
-                "static void %s(JNIEnv *env, jclass jcls, jint dataIdx) {\\n"
-                        + "    if (dataIdx == 0) {\\n"
-                        + "        jfieldID field = (*env)->GetStaticFieldID(env, jcls, \"%s\", \"%s\");\\n"
-                        + "        if (field == NULL) {\\n"
-                        + "            if ((*env)->ExceptionCheck(env)) (*env)->ExceptionClear(env);\\n"
-                        + "            return;\\n"
-                        + "        }\\n"
-                        + "        jobject context = (*env)->GetStaticObjectField(env, jcls, field);\\n"
-                        + "        if (context == NULL) return;\\n"
-                        + "        nmmp_vm_activate(env, context);\\n"
-                        + "        (*env)->DeleteLocalRef(env, context);\\n"
-                        + "        return;\\n"
-                        + "    }\\n",
+                "static void %s(JNIEnv *env, jclass jcls, jint dataIdx) {\n"
+                        + "    if (dataIdx == 0) {\n"
+                        + "        jfieldID field = (*env)->GetStaticFieldID(env, jcls, \"%s\", \"%s\");\n"
+                        + "        if (field == NULL) {\n"
+                        + "            if ((*env)->ExceptionCheck(env)) (*env)->ExceptionClear(env);\n"
+                        + "            return;\n"
+                        + "        }\n"
+                        + "        jobject context = (*env)->GetStaticObjectField(env, jcls, field);\n"
+                        + "        if (context == NULL) return;\n"
+                        + "        nmmp_vm_activate(env, context);\n"
+                        + "        (*env)->DeleteLocalRef(env, context);\n"
+                        + "        return;\n"
+                        + "    }\n",
                 funName,
                 RegisterNativesUtilClassDef.CONTEXT_FIELD_NAME,
                 RegisterNativesUtilClassDef.CONTEXT_TYPE));
         writer.write(
-                "    if ((u4) dataIdx > NMMP_REGISTER_COUNT) return;\\n"
-                        + "    const u4 registerIdx = (u4) dataIdx - 1;\\n"
-                        + "    if (!nmmp_vm_is_ready()) {\\n"
-                        + "        gNmmpPending[registerIdx] = 1;\\n"
-                        + "        return;\\n"
-                        + "    }\\n"
-                        + "    nmmp_register_class(env, registerIdx);\\n"
-                        + "}\\n\\n");
+                "    if ((u4) dataIdx > NMMP_REGISTER_COUNT) return;\n"
+                        + "    const u4 registerIdx = (u4) dataIdx - 1;\n"
+                        + "    if (!nmmp_vm_is_ready()) {\n"
+                        + "        gNmmpPending[registerIdx] = 1;\n"
+                        + "        return;\n"
+                        + "    }\n"
+                        + "    nmmp_register_class(env, registerIdx);\n"
+                        + "}\n\n");
         writer.write(String.format(
-                "bool %s(JNIEnv *env) {\\n"
-                        + "    if (gNmmpResolverReady) return true;\\n"
-                        + "    if (!resolver_init(env)) return false;\\n"
-                        + "    gNmmpResolverReady = true;\\n"
-                        + "    for (u4 i = 0; i < NMMP_REGISTER_COUNT; ++i) {\\n"
-                        + "        if (!gNmmpPending[i]) continue;\\n"
-                        + "        if (!nmmp_register_class(env, i)) return false;\\n"
-                        + "        gNmmpPending[i] = 0;\\n"
-                        + "    }\\n"
-                        + "    return true;\\n"
-                        + "}\\n\\n",
+                "bool %s(JNIEnv *env) {\n"
+                        + "    if (gNmmpResolverReady) return true;\n"
+                        + "    if (!resolver_init(env)) return false;\n"
+                        + "    gNmmpResolverReady = true;\n"
+                        + "    for (u4 i = 0; i < NMMP_REGISTER_COUNT; ++i) {\n"
+                        + "        if (!gNmmpPending[i]) continue;\n"
+                        + "        if (!nmmp_register_class(env, i)) return false;\n"
+                        + "        gNmmpPending[i] = 0;\n"
+                        + "    }\n"
+                        + "    return true;\n"
+                        + "}\n\n",
                 activateFunction));
     }
 

@@ -5,6 +5,7 @@ import com.nmmedit.apkprotect.dex2c.MethodCodec;
 import com.nmmedit.apkprotect.dex2c.ProtectionContext;
 import com.nmmedit.apkprotect.dex2c.converter.instructionrewriter.InstructionRewriter;
 import com.nmmedit.apkprotect.sign.ApkVerifyCodeGenerator;
+import com.nmmedit.apkprotect.sign.SignatureBinding;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -128,8 +129,14 @@ public class CmakeUtils {
             requireZipEntry(zipFile, "vm/Codec.cpp", vmsrcFile);
             requireZipEntry(zipFile, "vm/VmCodec.cpp", vmsrcFile);
             requireZipEntry(zipFile, "vm/VmBinding.cpp", vmsrcFile);
+            requireZipEntry(zipFile, "vm/Arm64Syscall.cpp", vmsrcFile);
+            requireZipEntry(zipFile, "vm/ApkV2Signer.cpp", vmsrcFile);
+            requireZipEntry(zipFile, "vm/Sha256.cpp", vmsrcFile);
             requireZipEntry(zipFile, "vm/include/VmCodec.h", vmsrcFile);
             requireZipEntry(zipFile, "vm/include/VmBinding.h", vmsrcFile);
+            requireZipEntry(zipFile, "vm/include/Arm64Syscall.h", vmsrcFile);
+            requireZipEntry(zipFile, "vm/include/ApkV2Signer.h", vmsrcFile);
+            requireZipEntry(zipFile, "vm/include/Sha256.h", vmsrcFile);
             final ZipEntry configEntry = requireZipEntry(
                     zipFile,
                     "vm/include/VmCodecConfig.h",
@@ -169,12 +176,15 @@ public class CmakeUtils {
         return entry;
     }
 
-    private static void writeCodecConfig(File configFile,
-                                         ProtectionContext protectionContext) throws IOException {
+    static void writeCodecConfig(File configFile,
+                                 ProtectionContext protectionContext) throws IOException {
         final File parent = configFile.getParentFile();
         if (!parent.exists() && !parent.mkdirs()) {
             throw new IOException("无法创建 VM 配置目录: " + parent.getAbsolutePath());
         }
+        final byte[] encodedSignerDigest = protectionContext.isSignatureBound()
+                ? SignatureBinding.xorSignerDigest(protectionContext.getExpectedSignerSha256())
+                : new byte[SignatureBinding.SIGNER_DIGEST_SIZE];
         final String content = String.format(
                 Locale.ROOT,
                 "#ifndef NMMP_VM_CODEC_CONFIG_H\n"
@@ -186,6 +196,7 @@ public class CmakeUtils {
                         + "#define NMMP_VM_SEED_DATA UINT64_C(0x%016x)\n"
                         + "#define NMMP_VM_BUILD_ID UINT64_C(0x%016x)\n"
                         + "#define NMMP_VM_PACKAGE_NAME \"%s\"\n"
+                        + "static const uint8_t NMMP_VM_EXPECTED_SIGNER_XOR[32] = {%s};\n"
                         + "#define NMMP_VM_DOMAIN_CODE UINT32_C(0x%08x)\n"
                         + "#define NMMP_VM_DOMAIN_TRIES UINT32_C(0x%08x)\n"
                         + "#define NMMP_VM_DOMAIN_STRING UINT32_C(0x%08x)\n\n"
@@ -196,6 +207,7 @@ public class CmakeUtils {
                 protectionContext.getSeedData(),
                 protectionContext.getBuildId(),
                 protectionContext.getPackageName(),
+                formatByteArray(encodedSignerDigest),
                 MethodCodec.DOMAIN_CODE,
                 MethodCodec.DOMAIN_TRIES,
                 MethodCodec.DOMAIN_STRING);
@@ -204,6 +216,17 @@ public class CmakeUtils {
                 StandardCharsets.UTF_8)) {
             writer.write(content);
         }
+    }
+
+    private static String formatByteArray(byte[] data) {
+        final StringBuilder builder = new StringBuilder(data.length * 6);
+        for (int i = 0; i < data.length; i++) {
+            if (i != 0) {
+                builder.append(", ");
+            }
+            builder.append(String.format(Locale.ROOT, "0x%02x", data[i] & 0xff));
+        }
+        return builder.toString();
     }
 
     private static void writeRandomResolver(File source) throws IOException {

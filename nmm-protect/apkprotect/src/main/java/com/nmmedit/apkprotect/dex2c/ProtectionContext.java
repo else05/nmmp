@@ -7,13 +7,14 @@ import java.security.SecureRandom;
 public final class ProtectionContext {
 
     public static final int CODEC_VERSION = 2;
-    public static final int TEMPLATE_VERSION = 2;
+    public static final int TEMPLATE_VERSION = 3;
 
     private final long buildSeed;
     private final long seedData;
     private final long buildId;
     private final String packageName;
     private final boolean signatureBound;
+    private final byte[] expectedSignerSha256;
     private final MethodCodec methodCodec;
     private long methodId;
     private long dexId;
@@ -43,6 +44,9 @@ public final class ProtectionContext {
         this.buildId = buildId;
         this.packageName = packageName;
         signatureBound = signerCertificate != null;
+        expectedSignerSha256 = signatureBound
+                ? SignatureBinding.certificateSha256(signerCertificate)
+                : new byte[SignatureBinding.SIGNER_DIGEST_SIZE];
         seedData = signatureBound
                 ? buildSeed ^ SignatureBinding.deriveMask(packageName, signerCertificate, buildId)
                 : buildSeed;
@@ -67,6 +71,10 @@ public final class ProtectionContext {
 
     public boolean isSignatureBound() {
         return signatureBound;
+    }
+
+    public byte[] getExpectedSignerSha256() {
+        return expectedSignerSha256.clone();
     }
 
     public MethodCodec getMethodCodec() {

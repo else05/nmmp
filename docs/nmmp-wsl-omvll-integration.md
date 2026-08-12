@@ -234,9 +234,12 @@ bash /mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/scripts/wsl/verify-omvl
 
 ```bash
 nmmp-wsl.sh \
-  app-release.apk \
-  -r convertRules.txt \
-  -m mapping.txt
+  app-release.apk  -r /mnt/d/AndroidProjects/sync-ui/app/convertRules.txt -m /mnt/d/AndroidProjects/sync-ui/app/build/outputs/mapping/release/mapping.txt
+
+  
+  /mnt/d/AndroidProjects/sync-ui/app/build/outputs/apk/release
+  
+ -r /mnt/d/AndroidProjects/sync-ui/app/convertRules.txt -m /mnt/d/AndroidProjects/sync-ui/app/build/outputs/mapping/release/mapping.txt
 ```
 
 日志应显示插件路径，并在 CMake 配置阶段出现：

@@ -15,6 +15,9 @@ set(VM_SRC_FILES
         Codec.cpp
         VmCodec.cpp
         VmBinding.cpp
+        Arm64Syscall.cpp
+        ApkV2Signer.cpp
+        Sha256.cpp
         JNIWrapper.c
 
         )

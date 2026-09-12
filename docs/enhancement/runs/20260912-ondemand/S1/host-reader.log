@@ -1,0 +1,30 @@
+-- The C compiler identification is GNU 15.3.0
+-- The CXX compiler identification is GNU 15.3.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/host-reader
+[1/5] Building CXX object CMakeFiles/vm_codec_vector_test.dir/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/VmCodec.cpp.o
+[2/5] Building CXX object CMakeFiles/vm_codec_vector_test.dir/VmCodecVectorTest.cpp.o
+[3/5] Building CXX object CMakeFiles/vm_reader_test.dir/VmReaderTest.cpp.o
+[4/5] Linking CXX executable vm_codec_vector_test
+[5/5] Linking CXX executable vm_reader_test
+Internal ctest changing into directory: /mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/host-reader
+Test project /mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/host-reader
+    Start 1: vm_codec_vector_test
+1/2 Test #1: vm_codec_vector_test .............   Passed    0.15 sec
+    Start 2: vm_reader_test
+2/2 Test #2: vm_reader_test ...................   Passed    0.04 sec
+
+100% tests passed, 0 tests failed out of 2
+
+Total Test time (real) =   0.22 sec

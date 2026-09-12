@@ -52,6 +52,17 @@ bool dvmInterpHandleFillArrayData(JNIEnv *env, jarray arrayObj, VmReader &r, int
             || !r.payloadRange(pc, 8 + uint64_t(width) * size)) {
         payloadError(env, r); return false;
     }
+    const char *types = width == 1 ? "ZB" : width == 2 ? "SC" : width == 4 ? "IF" : "JD";
+    bool matched = false;
+    for (unsigned i = 0; i < 2 && !matched; ++i) {
+        char descriptor[] = {'[', types[i], 0};
+        jclass type = env->FindClass(descriptor);
+        if (!type) return false;
+        matched = env->IsInstanceOf(arrayObj, type);
+        env->DeleteLocalRef(type);
+        if (env->ExceptionCheck()) return false;
+    }
+    if (!matched) { payloadError(env, r); return false; }
     jsize length = env->GetArrayLength(arrayObj);
     if (env->ExceptionCheck()) return false;
     if (size > uint32_t(length)) {

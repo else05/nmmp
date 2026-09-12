@@ -8,6 +8,14 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+bool vmCodecGetSeed(uint64_t *seed);
+#ifdef __cplusplus
+}
+#endif
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 void vmCodecTransform(uint8_t *data,
                       uint32_t size,

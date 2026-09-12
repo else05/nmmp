@@ -1,0 +1,142 @@
+{
+  "codec": 3,
+  "template": 4,
+  "domains": {
+    "FETCH": 1,
+    "OPERAND": 2,
+    "WIDE": 3,
+    "PAYLOAD": 4,
+    "TRIES": 5,
+    "RECORD": 6,
+    "MAP": 7,
+    "DIRECTORY": 8
+  },
+  "formats": {
+    "Format10t": [
+      1,
+      0
+    ],
+    "Format10x": [
+      1,
+      0
+    ],
+    "Format11n": [
+      1,
+      0
+    ],
+    "Format11x": [
+      1,
+      0
+    ],
+    "Format12x": [
+      1,
+      0
+    ],
+    "Format20t": [
+      2,
+      1
+    ],
+    "Format21c": [
+      2,
+      0
+    ],
+    "Format21ih": [
+      2,
+      0
+    ],
+    "Format21lh": [
+      2,
+      0
+    ],
+    "Format21s": [
+      2,
+      0
+    ],
+    "Format21t": [
+      2,
+      1
+    ],
+    "Format22b": [
+      2,
+      0
+    ],
+    "Format22c": [
+      2,
+      0
+    ],
+    "Format22s": [
+      2,
+      0
+    ],
+    "Format22t": [
+      2,
+      1
+    ],
+    "Format22x": [
+      2,
+      0
+    ],
+    "Format23x": [
+      2,
+      0
+    ],
+    "Format30t": [
+      3,
+      1
+    ],
+    "Format31c": [
+      3,
+      0
+    ],
+    "Format31i": [
+      3,
+      0
+    ],
+    "Format31t": [
+      3,
+      2
+    ],
+    "Format32x": [
+      3,
+      0
+    ],
+    "Format35c": [
+      3,
+      0
+    ],
+    "Format3rc": [
+      3,
+      0
+    ],
+    "Format51l": [
+      5,
+      0
+    ],
+    "PackedSwitchPayload": [
+      0,
+      3
+    ],
+    "SparseSwitchPayload": [
+      0,
+      4
+    ],
+    "ArrayPayload": [
+      0,
+      5
+    ]
+  },
+  "wideOpcodes": [
+    "CONST_WIDE_16",
+    "CONST_WIDE_32",
+    "CONST_WIDE",
+    "CONST_WIDE_HIGH16"
+  ],
+  "unsupportedOpcodes": [
+    "INVOKE_POLYMORPHIC",
+    "INVOKE_POLYMORPHIC_RANGE",
+    "INVOKE_CUSTOM",
+    "INVOKE_CUSTOM_RANGE",
+    "CONST_METHOD_HANDLE",
+    "CONST_METHOD_TYPE"
+  ]
+}

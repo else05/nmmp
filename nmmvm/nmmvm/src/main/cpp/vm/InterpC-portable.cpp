@@ -45,58 +45,78 @@ static const char kSpacing[] = "            ";
 #endif
 
 
-#define GET_REGISTER_FLAGS(_idx)           ((u1)fp_flags[(_idx)])
-#define SET_REGISTER_FLAGS(_idx, _val)     (fp_flags[(_idx)] =(u1) (_val))
+#define RINDEX(_idx, _width) ({ uint32_t index = (_idx); \
+    if (code->reader && (index >= code->registerCapacity || (_width) > code->registerCapacity - index)) \
+        goto readerFailed; index; })
+#define GET_REGISTER_FLAGS(_idx)           ((u1)fp_flags[RINDEX(_idx, 1)])
+#define SET_REGISTER_FLAGS(_idx, _val)     (fp_flags[RINDEX(_idx, 1)] =(u1) (_val))
 
 
-#define GET_REGISTER_AS_OBJECT(_idx)       ((jobject) fp[(_idx)])
+#define GET_REGISTER_AS_OBJECT(_idx) ({ uint32_t reg_src = RINDEX(_idx, 1); \
+    if (code->reader && !fp_flags[reg_src] && fp[reg_src] != 0) goto readerFailed; \
+    (jobject)fp[reg_src]; })
 
 #define DELETE_LOCAL_REF(_idx)                                  \
 if(GET_REGISTER_FLAGS(_idx)){                                   \
     wrapper->DeleteLocalRef(env, GET_REGISTER_AS_OBJECT(_idx)); \
 }
 
-#define SET_REGISTER_AS_OBJECT(_idx, _val)  \
-DELETE_LOCAL_REF(_idx);                     \
-(fp[(_idx)] = (regptr_t) (_val));           \
-SET_REGISTER_FLAGS(_idx, 1)
+#define SET_REGISTER_AS_OBJECT(_idx, _val) do { \
+    uint32_t reg_dst = RINDEX(_idx, 1); \
+    jobject reg_value = (_val); \
+    DELETE_LOCAL_REF(reg_dst); \
+    fp[reg_dst] = (regptr_t)reg_value; \
+    fp_flags[reg_dst] = 1; \
+} while (false)
 
 
-#define GET_REGISTER(_idx)                 ((u4)fp[(_idx)])
+#define GET_REGISTER(_idx)                 ((u4)fp[RINDEX(_idx, 1)])
 
-#define SET_REGISTER(_idx, _val)            \
-DELETE_LOCAL_REF(_idx);                     \
-(fp[(_idx)] =(u4) (_val));                  \
-SET_REGISTER_FLAGS(_idx, 0)
+#define SET_REGISTER(_idx, _val) do { \
+    uint32_t reg_dst = RINDEX(_idx, 1); \
+    u4 reg_value = (_val); \
+    DELETE_LOCAL_REF(reg_dst); \
+    fp[reg_dst] = reg_value; \
+    fp_flags[reg_dst] = 0; \
+} while (false)
 
 
 #define GET_REGISTER_INT(_idx)             ((s4)GET_REGISTER(_idx))
 
 #define SET_REGISTER_INT(_idx, _val)        SET_REGISTER(_idx, (s4)(_val));
 
-#define GET_REGISTER_FLOAT(_idx)           (*((float*) &fp[(_idx)]))
+#define GET_REGISTER_FLOAT(_idx)           (*((float*) &fp[RINDEX(_idx, 1)]))
 
-#define SET_REGISTER_FLOAT(_idx, _val)      \
-DELETE_LOCAL_REF(_idx);                     \
-(*((float*) &fp[(_idx)]) = (_val));         \
-SET_REGISTER_FLAGS(_idx, 0)
+#define SET_REGISTER_FLOAT(_idx, _val) do { \
+    uint32_t reg_dst = RINDEX(_idx, 1); \
+    float reg_value = (_val); \
+    DELETE_LOCAL_REF(reg_dst); \
+    *((float *)&fp[reg_dst]) = reg_value; \
+    fp_flags[reg_dst] = 0; \
+} while (false)
 
 
 //#ifdef _LP64
 
-#define GET_REGISTER_WIDE(_idx)            ((s8)fp[(_idx)])
+#define GET_REGISTER_WIDE(_idx)            ((s8)fp[RINDEX(_idx, 2)])
 
-#define SET_REGISTER_WIDE(_idx, _val)       \
-DELETE_LOCAL_REF(_idx);                     \
-(fp[(_idx)] =(s8) (_val));                  \
-SET_REGISTER_FLAGS(_idx, 0)
+#define SET_REGISTER_WIDE(_idx, _val) do { \
+    uint32_t reg_dst = RINDEX(_idx, 2); \
+    s8 reg_value = (_val); \
+    DELETE_LOCAL_REF(reg_dst); \
+    fp[reg_dst] = reg_value; \
+    fp_flags[reg_dst] = 0; \
+} while (false)
 
-#define GET_REGISTER_DOUBLE(_idx)          (*((double*) &fp[(_idx)]))
+#define GET_REGISTER_DOUBLE(_idx)          (*((double*) &fp[RINDEX(_idx, 2)]))
 
-#define SET_REGISTER_DOUBLE(_idx, _val)     \
-DELETE_LOCAL_REF(_idx);                     \
-(*((double*) &fp[(_idx)]) = (_val));        \
-SET_REGISTER_FLAGS(_idx, 0)
+#define SET_REGISTER_DOUBLE(_idx, _val) do { \
+    uint32_t reg_dst = RINDEX(_idx, 2); \
+    double reg_value = (_val); \
+    DELETE_LOCAL_REF(reg_dst); \
+    *((double *)&fp[reg_dst]) = reg_value; \
+    fp_flags[reg_dst] = 0; \
+} while (false)
 //#else
 
 //#define GET_REGISTER_WIDE(_idx)            getLongFromArray(fp,_idx)
@@ -899,7 +919,7 @@ FINISH(2);
 
 
 #define SET_ARGUMENT(_args, _typeCh, _idx, _vsrc)                           \
-    ILOGV("set argument args[%d]=%08llx", _idx, GET_REGISTER_WIDE(_vsrc));  \
+    ILOGV("set argument args[%d]=%08llx", _idx, (unsigned long long)fp[RINDEX(_vsrc, 1)]);  \
     switch(_typeCh){                                                        \
         case 'Z':                                                           \
         case 'B':                                                           \
@@ -940,12 +960,19 @@ FINISH(2);
     char returnCh = methodToCall->shorty[0];                                   \
                                                                                \
     const char *paramTypes = methodToCall->shorty + 1;                         \
+    unsigned expectedWords = 0; \
+    for (const char *type = paramTypes; *type; ++type) \
+        expectedWords += (*type == 'J' || *type == 'D') ? 2 : 1; \
+    if (expectedWords != (methodCallRange ? vsrc1 : vsrc1 >> 4)) goto readerFailed; \
+    if (code->reader && methodCallRange && (uint64_t(vdst) + expectedWords > code->registerCapacity)) goto readerFailed; \
                                                                                \
     /*                                                                         \
      * Copy args.  This may corrupt vsrc1/vdst.                                \
      */                                                                        \
     if (methodCallRange) {                                                     \
-        args = (jvalue *) malloc(sizeof(jvalue) * (vsrc1));                    \
+        args = (jvalue *) malloc(sizeof(jvalue) * (vsrc1)); \
+        activeArgs = args; \
+        if (vsrc1 && !args) goto readerFailed;                    \
         for (i = 0, idx = 0; idx < vsrc1; i++) {                               \
             SET_ARGUMENT(args, paramTypes[i], i, vdst + idx);                  \
             idx += regwidth;                                                   \
@@ -953,7 +980,7 @@ FINISH(2);
     } else {                                                                   \
         args = args_tmp;                                                       \
         u4 count = vsrc1 >> 4;                                                 \
-        assert(count <= 5);                                                    \
+        if (count > 5) goto readerFailed;                                                    \
         for (i = 0, idx = 0; idx < count; i++) {                               \
             switch (idx) {                                                     \
             case 4:                                                            \
@@ -982,7 +1009,7 @@ FINISH(2);
      * 如果申请的内存则需要释放                                                   \
      */                                                                        \
     if (args != args_tmp) {                                                    \
-        free(args);                                                            \
+        free(args); activeArgs = nullptr;                                                            \
     }                                                                          \
                                                                                \
     if(wrapper->ExceptionCheck(env)){                                          \
@@ -1001,12 +1028,19 @@ FINISH(2);
     char returnCh = methodToCall->shorty[0];                                   \
                                                                                \
     const char *paramTypes = methodToCall->shorty + 1;                         \
+    unsigned expectedWords = 1; \
+    for (const char *type = paramTypes; *type; ++type) \
+        expectedWords += (*type == 'J' || *type == 'D') ? 2 : 1; \
+    if (expectedWords != (methodCallRange ? vsrc1 : vsrc1 >> 4)) goto readerFailed; \
+    if (code->reader && methodCallRange && (uint64_t(vdst) + expectedWords > code->registerCapacity)) goto readerFailed; \
                                                                                \
     /*                                                                         \
      * Copy args.  This may corrupt vsrc1/vdst.                                \
      */                                                                        \
     if (methodCallRange) {                                                     \
-        args = (jvalue *) malloc(sizeof(jvalue) * (vsrc1));                    \
+        args = (jvalue *) malloc(sizeof(jvalue) * (vsrc1)); \
+        activeArgs = args; \
+        if (vsrc1 && !args) goto readerFailed;                    \
         for (i = 0, idx = 0; idx < vsrc1; i++) {                               \
             if (i == 0) {                                                      \
                 regwidth = 1;                                                  \
@@ -1018,7 +1052,7 @@ FINISH(2);
     } else {                                                                   \
         args = args_tmp;                                                       \
         u4 count = vsrc1 >> 4;                                                 \
-        assert(count <= 5);                                                    \
+        if (count > 5) goto readerFailed;                                                    \
         for (i = 0, idx = 0; idx < count; i++) {                               \
             switch (idx) {                                                     \
             case 4:                                                            \
@@ -1051,7 +1085,7 @@ FINISH(2);
      * 如果申请的内存则需要释放                                                   \
      */                                                                        \
     if (args != args_tmp) {                                                    \
-        free(args);                                                            \
+        free(args); activeArgs = nullptr;                                                            \
     }                                                                          \
                                                                                \
     if(wrapper->ExceptionCheck(env)){                                          \
@@ -1070,13 +1104,23 @@ jvalue vmInterpret(
         const vmCode *code,
         const vmResolver *dvmResolver
 ) {
+    if (code->reader) return vmInterpretReader(env, code, dvmResolver, code->reader);
+    if (code->insnsSize > UINT32_MAX / 2) {
+        dvmThrowInternalError(env, "Invalid VM code size"); return {};
+    }
+    VmReader reader(reinterpret_cast<const uint8_t *>(code->insns),
+                    code->insnsSize * 2, code->triesHandlers, code->triesByteSize);
+    return vmInterpretReader(env, code, dvmResolver, &reader);
+}
+
+jvalue vmInterpretReader(JNIEnv *env, const vmCode *code,
+                         const vmResolver *dvmResolver, VmReader *inputReader) {
+    jvalue *activeArgs = nullptr;
     jvalue args_tmp[5];//方法调用时参数传递(参数数量小于等于5)
     jvalue retval = {};
     regptr_t *fp = code->regs;//寄存器
     u1 *fp_flags = code->reg_flags;//寄存器类型标识
-    VmReader plainReader(reinterpret_cast<const uint8_t *>(code->insns),
-                         code->insnsSize * 2, code->triesHandlers, code->triesByteSize);
-    VmReader &reader = code->reader ? *code->reader : plainReader;
+    VmReader &reader = *inputReader;
     uint32_t pc = 0;
     u2 inst;                    // current instruction
 
@@ -1100,6 +1144,7 @@ jvalue vmInterpret(
 
     /* File: c/OP_NOP.cpp */
     HANDLE_OPCODE(OP_NOP)
+    if (code->reader && inst != 0) goto readerFailed;
     FINISH(1);
     OP_END
 
@@ -1593,6 +1638,7 @@ jvalue vmInterpret(
         }
 
         type = dvmResolver->dvmResolveTypeUtf(env, ref);
+        if (!type) GOTO_exceptionThrown();
         if (type == NULL) {
             GOTO_exceptionThrown();
         }
@@ -1881,26 +1927,32 @@ HANDLE_OP_IF_XXZ(OP_IF_LEZ, "lez", <=)
 
 /* File: c/OP_UNUSED_3E.cpp */
     HANDLE_OPCODE(OP_UNUSED_3E)
+    if (code->reader) goto readerFailed;
     OP_END
 
 /* File: c/OP_UNUSED_3F.cpp */
     HANDLE_OPCODE(OP_UNUSED_3F)
+    if (code->reader) goto readerFailed;
     OP_END
 
 /* File: c/OP_UNUSED_40.cpp */
     HANDLE_OPCODE(OP_UNUSED_40)
+    if (code->reader) goto readerFailed;
     OP_END
 
 /* File: c/OP_UNUSED_41.cpp */
     HANDLE_OPCODE(OP_UNUSED_41)
+    if (code->reader) goto readerFailed;
     OP_END
 
 /* File: c/OP_UNUSED_42.cpp */
     HANDLE_OPCODE(OP_UNUSED_42)
+    if (code->reader) goto readerFailed;
     OP_END
 
 /* File: c/OP_UNUSED_43.cpp */
     HANDLE_OPCODE(OP_UNUSED_43)
+    if (code->reader) goto readerFailed;
     OP_END
 
 /* File: c/OP_AGET.cpp */
@@ -2334,6 +2386,7 @@ HANDLE_SPUT_X(OP_SPUT_SHORT, "", {
 
 /* File: c/OP_UNUSED_73.cpp */
     HANDLE_OPCODE(OP_UNUSED_73)
+    if (code->reader) goto readerFailed;
     OP_END
 
 /* File: c/OP_INVOKE_VIRTUAL_RANGE.cpp */
@@ -2368,10 +2421,12 @@ HANDLE_SPUT_X(OP_SPUT_SHORT, "", {
 
 /* File: c/OP_UNUSED_79.cpp */
     HANDLE_OPCODE(OP_UNUSED_79)
+    if (code->reader) goto readerFailed;
     OP_END
 
 /* File: c/OP_UNUSED_7A.cpp */
     HANDLE_OPCODE(OP_UNUSED_7A)
+    if (code->reader) goto readerFailed;
     OP_END
 
 /* File: c/OP_NEG_INT.cpp */
@@ -2890,33 +2945,46 @@ HANDLE_OP_SHX_INT_LIT8(OP_USHR_INT_LIT8, "ushr", (u4), >>)
     OP_END
 
     HANDLE_OPCODE(OP_UNUSED_F3)
+    if (code->reader) goto readerFailed;
     OP_END
     HANDLE_OPCODE(OP_UNUSED_F4)
+    if (code->reader) goto readerFailed;
     OP_END
     HANDLE_OPCODE(OP_UNUSED_F5)
+    if (code->reader) goto readerFailed;
     OP_END
     HANDLE_OPCODE(OP_UNUSED_F6)
+    if (code->reader) goto readerFailed;
     OP_END
     HANDLE_OPCODE(OP_UNUSED_F7)
+    if (code->reader) goto readerFailed;
     OP_END
     HANDLE_OPCODE(OP_UNUSED_F8)
+    if (code->reader) goto readerFailed;
     OP_END
     HANDLE_OPCODE(OP_UNUSED_F9)
+    if (code->reader) goto readerFailed;
     OP_END
 
     //todo 实现高版本指令
     HANDLE_OPCODE(OP_INVOKE_POLYMORPHIC)
+    if (code->reader) goto readerFailed;
     OP_END
     HANDLE_OPCODE(OP_INVOKE_POLYMORPHIC_RANGE)
+    if (code->reader) goto readerFailed;
     OP_END
 
     HANDLE_OPCODE(OP_INVOKE_CUSTOM)
+    if (code->reader) goto readerFailed;
     OP_END
     HANDLE_OPCODE(OP_INVOKE_CUSTOM_RANGE)
+    if (code->reader) goto readerFailed;
     OP_END
     HANDLE_OPCODE(OP_CONST_METHOD_HANDLE)
+    if (code->reader) goto readerFailed;
     OP_END
     HANDLE_OPCODE(OP_CONST_METHOD_TYPE)
+    if (code->reader) goto readerFailed;
     OP_END
 /*
  * In portable interp, most unused opcodes will fall through to here.
@@ -2957,6 +3025,7 @@ HANDLE_OP_SHX_INT_LIT8(OP_USHR_INT_LIT8, "ushr", (u4), >>)
                   vsrc1, ref, vdst, arg5);
         }
         type = dvmResolver->dvmResolveTypeUtf(env, ref);
+        if (!type) GOTO_exceptionThrown();
         if (type == NULL) {
             dvmThrowNullPointerException(env,
                                          NULL);
@@ -3631,6 +3700,7 @@ HANDLE_OP_SHX_INT_LIT8(OP_USHR_INT_LIT8, "ushr", (u4), >>)
 /*--- end of opcodes ---*/
 
     readerFailed:
+    free(activeArgs); activeArgs = nullptr;
     if (!wrapper->ExceptionCheck(env)) dvmThrowInternalError(env, "Invalid VM reader access");
     retval = {};
     bail:

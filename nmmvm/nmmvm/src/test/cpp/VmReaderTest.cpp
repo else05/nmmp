@@ -1,8 +1,31 @@
 #include "VmReader.h"
 #include <cstdlib>
 #include <cstdio>
+#include "DemandVector.h"
 #define CHECK(x) do { if (!(x)) { std::fprintf(stderr, "line %d: %s\n", __LINE__, #x); std::abort(); } } while (0)
 int main() {
+    {
+        VmReader encoded(vectorCode, sizeof(vectorCode), vectorTries, sizeof(vectorTries),
+                         vectorBoundaries, vectorSeed);
+        // Reverse order and repeated domain changes exercise random access and cache replacement.
+        for (int pass = 0; pass < 3; ++pass) for (int pc = 79; pc >= 0; --pc) {
+            unsigned domain = (vectorBoundaries[pc / 2] >> ((pc & 1) * 4)) & 15;
+            uint16_t value;
+            if (domain == NMMP_READER_FETCH) value = encoded.instruction(pc);
+            else if (domain == NMMP_READER_PAYLOAD) value = encoded.payload16(pc);
+            else {
+                int start = pc;
+                while (((vectorBoundaries[start / 2] >> ((start & 1) * 4)) & 15) != NMMP_READER_FETCH) --start;
+                value = encoded.operand(start, pc - start);
+            }
+            CHECK(value == (vectorPlain[pc * 2] | (uint16_t(vectorPlain[pc * 2 + 1]) << 8)));
+            CHECK(encoded.try16(pc * 2) == value);
+        }
+        CHECK(!encoded.failed());
+        CHECK(!encoded.target(1)); // operand is not an executable instruction
+        VmReader bad(vectorCode, sizeof(vectorCode), nullptr, 0, vectorBoundaries, vectorSeed);
+        bad.operand(0, 2); CHECK(bad.failed()); // crosses into the next instruction
+    }
     const uint8_t bytes[] = {0x12,0xab,0xff,0xff,0x01,0x80,0x23,0x45};
     VmReader r(bytes, sizeof(bytes));
     CHECK(r.instruction(0) == 0xab12);

@@ -44,6 +44,13 @@ repositories {
 compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = 'UTF-8'
 
+task checkReaderFormats(type: Exec) {
+    workingDir projectDir.parentFile
+    commandLine(System.getProperty('os.name').toLowerCase().contains('windows') ? 'python' : 'python3',
+            'scripts/generate-reader-formats.py', '--check')
+}
+compileJava.dependsOn checkReaderFormats
+
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8

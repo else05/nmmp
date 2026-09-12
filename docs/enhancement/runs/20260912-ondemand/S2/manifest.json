@@ -1,0 +1,55 @@
+{
+  "stage": "S2",
+  "baseCommit": "18dc5b1",
+  "codec": 3,
+  "template": 4,
+  "mode": "on-demand-v1",
+  "privateLinker": false,
+  "methods": 526,
+  "semanticAssertionsPerConfiguration": 1351,
+  "androidConfigurations": [
+    "Debug",
+    "Release"
+  ],
+  "artifacts": {
+    "jar": {
+      "path": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s2-acceptance\\vm-protect.jar",
+      "sha256": "f1ee16287cba37dce5bd21c02b26f32d071f8e3bcf547a4147dbdf46278000ce",
+      "bytes": 20430695
+    },
+    "apk": {
+      "path": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s2-acceptance\\protected-signed.apk",
+      "sha256": "0f1a46793c328773735f2a236016e4cdeeb49b992bbe054d4d824946e3b38fd7",
+      "bytes": 9191365
+    },
+    "input": {
+      "path": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s2-acceptance\\input\\original.apk",
+      "sha256": "660e2ddc18a500b86ed4ab076b5fe72cbc37ec6400f2ff3ae9200344befb84a5",
+      "bytes": 8676280
+    },
+    "template": {
+      "path": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\apkprotect\\src\\main\\resources\\vmsrc.zip",
+      "sha256": "42205dd9e5faf7fb9646394cddd1c7d1fefed93f536b38962adc39b450a13b60",
+      "bytes": 537493
+    }
+  },
+  "limitations": [
+    "API26 device unavailable",
+    "Full business paths and three-seed performance acceptance pending",
+    "S2 direct records are transitional; S3 token records still pending"
+  ],
+  "javaTests": {
+    "arsc": {
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apkprotect": {
+      "tests": 35,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  }
+}

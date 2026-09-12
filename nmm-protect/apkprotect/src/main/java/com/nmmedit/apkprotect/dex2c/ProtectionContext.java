@@ -7,7 +7,18 @@ import java.security.SecureRandom;
 public final class ProtectionContext {
 
     public static final int CODEC_VERSION = 2;
-    public static final int TEMPLATE_VERSION = 3;
+    public static final int TEMPLATE_VERSION = 4;
+    private final boolean onDemand;
+
+    public static boolean configuredOnDemand() {
+        String mode = System.getProperty("vmDecodeMode", System.getenv("NMMP_VM_DECODE_MODE"));
+        if (mode == null || mode.equals("legacy")) return false;
+        if (mode.equals("on-demand-v1")) return true;
+        throw new IllegalArgumentException("vmDecodeMode must be legacy or on-demand-v1");
+    }
+    public boolean isOnDemand() { return onDemand; }
+    public int getCodecVersion() { return onDemand ? 3 : CODEC_VERSION; }
+    public String getDecodeMode() { return onDemand ? "on-demand-v1" : "legacy"; }
 
     private final long buildSeed;
     private final long seedData;
@@ -20,7 +31,7 @@ public final class ProtectionContext {
     private long dexId;
 
     public static ProtectionContext create() {
-        return new ProtectionContext(new SecureRandom().nextLong());
+        return new ProtectionContext(new SecureRandom().nextLong(), 0, "", null, configuredOnDemand());
     }
 
     public static ProtectionContext createBound(String packageName, byte[] signerCertificate) {
@@ -29,17 +40,27 @@ public final class ProtectionContext {
                 random.nextLong(),
                 random.nextLong(),
                 packageName,
-                signerCertificate);
+                signerCertificate, configuredOnDemand());
     }
 
     public ProtectionContext(long buildSeed) {
         this(buildSeed, 0, "", null);
     }
 
+    public ProtectionContext(long buildSeed, boolean onDemand) {
+        this(buildSeed, 0, "", null, onDemand);
+    }
+
     ProtectionContext(long buildSeed,
                       long buildId,
                       String packageName,
                       byte[] signerCertificate) {
+        this(buildSeed, buildId, packageName, signerCertificate, false);
+    }
+
+    private ProtectionContext(long buildSeed, long buildId, String packageName,
+                              byte[] signerCertificate, boolean onDemand) {
+        this.onDemand = onDemand;
         this.buildSeed = buildSeed;
         this.buildId = buildId;
         this.packageName = packageName;

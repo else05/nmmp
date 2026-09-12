@@ -35,6 +35,13 @@ bool vmCodecActivate(uint64_t bindingMask) {
 }
 
 extern "C"
+bool vmCodecGetSeed(uint64_t *seed) {
+    if (!gActivated || !seed) return false;
+    *seed = gRuntimeSeed;
+    return true;
+}
+
+extern "C"
 bool vmCodecIsActivated(void) {
     return gActivated;
 }

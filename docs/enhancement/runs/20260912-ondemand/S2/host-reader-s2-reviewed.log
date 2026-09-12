@@ -1,0 +1,12 @@
+[1/2] Building CXX object CMakeFiles/vm_reader_test.dir/VmReaderTest.cpp.o
+[2/2] Linking CXX executable vm_reader_test
+Internal ctest changing into directory: /mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/host-reader
+Test project /mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/host-reader
+    Start 1: vm_codec_vector_test
+1/2 Test #1: vm_codec_vector_test .............   Passed    0.13 sec
+    Start 2: vm_reader_test
+2/2 Test #2: vm_reader_test ...................   Passed    0.04 sec
+
+100% tests passed, 0 tests failed out of 2
+
+Total Test time (real) =   0.20 sec

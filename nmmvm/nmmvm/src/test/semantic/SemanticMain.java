@@ -47,6 +47,14 @@ public final class SemanticMain {
         if (args.length > 1 && args[1].equals("reader")) {
             failure(InternalError.class, 10, null);
             failure(InternalError.class, 11, null);
+            byte[] unchanged = new byte[259];
+            try { eval(12, 8, unchanged); throw new AssertionError("array width accepted"); }
+            catch (InternalError expected) { ++checks; }
+            for (byte value : unchanged) eq(0, value);
+            try { eval(12, 8, new Object[259]); throw new AssertionError("object array accepted"); }
+            catch (InternalError expected) { ++checks; }
+            if (args.length > 2 && args[2].equals("demand"))
+                for (int scenario = 20; scenario <= 32; ++scenario) failure(InternalError.class, scenario, null);
         }
         System.out.println("SEMANTIC_PASS checks=" + checks);
     }

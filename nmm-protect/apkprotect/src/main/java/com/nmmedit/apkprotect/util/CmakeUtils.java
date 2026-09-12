@@ -218,7 +218,7 @@ public class CmakeUtils {
                         + "#define NMMP_VM_DOMAIN_STRING UINT32_C(0x%08x)\n\n"
                         + "#endif\n",
                 ProtectionContext.TEMPLATE_VERSION,
-                ProtectionContext.CODEC_VERSION,
+                protectionContext.getCodecVersion(),
                 protectionContext.isSignatureBound() ? 1 : 0,
                 protectionContext.getSeedData(),
                 protectionContext.getBuildId(),

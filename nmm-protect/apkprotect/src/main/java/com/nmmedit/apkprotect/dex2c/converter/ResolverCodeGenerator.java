@@ -64,6 +64,7 @@ public class ResolverCodeGenerator {
         generateStringConstants(writer);
 
         //生成初始化函数及符号解析器结构体
+        generateDemandValidation(writer);
         generateResolver(writer);
     }
 
@@ -102,6 +103,24 @@ public class ResolverCodeGenerator {
                 Math.max(1, constStringIds.length)));
     }
 
+    private void generateDemandValidation(Writer writer) throws IOException {
+        String[] names = {"gStringIds", "gTypeIds", "gClassIds", "gSignatureIds", "gFieldIds", "gMethodIds", "gStringConstantIds"};
+        int[] counts = {references.getStringPool().size(), references.getTypePool().size(),
+                references.getClassNamePool().size(), references.getSignaturePool().size(),
+                references.getFieldPool().size(), references.getMethodPool().size(), references.getConstantStringPool().size()};
+        for (int i = 0; i < names.length; ++i) writer.write("#define " + names[i] + "_COUNT " + counts[i] + "u\n");
+        writer.write("#if NMMP_VM_CODEC_VERSION == 3\nstatic bool nmmp_validate_resolver(void) {\n"
+                + "    for (u4 i=0; i<gStringIds_COUNT; ++i) { u4 off=gStringIds[i].off; if (off>=gStringPoolByteSize || !memchr(gBaseStrPtr+off, 0, gStringPoolByteSize-off)) return false; }\n");
+        for (String name : new String[]{"gTypeIds", "gClassIds", "gSignatureIds", "gStringConstantIds"})
+            writer.write("    for (u4 i=0; i<" + name + "_COUNT; ++i) if (" + name + "[i].idx>=gStringIds_COUNT) return false;\n");
+        writer.write("    if (gTypeIds_COUNT != gClassIds_COUNT) return false;\n"
+                + "    for (u4 i=0; i<gFieldIds_COUNT; ++i) { FieldId f=gFieldIds[i]; if(f.classIdx>=gClassIds_COUNT || f.typeIdx>=gTypeIds_COUNT || f.nameIdx>=gStringIds_COUNT) return false; }\n"
+                + "    for (u4 i=0; i<gMethodIds_COUNT; ++i) { MethodId m=gMethodIds[i]; if(m.classIdx>=gClassIds_COUNT || m.sigIdx>=gSignatureIds_COUNT || m.nameIdx>=gStringIds_COUNT || m.shortyIdx>=gStringIds_COUNT) return false;\n"
+                + "        const char *s=(const char *)gBaseStrPtr+gStringIds[m.shortyIdx].off; if(!*s || !strchr(\"VZBCSIJFDL\", *s)) return false;\n"
+                + "        for (++s; *s; ++s) if(!strchr(\"ZBCSIJFDL\", *s)) return false;\n"
+                + "    }\n    return true;\n}\n#endif\n");
+    }
+
     private void generateResolver(Writer writer) throws IOException {
         writer.write("static pthread_mutex_t gResolverPublishMutex = PTHREAD_MUTEX_INITIALIZER;\n" +
                 "\n" +
@@ -112,6 +131,9 @@ public class ResolverCodeGenerator {
                 "                     gStringPoolDexId,\n" +
                 "                     NMMP_VM_DOMAIN_STRING);\n" +
                 "    if (vmCodecHash(gBaseStrPtr, gStringPoolByteSize) != gStringPoolHash) return;\n" +
+                "#if NMMP_VM_CODEC_VERSION == 3\n" +
+                "    if (!nmmp_validate_resolver()) return;\n" +
+                "#endif\n" +
                 "    gStringPoolReady = true;\n" +
                 "}\n" +
                 "\n" +
@@ -124,6 +146,9 @@ public class ResolverCodeGenerator {
                 "    return true;\n" +
                 "}\n" +
                 "\n" +
+                "#if NMMP_VM_CODEC_VERSION == 3\n" +
+                "#define NMMP_INDEX(_idx, _array) do { if ((u4)(_idx) >= _array##_COUNT) { if (!(*env)->ExceptionCheck(env)) (*env)->ThrowNew(env, gVm.exInternalError, \"Invalid VM reference index\"); return NULL; } } while (0)\n" +
+                "#else\n#define NMMP_INDEX(_idx, _array) ((void)0)\n#endif\n" +
                 "#define STRING_BY_ID(_idx) ((const char *) (gBaseStrPtr + gStringIds[_idx].off))\n" +
                 "\n" +
                 "#define STRING_BY_TYPE_ID(_idx) (STRING_BY_ID(gTypeIds[_idx].idx))\n" +
@@ -155,10 +180,16 @@ public class ResolverCodeGenerator {
                 "}\n" +
                 "\n" +
                 "static const vmField *dvmResolveField(JNIEnv *env, u4 idx, bool isStatic) {\n" +
+                "    NMMP_INDEX(idx, gFieldIds);\n" +
                 "    vmField *field = &gFields[idx];\n" +
                 "    if (__atomic_load_n(&gFieldReady[idx], __ATOMIC_ACQUIRE)) return field;\n" +
                 "\n" +
                 "    FieldId fieldId = gFieldIds[idx];\n" +
+                "    NMMP_INDEX(fieldId.classIdx, gClassIds);\n" +
+                "    NMMP_INDEX(fieldId.typeIdx, gTypeIds);\n" +
+                "    NMMP_INDEX(fieldId.nameIdx, gStringIds);\n" +
+                "    NMMP_INDEX(gClassIds[fieldId.classIdx].idx, gStringIds);\n" +
+                "    NMMP_INDEX(gTypeIds[fieldId.typeIdx].idx, gStringIds);\n" +
                 "    jclass clazz;\n" +
                 "    FIND_CLASS_BY_NAME(STRING_BY_CLASS_ID(fieldId.classIdx));\n" +
                 "\n" +
@@ -193,10 +224,17 @@ public class ResolverCodeGenerator {
                 "}\n" +
                 "\n" +
                 "static const vmMethod *dvmResolveMethod(JNIEnv *env, u4 idx, bool isStatic) {\n" +
+                "    NMMP_INDEX(idx, gMethodIds);\n" +
                 "    vmMethod *method = &gMethods[idx];\n" +
                 "    if (__atomic_load_n(&gMethodReady[idx], __ATOMIC_ACQUIRE)) return method;\n" +
                 "\n" +
                 "    MethodId methodId = gMethodIds[idx];\n" +
+                "    NMMP_INDEX(methodId.classIdx, gClassIds);\n" +
+                "    NMMP_INDEX(methodId.sigIdx, gSignatureIds);\n" +
+                "    NMMP_INDEX(methodId.nameIdx, gStringIds);\n" +
+                "    NMMP_INDEX(methodId.shortyIdx, gStringIds);\n" +
+                "    NMMP_INDEX(gClassIds[methodId.classIdx].idx, gStringIds);\n" +
+                "    NMMP_INDEX(gSignatureIds[methodId.sigIdx].idx, gStringIds);\n" +
                 "    jclass clazz;\n" +
                 "    FIND_CLASS_BY_NAME(STRING_BY_CLASS_ID(methodId.classIdx));\n" +
                 "\n" +
@@ -231,6 +269,8 @@ public class ResolverCodeGenerator {
                 "}\n" +
                 "\n" +
                 "static jstring dvmConstantString(JNIEnv *env, u4 idx) {\n" +
+                "    NMMP_INDEX(idx, gStringConstantIds);\n" +
+                "    NMMP_INDEX(gStringConstantIds[idx].idx, gStringIds);\n" +
                 "    if (__atomic_load_n(&gStringReady[idx], __ATOMIC_ACQUIRE)) {\n" +
                 "        return (jstring) (*env)->NewLocalRef(env, gStringConstants[idx]);\n" +
                 "    }\n" +
@@ -260,10 +300,16 @@ public class ResolverCodeGenerator {
                 "\n" +
                 "\n" +
                 "static const char *dvmResolveTypeUtf(JNIEnv *env, u4 idx) {\n" +
+                "    NMMP_INDEX(idx, gTypeIds);\n" +
+                "    NMMP_INDEX(gTypeIds[idx].idx, gStringIds);\n" +
                 "    return STRING_BY_TYPE_ID(idx);\n" +
                 "}\n" +
                 "\n" +
                 "static jclass dvmResolveClass(JNIEnv *env, u4 idx) {\n" +
+                "    NMMP_INDEX(idx, gTypeIds);\n" +
+                "    NMMP_INDEX(idx, gClassIds);\n" +
+                "    NMMP_INDEX(gTypeIds[idx].idx, gStringIds);\n" +
+                "    NMMP_INDEX(gClassIds[idx].idx, gStringIds);\n" +
                 "    jclass clazz = getCacheClass(env, STRING_BY_TYPE_ID(idx));\n" +
                 "    if (clazz != NULL) {\n" +
                 "        return (jclass) (*env)->NewLocalRef(env, clazz);\n" +
@@ -457,7 +503,7 @@ public class ResolverCodeGenerator {
                 MethodCodec.hash(plainBytes)));
         writer.write(String.format(
                 "static const u2 gStringPoolCodecVersion = %d;\n",
-                ProtectionContext.CODEC_VERSION));
+                protectionContext.getCodecVersion()));
         writer.write("static pthread_once_t gStringPoolOnce = PTHREAD_ONCE_INIT;\n");
         writer.write("static bool gStringPoolReady;\n\n");
 

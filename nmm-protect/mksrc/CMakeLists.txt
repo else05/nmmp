@@ -1,6 +1,14 @@
 cmake_minimum_required(VERSION 3.6)
 project(nmmp)
 option(NMMP_PRIVATE_LINKER "Privately load the encrypted ARM64 interpreter" OFF)
+set(NMMP_VM_DECODE_MODE "legacy" CACHE STRING "legacy or on-demand-v1")
+if (NOT NMMP_VM_DECODE_MODE MATCHES "^(legacy|on-demand-v1)$")
+    message(FATAL_ERROR "Unknown VM decode mode")
+endif ()
+if (NMMP_VM_DECODE_MODE STREQUAL "on-demand-v1" AND NOT ANDROID_ABI STREQUAL "arm64-v8a")
+    message(FATAL_ERROR "on-demand-v1 requires arm64-v8a")
+endif ()
+message(STATUS "NMMP vmDecodeMode=${NMMP_VM_DECODE_MODE}")
 
 # 仅在外部明确传入插件路径时启用 O-MVLL，保持原构建流程不变。
 set(NMMP_OMVLL_PLUGIN "" CACHE FILEPATH "O-MVLL plugin path")

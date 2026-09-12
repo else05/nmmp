@@ -35,6 +35,7 @@ typedef struct {
     const u1 *triesHandlers;     //异常表
     u4 triesByteSize;
     VmReader *reader;
+    u4 registerCapacity;
 } vmCode;
 
 typedef struct {
@@ -49,6 +50,25 @@ typedef struct {
     u4 plainTriesHash;
     u2 codecVersion;
 } vmEncodedCode;
+
+// S2 transition record. S3 replaces wrapper references with a token directory.
+typedef struct {
+    const u1 *code;
+    u4 codeBytes;
+    const u1 *tries;
+    u4 triesBytes;
+    const u1 *boundaries;
+    u4 boundariesBytes;
+    u4 methodId;
+    u8 descriptorTag;
+    u4 registersSize;
+    u4 insSize;
+    u4 codeHash;
+    u4 triesHash;
+    u4 boundariesHash;
+    u4 contextHash;
+    int state;
+} vmDemandCode;
 
 typedef struct {
 
@@ -82,6 +102,11 @@ jvalue vmExecute(
         const vmEncodedCode *code,
         const vmResolver *dvmResolver
 );
+
+bool vmPrepareDemandCode(JNIEnv *env, vmDemandCode *code);
+jvalue vmInterpretReader(JNIEnv *env, const vmCode *code, const vmResolver *resolver, VmReader *reader);
+jvalue vmExecuteDemand(JNIEnv *env, const vmDemandCode *code, regptr_t *regs,
+                       u1 *regFlags, u4 registerCapacity, const vmResolver *resolver);
 
 #ifdef __cplusplus
 }

@@ -10,6 +10,7 @@ import com.android.tools.smali.dexlib2.util.MethodUtil;
 import com.google.common.collect.HashMultimap;
 import com.nmmedit.apkprotect.dex2c.DexConfig;
 import com.nmmedit.apkprotect.dex2c.MethodCodec;
+import com.nmmedit.apkprotect.dex2c.DemandCodec;
 import com.nmmedit.apkprotect.dex2c.ProtectionContext;
 import com.nmmedit.apkprotect.dex2c.converter.instructionrewriter.InstructionRewriter;
 import com.nmmedit.apkprotect.dex2c.converter.structs.RegisterNativesUtilClassDef;
@@ -37,6 +38,7 @@ public class JniCodeGenerator {
     private final InstructionRewriter instructionRewriter;
     private final DexBackedDexFile dexFile;
     private final ProtectionContext protectionContext;
+    private final List<String> demandRecords = new ArrayList<>();
 
     public JniCodeGenerator(@Nonnull DexBackedDexFile dexFile,
                             @Nonnull ClassAnalyzer analyzer,
@@ -81,6 +83,28 @@ public class JniCodeGenerator {
 
         handledNativeMethods.put(clazzName, new MyMethod(clazzName, methodName, parameterTypes, returnType));
 
+        final String demandName = "nmmpDemand_" + methodId;
+        if (protectionContext.isOnDemand()) {
+            final byte[] plain = instructionRewriter.rewriteInstructions(method);
+            final byte[] tries = instructionRewriter.handleTries(implementation);
+            final DemandCodec.Encoded encoded = DemandCodec.encode(method, plain, tries,
+                    protectionContext.getBuildSeed(), methodId, parameterRegisterCount);
+            writeByteArray(writer, demandName + "Code", encoded.code);
+            writeByteArray(writer, demandName + "Tries", encoded.tries);
+            writeByteArray(writer, demandName + "Boundaries", encoded.boundaries);
+            writer.write(String.format(Locale.ROOT,
+                    "static vmDemandCode %s = {%sCode, %d, %sTries, %d, %sBoundaries, %d, "
+                            + "0x%08x, UINT64_C(0x%016x), %d, %d, 0x%08x, 0x%08x, 0x%08x, 0x%08x, 0};\n",
+                    demandName, demandName, encoded.code.length, demandName, encoded.tries.length,
+                    demandName, encoded.boundaries.length, methodId, encoded.descriptorTag,
+                    registerCount, parameterRegisterCount, MethodCodec.hash(encoded.code),
+                    MethodCodec.hash(encoded.tries), MethodCodec.hash(encoded.boundaries),
+                    DemandCodec.contextHash(protectionContext.getBuildSeed(), methodId, encoded.descriptorTag,
+                            registerCount, parameterRegisterCount, encoded.code, encoded.tries, encoded.boundaries)));
+            demandRecords.add(demandName);
+        }
+
+
         writer.write(String.format("%s %s %s(JNIEnv *env, %s ",
                 isRegisterNative ? "static" : "JNIEXPORT",
                 getJNIType(returnType),
@@ -116,6 +140,14 @@ public class JniCodeGenerator {
             regsAssign = new StringBuilder(String.format(
                     "    regptr_t *regs = (regptr_t *) calloc(%d, sizeof(regptr_t) + sizeof(u1));\n",
                     registerCount));
+
+            regsAssign.append("    if (regs == NULL) {\n"
+                    + "        if (!(*env)->ExceptionCheck(env)) {\n"
+                    + "            jclass oom = (*env)->FindClass(env, \"java/lang/OutOfMemoryError\");\n"
+                    + "            if (oom != NULL) { (*env)->ThrowNew(env, oom, \"VM register allocation\"); (*env)->DeleteLocalRef(env, oom); }\n"
+                    + "        }\n"
+                    + (returnType.equals("V") ? "        return;\n" : "        return 0;\n")
+                    + "    }\n");
 
             //寄存器后面部分是寄存器状态数组,和寄存器数量一一对应
             regFlagsAssign = new StringBuilder(
@@ -169,6 +201,7 @@ public class JniCodeGenerator {
         writer.append("\n");
 //        -----------结束----------------
 
+        if (!protectionContext.isOnDemand()) {
         final byte[] instructionData = instructionRewriter.rewriteInstructions(method);
         final byte[] encodedInstructions = protectionContext.getMethodCodec().transform(
                 instructionData,
@@ -210,8 +243,13 @@ public class JniCodeGenerator {
                 MethodCodec.hash(tries),
                 ProtectionContext.CODEC_VERSION));
 
+        }
+
         final boolean hasReturnValue = !returnType.equals("V");
-        if (hasReturnValue) {
+        if (protectionContext.isOnDemand()) {
+            writer.write((hasReturnValue ? "    volatile jvalue value = " : "    ")
+                    + "vmExecuteDemand(env, &" + demandName + ", regs, reg_flags, " + registerCount + ", &dvmResolver);\n");
+        } else if (hasReturnValue) {
             writer.write("\n" +
                     "    volatile jvalue value = vmExecute(env,\n" +
                     "                                &code,\n" +
@@ -298,6 +336,12 @@ public class JniCodeGenerator {
             }
         }
 
+        if (protectionContext.isOnDemand()) {
+            codeWriter.write("static bool nmmp_prepare_demand(JNIEnv *env) {\n");
+            for (String name : demandRecords)
+                codeWriter.write("    if (!vmPrepareDemandCode(env, &" + name + ")) return false;\n");
+            codeWriter.write("    return true;\n}\n");
+        }
         generateNativeMethodCode(config, codeWriter);
 
         codeWriter.write(String.format("void %s(JNIEnv *env) {\n", config.getHeaderFileAndSetupFunc().setupFunctionName));
@@ -305,6 +349,7 @@ public class JniCodeGenerator {
         codeWriter.write("\n    //符号解析器初始化\n");
         if (!protectionContext.isSignatureBound()) {
             codeWriter.write("    if (!resolver_init(env)) return;\n\n");
+            if (protectionContext.isOnDemand()) codeWriter.write("    if (!nmmp_prepare_demand(env)) return;\n");
         }
 
         if (isRegisterNative) {
@@ -512,6 +557,7 @@ public class JniCodeGenerator {
                 "bool %s(JNIEnv *env) {\n"
                         + "    if (gNmmpResolverReady) return true;\n"
                         + "    if (!resolver_init(env)) return false;\n"
+                        + (protectionContext.isOnDemand() ? "    if (!nmmp_prepare_demand(env)) return false;\n" : "")
                         + "    gNmmpResolverReady = true;\n"
                         + "    for (u4 i = 0; i < NMMP_REGISTER_COUNT; ++i) {\n"
                         + "        if (!gNmmpPending[i]) continue;\n"

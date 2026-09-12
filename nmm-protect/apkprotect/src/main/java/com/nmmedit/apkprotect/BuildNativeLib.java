@@ -1,6 +1,7 @@
 package com.nmmedit.apkprotect;
 
 import com.nmmedit.apkprotect.data.Prefs;
+import com.nmmedit.apkprotect.dex2c.ProtectionContext;
 import com.nmmedit.apkprotect.util.FileUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -59,9 +60,11 @@ public class BuildNativeLib {
         final Map<String, Map<File, File>> allLibs = new HashMap<>();
 
         for (String abi : abis) {
+            if (ProtectionContext.configuredOnDemand() && !"arm64-v8a".equals(abi))
+                throw new IOException("on-demand-v1 requires arm64-v8a: " + abi);
             final BuildNativeLib.CMakeOptions cmakeOptions = new BuildNativeLib.CMakeOptions(cmakePath,
                     sdkHome,
-                    ndkHome, isPrivateLinkerEnabled() ? 26 : 21,
+                    ndkHome, isPrivateLinkerEnabled() || ProtectionContext.configuredOnDemand() ? 26 : 21,
                     outDir.getAbsolutePath(),
                     BuildNativeLib.CMakeOptions.BuildType.RELEASE,
                     abi,
@@ -260,6 +263,7 @@ public class BuildNativeLib {
             if (isPrivateLinkerEnabled()) {
                 arguments.add("-DNMMP_PRIVATE_LINKER=ON");
             }
+            arguments.add("-DNMMP_VM_DECODE_MODE=" + (ProtectionContext.configuredOnDemand() ? "on-demand-v1" : "legacy"));
             return arguments;
         }
 

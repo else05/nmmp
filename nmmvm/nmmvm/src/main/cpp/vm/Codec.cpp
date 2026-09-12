@@ -5,6 +5,7 @@
 #include "vm.h"
 #include "PrivateLoaderState.h"
 
+#if NMMP_VM_CODEC_VERSION == 2
 extern "C"
 jvalue vmExecute(JNIEnv *env,
                  const vmEncodedCode *code,
@@ -93,3 +94,4 @@ jvalue vmExecute(JNIEnv *env,
     free(decodedInsns);
     return result;
 }
+#endif

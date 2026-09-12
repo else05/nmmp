@@ -1,0 +1,10 @@
+{
+  "purpose": "test only; never reuse these key/nonce values for protection",
+  "key_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+  "nonce_hex": "000102030405060708090a0b",
+  "build_id_hex": "000102030405060708090a0b0c0d0e0f",
+  "decoded_bytes": 320,
+  "decoded_sha256": "59ebf87b557a3508a4a0d091f30284e5d0a3df3b007ba95ac2c872e0d955038f",
+  "payload_bytes": 377,
+  "payload_sha256": "00a83aa30b9cc4f4624a2ac978702f5d4de1f88a8e6a9bd3a7c9d01e7ef6d77e"
+}

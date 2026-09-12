@@ -16,6 +16,13 @@ public class BuildNativeLib {
     //库名称
     public static final String NMMP_NAME = "c++_en";
 
+    public static boolean isPrivateLinkerEnabled() {
+        final String value = System.getenv("NMMP_PRIVATE_LINKER");
+        if (isEmpty(value) || "OFF".equalsIgnoreCase(value)) return false;
+        if ("ON".equalsIgnoreCase(value)) return true;
+        throw new IllegalArgumentException("NMMP_PRIVATE_LINKER must be ON or OFF");
+    }
+
     public static Map<String, Map<File, File>> generateNativeLibs(@Nonnull File outDir,
                                                                   @Nonnull final List<String> abis) throws IOException {
         String cmakePath = System.getenv("CMAKE_PATH");
@@ -54,7 +61,7 @@ public class BuildNativeLib {
         for (String abi : abis) {
             final BuildNativeLib.CMakeOptions cmakeOptions = new BuildNativeLib.CMakeOptions(cmakePath,
                     sdkHome,
-                    ndkHome, 21,
+                    ndkHome, isPrivateLinkerEnabled() ? 26 : 21,
                     outDir.getAbsolutePath(),
                     BuildNativeLib.CMakeOptions.BuildType.RELEASE,
                     abi,
@@ -249,6 +256,9 @@ public class BuildNativeLib {
                     "-GNinja"));
             if (!isEmpty(getOmvllPlugin())) {
                 arguments.add(String.format("-DNMMP_OMVLL_PLUGIN=%s", getOmvllPlugin()));
+            }
+            if (isPrivateLinkerEnabled()) {
+                arguments.add("-DNMMP_PRIVATE_LINKER=ON");
             }
             return arguments;
         }

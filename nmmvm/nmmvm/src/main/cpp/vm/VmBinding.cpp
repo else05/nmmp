@@ -10,6 +10,7 @@
 #include "Arm64Syscall.h"
 #include "Sha256.h"
 #include "VmCodec.h"
+#include "PrivateLoaderState.h"
 
 namespace {
 
@@ -261,6 +262,9 @@ static bool verifyApkAndActivate(const char *packageNameValue,
 
 extern "C"
 bool vmBindingActivate(JNIEnv *env, jobject context) {
+#if defined(NMMP_PRIVATE_LINKER)
+    if (nmmpPrivateLoaderFailed()) return false;
+#endif
 #if !NMMP_VM_SIGNATURE_BINDING
     (void) env;
     (void) context;

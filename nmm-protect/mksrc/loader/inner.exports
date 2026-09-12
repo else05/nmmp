@@ -1,0 +1,1 @@
+{ global: nmmp_inner_bootstrap_v1; local: *; };

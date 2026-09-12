@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.6)
 project(nmmp)
+option(NMMP_PRIVATE_LINKER "Privately load the encrypted ARM64 interpreter" OFF)
 
 # 仅在外部明确传入插件路径时启用 O-MVLL，保持原构建流程不变。
 set(NMMP_OMVLL_PLUGIN "" CACHE FILEPATH "O-MVLL plugin path")
@@ -33,6 +34,10 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -fvisibility=hidden ")
 #外部程序处理时替换 LIBNAME_PLACEHOLDER
 set(LIBNAME_PLACEHOLDER "nmmp")
 
+if (NMMP_PRIVATE_LINKER)
+    include(loader/PrivateLinker.cmake)
+    return()
+endif ()
 
 add_library(${LIBNAME_PLACEHOLDER} SHARED ConstantPool.c ${GEN_SOURCES} )
 

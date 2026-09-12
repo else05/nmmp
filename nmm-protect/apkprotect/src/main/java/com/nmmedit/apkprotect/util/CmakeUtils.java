@@ -126,6 +126,22 @@ public class CmakeUtils {
 
     private static void validateVmTemplate(File vmsrcFile) throws IOException {
         try (ZipFile zipFile = new ZipFile(vmsrcFile)) {
+            if (BuildNativeLib.isPrivateLinkerEnabled()) {
+                requireZipEntry(zipFile, "loader/PrivateLinker.cmake", vmsrcFile);
+                requireZipEntry(zipFile, "loader/pack.py", vmsrcFile);
+                final ZipEntry loaderVersion = requireZipEntry(zipFile, "loader/LoaderVersion.h", vmsrcFile);
+                requireZipEntry(zipFile, "vm/include/PrivateLoaderState.h", vmsrcFile);
+                try (InputStream inputStream = zipFile.getInputStream(loaderVersion);
+                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+                    FileUtils.copyStream(inputStream, outputStream);
+                    final Matcher loaderMatcher = Pattern.compile(
+                            "#define\\s+NMMP_PRIVATE_LOADER_FORMAT_VERSION\\s+(\\d+)")
+                            .matcher(new String(outputStream.toByteArray(), StandardCharsets.UTF_8));
+                    if (!loaderMatcher.find() || Integer.parseInt(loaderMatcher.group(1)) != 1) {
+                        throw new IOException("Private loader template format version mismatch: " + vmsrcFile);
+                    }
+                }
+            }
             requireZipEntry(zipFile, "vm/Codec.cpp", vmsrcFile);
             requireZipEntry(zipFile, "vm/VmCodec.cpp", vmsrcFile);
             requireZipEntry(zipFile, "vm/VmBinding.cpp", vmsrcFile);

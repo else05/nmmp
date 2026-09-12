@@ -13,3 +13,4 @@ rm -f "${OUT}"
 # 同名 CMake 模板必须强制覆盖，不能依赖 zip -u 的文件时间戳。
 zip -d "${OUT}" vm/CMakeLists.txt >/dev/null
 (cd "${SCRIPT_DIR}" && zip -0 -D "${OUT}" vm/CMakeLists.txt CMakeLists.txt)
+(cd "${SCRIPT_DIR}" && zip -0 -r -D "${OUT}" loader -x 'loader/tests/*' 'loader/__pycache__/*')

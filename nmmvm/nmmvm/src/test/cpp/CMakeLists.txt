@@ -7,5 +7,7 @@ add_executable(vm_codec_vector_test
         VmCodecVectorTest.cpp
         ../../main/cpp/vm/VmCodec.cpp)
 target_compile_features(vm_codec_vector_test PRIVATE cxx_std_11)
+target_include_directories(vm_codec_vector_test PRIVATE
+        ../../main/cpp/vm/include)
 
 add_test(NAME vm_codec_vector_test COMMAND vm_codec_vector_test)

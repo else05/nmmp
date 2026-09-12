@@ -1,0 +1,5 @@
+{
+  "description": "synthetic ARM64 two LOADs; all five supported RELA types; aligned empty INIT_ARRAY; original LOAD restoration verified",
+  "size": 8096,
+  "sha256": "560a4bbab663406814fa1b06e9a401ed922d41414bb8b797a2d98d6de34c9c5c"
+}

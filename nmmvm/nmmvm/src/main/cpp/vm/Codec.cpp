@@ -3,6 +3,7 @@
 #include "Exception.h"
 #include "VmCodec.h"
 #include "vm.h"
+#include "PrivateLoaderState.h"
 
 extern "C"
 jvalue vmExecute(JNIEnv *env,
@@ -13,6 +14,12 @@ jvalue vmExecute(JNIEnv *env,
     u1 *decodedTries = NULL;
 
     do {
+#if defined(NMMP_PRIVATE_LINKER)
+        if (nmmpPrivateLoaderFailed()) {
+            dvmThrowInternalError(env, "Private loader initialization failed");
+            break;
+        }
+#endif
         if (code == NULL) {
             dvmThrowInternalError(env, "VM 编码结构为空");
             break;

@@ -1,0 +1,2 @@
+06-01 17:50:49.074 17676 17676 E NMMP-Loader: initialization failed (-6)
+06-01 17:50:49.075 17676 17676 E AndroidRuntime: java.lang.UnsatisfiedLinkError: JNI_ERR returned from JNI_OnLoad in "/data/app/org.savior.sync-fVOciHPJen30oicVT5-q-w==/lib/arm64/libc++_en.so"

@@ -1,0 +1,41 @@
+-- The C compiler identification is GNU 15.3.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/p5-host
+[1/18] Building C object CMakeFiles/loader_test.dir/loader_test.c.o
+[2/18] Building C object CMakeFiles/crypto_test.dir/crypto_test.c.o
+[3/18] Building C object CMakeFiles/envelope.dir/mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/mksrc/loader/Envelope.c.o
+[4/18] Building C object CMakeFiles/loader_test.dir/failure_hooks.c.o
+[5/18] Building C object CMakeFiles/once_test.dir/once_test.c.o
+[6/18] Building C object CMakeFiles/once_test.dir/mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/mksrc/loader/Once.c.o
+[7/18] Building C object CMakeFiles/loader.dir/mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/mksrc/loader/Loader.c.o
+[8/18] Building C object CMakeFiles/stage0_test.dir/mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/p5-vectors/stage0-programs.c.o
+[9/18] Building C object CMakeFiles/stage0_test.dir/stage0_test.c.o
+[10/18] Linking C executable once_test
+[11/18] Building C object CMakeFiles/stage0_test.dir/mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/mksrc/loader/Stage0.c.o
+[12/18] Building C object CMakeFiles/stage0_test.dir/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/NativeVm.c.o
+[13/18] Building C object CMakeFiles/envelope.dir/mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/mksrc/loader/vendor/monocypher/monocypher.c.o
+[14/18] Linking C static library libenvelope.a
+[15/18] Linking C static library libloader.a
+[16/18] Linking C executable crypto_test
+[17/18] Linking C executable stage0_test
+[18/18] Linking C executable loader_test
+Internal ctest changing into directory: /mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/p5-host
+Test project /mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/p5-host
+    Start 1: crypto_envelope
+1/4 Test #1: crypto_envelope ..................   Passed    0.21 sec
+    Start 2: loader_content
+2/4 Test #2: loader_content ...................   Passed    0.15 sec
+    Start 3: loader_once
+3/4 Test #3: loader_once ......................   Passed    0.05 sec
+    Start 4: stage0_recovery
+4/4 Test #4: stage0_recovery ..................   Passed    0.05 sec
+
+100% tests passed, 0 tests failed out of 4
+
+Total Test time (real) =   0.51 sec

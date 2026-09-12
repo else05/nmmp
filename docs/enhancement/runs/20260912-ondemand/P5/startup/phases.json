@@ -1,0 +1,16 @@
+{
+  "stage0-off": {
+    "keyMedianUs": 12.0,
+    "unpackMedianUs": 18490.5,
+    "mapMedianUs": 14177.0,
+    "constructorsMedianUs": 5.0,
+    "bootstrapMedianUs": 509.0
+  },
+  "stage0-on": {
+    "keyMedianUs": 52.5,
+    "unpackMedianUs": 20833.0,
+    "mapMedianUs": 14093.0,
+    "constructorsMedianUs": 5.0,
+    "bootstrapMedianUs": 506.5
+  }
+}

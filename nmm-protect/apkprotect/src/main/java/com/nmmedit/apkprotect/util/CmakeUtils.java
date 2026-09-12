@@ -136,6 +136,9 @@ public class CmakeUtils {
             if (BuildNativeLib.isPrivateLinkerEnabled()) {
                 requireZipEntry(zipFile, "loader/PrivateLinker.cmake", vmsrcFile);
                 requireZipEntry(zipFile, "loader/pack.py", vmsrcFile);
+                requireZipEntry(zipFile, "loader/Stage0.c", vmsrcFile);
+                requireZipEntry(zipFile, "loader/stage0.py", vmsrcFile);
+                requireZipEntry(zipFile, "loader/native_formats.py", vmsrcFile);
                 final ZipEntry loaderVersion = requireZipEntry(zipFile, "loader/LoaderVersion.h", vmsrcFile);
                 requireZipEntry(zipFile, "vm/include/PrivateLoaderState.h", vmsrcFile);
                 try (InputStream inputStream = zipFile.getInputStream(loaderVersion);

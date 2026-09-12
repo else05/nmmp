@@ -1,0 +1,8 @@
+{
+  "apkSha256": "8092fd352c45638eba52f8905c366a4fa53308ad60440ed00f17ae0d050ae22b",
+  "goodApkRestoredAndVerified": true,
+  "loaderRejectedBeforePayload": true,
+  "loaderReadySeen": false,
+  "jniLoadFailed": true,
+  "harnessIssue": "Initial start -W waited on failed launch; second run completed nonwaiting launch and restoration but log parsing hit unrelated invalid UTF-8. Reparsed with replacement; all assertions pass."
+}

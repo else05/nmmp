@@ -3,6 +3,7 @@ if (NOT ANDROID_ABI STREQUAL "arm64-v8a" OR ANDROID_PLATFORM_LEVEL LESS 26)
 endif ()
 find_package(Python3 3.9 REQUIRED COMPONENTS Interpreter)
 find_package(Java 17 REQUIRED COMPONENTS Runtime)
+option(NMMP_STAGE0_VM "Recover the outer loader key through the bounded native VM" ON)
 set(PRIVATE_DIR "${CMAKE_CURRENT_BINARY_DIR}/private")
 file(MAKE_DIRECTORY "${PRIVATE_DIR}")
 execute_process(COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/loader/pack.py"
@@ -29,12 +30,19 @@ add_custom_command(OUTPUT "${PRIVATE_PAYLOAD}"
         COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/loader/pack.py" pack
                 "$<TARGET_FILE:nmmp_inner>" "${PRIVATE_DIR}"
                 --sysroot "${CMAKE_SYSROOT}/usr/lib/aarch64-linux-android/26"
-                --readelf "${CMAKE_READELF}" --java "${Java_JAVA_EXECUTABLE}"
-        DEPENDS nmmp_inner loader/pack.py loader/Seal.java "${PRIVATE_DIR}/build-id.txt"
+                --readelf "${CMAKE_READELF}" --java "${Java_JAVA_EXECUTABLE}" --stage0-vm "${NMMP_STAGE0_VM}"
+        DEPENDS nmmp_inner loader/pack.py loader/stage0.py loader/native_formats.py loader/Seal.java "${PRIVATE_DIR}/build-id.txt"
         VERBATIM)
 add_library(${LIBNAME_PLACEHOLDER} SHARED loader/Outer.c loader/Envelope.c loader/Loader.c
         loader/Once.c loader/vendor/monocypher/monocypher.c "${PRIVATE_PAYLOAD}")
 target_include_directories(${LIBNAME_PLACEHOLDER} PRIVATE loader "${PRIVATE_DIR}")
+if (NMMP_STAGE0_VM)
+    target_sources(${LIBNAME_PLACEHOLDER} PRIVATE loader/Stage0.c vm/NativeVm.c)
+    target_include_directories(${LIBNAME_PLACEHOLDER} PRIVATE vm/include)
+    target_compile_definitions(${LIBNAME_PLACEHOLDER} PRIVATE NMMP_STAGE0_VM=1)
+else ()
+    target_compile_definitions(${LIBNAME_PLACEHOLDER} PRIVATE NMMP_STAGE0_VM=0)
+endif ()
 target_compile_options(${LIBNAME_PLACEHOLDER} PRIVATE -ffunction-sections -fdata-sections)
 target_link_libraries(${LIBNAME_PLACEHOLDER} log dl z)
 set_target_properties(${LIBNAME_PLACEHOLDER} PROPERTIES C_VISIBILITY_PRESET hidden

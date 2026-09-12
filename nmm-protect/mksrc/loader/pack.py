@@ -349,12 +349,21 @@ def main():
     pack.add_argument('--sysroot', required=True)
     pack.add_argument('--java', default='java')
     pack.add_argument('--readelf', required=True)
+    pack.add_argument('--stage0-vm', choices=('ON', 'OFF'), default='ON')
     args = parser.parse_args()
     args.directory.mkdir(parents=True, exist_ok=True)
     if args.command == 'configure':
-        build_id = os.urandom(16)
-        (args.directory / 'build-id.txt').write_text(build_id.hex() + '\n')
-        (args.directory / 'BuildId.h').write_text(c_array('nmmp_build_id', build_id, 'static const'))
+        identity = args.directory / 'build-id.txt'
+        if identity.exists():
+            build_id = bytes.fromhex(identity.read_text().strip())
+            require(len(build_id) == 16, 'existing build ID must contain 16 bytes')
+        else:
+            build_id = os.urandom(16)
+            identity.write_text(build_id.hex() + '\n')
+        header = args.directory / 'BuildId.h'
+        source = c_array('nmmp_build_id', build_id, 'static const')
+        if not header.exists() or header.read_text() != source:
+            header.write_text(source)
         return
     elf = Elf(args.elf.read_bytes())
     audit_native_features(args.elf, args.readelf)
@@ -362,13 +371,21 @@ def main():
     content = split(elf, imports)
     build_id = bytes.fromhex((args.directory / 'build-id.txt').read_text().strip())
     payload, key = seal(content, build_id, args.java)
-    share = os.urandom(32)
     source = '#include <stddef.h>\n' + c_array('nmmp_payload', payload)
     source += 'const size_t nmmp_payload_size = sizeof(nmmp_payload);\n'
-    source += c_array('nmmp_key_share_a', share, 'const volatile')
-    source += c_array('nmmp_key_share_b', bytes(a ^ b for a, b in zip(key, share)), 'const volatile')
+    programs = []
+    if args.stage0_vm == 'ON':
+        import stage0
+        programs = stage0.generate(key, build_id)
+        source += stage0.c_source(programs)
+    else:
+        share = os.urandom(32)
+        source += c_array('nmmp_key_share_a', share, 'const volatile')
+        source += c_array('nmmp_key_share_b', bytes(a ^ b for a, b in zip(key, share)), 'const volatile')
     (args.directory / 'Payload.c').write_text(source)
     report = {'format_version': 1, 'build_id': build_id.hex(), 'elf_sha256': hashlib.sha256(elf.data).hexdigest(),
+              'stage0_vm': args.stage0_vm == 'ON',
+              'stage0_program_hashes': ['%08x' % program['hash'] for program in programs],
               'decoded_sha256': hashlib.sha256(content).hexdigest(), 'payload_sha256': hashlib.sha256(payload).hexdigest(),
               'elf_bytes': len(elf.data), 'decoded_bytes': len(content), 'payload_bytes': len(payload),
               'loads': len(elf.loads), 'symbols': elf.nsym, 'needed': elf.needed,

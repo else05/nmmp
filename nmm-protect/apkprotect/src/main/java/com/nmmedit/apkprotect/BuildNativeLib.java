@@ -24,6 +24,13 @@ public class BuildNativeLib {
         throw new IllegalArgumentException("NMMP_PRIVATE_LINKER must be ON or OFF");
     }
 
+    private static boolean isStage0VmEnabled() {
+        final String value = System.getenv("NMMP_PRIVATE_STAGE0_VM");
+        if (isEmpty(value) || "ON".equalsIgnoreCase(value)) return true;
+        if ("OFF".equalsIgnoreCase(value)) return false;
+        throw new IllegalArgumentException("NMMP_PRIVATE_STAGE0_VM must be ON or OFF");
+    }
+
     public static Map<String, Map<File, File>> generateNativeLibs(@Nonnull File outDir,
                                                                   @Nonnull final List<String> abis) throws IOException {
         String cmakePath = System.getenv("CMAKE_PATH");
@@ -262,6 +269,7 @@ public class BuildNativeLib {
             }
             if (isPrivateLinkerEnabled()) {
                 arguments.add("-DNMMP_PRIVATE_LINKER=ON");
+                arguments.add("-DNMMP_STAGE0_VM=" + (isStage0VmEnabled() ? "ON" : "OFF"));
             }
             arguments.add("-DNMMP_VM_DECODE_MODE=" + (ProtectionContext.configuredOnDemand() ? "on-demand-v1" : "legacy"));
             return arguments;

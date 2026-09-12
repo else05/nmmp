@@ -1,0 +1,312 @@
+{
+  "outerHasStage0Vm": true,
+  "outerHasBusinessVm": false,
+  "oldKeySharesAbsent": true,
+  "directInnerDependency": false,
+  "outerTlsSegment": false,
+  "outerWxLoadSegment": false,
+  "apkLibraries": [
+    "lib/arm64-v8a/libapssdk.so",
+    "lib/arm64-v8a/libimage_processing_util_jni.so",
+    "lib/arm64-v8a/libc++_en.so"
+  ],
+  "loaderReadyLines": [
+    "06-01 17:29:45.660 13437 13437 I NMMP-Loader: ready id=b6c732aa bias=0x7aeced3000 size=1232896 unpack_us=24495 map_us=14311 constructors_us=5 bootstrap_us=500 key_us=52"
+  ],
+  "innerAudit": {
+    "format_version": 1,
+    "build_id": "b6c732aa7b996c2ff8e21d6bc438299e",
+    "elf_sha256": "58c85c11c6a83adfa44d075b33b0e6d73b4e17b5bdaa4adcbb43b43e2a8e129c",
+    "stage0_vm": true,
+    "stage0_program_hashes": [
+      "d6407a9c",
+      "c08276fa",
+      "290cb877",
+      "2a0dd994"
+    ],
+    "decoded_sha256": "54b60c4f528ae84ba8bdad49a149629d225c8c1fa12cf819375f8cfc09e0c8a5",
+    "payload_sha256": "2285e8daa81642c2d8f5a0f4fa7fe0bbee919b516fffb2e53239953d34417b89",
+    "elf_bytes": 2731288,
+    "decoded_bytes": 1175852,
+    "payload_bytes": 759337,
+    "loads": 3,
+    "symbols": 35,
+    "needed": [
+      "liblog.so",
+      "libm.so",
+      "libdl.so",
+      "libc.so"
+    ],
+    "native_exception_rtti_tls_symbol_audit": "passed",
+    "relocations": {
+      "1027": 916,
+      "1026": 33
+    },
+    "imports": [
+      {
+        "symbol": "__cxa_finalize",
+        "provider": "libc.so",
+        "weak": false,
+        "version": "LIBC",
+        "default_on_api26_and_27_stubs": true,
+        "type": 2
+      },
+      {
+        "symbol": "__cxa_atexit",
+        "provider": "libc.so",
+        "weak": false,
+        "version": "LIBC",
+        "default_on_api26_and_27_stubs": true,
+        "type": 2
+      },
+      {
+        "symbol": "__register_atfork",
+        "provider": "libc.so",
+        "weak": false,
+        "version": "LIBC",
+        "default_on_api26_and_27_stubs": true,
+        "type": 2
+      },
+      {
+        "symbol": "pthread_mutex_lock",
+        "provider": "libc.so",
+        "weak": false,
+        "version": "LIBC",
+        "default_on_api26_and_27_stubs": true,
+        "type": 2
+      },
+      {
+        "symbol": "pthread_mutex_unlock",
+        "provider": "libc.so",
+        "weak": false,
+        "version": "LIBC",
+        "default_on_api26_and_27_stubs": true,
+        "type": 2
+      },
+      {
+        "symbol": "malloc",
+        "provider": "libc.so",
+        "weak": false,
+        "version": "LIBC",
+        "default_on_api26_and_27_stubs": true,
+        "type": 2
+      },
+      {
+        "symbol": "free",
+        "provider": "libc.so",
+        "weak": false,
+        "version": "LIBC",
+        "default_on_api26_and_27_stubs": true,
+        "type": 2
+      },
+      {
+        "symbol": "__stack_chk_fail",
+        "provider": "libc.so",
+        "weak": false,
+        "version": "LIBC",
+        "default_on_api26_and_27_stubs": true,
+        "type": 2
+      },
+      {
+        "symbol": "pthread_once",
+        "provider": "libc.so",
+        "weak": false,
+        "version": "LIBC",
+        "default_on_api26_and_27_stubs": true,
+        "type": 2
+      },
+      {
+        "symbol": "calloc",
+        "provider": "libc.so",
+        "weak": false,
+        "version": "LIBC",
+        "default_on_api26_and_27_stubs": true,
+        "type": 2
+      },
+      {
+        "symbol": "strlen",
+        "provider": "libc.so",
+        "weak": false,
+        "version": "LIBC",
+        "default_on_api26_and_27_stubs": true,
+        "type": 2
+      },
+      {
+        "symbol": "__strncpy_chk",
+        "provider": "libc.so",
+        "weak": false,
+        "version": "LIBC",
+        "default_on_api26_and_27_stubs": true,
+        "type": 2
+      },
+      {
+        "symbol": "memchr",
+        "provider": "libc.so",
+        "weak": false,
+        "version": "LIBC",
+        "default_on_api26_and_27_stubs": true,
+        "type": 2
+      },
+      {
+        "symbol": "__strchr_chk",
+        "provider": "libc.so",
+        "weak": false,
+        "version": "LIBC",
+        "default_on_api26_and_27_stubs": true,
+        "type": 2
+      },
+      {
+        "symbol": "__system_property_get",
+        "provider": "libc.so",
+        "weak": false,
+        "version": "LIBC",
+        "default_on_api26_and_27_stubs": true,
+        "type": 2
+      },
+      {
+        "symbol": "atoi",
+        "provider": "libc.so",
+        "weak": false,
+        "version": "LIBC",
+        "default_on_api26_and_27_stubs": true,
+        "type": 2
+      },
+      {
+        "symbol": "mmap",
+        "provider": "libc.so",
+        "weak": false,
+        "version": "LIBC",
+        "default_on_api26_and_27_stubs": true,
+        "type": 2
+      },
+      {
+        "symbol": "munmap",
+        "provider": "libc.so",
+        "weak": false,
+        "version": "LIBC",
+        "default_on_api26_and_27_stubs": true,
+        "type": 2
+      },
+      {
+        "symbol": "qsort",
+        "provider": "libc.so",
+        "weak": false,
+        "version": "LIBC",
+        "default_on_api26_and_27_stubs": true,
+        "type": 2
+      },
+      {
+        "symbol": "mprotect",
+        "provider": "libc.so",
+        "weak": false,
+        "version": "LIBC",
+        "default_on_api26_and_27_stubs": true,
+        "type": 2
+      },
+      {
+        "symbol": "vsnprintf",
+        "provider": "libc.so",
+        "weak": false,
+        "version": "LIBC",
+        "default_on_api26_and_27_stubs": true,
+        "type": 2
+      },
+      {
+        "symbol": "fmodf",
+        "provider": "libm.so",
+        "weak": false,
+        "version": "LIBC",
+        "default_on_api26_and_27_stubs": true,
+        "type": 2
+      },
+      {
+        "symbol": "fmod",
+        "provider": "libm.so",
+        "weak": false,
+        "version": "LIBC",
+        "default_on_api26_and_27_stubs": true,
+        "type": 2
+      },
+      {
+        "symbol": "memcpy",
+        "provider": "libc.so",
+        "weak": false,
+        "version": "LIBC",
+        "default_on_api26_and_27_stubs": true,
+        "type": 2
+      },
+      {
+        "symbol": "pthread_self",
+        "provider": "libc.so",
+        "weak": false,
+        "version": "LIBC",
+        "default_on_api26_and_27_stubs": true,
+        "type": 2
+      },
+      {
+        "symbol": "pthread_equal",
+        "provider": "libc.so",
+        "weak": false,
+        "version": "LIBC",
+        "default_on_api26_and_27_stubs": true,
+        "type": 2
+      },
+      {
+        "symbol": "pthread_cond_broadcast",
+        "provider": "libc.so",
+        "weak": false,
+        "version": "LIBC",
+        "default_on_api26_and_27_stubs": true,
+        "type": 2
+      },
+      {
+        "symbol": "pthread_cond_wait",
+        "provider": "libc.so",
+        "weak": false,
+        "version": "LIBC",
+        "default_on_api26_and_27_stubs": true,
+        "type": 2
+      },
+      {
+        "symbol": "strcmp",
+        "provider": "libc.so",
+        "weak": false,
+        "version": "LIBC",
+        "default_on_api26_and_27_stubs": true,
+        "type": 2
+      },
+      {
+        "symbol": "strstr",
+        "provider": "libc.so",
+        "weak": false,
+        "version": "LIBC",
+        "default_on_api26_and_27_stubs": true,
+        "type": 2
+      },
+      {
+        "symbol": "strncmp",
+        "provider": "libc.so",
+        "weak": false,
+        "version": "LIBC",
+        "default_on_api26_and_27_stubs": true,
+        "type": 2
+      },
+      {
+        "symbol": "strchr",
+        "provider": "libc.so",
+        "weak": false,
+        "version": "LIBC",
+        "default_on_api26_and_27_stubs": true,
+        "type": 2
+      },
+      {
+        "symbol": "memset",
+        "provider": "libc.so",
+        "weak": false,
+        "version": "LIBC",
+        "default_on_api26_and_27_stubs": true,
+        "type": 2
+      }
+    ]
+  }
+}

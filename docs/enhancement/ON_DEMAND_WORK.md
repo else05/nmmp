@@ -62,3 +62,16 @@ S2 仍直接引用过渡记录；接下来 S3 改 token、目录和编码方法�
 - 正式 native 符号存在 vmExecuteToken / nmmpNativeRun / initializeSeed，不含 S2 vmExecuteDemand 或 legacy vmExecute 入口。宿主测试与无 O-MVLL ARM64 harness、正式 O-MVLL APK 均有功能证据。
 
 接下来 P5 stage0 native VM 密钥恢复及 S5 组合性能与验收；API26/完整业务路径缺口不因此消失。
+
+## P5 当前证据
+
+- outer 已接入共享受限 native VM，四个随机编码程序分别恢复 key 的四段。程序检查完整 128-bit loader build ID，独立于 inner root/绑定，不存在循环依赖。旧份额 XOR 仅保留在显式 NMMP_PRIVATE_STAGE0_VM=OFF 对照路径；私有 linker 开启时 stage0 默认 ON。
+- 任一程序失败清理全部部分 key；成功后仍走原 ChaCha20-Poly1305 认证，再映射/重定位/构造器/bootstrap。共享引擎没有业务 VM、JNI 或系统调用依赖；outer 不链接 inner 的解释器。
+- Python 11 项、主机 ASan/UBSan 4 项通过；ARM64 Debug/Release 各通过 loader、stage0、实际权限/RELRO、并发及绑定/非绑定 bootstrap 共 19 场景，以及 24 Python/C 独立向量。向量 runner 的历史输出标签写 Java/native，这批输入实际来自 Python。
+- 正式组合 APK 全部 526 方法 Java/native 回验、API27 原签名启动通过。outer 无旧 key share 符号、无业务解释器、无 inner DT_NEEDED、TLS 或 WX LOAD，inner ELF 严格审计通过。
+- 相同 inner SHA/build ID，stage0 OFF/ON 交错各 3 次预热及 20 次有效启动，中位数 2331/2326ms，ON 比 OFF -0.21%；key 恢复中位数 12/52.5us。unpack_us 包含 key_us，不重复相加。此次测量不能替代 S5 的原 legacy/新模式/loader 四组合及三组固定 seed。
+- 组合产物：nmm-protect/build/on-demand-20260912/p5-combined/protected-signed.apk，SHA256 8246ee630a9253a003f677ae2b185198ee462b51fe1a2f6702b1106f8e2b85b1。原始证据在 runs/20260912-ondemand/P5/。
+
+S1–S4/P5 功能已经接入，S5 性能验收继续；默认 legacy、私有 linker OFF。API26/完整业务路径尚无通过证据。
+
+P5 生产负向副本：仅损坏第三段 stage0 程序 hash，原签名安装后 loader -6 / JNI_ERR，未出现 READY；随后恢复并验证正常 APK。测试驱动的崩溃等待和外部 logcat 非 UTF-8 问题均保留记录，使用非等待启动和容错解码完成核验。

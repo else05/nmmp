@@ -22,6 +22,9 @@ void classes2_setup(JNIEnv *env) { (void)env; check(stage == 2); stage = 3; }
 bool vmBindingActivate(JNIEnv *env, jobject context) { check(env == &environment && context); ++binding_calls; return mode != 6; }
 bool classes_setup_activate(JNIEnv *env) { (void)env; check(stage == 3); stage = 4; return true; }
 bool classes2_setup_activate(JNIEnv *env) { (void)env; check(stage == 4); stage = 5; return true; }
+bool classes_setup_finish(JNIEnv *env) { (void)env; check(stage == 5); return true; }
+bool classes2_setup_finish(JNIEnv *env) { (void)env; check(stage == 5); return true; }
+bool vmCodecActivate(uint64_t mask) { check(!stage && !mask); return true; }
 #if NMMP_TEST_BOUND
 extern bool nmmp_vm_activate(JNIEnv *, jobject);
 extern bool nmmp_vm_is_ready(void);

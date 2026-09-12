@@ -1,0 +1,20 @@
+RFC 8439 and envelope tests passed
+mapping, all RELA types, BSS, RX/RELRO/holes and malformed corpus passed
+16-thread once, unlocked callbacks, permanent failure and same-thread reentry passed
+PASS: stage0 recovery, 128-bit identity, four partial-failure cleanups, authenticated envelope
+system/private constructors, BSS, imports/default versions, floating result and failure lifecycle passed
+bootstrap ABI, generated JNI branch/order and Context activation checks passed
+bootstrap ABI, generated JNI branch/order and Context activation checks passed
+bootstrap ABI, generated JNI branch/order and Context activation checks passed
+bootstrap ABI, generated JNI branch/order and Context activation checks passed
+bootstrap ABI, generated JNI branch/order and Context activation checks passed
+bootstrap ABI, generated JNI branch/order and Context activation checks passed
+bootstrap ABI, generated JNI branch/order and Context activation checks passed
+bootstrap ABI, generated JNI branch/order and Context activation checks passed
+bootstrap ABI, generated JNI branch/order and Context activation checks passed
+bootstrap ABI, generated JNI branch/order and Context activation checks passed
+bootstrap ABI, generated JNI branch/order and Context activation checks passed
+bootstrap ABI, generated JNI branch/order and Context activation checks passed
+bootstrap ABI, generated JNI branch/order and Context activation checks passed
+bootstrap ABI, generated JNI branch/order and Context activation checks passed
+PASS: 24 independent Java/native program vectors

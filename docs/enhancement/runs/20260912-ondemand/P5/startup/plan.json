@@ -1,0 +1,21 @@
+{
+  "package": "org.savior.sync",
+  "activity": "org.savior.sync/.MainActivity",
+  "serial": "192.168.6.118:5555",
+  "warmups": 3,
+  "rounds": 20,
+  "variants": [
+    {
+      "name": "stage0-off",
+      "apk": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\p5-stage0-off\\protected-signed.apk",
+      "loader": true,
+      "sha256": "804627e2a57fc6509bf469939b23ca049338be568cd95aea1957439071532432"
+    },
+    {
+      "name": "stage0-on",
+      "apk": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\p5-combined\\protected-signed.apk",
+      "loader": true,
+      "sha256": "8246ee630a9253a003f677ae2b185198ee462b51fe1a2f6702b1106f8e2b85b1"
+    }
+  ]
+}

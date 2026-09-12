@@ -1,0 +1,18 @@
+{
+  "stage0-off": {
+    "count": 20,
+    "medianMs": 2331.0,
+    "p95Ms": 2555,
+    "minMs": 2233,
+    "maxMs": 2702,
+    "regressionPercentVsFirst": 0.0
+  },
+  "stage0-on": {
+    "count": 20,
+    "medianMs": 2326.0,
+    "p95Ms": 2413,
+    "minMs": 2228,
+    "maxMs": 2486,
+    "regressionPercentVsFirst": -0.21450021450021284
+  }
+}

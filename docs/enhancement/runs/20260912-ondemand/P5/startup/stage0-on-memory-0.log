@@ -1,0 +1,52 @@
+Applications Memory Usage (in Kilobytes):
+Uptime: 34606753 Realtime: 34606753
+
+** MEMINFO in pid 22875 [org.savior.sync] **
+                   Pss  Private  Private  SwapPss     Heap     Heap     Heap
+                 Total    Dirty    Clean    Dirty     Size    Alloc     Free
+                ------   ------   ------   ------   ------   ------   ------
+  Native Heap     9510     9480        0        0    16384    12311     4072
+  Dalvik Heap     4718     4700        0        0     7872     3936     3936
+ Dalvik Other     2497     2496        0        0                           
+        Stack      452      452        0        0                           
+       Ashmem        2        0        0        0                           
+      Gfx dev     1756     1756        0        0                           
+    Other dev       12        0       12        0                           
+     .so mmap     3569      184      952        0                           
+    .apk mmap      350        0        0        0                           
+    .ttf mmap      219        0       24        0                           
+    .dex mmap     7076        4     6548        0                           
+    .oat mmap     1180        0      188        0                           
+    .art mmap      833      628        4        0                           
+   Other mmap       34        4        4        0                           
+   EGL mtrack    18524    18524        0        0                           
+    GL mtrack     2788     2788        0        0                           
+      Unknown     2359     2336        0        0                           
+        TOTAL    55879    43352     7732        0    24256    16247     8008
+ 
+ App Summary
+                       Pss(KB)
+                        ------
+           Java Heap:     5332
+         Native Heap:     9480
+                Code:     7900
+               Stack:      452
+            Graphics:    23068
+       Private Other:     4852
+              System:     4795
+ 
+               TOTAL:    55879       TOTAL SWAP PSS:        0
+ 
+ Objects
+               Views:       10         ViewRootImpl:        2
+         AppContexts:        3           Activities:        1
+              Assets:        2        AssetManagers:        3
+       Local Binders:       18        Proxy Binders:       24
+       Parcel memory:        6         Parcel count:       22
+    Death Recipients:        2      OpenSSL Sockets:        0
+            WebViews:        0
+ 
+ SQL
+         MEMORY_USED:        0
+  PAGECACHE_OVERFLOW:        0          MALLOC_SIZE:        0
+ 

@@ -3,6 +3,9 @@
 #include "Envelope.h"
 #include "Loader.h"
 #include "Once.h"
+#if NMMP_STAGE0_VM
+#include "Stage0.h"
+#endif
 #include "vendor/monocypher/monocypher.h"
 #include <android/log.h>
 #include <android/api-level.h>
@@ -11,7 +14,11 @@
 
 extern const unsigned char nmmp_payload[];
 extern const size_t nmmp_payload_size;
+#if NMMP_STAGE0_VM
+extern const NmmpNativeProgram nmmp_stage0_programs[4];
+#else
 extern const volatile unsigned char nmmp_key_share_a[32], nmmp_key_share_b[32];
+#endif
 static NmmpOnce load_once = NMMP_ONCE_INIT;
 static NmmpModule *module;
 static NmmpHostV1 host;
@@ -29,11 +36,17 @@ static int initialize(void *opaque) {
     if (api != 26 && api != 27) return -1;
     JNIEnv *env = NULL;
     if ((*args->vm)->GetEnv(args->vm, (void **)&env, JNI_VERSION_1_6) != JNI_OK) return -1;
-    uint8_t key[32], *decoded = NULL;
+    uint8_t key[32] = {0}, *decoded = NULL;
     size_t decoded_size = 0;
     uint64_t start = nanos();
+    int error = -6;
+#if NMMP_STAGE0_VM
+    if (!nmmpRecoverStage0(nmmp_stage0_programs, nmmp_build_id, key)) goto failed;
+#else
     for (unsigned i = 0; i < 32; ++i) key[i] = nmmp_key_share_a[i] ^ nmmp_key_share_b[i];
-    int error = nmmp_open_payload(nmmp_payload, nmmp_payload_size, key, nmmp_build_id, &decoded, &decoded_size);
+#endif
+    uint64_t recovered = nanos();
+    error = nmmp_open_payload(nmmp_payload, nmmp_payload_size, key, nmmp_build_id, &decoded, &decoded_size);
     crypto_wipe(key, sizeof(key));
     uint64_t unpacked = nanos();
     if (error) goto failed;
@@ -59,15 +72,17 @@ static int initialize(void *opaque) {
         goto failed;
     }
     __android_log_print(ANDROID_LOG_INFO, "NMMP-Loader",
-                        "ready id=%02x%02x%02x%02x bias=%p size=%zu unpack_us=%llu map_us=%llu constructors_us=%llu bootstrap_us=%llu",
+                        "ready id=%02x%02x%02x%02x bias=%p size=%zu unpack_us=%llu map_us=%llu constructors_us=%llu bootstrap_us=%llu key_us=%llu",
                         nmmp_build_id[0], nmmp_build_id[1], nmmp_build_id[2], nmmp_build_id[3],
                         (void *)nmmp_image_bias(module), nmmp_image_size(module),
                         (unsigned long long)((unpacked - start) / 1000),
                         (unsigned long long)((mapped - unpacked) / 1000),
                         (unsigned long long)((constructed - mapped) / 1000),
-                        (unsigned long long)((nanos() - constructed) / 1000));
+                        (unsigned long long)((nanos() - constructed) / 1000),
+                        (unsigned long long)((recovered - start) / 1000));
     return 0;
 failed:
+    crypto_wipe(key, sizeof(key));
     __atomic_store_n(&load_once.failed, 1, __ATOMIC_RELEASE);
     nmmp_free_secret(decoded, decoded_size);
     nmmp_discard_image(module); /* Does nothing after constructors have started. */

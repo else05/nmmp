@@ -27,3 +27,13 @@ root、四行映射和解码边界在匿名 RW 页建立后 mprotect 为 R；不
 每调用二分查找 token，只解码一条 56 字节记录并检查 hash/row/偏移/帧容量；不会扫描完整方法。调用独立 reader 保存 64 字节密钥流，不保存明文指令窗口。记录临时缓冲与派生 seed 清理，root/映射/边界长期驻留直至 SO/进程结束。当前不支持模块热卸载。
 
 FNV1a 是一致性检查，不是 MAC；token 目录可枚举，运行中的代码值、root 和密钥流仍可被观察。这里不宣称不可还原或对主动篡改提供密码学完整性。
+
+## 小型 native VM（S4）
+
+合同源为 native-program-format.json，生成 NativeFormats.java / NativeFormats.h。16 字节一条：stored opcode @0，dst/a/b @1/2/3，u64 immediate @4，u16 绝对指令索引 target @12，保留零 @14/15。所有未使用字段必须为零；14 项 semantic→stored 表必须无重复。完整编码程序 FNV1a 校验后逐条检查全部指令（含不可达指令），执行仍逐条解码，不保存完整明文程序。
+
+支持 LOAD_INPUT、CONST、MOV、XOR、AND、OR、ADD、SUB、MUL、SHL、SHR、JULT（u64 小于）、JMP、RETURN；16 个 u64 寄存器，最多 16 输入、256 指令、1024 步，shift 值 0..63。RETURN 固定 r0 值、r1 状态=1，其余状态失败且输出清零。无地址、JNI/FFI/syscall、动态代码或宿主函数调用指令。
+
+独立 programKey 经 MethodCodec(id=0,domain=0x4e564d31) 按位置编码；此 key 与业务 root 无依赖。root 程序校验已核验状态=1、完整 buildId，再将 seedData 与 bindingMask 组合，保持旧参数公式逐位一致。证书与 APK 读取不进入 VM。codec3 native 没有可调用的直接 XOR 参考恢复分支；legacy 的旧公式仅存在于互斥编译分支。
+
+root/各模块状态与全局业务 READY 使用 acquire/release。全局参数初始化阶段严格拒绝同线程业务重入；全部 DEX resolver/map 准备完成后发布 READY，再处理待注册类。注册完成状态独立协调：注册线程在真实 Java/JNI 回调中可访问已完成参数并重入，其他激活线程必须等待待注册集合处理结束。注册失败终止后续业务进入；不取消已运行的调用。状态锁与 pending 队列锁内都不执行 JNI。

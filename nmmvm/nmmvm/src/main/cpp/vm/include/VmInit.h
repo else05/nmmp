@@ -17,6 +17,9 @@ typedef struct {
 extern "C" {
 #endif
 bool vmInitRun(VmInit *control, bool (*initialize)(void *), void *argument);
+bool vmInitRequireReady(VmInit *control);
+void vmInitFail(VmInit *control);
+bool vmInitIsOwner(VmInit *control);
 #ifdef __cplusplus
 }
 #endif

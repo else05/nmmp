@@ -1,0 +1,48 @@
+CMake Deprecation Warning at CMakeLists.txt:1 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+-- Configuring done (0.3s)
+-- Generating done (0.4s)
+-- Build files have been written to: /mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/host-reader
+[1/15] Building C object CMakeFiles/vm_codec_vector_test.dir/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/VmInit.c.o
+[2/15] Building CXX object CMakeFiles/native_root_test.dir/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/VmCodec.cpp.o
+[3/15] Building CXX object CMakeFiles/vm_codec_vector_test.dir/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/VmCodec.cpp.o
+[4/15] Building C object CMakeFiles/native_root_test.dir/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/VmInit.c.o
+[5/15] Building CXX object CMakeFiles/native_vm_test.dir/NativeVmTest.cpp.o
+[6/15] Building CXX object CMakeFiles/native_root_test.dir/NativeRootTest.cpp.o
+[7/15] Building C object CMakeFiles/vm_module_test.dir/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/VmInit.c.o
+[8/15] Building C object CMakeFiles/generated_init_test.dir/GeneratedInitTest.c.o
+[9/15] Linking CXX executable vm_codec_vector_test
+[10/15] Linking CXX executable native_vm_test
+[11/15] Linking CXX executable native_root_test
+[12/15] Building C object CMakeFiles/generated_init_test.dir/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/VmInit.c.o
+[13/15] Linking C executable generated_init_test
+[14/15] Building CXX object CMakeFiles/vm_module_test.dir/VmModuleTest.cpp.o
+[15/15] Linking CXX executable vm_module_test
+Test project /mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/host-reader
+    Start 1: vm_codec_vector_test
+1/8 Test #1: vm_codec_vector_test .............   Passed    0.04 sec
+    Start 2: vm_reader_test
+2/8 Test #2: vm_reader_test ...................   Passed    0.01 sec
+    Start 3: native_vm_test
+3/8 Test #3: native_vm_test ...................   Passed    0.02 sec
+    Start 4: native_root_test
+4/8 Test #4: native_root_test .................   Passed    0.02 sec
+    Start 5: vm_module_test
+5/8 Test #5: vm_module_test ...................   Passed    0.05 sec
+    Start 6: generated_init_0
+6/8 Test #6: generated_init_0 .................   Passed    0.01 sec
+    Start 7: generated_init_1
+7/8 Test #7: generated_init_1 .................   Passed    0.01 sec
+    Start 8: generated_init_2
+8/8 Test #8: generated_init_2 .................   Passed    0.01 sec
+
+100% tests passed, 0 tests failed out of 8
+
+Total Test time (real) =   0.26 sec

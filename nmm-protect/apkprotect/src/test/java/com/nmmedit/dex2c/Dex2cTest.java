@@ -106,7 +106,7 @@ public class Dex2cTest {
         final String initSource = new String(
                 Files.readAllBytes(global.getInitCodeFile().toPath()),
                 StandardCharsets.UTF_8);
-        assertTrue(initSource.contains("vmBindingActivate(env, context)"));
+        assertTrue(initSource.contains("vmBindingActivate(env, args->context)"));
         assertTrue(initSource.contains("classes_setup_activate(env)"));
     }
 

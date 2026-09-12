@@ -1,0 +1,4 @@
+0000000000115768 t initializeSeed(void*)
+00000000001162c4 t nmmpNativeRun
+00000000000f3a30 t nmmp_vm_activate
+00000000000f53ec t vmExecuteToken

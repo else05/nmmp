@@ -66,7 +66,7 @@ public class GlobalDexConfig {
 
         writer.write(String.format(
                 "#include <jni.h>\n" +
-                        "#include \"GlobalCache.h\"\n" +
+                        "#include \"GlobalCache.h\"\n#include \"VmCodec.h\"\n" +
                         "\n" +
                         "//auto generated\n" +
                         "%s" +
@@ -77,6 +77,7 @@ public class GlobalDexConfig {
                         "    if ((*vm)->GetEnv(vm, (void **) &env, JNI_VERSION_1_6) != JNI_OK) {\n" +
                         "        return -1;\n" +
                         "    }\n" +
+                        "    if (!vmCodecActivate(0)) return JNI_ERR;\n" +
                         "    cacheInitial(env);\n" +
                         "    if ((*env)->ExceptionCheck(env)) return JNI_ERR;\n" +
                         "\n" +
@@ -97,8 +98,8 @@ public class GlobalDexConfig {
         for (DexConfig config : configs) {
             final String setup = config.getHeaderFileAndSetupFunc().setupFunctionName;
             declarations.append(String.format(
-                    "extern void %s(JNIEnv *env);\nextern bool %s_activate(JNIEnv *env);\n",
-                    setup, setup));
+                    "extern void %s(JNIEnv *env);\nextern bool %s_activate(JNIEnv *env);\nextern bool %s_finish(JNIEnv *env);\n",
+                    setup, setup, setup));
             setupCalls.append(String.format(
                     "    %s(env);\n    if ((*env)->ExceptionCheck(env)) return JNI_ERR;\n",
                     setup));
@@ -108,37 +109,38 @@ public class GlobalDexConfig {
         }
 
         writer.write("#include <jni.h>\n#include <stdbool.h>\n#include <pthread.h>\n");
-        writer.write("#include \"GlobalCache.h\"\n#include \"VmBinding.h\"\n\n");
+        writer.write("#include \"GlobalCache.h\"\n#include \"VmBinding.h\"\n#include \"VmInit.h\"\n\n");
         writer.write(declarations.toString());
         writer.write(
-                "\nstatic pthread_mutex_t gNmmpInitLock = PTHREAD_MUTEX_INITIALIZER;\n"
-                        + "static volatile int gNmmpInitState = 0;\n\n"
-                        + "bool nmmp_vm_is_ready(void) {\n"
-                        + "    return gNmmpInitState == 2;\n"
-                        + "}\n\n"
-                        + "bool nmmp_vm_activate(JNIEnv *env, jobject context) {\n"
-                        + "    pthread_mutex_lock(&gNmmpInitLock);\n"
-                        + "    if (gNmmpInitState == 2) {\n"
-                        + "        pthread_mutex_unlock(&gNmmpInitLock);\n"
-                        + "        return true;\n"
-                        + "    }\n"
-                        + "    if (gNmmpInitState == -1) {\n"
-                        + "        pthread_mutex_unlock(&gNmmpInitLock);\n"
-                        + "        return false;\n"
-                        + "    }\n"
-                        + "    gNmmpInitState = 1;\n"
-                        + "    if (!vmBindingActivate(env, context)) goto failed;\n");
+                "\nstatic VmInit gNmmpInit = NMMP_VM_INIT;\n"
+                        + "static VmInit gNmmpRegister = NMMP_VM_INIT;\n"
+                        + "void nmmp_vm_fail(void) { vmInitFail(&gNmmpInit); }\n"
+                        + "bool nmmp_vm_failed(void) { return __atomic_load_n(&gNmmpInit.state, __ATOMIC_ACQUIRE) == 3; }\n"
+                        + "typedef struct { JNIEnv *env; jobject context; } InitArguments;\n"
+                        + "bool nmmp_vm_is_ready(void) { return __atomic_load_n(&gNmmpInit.state, __ATOMIC_ACQUIRE) == 2; }\n"
+                        + "bool nmmp_vm_require_ready(void) { return vmInitRequireReady(&gNmmpInit); }\n"
+                        + "static bool nmmp_initialize(void *argument) {\n"
+                        + "    InitArguments *args = (InitArguments *) argument;\n"
+                        + "    JNIEnv *env = args->env;\n"
+                        + "    if (!vmBindingActivate(env, args->context)) goto failed;\n");
         writer.write(activateCalls.toString());
         writer.write(
-                "    gNmmpInitState = 2;\n"
-                        + "    pthread_mutex_unlock(&gNmmpInitLock);\n"
-                        + "    return true;\n"
+                "    return true;\n"
                         + "failed:\n"
-                        + "    if ((*env)->ExceptionCheck(env)) (*env)->ExceptionClear(env);\n"
-                        + "    gNmmpInitState = -1;\n"
-                        + "    pthread_mutex_unlock(&gNmmpInitLock);\n"
                         + "    return false;\n"
                         + "}\n\n"
+                        + "static bool nmmp_register_pending(void *argument) {\n"
+                        + "    JNIEnv *env = (JNIEnv *) argument;\n");
+        for (DexConfig config : configs)
+            writer.write("    if (!" + config.getHeaderFileAndSetupFunc().setupFunctionName + "_finish(env)) return false;\n");
+        writer.write("    return nmmp_vm_is_ready() && !(*env)->ExceptionCheck(env);\n}\n\n"
+                        + "bool nmmp_vm_activate(JNIEnv *env, jobject context) {\n"
+                        + "    InitArguments args = {env, context};\n"
+                        + "    if (!vmInitRun(&gNmmpInit, nmmp_initialize, &args)) return false;\n"
+                        + "    if (!vmInitIsOwner(&gNmmpRegister) && !vmInitRun(&gNmmpRegister, nmmp_register_pending, env)) {\n"
+                        + "        nmmp_vm_fail(); return false;\n"
+                        + "    }\n"
+                        + "    return nmmp_vm_is_ready() && !(*env)->ExceptionCheck(env);\n}\n\n"
                         + "JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved) {\n"
                         + "    JNIEnv *env;\n"
                         + "    if ((*vm)->GetEnv(vm, (void **) &env, JNI_VERSION_1_6) != JNI_OK) {\n"

@@ -77,6 +77,13 @@ class NmmpConfig(omvll.ObfuscationConfig):
         )
 
     @classmethod
+    def is_native_initializer(cls, module: omvll.Module, function: omvll.Function) -> bool:
+        return (
+            (cls.is_real_vm_module(module, "NativeVm.c") and cls.is_function(function, "nmmpNativeRun"))
+            or (cls.is_real_vm_module(module, "VmCodec.cpp") and cls.is_function(function, "initializeSeed"))
+        )
+
+    @classmethod
     def is_string_decoder(cls, module: omvll.Module, function: omvll.Function) -> bool:
         return (
             cls.is_generated_module(module)
@@ -122,6 +129,7 @@ class NmmpConfig(omvll.ObfuscationConfig):
         return (
             self.is_string_decoder(module, function)
             or self.is_resolver_function(module, function)
+            or self.is_native_initializer(module, function)
         )
 
     def obfuscate_constants(self, module: omvll.Module, function: omvll.Function):
@@ -136,6 +144,7 @@ class NmmpConfig(omvll.ObfuscationConfig):
             or self.is_string_decoder(module, function)
             or self.is_smoke_entry(module, function)
             or self.is_smoke_arithmetic(module, function)
+            or self.is_native_initializer(module, function)
         ):
             return omvll.OpaqueConstantsLowerLimit(255)
 

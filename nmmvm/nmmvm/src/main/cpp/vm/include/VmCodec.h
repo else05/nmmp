@@ -2,6 +2,7 @@
 #define NMMP_VM_CODEC_H
 
 #include <stdint.h>
+#include <stdbool.h>
 
 #include "VmCodecConfig.h"
 

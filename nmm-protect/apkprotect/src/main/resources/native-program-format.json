@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "constants": {
+    "INSTRUCTION_BYTES": 16,
+    "MAX_INSTRUCTIONS": 256,
+    "MAX_STEPS": 1024,
+    "REGISTERS": 16,
+    "DOMAIN": 1314278705,
+    "OP_COUNT": 14
+  },
+  "fields": {"OP": 0, "DST": 1, "A": 2, "B": 3, "IMM": 4, "TARGET": 12, "RESERVED": 14},
+  "usedFieldBits": {"DST": 1, "A": 2, "B": 4, "IMM": 8, "TARGET": 16},
+  "ops": [
+    {"name": "LOAD_INPUT", "fields": ["DST", "A"]},
+    {"name": "CONST", "fields": ["DST", "IMM"]},
+    {"name": "MOV", "fields": ["DST", "A"]},
+    {"name": "XOR", "fields": ["DST", "A", "B"]},
+    {"name": "AND", "fields": ["DST", "A", "B"]},
+    {"name": "OR", "fields": ["DST", "A", "B"]},
+    {"name": "ADD", "fields": ["DST", "A", "B"]},
+    {"name": "SUB", "fields": ["DST", "A", "B"]},
+    {"name": "MUL", "fields": ["DST", "A", "B"]},
+    {"name": "SHL", "fields": ["DST", "A", "B"]},
+    {"name": "SHR", "fields": ["DST", "A", "B"]},
+    {"name": "JULT", "fields": ["A", "B", "TARGET"]},
+    {"name": "JMP", "fields": ["TARGET"]},
+    {"name": "RETURN", "fields": []}
+  ],
+  "return": {"valueRegister": 0, "statusRegister": 1, "successStatus": 1, "failureValue": 0},
+  "rules": [
+    "All instructions, including unreachable instructions, are validated before execution.",
+    "Unused fields and reserved bytes must be zero; targets are instruction indices.",
+    "Input count is at most REGISTERS. LOAD_INPUT A is an input index; other A/B are register indices.",
+    "SHL/SHR require the runtime shift register to be at most 63. JULT compares unsigned u64.",
+    "Program encoding is MethodCodec(programKey), id=0, DOMAIN; positions are absolute program byte offsets.",
+    "The trusted FNV-1a checksum covers encoded program bytes. Opcode table entries are unique bytes."
+  ]
+}

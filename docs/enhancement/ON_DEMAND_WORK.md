@@ -49,3 +49,16 @@ S2 仍直接引用过渡记录；接下来 S3 改 token、目录和编码方法�
 - S2 直接记录入口仍用于已有语义 fixture；正式生成器不再引用，最终阶段会检查无被链接的过渡执行入口。
 
 接下来 S4 小型 native VM 与绑定初始化状态接入，之后继续 P5/S5；不将 S3 当完整交付。
+
+## S4 当前证据
+
+- 受限 native VM 已实际接入 codec3 root 恢复；独立引导 key、按构建随机 opcode 表、逐条解码，16 寄存器、256 指令和 1024 步上限。JSON 同源生成 Java/C 常量并在构建检查，参考实现只在 Java/测试端。
+- root 上下文使用只读页，经初始化控制器发布；绑定证书/包名/APK 核验仍由原宿主实现，临时证书、mask、输入与 VM 寄存器清理。
+- 绑定、root、全 DEX 参数准备的初始化回调均不持有状态锁调用 JNI。先准备所有模块再发布参数 READY，之后独立协调待注册类；注册线程合法重入不等待自身，其他激活线程等待注册完成。提前业务调用、注册失败均进入可观察失败路径。
+- 主机 ASan/UBSan 8/8，通过 105 Java/C 程序向量、root 1600 次并发调用、实际生成初始化 C 的成功/失败/重入；另一个坏程序编译产物证明永久失败和等待者一致。
+- ARM64 Debug/Release 均通过 105 native VM 向量、1600 次 root 激活、1351 语义断言；真实 ART/JNI 回调的 16 线程激活，成功、注册失败、提前业务重入三种场景均通过。
+- Release 测试最初因 NDEBUG 关闭 assert 读取而报告 0 向量；已修正测试并重跑，原日志保留但不计通过。旧 Java 断言因参数改为回调 args->context 更新后完整构建通过。
+- 正式 O-MVLL 开启的 APK 完成全部 526 方法 Java/native 回验，API27 原签名安装启动、当前 PID 17032 主窗口首绘/可见，无 crash marker。ThisTime=2928ms 是单次功能样本。
+- 正式 native 符号存在 vmExecuteToken / nmmpNativeRun / initializeSeed，不含 S2 vmExecuteDemand 或 legacy vmExecute 入口。宿主测试与无 O-MVLL ARM64 harness、正式 O-MVLL APK 均有功能证据。
+
+接下来 P5 stage0 native VM 密钥恢复及 S5 组合性能与验收；API26/完整业务路径缺口不因此消失。

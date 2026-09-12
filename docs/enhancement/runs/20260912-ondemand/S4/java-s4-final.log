@@ -1,0 +1,44 @@
+> Task :apkprotect:checkNativeFormats
+> Task :apkprotect:checkReaderFormats
+> Task :arsc:compileJava UP-TO-DATE
+> Task :arsc:processResources NO-SOURCE
+> Task :apkprotect:extractIncludeProto UP-TO-DATE
+> Task :apkprotect:extractProto UP-TO-DATE
+> Task :apkprotect:generateProto UP-TO-DATE
+> Task :apkprotect:compileJava UP-TO-DATE
+> Task :apkprotect:processResources
+> Task :apkprotect:classes
+> Task :apkprotect:jar
+> Task :compileJava UP-TO-DATE
+> Task :processResources NO-SOURCE
+> Task :classes UP-TO-DATE
+> Task :jar
+> Task :assemble
+> Task :compileTestJava NO-SOURCE
+> Task :processTestResources NO-SOURCE
+> Task :testClasses UP-TO-DATE
+> Task :arsc:classes UP-TO-DATE
+> Task :arsc:jar UP-TO-DATE
+> Task :test NO-SOURCE
+> Task :check UP-TO-DATE
+> Task :build
+> Task :apkprotect:assemble
+> Task :apkprotect:extractIncludeTestProto
+> Task :apkprotect:extractTestProto UP-TO-DATE
+> Task :apkprotect:generateTestProto NO-SOURCE
+> Task :apkprotect:compileTestJava UP-TO-DATE
+> Task :apkprotect:processTestResources UP-TO-DATE
+> Task :apkprotect:testClasses UP-TO-DATE
+> Task :apkprotect:test
+> Task :apkprotect:check
+> Task :apkprotect:build
+> Task :arsc:assemble UP-TO-DATE
+> Task :arsc:compileTestJava UP-TO-DATE
+> Task :arsc:processTestResources UP-TO-DATE
+> Task :arsc:testClasses UP-TO-DATE
+> Task :arsc:test UP-TO-DATE
+> Task :arsc:check UP-TO-DATE
+> Task :arsc:build UP-TO-DATE
+
+BUILD SUCCESSFUL in 8s
+20 actionable tasks: 7 executed, 13 up-to-date

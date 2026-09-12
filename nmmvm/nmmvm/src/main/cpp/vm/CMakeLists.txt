@@ -16,6 +16,7 @@ set(VM_SRC_FILES
         Demand.cpp
         Module.cpp
         VmInit.c
+        NativeVm.c
         VmCodec.cpp
         VmBinding.cpp
         Arm64Syscall.cpp

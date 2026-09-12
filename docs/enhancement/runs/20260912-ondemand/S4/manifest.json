@@ -1,0 +1,53 @@
+{
+  "stage": "S4",
+  "artifacts": {
+    "protected-signed.apk": {
+      "path": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s4-acceptance\\protected-signed.apk",
+      "bytes": 9269189,
+      "sha256": "a734ab38429c2aed7627cc678aa8a9142a55777440bb46effa4bfad648d669ee"
+    },
+    "vm-protect.jar": {
+      "path": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s4-acceptance\\vm-protect.jar",
+      "bytes": 20454969,
+      "sha256": "d9809bd061225af7e2129c35e9ad5a70825ff673e2f4b9bfff26ec9dd958fb91"
+    }
+  },
+  "javaTests": {
+    "arsc": {
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apkprotect": {
+      "tests": 45,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "host": "8/8 ASan+UBSan; bad-program root initializer 1/1",
+  "nativeVectors": 105,
+  "deviceSemanticAssertions": 1351,
+  "rootConcurrentActivations": 1600,
+  "realJniInitModes": [
+    "success+ownerReentry+16waiters",
+    "registrationFailure",
+    "earlyBusinessReentryFailure"
+  ],
+  "device": {
+    "api": 27,
+    "pid": 17032,
+    "firstThisTimeMs": 2928,
+    "mainWindowDrawnAndOnScreen": true,
+    "crashMarkers": []
+  },
+  "mode": "on-demand-v1",
+  "privateLinker": false,
+  "selectedMethods": 526,
+  "performance": "single startup observation; formal S5 pending",
+  "initialTestIssues": [
+    "Updated existing Java source assertion for callback parameter name",
+    "Release native test NDEBUG disabled assertions; fixed and rerun 105 vectors, old 0-vector result excluded"
+  ]
+}

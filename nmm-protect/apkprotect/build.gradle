@@ -51,6 +51,13 @@ task checkReaderFormats(type: Exec) {
 }
 compileJava.dependsOn checkReaderFormats
 
+task checkNativeFormats(type: Exec) {
+    workingDir projectDir.parentFile
+    commandLine(System.getProperty('os.name').toLowerCase().contains('windows') ? 'python' : 'python3',
+            'scripts/generate-native-format.py', '--check')
+}
+compileJava.dependsOn checkNativeFormats
+
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8

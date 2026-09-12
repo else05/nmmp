@@ -103,6 +103,7 @@ public class JniCodeGenerator {
                 isStatic ? "jclass jcls" : "jobject thiz")
         );
 
+
 //        --------jni函数定义及参数赋值-------
 
         //如果寄存器数量比较小直接使用栈上内存,不自己分配和释放
@@ -185,6 +186,9 @@ public class JniCodeGenerator {
             writer.append(", ").append(params.toString());
         }
         writer.append(") {\n");
+        if (protectionContext.isSignatureBound())
+            writer.write("    if (!nmmp_require_ready(env)) return" + (returnType.equals("V") ? ";\n" : " 0;\n"));
+
         writer.append(regsAssign);
         writer.append("\n");
 
@@ -323,6 +327,14 @@ public class JniCodeGenerator {
                         "\n"
                 , config.getResolverFile().getName()));
 
+        if (protectionContext.isSignatureBound()) codeWriter.write(
+                "extern bool nmmp_vm_require_ready(void);\n"
+                        + "static bool nmmp_require_ready(JNIEnv *env) {\n"
+                        + "    if (nmmp_vm_require_ready()) return true;\n"
+                        + "    if (!(*env)->ExceptionCheck(env)) {\n"
+                        + "        jclass error = (*env)->FindClass(env, \"java/lang/InternalError\");\n"
+                        + "        if (error) { (*env)->ThrowNew(env, error, \"NMMP initialization is not ready\"); (*env)->DeleteLocalRef(env, error); }\n"
+                        + "    }\n    return false;\n}\n");
         if (protectionContext.isOnDemand()) codeWriter.write("static vmDemandModule nmmpModule;\n\n");
         for (DexBackedClassDef classDef : dexFile.getClasses()) {
             for (DexBackedMethod method : classDef.getMethods()) {
@@ -491,9 +503,10 @@ public class JniCodeGenerator {
         writer.write(String.format(
                 "#define NMMP_REGISTER_COUNT %d\n"
                         + "static u1 gNmmpPending[NMMP_REGISTER_COUNT > 0 ? NMMP_REGISTER_COUNT : 1];\n"
-                        + "static bool gNmmpResolverReady = false;\n"
+                        + "static pthread_mutex_t gNmmpPendingLock = PTHREAD_MUTEX_INITIALIZER;\n"
                         + "extern bool nmmp_vm_is_ready(void);\n"
-                        + "extern bool nmmp_vm_activate(JNIEnv *env, jobject context);\n\n",
+                        + "extern bool nmmp_vm_activate(JNIEnv *env, jobject context);\n"
+                        + "extern void nmmp_vm_fail(void);\nextern bool nmmp_vm_failed(void);\n\n",
                 registerCount));
         writer.write(
                 "static bool nmmp_register_class(JNIEnv *env, u4 dataIdx) {\n"
@@ -535,7 +548,7 @@ public class JniCodeGenerator {
                         + "        }\n"
                         + "        jobject context = (*env)->GetStaticObjectField(env, jcls, field);\n"
                         + "        if (context == NULL) return;\n"
-                        + "        nmmp_vm_activate(env, context);\n"
+                        + "        if (!nmmp_vm_activate(env, context)) nmmp_require_ready(env);\n"
                         + "        (*env)->DeleteLocalRef(env, context);\n"
                         + "        return;\n"
                         + "    }\n",
@@ -545,23 +558,26 @@ public class JniCodeGenerator {
         writer.write(
                 "    if ((u4) dataIdx > NMMP_REGISTER_COUNT) return;\n"
                         + "    const u4 registerIdx = (u4) dataIdx - 1;\n"
-                        + "    if (!nmmp_vm_is_ready()) {\n"
-                        + "        gNmmpPending[registerIdx] = 1;\n"
-                        + "        return;\n"
+                        + "    pthread_mutex_lock(&gNmmpPendingLock);\n"
+                        + "    bool ready = nmmp_vm_is_ready();\n"
+                        + "    if (!ready) gNmmpPending[registerIdx] = 1;\n"
+                        + "    pthread_mutex_unlock(&gNmmpPendingLock);\n"
+                        + "    if ((ready && !nmmp_register_class(env, registerIdx)) || nmmp_vm_failed()) {\n"
+                        + "        nmmp_vm_fail(); nmmp_require_ready(env);\n"
                         + "    }\n"
-                        + "    nmmp_register_class(env, registerIdx);\n"
                         + "}\n\n");
+        writer.write("bool " + config.getHeaderFileAndSetupFunc().setupFunctionName + "_finish(JNIEnv *env) {\n"
+                + "    for (u4 i = 0; i < NMMP_REGISTER_COUNT; ++i) {\n"
+                + "        pthread_mutex_lock(&gNmmpPendingLock);\n"
+                + "        bool pending = gNmmpPending[i] != 0;\n"
+                + "        gNmmpPending[i] = 0;\n"
+                + "        pthread_mutex_unlock(&gNmmpPendingLock);\n"
+                + "        if (pending && !nmmp_register_class(env, i)) return false;\n"
+                + "    }\n    return true;\n}\n\n");
         writer.write(String.format(
                 "bool %s(JNIEnv *env) {\n"
-                        + "    if (gNmmpResolverReady) return true;\n"
                         + "    if (!resolver_init(env)) return false;\n"
                         + (protectionContext.isOnDemand() ? "    if (!nmmp_prepare_demand(env)) return false;\n" : "")
-                        + "    gNmmpResolverReady = true;\n"
-                        + "    for (u4 i = 0; i < NMMP_REGISTER_COUNT; ++i) {\n"
-                        + "        if (!gNmmpPending[i]) continue;\n"
-                        + "        if (!nmmp_register_class(env, i)) return false;\n"
-                        + "        gNmmpPending[i] = 0;\n"
-                        + "    }\n"
                         + "    return true;\n"
                         + "}\n\n",
                 activateFunction));

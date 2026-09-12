@@ -2,6 +2,7 @@ package com.nmmedit.apkprotect.util;
 
 import com.nmmedit.apkprotect.BuildNativeLib;
 import com.nmmedit.apkprotect.dex2c.MethodCodec;
+import com.nmmedit.apkprotect.dex2c.NativeProgram;
 import com.nmmedit.apkprotect.dex2c.ProtectionContext;
 import com.nmmedit.apkprotect.dex2c.converter.instructionrewriter.InstructionRewriter;
 import com.nmmedit.apkprotect.sign.ApkVerifyCodeGenerator;
@@ -107,6 +108,12 @@ public class CmakeUtils {
         validateVmTemplate(vmsrcFile);
         final List<File> cSources = ApkUtils.extractFiles(vmsrcFile, ".*", srcDir);
         writeCodecConfig(new File(srcDir, "vm/include/VmCodecConfig.h"), protectionContext);
+        if (protectionContext.isOnDemand()) {
+            try (Writer writer = new OutputStreamWriter(new FileOutputStream(
+                    new File(srcDir, "vm/include/NativeProgramConfig.h")), StandardCharsets.UTF_8)) {
+                NativeProgram.root(protectionContext.getBuildId()).writeHeader(writer);
+            }
+        }
 
         //处理指令及apk验证,生成新的c文件
         for (File source : cSources) {
@@ -144,6 +151,11 @@ public class CmakeUtils {
             }
             requireZipEntry(zipFile, "vm/Codec.cpp", vmsrcFile);
             requireZipEntry(zipFile, "vm/VmCodec.cpp", vmsrcFile);
+            requireZipEntry(zipFile, "vm/Module.cpp", vmsrcFile);
+            requireZipEntry(zipFile, "vm/VmInit.c", vmsrcFile);
+            requireZipEntry(zipFile, "vm/NativeVm.c", vmsrcFile);
+            requireZipEntry(zipFile, "vm/include/NativeFormats.h", vmsrcFile);
+            requireZipEntry(zipFile, "vm/include/NativeVm.h", vmsrcFile);
             requireZipEntry(zipFile, "vm/VmBinding.cpp", vmsrcFile);
             requireZipEntry(zipFile, "vm/Arm64Syscall.cpp", vmsrcFile);
             requireZipEntry(zipFile, "vm/ApkV2Signer.cpp", vmsrcFile);

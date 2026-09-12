@@ -1,4 +1,7 @@
 // Host tests use the actual module parser/reader with a minimal JNI exception boundary.
+#ifdef NDEBUG
+#undef NDEBUG
+#endif
 #define _LIBS_CUTILS_LOG_H
 #define NMMP_VM_CODEC_CONFIG_H
 #define NMMP_VM_CODEC_VERSION 3
@@ -175,5 +178,30 @@ int main(int argc, char **argv) {
     assert(!vmInitRun(&reentry, nested, &reentry) && reentry.state == 3);
     assert(!vmInitRun(&reentry, [](void *) { return true; }, nullptr));
     pthread_cond_destroy(&reentry.condition); pthread_mutex_destroy(&reentry.mutex);
+    VmInit businessReentry = NMMP_VM_INIT;
+    assert(!vmInitRun(&businessReentry, [](void *p) {
+        auto *c = static_cast<VmInit *>(p);
+        assert(!pthread_mutex_trylock(&c->mutex)); pthread_mutex_unlock(&c->mutex);
+        assert(!vmInitRequireReady(c)); return true;
+    }, &businessReentry));
+    assert(businessReentry.state == 3);
+    pthread_cond_destroy(&businessReentry.condition); pthread_mutex_destroy(&businessReentry.mutex);
+    struct Failing { VmInit init = NMMP_VM_INIT; std::atomic<unsigned> calls{0}, entered{0}; std::atomic<bool> release{false}; } failing;
+    std::atomic<unsigned> failures{0}; threads.clear();
+    for (unsigned i = 0; i < 16; ++i) threads.emplace_back([&] {
+        ++failing.entered;
+        bool ready = vmInitRun(&failing.init, [](void *p) {
+            auto *state = static_cast<Failing *>(p); ++state->calls;
+            while (!state->release.load()) std::this_thread::yield();
+            return false;
+        }, &failing);
+        if (!ready) ++failures;
+    });
+    while (failing.entered != 16) std::this_thread::yield();
+    failing.release = true;
+    for (auto &thread : threads) thread.join();
+    assert(failures == 16 && failing.calls == 1 && failing.init.state == 3);
+    assert(!vmInitRun(&failing.init, [](void *) { assert(false); return true; }, nullptr));
+    pthread_cond_destroy(&failing.init.condition); pthread_mutex_destroy(&failing.init.mutex);
     puts("module: concurrent publication, unsigned token, mapped reader, corruptions, bounds and reentry PASS");
 }

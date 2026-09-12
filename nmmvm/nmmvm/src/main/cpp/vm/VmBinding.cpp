@@ -1,6 +1,6 @@
 #include "VmBinding.h"
 
-#include <atomic>
+#include "VmInit.h"
 #include <cstdlib>
 #include <cstring>
 #include <fcntl.h>
@@ -23,9 +23,7 @@ const uint8_t kSignerDigestXorMask[kSignerDigestSize] = {
         0x3c, 0xb4, 0x69, 0xd7, 0x20, 0xfa, 0x95, 0x4e
 };
 
-#if NMMP_VM_SIGNATURE_BINDING
-std::atomic<int> gBindingState(0);
-#endif
+static VmInit gBindingInit = NMMP_VM_INIT;
 
 static uint64_t updateHash(uint64_t hash, const uint8_t *data, size_t size) {
     for (size_t i = 0; i < size; ++i) {
@@ -243,7 +241,7 @@ static bool verifyApkAndActivate(const char *packageNameValue,
             expectedDigest, apkDigest, kSignerDigestSize)
                          && constantTimeEqual(
             packageManagerDigest, apkDigest, kSignerDigestSize);
-    const uint64_t bindingMask = matched
+    uint64_t bindingMask = matched
                                  ? deriveBindingMask(
                                          packageNameValue,
                                          apkCertificate.data,
@@ -254,31 +252,24 @@ static bool verifyApkAndActivate(const char *packageNameValue,
     secureZero(expectedDigest, sizeof(expectedDigest));
     secureZero(packageManagerDigest, sizeof(packageManagerDigest));
     secureZero(apkDigest, sizeof(apkDigest));
-    return matched && vmCodecActivate(bindingMask);
+    const bool activated = matched && vmCodecActivate(bindingMask);
+    secureZero(&bindingMask, sizeof(bindingMask));
+    return activated;
 #endif
 }
 
 }  // namespace
 
-extern "C"
-bool vmBindingActivate(JNIEnv *env, jobject context) {
-#if defined(NMMP_PRIVATE_LINKER)
-    if (nmmpPrivateLoaderFailed()) return false;
-#endif
+struct BindingArguments { JNIEnv *env; jobject context; };
+static bool initializeBinding(void *argument) {
+    auto *args = static_cast<BindingArguments *>(argument);
+    JNIEnv *env = args->env;
+    jobject context = args->context;
 #if !NMMP_VM_SIGNATURE_BINDING
-    (void) env;
-    (void) context;
-    return true;
+    (void)env; (void)context;
+    return vmCodecActivate(0);
 #else
-    int expectedState = 0;
-    if (!gBindingState.compare_exchange_strong(expectedState, 1)) {
-        return expectedState == 2 && vmCodecIsActivated();
-    }
-    if (context == nullptr) {
-        gBindingState.store(3);
-        return false;
-    }
-
+    if (!context) return false;
     jstring name = nullptr;
     const char *nameChars = nullptr;
     jobject manager = nullptr;
@@ -330,11 +321,16 @@ cleanup:
     if (manager != nullptr) env->DeleteLocalRef(manager);
     if (nameChars != nullptr) env->ReleaseStringUTFChars(name, nameChars);
     if (name != nullptr) env->DeleteLocalRef(name);
-    if (env->ExceptionCheck()) {
-        env->ExceptionClear();
-        result = false;
-    }
-    gBindingState.store(result ? 2 : 3);
+    if (env->ExceptionCheck()) result = false;
     return result;
 #endif
+}
+
+extern "C"
+bool vmBindingActivate(JNIEnv *env, jobject context) {
+#if defined(NMMP_PRIVATE_LINKER)
+    if (nmmpPrivateLoaderFailed()) return false;
+#endif
+    BindingArguments arguments = {env, context};
+    return vmInitRun(&gBindingInit, initializeBinding, &arguments) && vmCodecIsActivated();
 }

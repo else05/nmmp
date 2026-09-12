@@ -14,6 +14,8 @@ set(VM_SRC_FILES
         GlobalCache.cpp
         Codec.cpp
         Demand.cpp
+        Module.cpp
+        VmInit.c
         VmCodec.cpp
         VmBinding.cpp
         Arm64Syscall.cpp

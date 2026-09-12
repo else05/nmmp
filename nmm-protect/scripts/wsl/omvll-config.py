@@ -51,14 +51,15 @@ class NmmpConfig(omvll.ObfuscationConfig):
     def is_interpreter(cls, module: omvll.Module, function: omvll.Function) -> bool:
         return (
             cls.is_real_vm_module(module, "InterpC-portable.cpp")
-            and cls.is_function(function, "vmInterpret")
+            and (cls.is_function(function, "vmInterpret")
+                 or cls.is_function(function, "vmInterpretReader"))
         )
 
     @classmethod
     def is_vm_execute(cls, module: omvll.Module, function: omvll.Function) -> bool:
         return (
-            cls.is_real_vm_module(module, "Codec.cpp")
-            and cls.is_function(function, "vmExecute")
+            (cls.is_real_vm_module(module, "Codec.cpp") and cls.is_function(function, "vmExecute"))
+            or (cls.is_real_vm_module(module, "Module.cpp") and cls.is_function(function, "vmExecuteToken"))
         )
 
     @classmethod

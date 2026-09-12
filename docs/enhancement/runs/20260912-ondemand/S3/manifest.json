@@ -1,0 +1,43 @@
+{
+  "stage": "S3",
+  "artifacts": {
+    "protected-signed.apk": {
+      "path": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s3-acceptance\\protected-signed.apk",
+      "bytes": 9252805,
+      "sha256": "e77ca84c2c85b55d6d4c4e2b22052094f0a9d16aede1620706ec4d14b5d65144"
+    },
+    "vm-protect.jar": {
+      "path": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s3-acceptance\\vm-protect.jar",
+      "bytes": 20442047,
+      "sha256": "d1e6a4cfb4ffc972ef283bdea6cdcb3d54fbab6eb604b72f9e75deecd418c457"
+    }
+  },
+  "javaTests": {
+    "arsc": {
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apkprotect": {
+      "tests": 41,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "host": "3/3 ASan+UBSan passed",
+  "nativeReplay": "PASS: 527 Java-generated methods through native token/record/map and reverse-order reader\n",
+  "device": {
+    "api": 27,
+    "pid": 4350,
+    "firstThisTimeMs": 2315,
+    "mainWindowDrawnAndOnScreen": true,
+    "crashMarkers": []
+  },
+  "mode": "on-demand-v1",
+  "privateLinker": false,
+  "selectedMethods": 526,
+  "performance": "single startup observation, not formal S5 gate",
+  "omvllConfig": "nmm-protect/scripts/wsl/omvll-config.py; vmInterpretReader and vmExecuteToken included"
+}

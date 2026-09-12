@@ -7,6 +7,7 @@
 
 #include <jni.h>
 #include "Common.h"
+#include "VmInit.h"
 
 #ifdef __cplusplus
 class VmReader;
@@ -71,6 +72,18 @@ typedef struct {
 } vmDemandCode;
 
 typedef struct {
+    const u1 *blob;
+    u4 size;
+    u4 hash;
+    u4 moduleId;
+    u8 buildId;
+    VmInit init;
+    const void *context;
+} vmDemandModule;
+#define NMMP_DEMAND_MODULE_INIT(blob, size, hash, module, build) \
+    {blob, size, hash, module, build, NMMP_VM_INIT, NULL}
+
+typedef struct {
 
     const vmField *(*dvmResolveField)(JNIEnv *env, u4 idx, bool isStatic);
 
@@ -104,6 +117,9 @@ jvalue vmExecute(
 );
 
 bool vmPrepareDemandCode(JNIEnv *env, vmDemandCode *code);
+bool vmPrepareDemandModule(JNIEnv *env, vmDemandModule *module);
+jvalue vmExecuteToken(JNIEnv *env, const vmDemandModule *module, u4 token,
+                      regptr_t *regs, u1 *regFlags, u4 registerCapacity, const vmResolver *resolver);
 jvalue vmInterpretReader(JNIEnv *env, const vmCode *code, const vmResolver *resolver, VmReader *reader);
 jvalue vmExecuteDemand(JNIEnv *env, const vmDemandCode *code, regptr_t *regs,
                        u1 *regFlags, u4 registerCapacity, const vmResolver *resolver);

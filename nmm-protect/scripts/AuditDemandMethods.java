@@ -16,6 +16,7 @@ import com.nmmedit.apkprotect.dex2c.converter.instructionrewriter.InstructionRew
 import com.nmmedit.apkprotect.sign.SignatureBinding;
 import java.io.*;
 import java.nio.file.*;
+import java.nio.*;
 import java.security.MessageDigest;
 import java.util.*;
 import java.util.regex.*;
@@ -63,6 +64,10 @@ public class AuditDemandMethods {
         protected List<Opcode> getOpcodeList() { throw new UnsupportedOperationException("Audit does not generate tables"); }
     }
 
+    static void auditInt(OutputStream out, int x) throws IOException {
+        for (int b = 0; b < 4; ++b) out.write(x >>> (8 * b));
+    }
+
     public static void main(String[] args) throws Exception {
         Path work = Path.of(args[0]);
         Path out = Path.of(args[1]);
@@ -101,10 +106,29 @@ public class AuditDemandMethods {
                 dex = DexBackedDexFile.fromInputStream(null, input);
             }
             String source = Files.readString(impl.resolveSibling(impl.getFileName().toString().replace("_impl.dex", "_native_functions.c")));
+            byte[] blob = array(source, "nmmpModuleBlob");
+            ByteBuffer header = ByteBuffer.wrap(blob).order(ByteOrder.LITTLE_ENDIAN);
+            long moduleId = Integer.toUnsignedLong(header.getInt(16));
+            int count = header.getInt(20);
+            require(header.getInt(44) == blob.length && header.getLong(48) == buildId, "Module identity");
+            Map<Long, Integer> directory = new HashMap<>();
+            long previous = -1;
+            for (int i = 0; i < count; ++i) {
+                long token = Integer.toUnsignedLong(header.getInt(64 + i * 8));
+                int offset = header.getInt(68 + i * 8);
+                require(token > previous && offset >= 64 + count * 8 && (long)offset + 56 <= header.getInt(28), "Directory bounds/order");
+                directory.put(token, offset); previous = token;
+            }
+            byte[] maps = codec.transform(Arrays.copyOfRange(blob, header.getInt(28), header.getInt(28) + 1024), moduleId, 7);
+            byte[] moduleBounds = codec.transform(Arrays.copyOfRange(blob, header.getInt(32), header.getInt(32) + header.getInt(36)), moduleId, 8);
+            ByteArrayOutputStream nativeAudit = new ByteArrayOutputStream();
+            auditInt(nativeAudit, (int)seed); auditInt(nativeAudit, (int)(seed >>> 32));
+            auditInt(nativeAudit, (int)moduleId); auditInt(nativeAudit, (int)buildId); auditInt(nativeAudit, (int)(buildId >>> 32));
+            auditInt(nativeAudit, blob.length); nativeAudit.write(blob); auditInt(nativeAudit, count);
             Map<String, String> bodies = new HashMap<>();
             Matcher wrappers = Pattern.compile("^(?:static|JNIEXPORT) \\w+ (Java_\\w+)\\([^\\n]*\\) \\{(.*?)^}", Pattern.MULTILINE | Pattern.DOTALL).matcher(source);
             while (wrappers.find()) {
-                if (wrappers.group(2).contains("vmExecuteDemand("))
+                if (wrappers.group(2).contains("vmExecuteToken("))
                     require(bodies.put(wrappers.group(1), wrappers.group(2)) == null, "Duplicate wrapper");
             }
             ResolverCodeGenerator resolver = new ResolverCodeGenerator(dex, analyzer, new ProtectionContext(seed), dexId++);
@@ -116,8 +140,13 @@ public class AuditDemandMethods {
                 String wrapper = MyMethodUtil.getJniFunctionName(type.substring(1, type.length() - 1), method.getName(), method.getParameterTypes(), method.getReturnType());
                 String body = bodies.remove(wrapper);
                 require(body != null, "Missing wrapper: " + descriptor);
-                long methodId = Long.parseLong(match(body, "&nmmpDemand_([0-9]+)"));
-                String recordName = "nmmpDemand_" + methodId;
+                long token = Long.parseUnsignedLong(match(body, "vmExecuteToken\\(env, &nmmpModule, UINT32_C\\(0x([0-9a-f]+)\\)"), 16);
+                Integer offset = directory.remove(token);
+                require(offset != null, "Missing token: " + descriptor);
+                byte[] record = codec.transform(Arrays.copyOfRange(blob, offset, offset + 56), token, 6);
+                ByteBuffer r = ByteBuffer.wrap(record).order(ByteOrder.LITTLE_ENDIAN);
+                require(r.getInt(48) == 3 && r.getInt(52) == MethodCodec.hash(Arrays.copyOf(record, 52)), "Record integrity");
+                long methodId = Integer.toUnsignedLong(r.getInt(0));
                 require(ids.add(methodId), "Duplicate method ID");
                 require(descriptors.add(descriptor), "Duplicate method descriptor");
                 int units = 0;
@@ -130,17 +159,26 @@ public class AuditDemandMethods {
                 }
                 byte[] code = rewriter.rewriteInstructions(method);
                 byte[] tries = rewriter.handleTries(method.getImplementation());
-                byte[] encodedCode = array(source, recordName + "Code");
-                byte[] encodedTries = array(source, recordName + "Tries");
-                byte[] boundaries = array(source, recordName + "Boundaries");
+                byte[] encodedCode = Arrays.copyOfRange(blob, r.getInt(20), r.getInt(20) + r.getInt(24));
+                byte[] encodedTries = Arrays.copyOfRange(blob, r.getInt(28), r.getInt(28) + r.getInt(32));
+                byte[] boundaries = Arrays.copyOfRange(moduleBounds, r.getInt(36), r.getInt(36) + r.getInt(40));
                 int ins = MethodUtil.getParameterRegisterCount(method.getParameterTypes(), (method.getAccessFlags() & 8) != 0);
                 DemandCodec.Encoded expected = DemandCodec.encode(method, code, tries, seed, methodId, ins);
                 require(code.length == units * 2, "Instruction width lost: " + descriptor);
-                require(Arrays.equals(encodedCode, expected.code), "Encoded code mismatch: " + descriptor);
+
                 require(Arrays.equals(encodedTries, expected.tries), "Encoded tries mismatch: " + descriptor);
                 require(Arrays.equals(boundaries, expected.boundaries), "Boundary recipe mismatch: " + descriptor);
                 long methodSeed = DemandCodec.seed(seed, methodId, expected.descriptorTag, method.getImplementation().getRegisterCount(), ins);
-                require(Arrays.equals(code, DemandCodec.transformCode(encodedCode, methodSeed, boundaries)), "Code byte mismatch: " + descriptor);
+                require(r.getLong(4) == expected.descriptorTag && r.getInt(12) == method.getImplementation().getRegisterCount()
+                        && r.getInt(16) == ins && r.getInt(44) == (methodSeed & 3), "Method context mismatch");
+                byte[] decoded = DemandCodec.transformCode(encodedCode, methodSeed, boundaries);
+                for (int pc = 0; pc < decoded.length / 2; ++pc)
+                    if (DemandCodec.kind(boundaries, pc) == 1)
+                        decoded[pc * 2] = maps[r.getInt(44) * 256 + (decoded[pc * 2] & 255)];
+                require(Arrays.equals(code, decoded), "Mapped code byte mismatch: " + descriptor);
+                auditInt(nativeAudit, (int)token); auditInt(nativeAudit, r.getInt(12));
+                auditInt(nativeAudit, code.length); auditInt(nativeAudit, tries.length); auditInt(nativeAudit, boundaries.length);
+                nativeAudit.write(code); nativeAudit.write(tries); nativeAudit.write(boundaries);
                 require(Arrays.equals(tries, new MethodCodec(methodSeed).transform(encodedTries, 0, 5)), "Try byte mismatch: " + descriptor);
                 Map<String, Object> row = new LinkedHashMap<>();
                 row.put("descriptor", descriptor); row.put("methodId", methodId);
@@ -149,6 +187,8 @@ public class AuditDemandMethods {
                 row.put("bytewiseRewrittenCodeAndTriesMatch", true); rows.add(row);
             }
             require(bodies.isEmpty(), "Unaccounted wrappers: " + bodies.keySet());
+            require(directory.isEmpty(), "Unaccounted module tokens");
+            Files.write(out.resolve(impl.getFileName().toString().replace("_impl.dex", ".native-audit")), nativeAudit.toByteArray());
         }
         require(rows.size() == 526, "Selected method count differs from build report");
         Set<String> packagedNativeMethods = new HashSet<>();

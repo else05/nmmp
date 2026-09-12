@@ -97,6 +97,45 @@ void dvmThrowClassNotFoundException(JNIEnv *env, const char *name) {
  *
  * Returns the offset of the catch block on success, or -1 on failure.
  */
+#include "VmReader.h"
+
+int dvmFindCatchBlockReader(JNIEnv *env, const vmResolver *resolver, uint32_t relPc,
+                           jthrowable exception, VmReader &r) {
+    if (!r.triesBytes()) return -1;
+    uint32_t count = r.try16(0);
+    uint64_t handlers = 4 + uint64_t(count) * 8;
+    if (!r.range(0, handlers, r.triesBytes())) return -1;
+    int lo = 0, hi = int(count) - 1;
+    while (lo <= hi) {
+        int mid = lo + (hi - lo) / 2;
+        uint64_t item = 4 + uint64_t(mid) * 8;
+        uint32_t start = r.try32(item), length = r.try16(item + 4);
+        if (relPc < start) { hi = mid - 1; continue; }
+        if (uint64_t(relPc) >= uint64_t(start) + length) { lo = mid + 1; continue; }
+        uint64_t offset = handlers + r.try16(item + 6);
+        if (!r.range(offset, 1, r.triesBytes())) return -1;
+        uint32_t cursor = uint32_t(offset);
+        int32_t signedCount = r.sleb(cursor);
+        uint64_t typed = signedCount < 0 ? -int64_t(signedCount) : signedCount;
+        if (r.failed() || typed > r.triesBytes() / 2) { r.fail(); return -1; }
+        for (uint64_t i = 0; i < typed; ++i) {
+            uint32_t type = r.uleb(cursor), address = r.uleb(cursor);
+            if (r.failed() || !r.target(address)) return -1;
+            ScopedLocalRef<jclass> clazz(env, resolver->dvmResolveClass(env, type));
+            if (!clazz.get()) { env->ExceptionClear(); continue; }
+            bool match = env->IsInstanceOf(exception, clazz.get());
+            if (env->ExceptionCheck()) { env->ExceptionClear(); continue; }
+            if (match) return int(address);
+        }
+        if (signedCount <= 0) {
+            uint32_t address = r.uleb(cursor);
+            if (!r.failed() && r.target(address)) return int(address);
+        }
+        return -1;
+    }
+    return -1;
+}
+
 static int
 findCatchInMethod(JNIEnv *env,
                   const vmResolver *resolver,

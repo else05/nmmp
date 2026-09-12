@@ -1,194 +1,84 @@
-//
-// Created by mao on 20-8-17.
-//
-
-#include <cstdlib>
+// Payload readers preserve the existing Dalvik switch and array semantics.
 #include <cstring>
 #include "Interp.h"
 #include "DexOpcodes.h"
 #include "Exception.h"
 
-
-/*
- * Find the matching case.  Returns the offset to the handler instructions.
- *
- * Returns 3 if we don't find a match (it's the size of the packed-switch
- * instruction).
- */
-s4 dvmInterpHandlePackedSwitch(JNIEnv *env, const u2 *switchData, s4 testVal) {
-    const int kInstrLen = 3;
-
-    /*
-     * Packed switch data format:
-     *  ushort ident = 0x0100   magic value
-     *  ushort size             number of entries in the table
-     *  int first_key           first (and lowest) switch case value
-     *  int targets[size]       branch targets, relative to switch opcode
-     *
-     * Total size is (4+size*2) 16-bit code units.
-     */
-    if (*switchData++ != kPackedSwitchSignature) {
-        /* should have been caught by verifier */
-        dvmThrowInternalError(env, "bad packed switch magic");
-        return kInstrLen;
-    }
-
-    u2 size = *switchData++;
-    assert(size > 0);
-
-    s4 firstKey = *switchData++;
-    firstKey |= (*switchData++) << 16;
-
-    int index = testVal - firstKey;
-    if (index < 0 || index >= size) {
-        LOGVV("Value %d not found in switch (%d-%d)",
-              testVal, firstKey, firstKey + size - 1);
-        return kInstrLen;
-    }
-
-    /* The entries are guaranteed to be aligned on a 32-bit boundary;
-     * we can treat them as a native int array.
-     */
-    const s4 *entries = (const s4 *) switchData;
-
-    assert(index >= 0 && index < size);
-    LOGVV("Value %d found in slot %d (goto 0x%02x)",
-          testVal, index,
-          s4FromSwitchData(&entries[index]));
-    return s4FromSwitchData(&entries[index]);
+static void payloadError(JNIEnv *env, VmReader &reader) {
+    reader.fail();
+    if (!env->ExceptionCheck()) dvmThrowInternalError(env, "Invalid VM payload");
 }
 
-/*
- * Find the matching case.  Returns the offset to the handler instructions.
- *
- * Returns 3 if we don't find a match (it's the size of the sparse-switch
- * instruction).
- */
-s4 dvmInterpHandleSparseSwitch(JNIEnv *env, const u2 *switchData, s4 testVal) {
-    const int kInstrLen = 3;
-    u2 size;
-    const s4 *keys;
-    const s4 *entries;
-
-    /*
-     * Sparse switch data format:
-     *  ushort ident = 0x0200   magic value
-     *  ushort size             number of entries in the table; > 0
-     *  int keys[size]          keys, sorted low-to-high; 32-bit aligned
-     *  int targets[size]       branch targets, relative to switch opcode
-     *
-     * Total size is (2+size*4) 16-bit code units.
-     */
-
-    if (*switchData++ != kSparseSwitchSignature) {
-        /* should have been caught by verifier */
-        dvmThrowInternalError(env, "bad sparse switch magic");
-        return kInstrLen;
+s4 dvmInterpHandlePackedSwitch(JNIEnv *env, VmReader &r, int64_t pc, s4 testVal) {
+    if (!r.payloadRange(pc, 8) || r.payload16(pc) != kPackedSwitchSignature) {
+        payloadError(env, r); return 3;
     }
+    uint32_t size = r.payload16(pc + 1);
+    int32_t first = int32_t(r.payload32(pc + 2));
+    if (!r.payloadRange(pc, 8 + uint64_t(size) * 4)) {
+        payloadError(env, r); return 3;
+    }
+    int64_t index = int64_t(testVal) - first;
+    if (index < 0 || uint64_t(index) >= size) return 3;
+    return int32_t(r.payload32(pc + 4 + index * 2));
+}
 
-    size = *switchData++;
-    assert(size > 0);
-
-    /* The keys are guaranteed to be aligned on a 32-bit boundary;
-     * we can treat them as a native int array.
-     */
-    keys = (const s4 *) switchData;
-
-    /* The entries are guaranteed to be aligned on a 32-bit boundary;
-     * we can treat them as a native int array.
-     */
-    entries = keys + size;
-
-    /*
-     * Binary-search through the array of keys, which are guaranteed to
-     * be sorted low-to-high.
-     */
-    int lo = 0;
-    int hi = size - 1;
+s4 dvmInterpHandleSparseSwitch(JNIEnv *env, VmReader &r, int64_t pc, s4 testVal) {
+    if (!r.payloadRange(pc, 4) || r.payload16(pc) != kSparseSwitchSignature) {
+        payloadError(env, r); return 3;
+    }
+    uint32_t size = r.payload16(pc + 1);
+    if (!r.payloadRange(pc, 4 + uint64_t(size) * 8)) {
+        payloadError(env, r); return 3;
+    }
+    int lo = 0, hi = int(size) - 1;
     while (lo <= hi) {
-        int mid = (lo + hi) >> 1;
-
-        s4 foundVal = s4FromSwitchData(&keys[mid]);
-        if (testVal < foundVal) {
-            hi = mid - 1;
-        } else if (testVal > foundVal) {
-            lo = mid + 1;
-        } else {
-            LOGVV("Value %d found in entry %d (goto 0x%02x)",
-                  testVal, mid, s4FromSwitchData(&entries[mid]));
-            return s4FromSwitchData(&entries[mid]);
-        }
+        int mid = lo + (hi - lo) / 2;
+        int32_t key = int32_t(r.payload32(pc + 2 + mid * 2));
+        if (testVal < key) hi = mid - 1;
+        else if (testVal > key) lo = mid + 1;
+        else return int32_t(r.payload32(pc + 2 + size * 2 + mid * 2));
     }
-
-    LOGVV("Value %d not found in switch", testVal);
-    return kInstrLen;
+    return 3;
 }
 
-
-/*
- * Fill the array with predefined constant values.
- *
- * Returns true if job is completed, otherwise false to indicate that
- * an exception has been thrown.
- */
-bool dvmInterpHandleFillArrayData(JNIEnv *env, jarray arrayObj, const u2 *arrayData) {
-    u2 width;
-    u4 size;
-
-    if (arrayObj == NULL) {
-        dvmThrowNullPointerException(env, NULL);
-        return false;
+bool dvmInterpHandleFillArrayData(JNIEnv *env, jarray arrayObj, VmReader &r, int64_t pc) {
+    if (!arrayObj) { dvmThrowNullPointerException(env, nullptr); return false; }
+    if (!r.payloadRange(pc, 8) || r.payload16(pc) != kArrayDataSignature) {
+        payloadError(env, r); return false;
     }
-
-    /*
-     * Array data table format:
-     *  ushort ident = 0x0300   magic value
-     *  ushort width            width of each element in the table
-     *  uint   size             number of elements in the table
-     *  ubyte  data[size*width] table of data values (may contain a single-byte
-     *                          padding at the end)
-     *
-     * Total size is 4+(width * size + 1)/2 16-bit code units.
-     */
-    if (arrayData[0] != kArrayDataSignature) {
-        dvmThrowInternalError(env, "bad array data magic");
-        return false;
+    uint32_t width = r.payload16(pc + 1), size = r.payload32(pc + 2);
+    if ((width != 1 && width != 2 && width != 4 && width != 8)
+            || !r.payloadRange(pc, 8 + uint64_t(width) * size)) {
+        payloadError(env, r); return false;
     }
-
-    width = arrayData[1];
-    size = arrayData[2] | (((u4) arrayData[3]) << 16);
-
-    jsize arrayLength = env->GetArrayLength(arrayObj);
-    if (size > arrayLength) {
-        dvmThrowArrayIndexOutOfBoundsException(env, arrayLength, size);
-        return false;
+    jsize length = env->GetArrayLength(arrayObj);
+    if (env->ExceptionCheck()) return false;
+    if (size > uint32_t(length)) {
+        dvmThrowArrayIndexOutOfBoundsException(env, length, size); return false;
     }
-    void *arrp;
-    switch (width) {
-        case 1:
-            arrp = env->GetPrimitiveArrayCritical(arrayObj, NULL);
-            memcpy(arrp, &arrayData[4], size * 1);
-            env->ReleasePrimitiveArrayCritical(arrayObj, arrp, 0);
-            break;
-        case 2:
-            arrp = env->GetPrimitiveArrayCritical(arrayObj, NULL);
-            memcpy(arrp, &arrayData[4], size * 2);
-            env->ReleasePrimitiveArrayCritical(arrayObj, arrp, 0);
-            break;
-        case 4:
-            arrp = env->GetPrimitiveArrayCritical(arrayObj, NULL);
-            memcpy(arrp, &arrayData[4], size * 4);
-            env->ReleasePrimitiveArrayCritical(arrayObj, arrp, 0);
-            break;
-        case 8:
-            arrp = env->GetPrimitiveArrayCritical(arrayObj, NULL);
-            memcpy(arrp, &arrayData[4], size * 8);
-            env->ReleasePrimitiveArrayCritical(arrayObj, arrp, 0);
-            break;
-        default:
-            ALOGV("Unexpected width %d in copySwappedArrayData", width);
-            abort();
-            break;
+    // Decode before entering the JNI critical region; no JNI calls while pinned.
+    uint8_t batch[256];
+    const uint64_t total = uint64_t(width) * size;
+    bool ok = true;
+    for (uint64_t pos = 0; pos < total; pos += sizeof(batch)) {
+        size_t count = size_t(total - pos < sizeof(batch) ? total - pos : sizeof(batch));
+        for (size_t i = 0; i < count; ++i) batch[i] = r.payloadByte(uint64_t(pc) * 2 + 8 + pos + i);
+        if (r.failed()) { payloadError(env, r); ok = false; break; }
+#if defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+        for (size_t i = 0; i < count; i += width)
+            for (size_t j = 0; j < width / 2; ++j) {
+                uint8_t t = batch[i + j]; batch[i + j] = batch[i + width - 1 - j];
+                batch[i + width - 1 - j] = t;
+            }
+#endif
+        void *dst = env->GetPrimitiveArrayCritical(arrayObj, nullptr);
+        if (!dst) { ok = false; break; }
+        std::memcpy(static_cast<uint8_t *>(dst) + pos, batch, count);
+        env->ReleasePrimitiveArrayCritical(arrayObj, dst, 0);
+        if (env->ExceptionCheck()) { ok = false; break; }
     }
-    return true;
+    volatile uint8_t *wipe = batch;
+    for (size_t i = 0; i < sizeof(batch); ++i) wipe[i] = 0;
+    return ok;
 }

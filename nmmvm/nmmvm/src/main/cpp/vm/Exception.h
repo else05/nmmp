@@ -45,4 +45,8 @@ inline void dvmThrowExceptionFmt(JNIEnv *env, const char *name,
 int dvmFindCatchBlock(JNIEnv *env, const vmResolver *resolver, int relPc, jthrowable exception,
                       TryCatchHandler *pHandler);
 
+class VmReader;
+int dvmFindCatchBlockReader(JNIEnv *env, const vmResolver *resolver, uint32_t relPc,
+                           jthrowable exception, VmReader &reader);
+
 #endif //DEX_EDITOR_EXCEPTION_H

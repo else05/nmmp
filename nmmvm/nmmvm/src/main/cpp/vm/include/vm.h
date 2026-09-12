@@ -9,7 +9,10 @@
 #include "Common.h"
 
 #ifdef __cplusplus
+class VmReader;
 extern "C" {
+#else
+typedef struct VmReader VmReader;
 #endif
 
 typedef struct {
@@ -30,6 +33,8 @@ typedef struct {
     regptr_t *regs;                    //寄存器
     u1 *reg_flags;               //寄存器数据类型标记,主要标记是否为对象
     const u1 *triesHandlers;     //异常表
+    u4 triesByteSize;
+    VmReader *reader;
 } vmCode;
 
 typedef struct {

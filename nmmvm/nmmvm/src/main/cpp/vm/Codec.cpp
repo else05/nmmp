@@ -82,7 +82,9 @@ jvalue vmExecute(JNIEnv *env,
                 code->encodedInsnsByteSize / 2U,
                 code->regs,
                 code->reg_flags,
-                decodedTries
+                decodedTries,
+                code->encodedTriesByteSize,
+                nullptr
         };
         result = vmInterpret(env, &runtimeCode, dvmResolver);
     } while (false);

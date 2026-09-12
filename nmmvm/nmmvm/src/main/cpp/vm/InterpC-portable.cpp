@@ -1,3 +1,4 @@
+#include "VmReader.h"
 //
 // Created by mao on 20-7-28.
 //
@@ -126,7 +127,9 @@ SET_REGISTER_FLAGS(_idx, 0)
  *
  * Assumes existence of "const u2* pc".
  */
-#define FETCH(_offset)     (pc[(_offset)])
+#define READ_CHECK(_expr) ({ u2 word = (_expr); if (reader.failed()) goto readerFailed; word; })
+#define FETCH(_offset) READ_CHECK((_offset) == 0 ? reader.instruction(pc) : reader.operand(pc, (_offset)))
+#define FETCH_NEXT(_offset) READ_CHECK(reader.instruction(int64_t(pc) + (_offset)))
 
 /*
  * Extract instruction byte from 16-bit fetch (_inst is a u2).
@@ -163,7 +166,8 @@ SET_REGISTER_FLAGS(_idx, 0)
  */
 
 # define ADJUST_PC(_offset) do {                                            \
-        pc += _offset;                                                      \
+        if (!reader.target(int64_t(pc) + int64_t(_offset))) goto readerFailed; \
+        pc = uint32_t(int64_t(pc) + int64_t(_offset));                                                      \
 } while (false)
 
 
@@ -1070,7 +1074,10 @@ jvalue vmInterpret(
     jvalue retval = {};
     regptr_t *fp = code->regs;//寄存器
     u1 *fp_flags = code->reg_flags;//寄存器类型标识
-    const u2 *pc = code->insns;
+    VmReader plainReader(reinterpret_cast<const uint8_t *>(code->insns),
+                         code->insnsSize * 2, code->triesHandlers, code->triesByteSize);
+    VmReader &reader = code->reader ? *code->reader : plainReader;
+    uint32_t pc = 0;
     u2 inst;                    // current instruction
 
     const JNIWrapper *wrapper = getJNIWrapper();
@@ -1613,17 +1620,17 @@ jvalue vmInterpret(
 /* File: c/OP_FILL_ARRAY_DATA.cpp */
     HANDLE_OPCODE(OP_FILL_ARRAY_DATA)   /*vAA, +BBBBBBBB*/
     {
-        const u2 *arrayData;
+        int64_t arrayData;
         s4 offset;
         jarray arrayObj;
 //
         vsrc1 = INST_AA(inst);
         offset = FETCH(1) | (((s4) FETCH(2)) << 16);
         ILOGV("|fill-array-data v%d +0x%04x", vsrc1, offset);
-        arrayData = pc + offset;       // offset in 16-bit units
+        arrayData = int64_t(pc) + offset;       // offset in 16-bit units
 
         arrayObj = (jarray) GET_REGISTER_AS_OBJECT(vsrc1);
-        if (!dvmInterpHandleFillArrayData(env, arrayObj, arrayData)) {
+        if (!dvmInterpHandleFillArrayData(env, arrayObj, reader, arrayData)) {
             GOTO_exceptionThrown();
         }
         FINISH(3);
@@ -1703,18 +1710,18 @@ jvalue vmInterpret(
 /* File: c/OP_PACKED_SWITCH.cpp */
     HANDLE_OPCODE(OP_PACKED_SWITCH /*vAA, +BBBB*/)
     {
-        const u2 *switchData;
+        int64_t switchData;
         u4 testVal;
         s4 offset;
 
         vsrc1 = INST_AA(inst);
         offset = FETCH(1) | (((s4) FETCH(2)) << 16);
         ILOGV("|packed-switch v%d +0x%04x", vsrc1, offset);
-        switchData = pc + offset;       // offset in 16-bit units
+        switchData = int64_t(pc) + offset;       // offset in 16-bit units
 
         testVal = GET_REGISTER(vsrc1);
 
-        offset = dvmInterpHandlePackedSwitch(env, switchData, testVal);
+        offset = dvmInterpHandlePackedSwitch(env, reader, switchData, testVal);
         ILOGV("> branch taken (0x%04x)", offset);
         if (offset <= 0)  /* uncommon */
             PERIODIC_CHECKS(offset);
@@ -1725,18 +1732,18 @@ jvalue vmInterpret(
 /* File: c/OP_SPARSE_SWITCH.cpp */
     HANDLE_OPCODE(OP_SPARSE_SWITCH /*vAA, +BBBB*/)
     {
-        const u2 *switchData;
+        int64_t switchData;
         u4 testVal;
         s4 offset;
 
         vsrc1 = INST_AA(inst);
         offset = FETCH(1) | (((s4) FETCH(2)) << 16);
         ILOGV("|sparse-switch v%d +0x%04x", vsrc1, offset);
-        switchData = pc + offset;       // offset in 16-bit units
+        switchData = int64_t(pc) + offset;       // offset in 16-bit units
 
         testVal = GET_REGISTER(vsrc1);
 
-        offset = dvmInterpHandleSparseSwitch(env, switchData, testVal);
+        offset = dvmInterpHandleSparseSwitch(env, reader, switchData, testVal);
         ILOGV("> branch taken (0x%04x)", offset);
         if (offset <= 0)  /* uncommon */
             PERIODIC_CHECKS(offset);
@@ -3012,7 +3019,7 @@ HANDLE_OP_SHX_INT_LIT8(OP_USHR_INT_LIT8, "ushr", (u4), >>)
         }
 
         retval.l = newArray;
-        if (INST_INST(FETCH(3)) != OP_MOVE_RESULT_OBJECT) {
+        if (INST_INST(FETCH_NEXT(3)) != OP_MOVE_RESULT_OBJECT) {
             wrapper->DeleteLocalRef(env, retval.l);
             retval.l = NULL;
         }
@@ -3113,7 +3120,7 @@ HANDLE_OP_SHX_INT_LIT8(OP_USHR_INT_LIT8, "ushr", (u4), >>)
                                                                   thisPtr,
                                                                   methodToCall->methodId,
                                                                   args + 1);
-                            if (INST_INST(FETCH(3)) != OP_MOVE_RESULT_OBJECT) {
+                            if (INST_INST(FETCH_NEXT(3)) != OP_MOVE_RESULT_OBJECT) {
                                 if (retval.l != NULL) wrapper->DeleteLocalRef(env, retval.l);
                             }
                             break;
@@ -3225,7 +3232,7 @@ HANDLE_OP_SHX_INT_LIT8(OP_USHR_INT_LIT8, "ushr", (u4), >>)
                                                                             clazz,
                                                                             methodToCall->methodId,
                                                                             args + 1);
-                            if (INST_INST(FETCH(3)) != OP_MOVE_RESULT_OBJECT) {
+                            if (INST_INST(FETCH_NEXT(3)) != OP_MOVE_RESULT_OBJECT) {
                                 if (retval.l != NULL) wrapper->DeleteLocalRef(env, retval.l);
                             }
                             break;
@@ -3325,7 +3332,7 @@ HANDLE_OP_SHX_INT_LIT8(OP_USHR_INT_LIT8, "ushr", (u4), >>)
                             retval.l = wrapper->CallObjectMethodA(env, thisPtr,
                                                                   methodToCall->methodId,
                                                                   args + 1);
-                            if (INST_INST(FETCH(3)) != OP_MOVE_RESULT_OBJECT) {
+                            if (INST_INST(FETCH_NEXT(3)) != OP_MOVE_RESULT_OBJECT) {
                                 if (retval.l != NULL) wrapper->DeleteLocalRef(env, retval.l);
                             }
                             break;
@@ -3436,7 +3443,7 @@ HANDLE_OP_SHX_INT_LIT8(OP_USHR_INT_LIT8, "ushr", (u4), >>)
                                                                             methodToCall->methodId,
                                                                             args + 1);
 
-                            if (INST_INST(FETCH(3)) != OP_MOVE_RESULT_OBJECT) {
+                            if (INST_INST(FETCH_NEXT(3)) != OP_MOVE_RESULT_OBJECT) {
                                 if (retval.l != NULL) wrapper->DeleteLocalRef(env, retval.l);
                             }
                             break;
@@ -3524,7 +3531,7 @@ HANDLE_OP_SHX_INT_LIT8(OP_USHR_INT_LIT8, "ushr", (u4), >>)
                             retval.l = wrapper->CallStaticObjectMethodA(env, clazz,
                                                                         methodToCall->methodId,
                                                                         args);
-                            if (INST_INST(FETCH(3)) != OP_MOVE_RESULT_OBJECT) {
+                            if (INST_INST(FETCH_NEXT(3)) != OP_MOVE_RESULT_OBJECT) {
                                 if (retval.l != NULL) wrapper->DeleteLocalRef(env, retval.l);
                             }
                             break;
@@ -3568,7 +3575,7 @@ HANDLE_OP_SHX_INT_LIT8(OP_USHR_INT_LIT8, "ushr", (u4), >>)
         ScopedLocalRef<jthrowable> exception(env, wrapper->ExceptionOccurred(env));
         wrapper->ExceptionClear(env);
         ILOGV("Handling exception %p at :%d",
-              exception.get(), (pc - code->insns));
+              exception.get(), pc);
 
 
 /*
@@ -3586,15 +3593,18 @@ HANDLE_OP_SHX_INT_LIT8(OP_USHR_INT_LIT8, "ushr", (u4), >>)
  * Note this can cause an exception while resolving classes in
  * the "catch" blocks.
  */
-        catchRelPc = dvmFindCatchBlock(env, dvmResolver, pc - code->insns,
-                                       exception.get(), (TryCatchHandler *) code->triesHandlers);
+        // Legacy development fixtures without a sized exception span retain their explicit adapter.
+        catchRelPc = (!code->reader && code->triesHandlers && !code->triesByteSize)
+                ? dvmFindCatchBlock(env, dvmResolver, pc, exception.get(),
+                                    (TryCatchHandler *) code->triesHandlers)
+                : dvmFindCatchBlockReader(env, dvmResolver, pc, exception.get(), reader);
 
-        if (catchRelPc < 0) {
+        if (catchRelPc < 0 || !reader.target(catchRelPc)) {
 /* falling through to JNI code or off the bottom of the stack */
             wrapper->Throw(env, exception.get());
             GOTO_bail();
         }
-        pc = code->insns + catchRelPc;
+        pc = uint32_t(catchRelPc);
 
 /*
  * Restore the exception if the handler wants it.
@@ -3620,6 +3630,9 @@ HANDLE_OP_SHX_INT_LIT8(OP_USHR_INT_LIT8, "ushr", (u4), >>)
 /* File: portable/enddefs.cpp */
 /*--- end of opcodes ---*/
 
+    readerFailed:
+    if (!wrapper->ExceptionCheck(env)) dvmThrowInternalError(env, "Invalid VM reader access");
+    retval = {};
     bail:
     ILOGD("|-- Leaving interpreter loop");      // note "curMethod" may be NULL
     return retval;

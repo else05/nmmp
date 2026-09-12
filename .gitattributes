@@ -1,0 +1,2 @@
+nmm-protect/mksrc/build-src.sh text eol=lf
+nmm-protect/scripts/wsl/*.sh text eol=lf

@@ -1,0 +1,42 @@
+[/mnt/d/Android/SDK_WSL/cmake/3.22.1/bin/cmake, -H/mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/s5-negative-seed/input/build/dex2c, -DCMAKE_TOOLCHAIN_FILE=/mnt/d/Android/SDK_WSL/ndk/26.3.11579264/build/cmake/android.toolchain.cmake, -DCMAKE_BUILD_TYPE=Release, -DANDROID_ABI=arm64-v8a, -DANDROID_NDK=/mnt/d/Android/SDK_WSL/ndk/26.3.11579264, -DANDROID_PLATFORM=android-26, -DCMAKE_ANDROID_ARCH_ABI=arm64-v8a, -DCMAKE_ANDROID_NDK=/mnt/d/Android/SDK_WSL/ndk/26.3.11579264, -DCMAKE_EXPORT_COMPILE_COMMANDS=ON, -DCMAKE_LIBRARY_OUTPUT_DIRECTORY=/mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/s5-negative-seed/input/build/obj/sym/arm64-v8a, -DCMAKE_MAKE_PROGRAM=/mnt/d/Android/SDK_WSL/cmake/3.22.1/bin/ninja, -DCMAKE_SYSTEM_NAME=Android, -DCMAKE_SYSTEM_VERSION=26, -B/mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/s5-negative-seed/input/build/.cxx/cmake/Release/arm64-v8a, -GNinja, -DNMMP_OMVLL_PLUGIN=/mnt/d/Android/SDK_WSL/omvll/1.8.0/omvll_ndk_r26d.so, -DNMMP_VM_DECODE_MODE=on-demand-v1]
+-- The C compiler identification is Clang 17.0.2
+-- The CXX compiler identification is Clang 17.0.2
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /mnt/d/Android/SDK_WSL/ndk/26.3.11579264/toolchains/llvm/prebuilt/linux-x86_64/bin/clang - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /mnt/d/Android/SDK_WSL/ndk/26.3.11579264/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- NMMP vmDecodeMode=on-demand-v1
+-- NMMP O-MVLL enabled: /mnt/d/Android/SDK_WSL/omvll/1.8.0/omvll_ndk_r26d.so
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/s5-negative-seed/input/build/.cxx/cmake/Release/arm64-v8a
+[/mnt/d/Android/SDK_WSL/cmake/3.22.1/bin/cmake, --build, /mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/s5-negative-seed/input/build/.cxx/cmake/Release/arm64-v8a]
+[1/22] Building C object CMakeFiles/c++_en.dir/ConstantPool.c.o
+[2/22] Building CXX object vm/CMakeFiles/nmmvm.dir/DexCatch.cpp.o
+[3/22] Building C object CMakeFiles/c++_en.dir/generated/classes_native_functions.c.o
+[4/22] Building C object CMakeFiles/c++_en.dir/generated/jni_init.c.o
+[5/22] Building CXX object vm/CMakeFiles/nmmvm.dir/GlobalCache.cpp.o
+[6/22] Building CXX object vm/CMakeFiles/nmmvm.dir/Interp.cpp.o
+[7/22] Building CXX object vm/CMakeFiles/nmmvm.dir/Exception.cpp.o
+[8/22] Building CXX object vm/CMakeFiles/nmmvm.dir/Codec.cpp.o
+[9/22] Building CXX object vm/CMakeFiles/nmmvm.dir/Demand.cpp.o
+[10/22] Building CXX object vm/CMakeFiles/nmmvm.dir/Module.cpp.o
+[11/22] Building C object vm/CMakeFiles/nmmvm.dir/VmInit.c.o
+[12/22] Building C object vm/CMakeFiles/nmmvm.dir/NativeVm.c.o
+[13/22] Building CXX object vm/CMakeFiles/nmmvm.dir/VmCodec.cpp.o
+[14/22] Building CXX object vm/CMakeFiles/nmmvm.dir/Arm64Syscall.cpp.o
+[15/22] Building CXX object vm/CMakeFiles/nmmvm.dir/VmBinding.cpp.o
+[16/22] Building CXX object vm/CMakeFiles/nmmvm.dir/Sha256.cpp.o
+[17/22] Building CXX object vm/CMakeFiles/nmmvm.dir/ApkV2Signer.cpp.o
+[18/22] Building C object vm/CMakeFiles/nmmvm.dir/JNIWrapper.c.o
+[19/22] Building C object CMakeFiles/c++_en.dir/generated/classes2_native_functions.c.o
+[20/22] Building CXX object vm/CMakeFiles/nmmvm.dir/InterpC-portable.cpp.o
+[21/22] Linking CXX static library vm/libnmmvm.a
+[22/22] Linking CXX shared library /mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/s5-negative-seed/input/build/obj/sym/arm64-v8a/libc++_en.so
+[/mnt/d/Android/SDK_WSL/ndk/26.3.11579264/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-strip, --strip-unneeded, -o, /mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/s5-negative-seed/input/build/obj/strip/arm64-v8a/libc++_en.so, /mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/s5-negative-seed/input/build/obj/sym/arm64-v8a/libc++_en.so]

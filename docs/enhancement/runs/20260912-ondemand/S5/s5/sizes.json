@@ -1,0 +1,80 @@
+{
+  "seed1": {
+    "A": {
+      "apkBytes": 9326566,
+      "soBytes": 1072024,
+      "apkSha256": "0162330fb1750933a5514da8090757209b1c00f699cfc5aac98697cea2a010ec",
+      "selectedMethodCount": 526
+    },
+    "B": {
+      "apkBytes": 9039813,
+      "soBytes": 617496,
+      "apkSha256": "9d8e1508e6bb8a81fd21678bee4dd4d722f99e57d3a4f3ef9ad0357ec5cec3f5",
+      "selectedMethodCount": 526
+    },
+    "C": {
+      "apkBytes": 9269189,
+      "soBytes": 1395840,
+      "apkSha256": "8a7c1d65716e3481a972fda92957400ee291aa823fee7e50944471bd0b608566",
+      "selectedMethodCount": 526
+    },
+    "D": {
+      "apkBytes": 9437158,
+      "soBytes": 794800,
+      "apkSha256": "f346442e2ac4478332674db2751c0d7f5d1ab6d7f62b9f9f13c1b3e05c5c4995",
+      "selectedMethodCount": 526
+    }
+  },
+  "seed2": {
+    "A": {
+      "apkBytes": 9330662,
+      "soBytes": 1077544,
+      "apkSha256": "11dc7a0f61c83f99a58ea5a9085db8f0604ee6f2c0f79abcc0ada2551284cec2",
+      "selectedMethodCount": 526
+    },
+    "B": {
+      "apkBytes": 9039813,
+      "soBytes": 617640,
+      "apkSha256": "eb7ca46e185e6010d16a57da0a25ff36f9d9a3470053e887bae097a0e3b22a63",
+      "selectedMethodCount": 526
+    },
+    "C": {
+      "apkBytes": 9269189,
+      "soBytes": 1394304,
+      "apkSha256": "74e0fcce1811e9061ed4ccdfe59cd4f3964bd7bf9bd790c4387eb77b7ea64265",
+      "selectedMethodCount": 526
+    },
+    "D": {
+      "apkBytes": 9437158,
+      "soBytes": 794752,
+      "apkSha256": "bcb7e07426f36e030a2b37f4078c2132239a588eacb169d44d5f159dce9c3008",
+      "selectedMethodCount": 526
+    }
+  },
+  "seed3": {
+    "A": {
+      "apkBytes": 9326566,
+      "soBytes": 1072024,
+      "apkSha256": "c3d8a7e3013f91bfe78ca0830abc4bc5e7ad4020b9ea3aedc5fb24556d8b68b9",
+      "selectedMethodCount": 526
+    },
+    "B": {
+      "apkBytes": 9039813,
+      "soBytes": 617624,
+      "apkSha256": "eaa1311460f25b28b716247b3927141ff3bc8f9db65bd6488ab3bc956cfac69e",
+      "selectedMethodCount": 526
+    },
+    "C": {
+      "apkBytes": 9269189,
+      "soBytes": 1397984,
+      "apkSha256": "a0678b76465112de2a587a8077b75eee5fd63bd95a4b1abfcdfbd377f76b3ea6",
+      "selectedMethodCount": 526
+    },
+    "D": {
+      "apkBytes": 9437158,
+      "soBytes": 794592,
+      "apkSha256": "eb868b98d43cb01d8fecc25d330f2f4a336fe06ba3421952ec4225813795cbd2",
+      "selectedMethodCount": 526
+    }
+  }
+}

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -52,7 +51,7 @@ public final class NativeProgram {
         }
     }
 
-    public static Program root(long buildId) { return root(buildId, new SecureRandom()); }
+    public static Program root(long buildId) { return root(buildId, GeneratorRandom.create("native-root", buildId)); }
 
     static Program root(long buildId, Random random) {
         byte[] opcodes = randomOpcodes(random);

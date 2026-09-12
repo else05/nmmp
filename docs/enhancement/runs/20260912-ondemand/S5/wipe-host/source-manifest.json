@@ -1,0 +1,18 @@
+{
+  "modified": [
+    "nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp",
+    "nmmvm/nmmvm/src/test/semantic/CMakeLists.txt"
+  ],
+  "added": [
+    "nmmvm/nmmvm/src/main/cpp/vm/include/VmDecodedState.h",
+    "nmmvm/nmmvm/src/test/semantic/DecodedWipeBridge.cpp",
+    "nmmvm/nmmvm/src/test/semantic/DecodedWipeMain.java"
+  ],
+  "sha256": {
+    "nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp": "053fbd8aa836bcdf2627962caaaebb1138b61eeb26aa566e683552a44c8b23d1",
+    "nmmvm/nmmvm/src/test/semantic/CMakeLists.txt": "2735fc7f7e228ed7f191dea091ce85e1c8fce65cfa73c4a3bb62479d9435b6ac",
+    "nmmvm/nmmvm/src/main/cpp/vm/include/VmDecodedState.h": "00b048334b2988fec98574595216f23e9b9e32eb93cd1ff778716697bb6ef677",
+    "nmmvm/nmmvm/src/test/semantic/DecodedWipeBridge.cpp": "5cd2e007cca9710b48f618de49193a2300d3d474b9ee2dec4ed5e18d651e6fb9",
+    "nmmvm/nmmvm/src/test/semantic/DecodedWipeMain.java": "f22816b17db665238d283618c57ea959b7235fee5223c2502e3aaf2cd6b633e3"
+  }
+}

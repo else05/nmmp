@@ -1,0 +1,45 @@
+{
+  "serial": "192.168.6.118:5555",
+  "package": "org.savior.sync",
+  "activity": "org.savior.sync/.MainActivity",
+  "warmups": 3,
+  "rounds": 20,
+  "variants": [
+    {
+      "name": "A",
+      "apk": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed2\\A\\protected-signed.apk",
+      "loader": false,
+      "sha256": "11dc7a0f61c83f99a58ea5a9085db8f0604ee6f2c0f79abcc0ada2551284cec2"
+    },
+    {
+      "name": "B",
+      "apk": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed2\\B\\protected-signed.apk",
+      "loader": true,
+      "loaderId": "59bdfa14",
+      "sha256": "eb7ca46e185e6010d16a57da0a25ff36f9d9a3470053e887bae097a0e3b22a63"
+    },
+    {
+      "name": "C",
+      "apk": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed2\\C\\protected-signed.apk",
+      "loader": false,
+      "sha256": "74e0fcce1811e9061ed4ccdfe59cd4f3964bd7bf9bd790c4387eb77b7ea64265"
+    },
+    {
+      "name": "D",
+      "apk": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed2\\D\\protected-signed.apk",
+      "loader": true,
+      "loaderId": "8f8f2581",
+      "sha256": "bcb7e07426f36e030a2b37f4078c2132239a588eacb169d44d5f159dce9c3008"
+    }
+  ],
+  "adb": "D:\\Android\\SDK\\platform-tools\\adb.exe",
+  "resumeFrom": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed2\\startup-independent\\attempts.jsonl",
+  "resumeReason": "Local ADB5037 timeout during Activity query on A round14. ThisTime2844/PID31311/window drawn recorded; follow-up retains same app PID and adb server5972 startedSep9. Preserve 56 valid attempts plus this invalid attempt. Switch to existing SDK client path matching server installation; version equal but binary hashes differ, recorded in wipe-adb-client-switch.json. Cause remains unproven; repeat A14.",
+  "resumeHistory": [
+    {
+      "ledgerIndex": 56,
+      "source": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed2\\startup-independent\\attempts.jsonl",
+      "reason": "Local ADB5037 timeout during Activity query on A round14. ThisTime2844/PID31311/window drawn recorded; follow-up retains same app PID and adb server5972 startedSep9. Preserve 56 valid attempts plus this invalid attempt. Switch to existing SDK client path matching server installation; version equal but binary hashes differ, recorded in wipe-adb-client-switch.json. Cause remains unproven; repeat A14."
+    }
+  ]
+}

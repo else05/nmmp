@@ -1,0 +1,32 @@
+{
+  "results": [
+    {
+      "mutation": "package",
+      "apkSha256": "6e2408e22cf3cf66703878a172490f7d29b8607dfe8b09e66cd77947ba748cb7",
+      "pid": "32000",
+      "internalError": true,
+      "errors": [
+        "NMMP initialization is not ready"
+      ]
+    },
+    {
+      "mutation": "certificate",
+      "apkSha256": "4c455ed17e7940b61531b1091e4fd617dd87249d8fe023f78ee6908a6557b921",
+      "pid": "32302",
+      "internalError": true,
+      "errors": [
+        "NMMP initialization is not ready"
+      ]
+    },
+    {
+      "mutation": "seed",
+      "apkSha256": "60546e6ba7a4969f7e58de0346023077b07e664f52906e0cffccfbdbf659b5d2",
+      "pid": "32607",
+      "internalError": true,
+      "errors": [
+        "string pool decode failed"
+      ]
+    }
+  ],
+  "unseededCandidateRestoredAndVerified": true
+}

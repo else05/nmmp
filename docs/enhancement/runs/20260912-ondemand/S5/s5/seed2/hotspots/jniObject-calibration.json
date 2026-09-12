@@ -1,0 +1,98 @@
+[
+  {
+    "case": "jniObject",
+    "round": -1,
+    "iterations": 1000,
+    "elapsedNs": 7053386,
+    "checksum": 126000,
+    "variant": "D"
+  },
+  {
+    "case": "jniObject",
+    "round": 0,
+    "iterations": 1000,
+    "elapsedNs": 8096927,
+    "checksum": 126000,
+    "variant": "D"
+  },
+  {
+    "case": "jniObject",
+    "round": 1,
+    "iterations": 1000,
+    "elapsedNs": 5381823,
+    "checksum": 126000,
+    "variant": "D"
+  },
+  {
+    "case": "jniObject",
+    "round": -1,
+    "iterations": 1000,
+    "elapsedNs": 7065781,
+    "checksum": 126000,
+    "variant": "A"
+  },
+  {
+    "case": "jniObject",
+    "round": 0,
+    "iterations": 1000,
+    "elapsedNs": 7146458,
+    "checksum": 126000,
+    "variant": "A"
+  },
+  {
+    "case": "jniObject",
+    "round": 1,
+    "iterations": 1000,
+    "elapsedNs": 5872448,
+    "checksum": 126000,
+    "variant": "A"
+  },
+  {
+    "case": "jniObject",
+    "round": -1,
+    "iterations": 1000,
+    "elapsedNs": 6911198,
+    "checksum": 126000,
+    "variant": "B"
+  },
+  {
+    "case": "jniObject",
+    "round": 0,
+    "iterations": 1000,
+    "elapsedNs": 6997031,
+    "checksum": 126000,
+    "variant": "B"
+  },
+  {
+    "case": "jniObject",
+    "round": 1,
+    "iterations": 1000,
+    "elapsedNs": 5847031,
+    "checksum": 126000,
+    "variant": "B"
+  },
+  {
+    "case": "jniObject",
+    "round": -1,
+    "iterations": 1000,
+    "elapsedNs": 6907031,
+    "checksum": 126000,
+    "variant": "C"
+  },
+  {
+    "case": "jniObject",
+    "round": 0,
+    "iterations": 1000,
+    "elapsedNs": 7130781,
+    "checksum": 126000,
+    "variant": "C"
+  },
+  {
+    "case": "jniObject",
+    "round": 1,
+    "iterations": 1000,
+    "elapsedNs": 5367344,
+    "checksum": 126000,
+    "variant": "C"
+  }
+]

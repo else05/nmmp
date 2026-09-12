@@ -1,0 +1,35 @@
+{
+  "A": {
+    "count": 20,
+    "medianMs": 2806.0,
+    "p95Ms": 3012,
+    "minMs": 2300,
+    "maxMs": 3034,
+    "regressionPercentVsFirst": 0.0
+  },
+  "B": {
+    "count": 20,
+    "medianMs": 2872.5,
+    "p95Ms": 3064,
+    "minMs": 2198,
+    "maxMs": 3106,
+    "regressionPercentVsFirst": 2.3699215965787612
+  },
+  "C": {
+    "count": 20,
+    "medianMs": 2905.0,
+    "p95Ms": 3008,
+    "minMs": 2302,
+    "maxMs": 3021,
+    "regressionPercentVsFirst": 3.528153955808988
+  },
+  "D": {
+    "count": 20,
+    "medianMs": 2885.5,
+    "p95Ms": 3021,
+    "minMs": 2319,
+    "maxMs": 3053,
+    "regressionPercentVsFirst": 2.8332145402708564,
+    "regressionPercentVsC": -0.6712564543889799
+  }
+}

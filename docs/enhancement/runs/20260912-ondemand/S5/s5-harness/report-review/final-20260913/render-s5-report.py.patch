@@ -1,0 +1,20 @@
+--- a/render-s5-report.py
++++ b/render-s5-report.py
+@@ -12,7 +12,7 @@
+     '本报告由原始 ledger 重算；冻结的三组各场景及独立启动复核的样本采集状态：' + ('已完成。' if report['measurementComplete'] else '**进行中。**'), '',
+     '最终合同审查发现的解释器具名解码暂存擦除缺口已补齐，详见 [POST_REVIEW.md](POST_REVIEW.md)。以下三组库保持冻结，属于擦除补齐前版本；不得把这些数字当成修复后JAR/APK的完整性能验收。修复后的构建、功能回归和定向性能对照另行记录。', '',
+     '## 对照与产物', '',
+-    'A=原提交 14bc959 legacy/loader OFF；B=同基线 legacy/loader ON；C=当前按需/native VM/loader OFF；D=当前按需/native VM/loader ON、stage0 VM ON。每组均使用同一个授权 APK、规则、mapping、原证书及全部 526 个方法。冻结三组所用 JAR 为 `vm-protect-2026-09-13-0136.jar`，SHA256 `28c13bbb3952d69640ad5bae626f0f5b7d04346e701e43dded0efd5e3734b469`。', '',
++    'A=原提交 14bc959 legacy/loader OFF；B=同基线 legacy/loader ON；C=当前按需/native VM/loader OFF；D=当前按需/native VM/loader ON、stage0 VM ON。每组均使用同一个授权 APK、规则、mapping、原证书及全部 526 个方法。三组A/B使用基线快照JAR，SHA256 `9033d186fe875858552177856c126f51b34264d0d52ca579138fd584be497747`；C/D使用增强JAR，SHA256 `28c13bbb3952d69640ad5bae626f0f5b7d04346e701e43dded0efd5e3734b469`。两者文件名均为 `vm-protect-2026-09-13-0136.jar`，所在目录不同。', '',
+     '三组预先固定 seed 为 `0123456789abcdef`、`fedcba9876543210`、`6a09e667f3bcc909`。基线只补充 Java 测试随机入口，121 个 native/template 文件与 14bc959 逐字节相同；共享 context/opcode/resolver/JNI 随机流三组一致。Python loader 和 O-MVLL 随机性未固定，不声称二进制可复现。', '',
+     '实际设备 `192.168.6.118:5555`，ARM64/API27；正式构建为 NDK26.3/Clang17、API26、Release、O-MVLL1.8 与同一仓库配置。设备电池报告 present=false、温度0，不能作为有效温度。设备时钟为2020年，与主机不同；当前日志用设备 epoch 起点过滤，以免 PID 复用命中历史 crash buffer。', '',
+     '## 启动', '',
+@@ -102,7 +102,7 @@
+             or not stability['mainWindowVisible'] or not stability['resumed']):
+         raise ValueError('Final device observation failed')
+     lines[lines.index('## 复算与证据'):lines.index('## 复算与证据')] = [
+-        '最终设备已恢复上述无固定测试seed候选，安装后核对APK哈希、当前PID和loader build ID。'
++        '冻结阶段曾恢复上述修复前候选，安装后核对APK哈希、当时PID和loader build ID；这不是当前设备状态。'
+         + f"连续{stability['elapsedSeconds']:.1f}秒观察中主PID始终为{stability['pid']}，"
+         + '未发现所检查的崩溃标记，结束时MainActivity仍首绘可见且resumed。应用处于未激活状态；这只是空闲驻留验证，不能证明完整业务正确或无泄漏。', '']
+ (root / 'docs/enhancement/S5_RESULTS.md').write_text('\n'.join(lines), encoding='utf-8')

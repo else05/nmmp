@@ -1,0 +1,66 @@
+{
+  "mainCellVariables": [
+    "adb",
+    "command",
+    "package",
+    "sample",
+    "variant"
+  ],
+  "nestedClosures": [
+    {
+      "name": "command",
+      "firstLine": 264,
+      "freeVariables": [
+        "adb"
+      ]
+    },
+    {
+      "name": "shell",
+      "firstLine": 270,
+      "freeVariables": [
+        "command"
+      ]
+    },
+    {
+      "name": "drawn",
+      "firstLine": 273,
+      "freeVariables": [
+        "package"
+      ]
+    },
+    {
+      "name": "<genexpr>",
+      "firstLine": 274,
+      "freeVariables": [
+        "package",
+        "pid"
+      ]
+    },
+    {
+      "name": "<genexpr>",
+      "firstLine": 325,
+      "freeVariables": [
+        "package"
+      ]
+    },
+    {
+      "name": "<genexpr>",
+      "firstLine": 329,
+      "freeVariables": [
+        "sample"
+      ]
+    },
+    {
+      "name": "<genexpr>",
+      "firstLine": 339,
+      "freeVariables": []
+    },
+    {
+      "name": "<genexpr>",
+      "firstLine": 341,
+      "freeVariables": [
+        "variant"
+      ]
+    }
+  ]
+}

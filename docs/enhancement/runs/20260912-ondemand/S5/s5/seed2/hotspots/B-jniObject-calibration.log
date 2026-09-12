@@ -1,0 +1,5 @@
+{"case":"jniObject","round":-1,"iterations":1000,"elapsedNs":6911198,"checksum":126000}
+{"case":"jniObject","round":0,"iterations":1000,"elapsedNs":6997031,"checksum":126000}
+{"case":"jniObject","round":1,"iterations":1000,"elapsedNs":5847031,"checksum":126000}
+VmHWM:	   44128 kB
+VmRSS:	   43728 kB

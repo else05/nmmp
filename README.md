@@ -1,6 +1,8 @@
 # nmmp
 基于dex-vm运行dalvik字节码从而对dex进行保护，增加反编译难度。
 项目分为两部分nmm-protect是纯java项目，对dex进行转换，把dex里数据转为c结构体，opcode随机化生成ndk项目,编译后生成加固后的apk。nmmvm是一个安卓项目，包含dex-vm实现及各种dalvik指令的测试等。
+
+本地增强版已接入按需解码、token 记录、小型 native VM 和可选私有 loader。新模式仍为实验选项，默认 legacy；使用方式及验收限制见 [增强版说明](docs/enhancement/USAGE.md)。
 # nmm-protect
 
 + 配置ndk及环境变量

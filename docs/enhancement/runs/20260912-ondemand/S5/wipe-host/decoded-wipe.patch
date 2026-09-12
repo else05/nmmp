@@ -1,0 +1,668 @@
+diff --git a/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp b/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp
+index 114e7de..8d29c1b 100644
+--- a/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp
++++ b/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp
+@@ -1,4 +1,5 @@
+ #include "VmReader.h"
++#include "VmDecodedState.h"
+ //
+ // Created by mao on 20-7-28.
+ //
+@@ -147,7 +148,9 @@ if(GET_REGISTER_FLAGS(_idx)){                                   \
+  *
+  * Assumes existence of "const u2* pc".
+  */
+-#define READ_CHECK(_expr) ({ u2 word = (_expr); if (reader.failed()) goto readerFailed; word; })
++#define READ_CHECK(_expr) ({ u2 word = (_expr); \
++    if (reader.failed()) { nmmpWipeDecoded(&word, sizeof(word)); goto readerFailed; } \
++    nmmpTakeDecodedWord(&word); })
+ #define FETCH(_offset) READ_CHECK((_offset) == 0 ? reader.instruction(pc) : reader.operand(pc, (_offset)))
+ #define FETCH_NEXT(_offset) READ_CHECK(reader.instruction(int64_t(pc) + (_offset)))
+ 
+@@ -312,7 +315,7 @@ if(GET_REGISTER_FLAGS(_idx)){                                   \
+     HANDLE_OPCODE(_opcode /*vAA, vBB, vCC*/)                                \
+     {                                                                       \
+         int result;                                                         \
+-        u2 regs;                                                            \
++        u2 &regs = decoded.regs;                                                            \
+         _varType val1, val2;                                                \
+         vdst = INST_AA(inst);                                               \
+         regs = FETCH(1);                                                    \
+@@ -339,7 +342,7 @@ if(GET_REGISTER_FLAGS(_idx)){                                   \
+         vsrc1 = INST_A(inst);                                               \
+         vsrc2 = INST_B(inst);                                               \
+         if ((s4) GET_REGISTER(vsrc1) _cmp (s4) GET_REGISTER(vsrc2)) {       \
+-            int branchOffset = (s2)FETCH(1);    /* sign-extended */         \
++            int &branchOffset = decoded.branchOffset; branchOffset = (s2)FETCH(1);    /* sign-extended */         \
+             ILOGV("|if-%s v%d,v%d,+0x%04x", (_opname), vsrc1, vsrc2,        \
+                 branchOffset);                                              \
+             ILOGV("> branch taken");                                        \
+@@ -355,7 +358,7 @@ if(GET_REGISTER_FLAGS(_idx)){                                   \
+     HANDLE_OPCODE(_opcode /*vAA, +BBBB*/)                                   \
+         vsrc1 = INST_AA(inst);                                              \
+         if ((s4) GET_REGISTER(vsrc1) _cmp 0) {                              \
+-            int branchOffset = (s2)FETCH(1);    /* sign-extended */         \
++            int &branchOffset = decoded.branchOffset; branchOffset = (s2)FETCH(1);    /* sign-extended */         \
+             ILOGV("|if-%s v%d,+0x%04x", (_opname), vsrc1, branchOffset);    \
+             ILOGV("> branch taken");                                        \
+             if (branchOffset < 0)                                           \
+@@ -377,7 +380,7 @@ if(GET_REGISTER_FLAGS(_idx)){                                   \
+ #define HANDLE_OP_X_INT(_opcode, _opname, _op, _chkdiv)                     \
+     HANDLE_OPCODE(_opcode /*vAA, vBB, vCC*/)                                \
+     {                                                                       \
+-        u2 srcRegs;                                                         \
++        u2 &srcRegs = decoded.srcRegs;                                                         \
+         vdst = INST_AA(inst);                                               \
+         srcRegs = FETCH(1);                                                 \
+         vsrc1 = srcRegs & 0xff;                                             \
+@@ -411,7 +414,7 @@ if(GET_REGISTER_FLAGS(_idx)){                                   \
+ #define HANDLE_OP_SHX_INT(_opcode, _opname, _cast, _op)                     \
+     HANDLE_OPCODE(_opcode /*vAA, vBB, vCC*/)                                \
+     {                                                                       \
+-        u2 srcRegs;                                                         \
++        u2 &srcRegs = decoded.srcRegs;                                                         \
+         vdst = INST_AA(inst);                                               \
+         srcRegs = FETCH(1);                                                 \
+         vsrc1 = srcRegs & 0xff;                                             \
+@@ -455,7 +458,7 @@ if(GET_REGISTER_FLAGS(_idx)){                                   \
+ #define HANDLE_OP_X_INT_LIT8(_opcode, _opname, _op, _chkdiv)                \
+     HANDLE_OPCODE(_opcode /*vAA, vBB, #+CC*/)                               \
+     {                                                                       \
+-        u2 litInfo;                                                         \
++        u2 &litInfo = decoded.litInfo;                                                         \
+         vdst = INST_AA(inst);                                               \
+         litInfo = FETCH(1);                                                 \
+         vsrc1 = litInfo & 0xff;                                             \
+@@ -488,7 +491,7 @@ if(GET_REGISTER_FLAGS(_idx)){                                   \
+ #define HANDLE_OP_SHX_INT_LIT8(_opcode, _opname, _cast, _op)                \
+     HANDLE_OPCODE(_opcode /*vAA, vBB, #+CC*/)                               \
+     {                                                                       \
+-        u2 litInfo;                                                         \
++        u2 &litInfo = decoded.litInfo;                                                         \
+         vdst = INST_AA(inst);                                               \
+         litInfo = FETCH(1);                                                 \
+         vsrc1 = litInfo & 0xff;                                             \
+@@ -540,7 +543,7 @@ if(GET_REGISTER_FLAGS(_idx)){                                   \
+ #define HANDLE_OP_X_LONG(_opcode, _opname, _op, _chkdiv)                    \
+     HANDLE_OPCODE(_opcode /*vAA, vBB, vCC*/)                                \
+     {                                                                       \
+-        u2 srcRegs;                                                         \
++        u2 &srcRegs = decoded.srcRegs;                                                         \
+         vdst = INST_AA(inst);                                               \
+         srcRegs = FETCH(1);                                                 \
+         vsrc1 = srcRegs & 0xff;                                             \
+@@ -575,7 +578,7 @@ if(GET_REGISTER_FLAGS(_idx)){                                   \
+ #define HANDLE_OP_SHX_LONG(_opcode, _opname, _cast, _op)                    \
+     HANDLE_OPCODE(_opcode /*vAA, vBB, vCC*/)                                \
+     {                                                                       \
+-        u2 srcRegs;                                                         \
++        u2 &srcRegs = decoded.srcRegs;                                                         \
+         vdst = INST_AA(inst);                                               \
+         srcRegs = FETCH(1);                                                 \
+         vsrc1 = srcRegs & 0xff;                                             \
+@@ -628,7 +631,7 @@ if(GET_REGISTER_FLAGS(_idx)){                                   \
+ #define HANDLE_OP_X_FLOAT(_opcode, _opname, _op)                            \
+     HANDLE_OPCODE(_opcode /*vAA, vBB, vCC*/)                                \
+     {                                                                       \
+-        u2 srcRegs;                                                         \
++        u2 &srcRegs = decoded.srcRegs;                                                         \
+         vdst = INST_AA(inst);                                               \
+         srcRegs = FETCH(1);                                                 \
+         vsrc1 = srcRegs & 0xff;                                             \
+@@ -642,7 +645,7 @@ if(GET_REGISTER_FLAGS(_idx)){                                   \
+ #define HANDLE_OP_X_DOUBLE(_opcode, _opname, _op)                           \
+     HANDLE_OPCODE(_opcode /*vAA, vBB, vCC*/)                                \
+     {                                                                       \
+-        u2 srcRegs;                                                         \
++        u2 &srcRegs = decoded.srcRegs;                                                         \
+         vdst = INST_AA(inst);                                               \
+         srcRegs = FETCH(1);                                                 \
+         vsrc1 = srcRegs & 0xff;                                             \
+@@ -675,7 +678,7 @@ if(GET_REGISTER_FLAGS(_idx)){                                   \
+     HANDLE_OPCODE(_opcode /*vAA, vBB, vCC*/)                                \
+     {                                                                       \
+         jarray arrayObj;                                                    \
+-        u2 arrayInfo;                                                       \
++        u2 &arrayInfo = decoded.arrayInfo;                                                       \
+         vdst = INST_AA(inst);                                               \
+         arrayInfo = FETCH(1);                                               \
+         vsrc1 = arrayInfo & 0xff;    /* array ptr */                        \
+@@ -699,7 +702,7 @@ if(GET_REGISTER_FLAGS(_idx)){                                   \
+     HANDLE_OPCODE(_opcode /*vAA, vBB, vCC*/)                                \
+     {                                                                       \
+         jarray arrayObj;                                                    \
+-        u2 arrayInfo;                                                       \
++        u2 &arrayInfo = decoded.arrayInfo;                                                       \
+         vdst = INST_AA(inst);                                               \
+         arrayInfo = FETCH(1);                                               \
+         vsrc1 = arrayInfo & 0xff;    /* array ptr */                        \
+@@ -979,7 +982,7 @@ FINISH(2);
+         }                                                                      \
+     } else {                                                                   \
+         args = args_tmp;                                                       \
+-        u4 count = vsrc1 >> 4;                                                 \
++        u4 &count = decoded.count; count = vsrc1 >> 4;                                                 \
+         if (count > 5) goto readerFailed;                                                    \
+         for (i = 0, idx = 0; idx < count; i++) {                               \
+             switch (idx) {                                                     \
+@@ -1051,7 +1054,7 @@ FINISH(2);
+         }                                                                      \
+     } else {                                                                   \
+         args = args_tmp;                                                       \
+-        u4 count = vsrc1 >> 4;                                                 \
++        u4 &count = decoded.count; count = vsrc1 >> 4;                                                 \
+         if (count > 5) goto readerFailed;                                                    \
+         for (i = 0, idx = 0; idx < count; i++) {                               \
+             switch (idx) {                                                     \
+@@ -1122,16 +1125,21 @@ jvalue vmInterpretReader(JNIEnv *env, const vmCode *code,
+     u1 *fp_flags = code->reg_flags;//寄存器类型标识
+     VmReader &reader = *inputReader;
+     uint32_t pc = 0;
+-    u2 inst;                    // current instruction
++    VmDecodedState decoded = {};
++#if defined(NMMP_TEST_DECODE_WIPE)
++    unsigned decodedExitReason = NMMP_DECODE_RETURN;
++    nmmpObserveDecodedState(&decoded, NMMP_DECODE_ENTER, decodedExitReason);
++#endif
++    u2 &inst = decoded.inst;     // current instruction
+ 
+     const JNIWrapper *wrapper = getJNIWrapper();
+ 
+     /* instruction decoding */
+-    u4 ref;                     // 16 or 32-bit quantity fetched directly
+-    u2 vsrc1, vsrc2, vdst;      // usually used for register indexes
++    u4 &ref = decoded.ref;       // 16 or 32-bit quantity fetched directly
++    u2 &vsrc1 = decoded.vsrc1, &vsrc2 = decoded.vsrc2, &vdst = decoded.vdst;
+ 
+ 
+-    bool methodCallRange;
++    bool &methodCallRange = decoded.methodCallRange;
+     const vmMethod *methodToCall;
+ 
+ 
+@@ -1336,7 +1344,7 @@ jvalue vmInterpretReader(JNIEnv *env, const vmCode *code,
+ /* File: c/OP_CONST_4.cpp */
+     HANDLE_OPCODE(OP_CONST_4 /*vA, #+B*/)
+     {
+-        s4 tmp;
++        s4 &tmp = decoded.tmpSigned;
+ 
+         vdst = INST_A(inst);
+         tmp = (s4) (INST_B(inst) << 28) >> 28;  // sign extend 4-bit value
+@@ -1358,7 +1366,7 @@ jvalue vmInterpretReader(JNIEnv *env, const vmCode *code,
+ /* File: c/OP_CONST.cpp */
+     HANDLE_OPCODE(OP_CONST /*vAA, #+BBBBBBBB*/)
+     {
+-        u4 tmp;
++        u4 &tmp = decoded.tmp32;
+ 
+         vdst = INST_AA(inst);
+         tmp = FETCH(1);
+@@ -1390,7 +1398,7 @@ jvalue vmInterpretReader(JNIEnv *env, const vmCode *code,
+ /* File: c/OP_CONST_WIDE_32.cpp */
+     HANDLE_OPCODE(OP_CONST_WIDE_32 /*vAA, #+BBBBBBBB*/)
+     {
+-        u4 tmp;
++        u4 &tmp = decoded.tmp32;
+ 
+         vdst = INST_AA(inst);
+         tmp = FETCH(1);
+@@ -1404,7 +1412,7 @@ jvalue vmInterpretReader(JNIEnv *env, const vmCode *code,
+ /* File: c/OP_CONST_WIDE.cpp */
+     HANDLE_OPCODE(OP_CONST_WIDE /*vAA, #+BBBBBBBBBBBBBBBB*/)
+     {
+-        u8 tmp;
++        u8 &tmp = decoded.tmp64;
+ 
+         vdst = INST_AA(inst);
+         tmp = FETCH(1);
+@@ -1446,7 +1454,7 @@ jvalue vmInterpretReader(JNIEnv *env, const vmCode *code,
+     HANDLE_OPCODE(OP_CONST_STRING_JUMBO /*vAA, string@BBBBBBBB*/)
+     {
+         jstring strObj;
+-        u4 tmp;
++        u4 &tmp = decoded.tmp32;
+ 
+         vdst = INST_AA(inst);
+         tmp = FETCH(1);
+@@ -1666,8 +1674,8 @@ jvalue vmInterpretReader(JNIEnv *env, const vmCode *code,
+ /* File: c/OP_FILL_ARRAY_DATA.cpp */
+     HANDLE_OPCODE(OP_FILL_ARRAY_DATA)   /*vAA, +BBBBBBBB*/
+     {
+-        int64_t arrayData;
+-        s4 offset;
++        int64_t &arrayData = decoded.arrayData;
++        s4 &offset = decoded.offset;
+         jarray arrayObj;
+ //
+         vsrc1 = INST_AA(inst);
+@@ -1724,7 +1732,7 @@ jvalue vmInterpretReader(JNIEnv *env, const vmCode *code,
+ /* File: c/OP_GOTO_16.cpp */
+     HANDLE_OPCODE(OP_GOTO_16 /*+AAAA*/)
+     {
+-        s4 offset = (s2) FETCH(1);          /* sign-extend next code unit */
++        s4 &offset = decoded.offset; offset = (s2) FETCH(1);          /* sign-extend next code unit */
+ 
+         if (offset < 0)
+             ILOGV("|goto/16 -0x%04x", -offset);
+@@ -1739,7 +1747,7 @@ jvalue vmInterpretReader(JNIEnv *env, const vmCode *code,
+ /* File: c/OP_GOTO_32.cpp */
+     HANDLE_OPCODE(OP_GOTO_32 /*+AAAAAAAA*/)
+     {
+-        s4 offset = FETCH(1);               /* low-order 16 bits */
++        s4 &offset = decoded.offset; offset = FETCH(1);               /* low-order 16 bits */
+         offset |= ((s4) FETCH(2)) << 16;    /* high-order 16 bits */
+ 
+         if (offset < 0)
+@@ -1756,9 +1764,9 @@ jvalue vmInterpretReader(JNIEnv *env, const vmCode *code,
+ /* File: c/OP_PACKED_SWITCH.cpp */
+     HANDLE_OPCODE(OP_PACKED_SWITCH /*vAA, +BBBB*/)
+     {
+-        int64_t switchData;
++        int64_t &switchData = decoded.switchData;
+         u4 testVal;
+-        s4 offset;
++        s4 &offset = decoded.offset;
+ 
+         vsrc1 = INST_AA(inst);
+         offset = FETCH(1) | (((s4) FETCH(2)) << 16);
+@@ -1778,9 +1786,9 @@ jvalue vmInterpretReader(JNIEnv *env, const vmCode *code,
+ /* File: c/OP_SPARSE_SWITCH.cpp */
+     HANDLE_OPCODE(OP_SPARSE_SWITCH /*vAA, +BBBB*/)
+     {
+-        int64_t switchData;
++        int64_t &switchData = decoded.switchData;
+         u4 testVal;
+-        s4 offset;
++        s4 &offset = decoded.offset;
+ 
+         vsrc1 = INST_AA(inst);
+         offset = FETCH(1) | (((s4) FETCH(2)) << 16);
+@@ -1825,7 +1833,7 @@ HANDLE_OP_CMPX(OP_CMP_LONG, "-long", s8, _WIDE, 0)
+         //对象寄存器 需要特殊比较
+         if (wrapper->IsSameObject(env, GET_REGISTER_AS_OBJECT(vsrc1),
+                                   GET_REGISTER_AS_OBJECT(vsrc2))) {
+-            int branchOffset = (s2) FETCH(1);    /* sign-extended */
++            int &branchOffset = decoded.branchOffset; branchOffset = (s2) FETCH(1);    /* sign-extended */
+             ILOGV("|if-eq v%d,v%d,+0x%04x", vsrc1, vsrc2,
+                   branchOffset);
+             ILOGV("> branch taken");
+@@ -1838,7 +1846,7 @@ HANDLE_OP_CMPX(OP_CMP_LONG, "-long", s8, _WIDE, 0)
+         }
+     } else {
+         if ((s4) GET_REGISTER(vsrc1) == (s4) GET_REGISTER(vsrc2)) {
+-            int branchOffset = (s2) FETCH(1);    /* sign-extended */
++            int &branchOffset = decoded.branchOffset; branchOffset = (s2) FETCH(1);    /* sign-extended */
+             ILOGV("|if-eq v%d,v%d,+0x%04x", vsrc1, vsrc2,
+                   branchOffset);
+             ILOGV("> branch taken");
+@@ -1859,7 +1867,7 @@ HANDLE_OP_CMPX(OP_CMP_LONG, "-long", s8, _WIDE, 0)
+         //对象寄存器 需要特殊比较
+         if (!wrapper->IsSameObject(env, GET_REGISTER_AS_OBJECT(vsrc1),
+                                    GET_REGISTER_AS_OBJECT(vsrc2))) {
+-            int branchOffset = (s2) FETCH(1);    /* sign-extended */
++            int &branchOffset = decoded.branchOffset; branchOffset = (s2) FETCH(1);    /* sign-extended */
+             ILOGV("|if-eq v%d,v%d,+0x%04x", vsrc1, vsrc2,
+                   branchOffset);
+             ILOGV("> branch taken");
+@@ -1872,7 +1880,7 @@ HANDLE_OP_CMPX(OP_CMP_LONG, "-long", s8, _WIDE, 0)
+         }
+     } else {
+         if ((s4) GET_REGISTER(vsrc1) != (s4) GET_REGISTER(vsrc2)) {
+-            int branchOffset = (s2) FETCH(1);    /* sign-extended */
++            int &branchOffset = decoded.branchOffset; branchOffset = (s2) FETCH(1);    /* sign-extended */
+             ILOGV("|if-ne v%d,v%d,+0x%04x", vsrc1, vsrc2,
+                   branchOffset);
+             ILOGV("> branch taken");
+@@ -1990,7 +1998,7 @@ HANDLE_OP_AGET(OP_AGET_WIDE, "-wide", {
+     HANDLE_OPCODE(OP_AGET_OBJECT /*vAA, vBB, vCC*/)
+     {
+         jobjectArray arrayObj;
+-        u2 arrayInfo;
++        u2 &arrayInfo = decoded.arrayInfo;
+         vdst = INST_AA(inst);
+         arrayInfo = FETCH(1);
+         vsrc1 = arrayInfo & 0xff;    /* array ptr */
+@@ -2078,7 +2086,7 @@ HANDLE_OP_APUT(OP_APUT_WIDE, "-wide", {
+     HANDLE_OPCODE(OP_APUT_OBJECT /*vAA, vBB, vCC*/)
+     {
+         jobjectArray arrayObj;
+-        u2 arrayInfo;
++        u2 &arrayInfo = decoded.arrayInfo;
+         vdst = INST_AA(inst);
+         arrayInfo = FETCH(1);
+         vsrc1 = arrayInfo & 0xff;    /* array ptr */
+@@ -2624,7 +2632,7 @@ HANDLE_OP_X_FLOAT(OP_DIV_FLOAT, "div", /)
+ /* File: c/OP_REM_FLOAT.cpp */
+     HANDLE_OPCODE(OP_REM_FLOAT /*vAA, vBB, vCC*/)
+     {
+-        u2 srcRegs;
++        u2 &srcRegs = decoded.srcRegs;
+         vdst = INST_AA(inst);
+         srcRegs = FETCH(1);
+         vsrc1 = srcRegs & 0xff;
+@@ -2656,7 +2664,7 @@ HANDLE_OP_X_DOUBLE(OP_DIV_DOUBLE, "div", /)
+ /* File: c/OP_REM_DOUBLE.cpp */
+     HANDLE_OPCODE(OP_REM_DOUBLE /*vAA, vBB, vCC*/)
+     {
+-        u2 srcRegs;
++        u2 &srcRegs = decoded.srcRegs;
+         vdst = INST_AA(inst);
+         srcRegs = FETCH(1);
+         vsrc1 = srcRegs & 0xff;
+@@ -2858,7 +2866,7 @@ HANDLE_OP_X_INT_LIT8(OP_ADD_INT_LIT8, "add", +, 0)
+ /* File: c/OP_RSUB_INT_LIT8.cpp */
+     HANDLE_OPCODE(OP_RSUB_INT_LIT8 /*vAA, vBB, #+CC*/)
+     {
+-        u2 litInfo;
++        u2 &litInfo = decoded.litInfo;
+         vdst = INST_AA(inst);
+         litInfo = FETCH(1);
+         vsrc1 = litInfo & 0xff;
+@@ -3008,7 +3016,7 @@ HANDLE_OP_SHX_INT_LIT8(OP_USHR_INT_LIT8, "ushr", (u4), >>)
+         const char *type;
+         int i;
+         u4 val;
+-        u4 arg5;
++        u4 &arg5 = decoded.arg5;
+ 
+         ref = FETCH(1);             /* class ref */
+         vdst = FETCH(2);            /* first 4 regs -or- range base */
+@@ -3624,7 +3632,7 @@ HANDLE_OP_SHX_INT_LIT8(OP_USHR_INT_LIT8, "ushr", (u4), >>)
+  */
+     GOTO_TARGET(returnFromMethod)
+     {
+-        return retval;
++        goto decodedExit;
+     }
+     GOTO_TARGET_END
+ 
+@@ -3637,7 +3645,7 @@ HANDLE_OP_SHX_INT_LIT8(OP_USHR_INT_LIT8, "ushr", (u4), >>)
+  */
+     GOTO_TARGET(exceptionThrown)
+     {
+-        int catchRelPc;
++        int &catchRelPc = decoded.catchRelPc;
+ 
+         PERIODIC_CHECKS(0);
+ 
+@@ -3671,6 +3679,9 @@ HANDLE_OP_SHX_INT_LIT8(OP_USHR_INT_LIT8, "ushr", (u4), >>)
+         if (catchRelPc < 0 || !reader.target(catchRelPc)) {
+ /* falling through to JNI code or off the bottom of the stack */
+             wrapper->Throw(env, exception.get());
++#if defined(NMMP_TEST_DECODE_WIPE)
++            decodedExitReason = NMMP_DECODE_UNCAUGHT;
++#endif
+             GOTO_bail();
+         }
+         pc = uint32_t(catchRelPc);
+@@ -3700,11 +3711,22 @@ HANDLE_OP_SHX_INT_LIT8(OP_USHR_INT_LIT8, "ushr", (u4), >>)
+ /*--- end of opcodes ---*/
+ 
+     readerFailed:
++#if defined(NMMP_TEST_DECODE_WIPE)
++    decodedExitReason = NMMP_DECODE_READER_FAILED;
++#endif
+     free(activeArgs); activeArgs = nullptr;
+     if (!wrapper->ExceptionCheck(env)) dvmThrowInternalError(env, "Invalid VM reader access");
+     retval = {};
+     bail:
+     ILOGD("|-- Leaving interpreter loop");      // note "curMethod" may be NULL
++    decodedExit:
++#if defined(NMMP_TEST_DECODE_WIPE)
++    nmmpObserveDecodedState(&decoded, NMMP_DECODE_BEFORE_WIPE, decodedExitReason);
++#endif
++    nmmpWipeDecoded(&decoded, sizeof(decoded));
++#if defined(NMMP_TEST_DECODE_WIPE)
++    nmmpObserveDecodedState(&decoded, NMMP_DECODE_AFTER_WIPE, decodedExitReason);
++#endif
+     return retval;
+ 
+ }
+diff --git a/nmmvm/nmmvm/src/test/semantic/CMakeLists.txt b/nmmvm/nmmvm/src/test/semantic/CMakeLists.txt
+index d16350b..1642bc5 100644
+--- a/nmmvm/nmmvm/src/test/semantic/CMakeLists.txt
++++ b/nmmvm/nmmvm/src/test/semantic/CMakeLists.txt
+@@ -5,6 +5,11 @@ add_subdirectory("${NMMP_CPP_ROOT}/vm" vm)
+ add_library(nmmp_semantic SHARED SemanticBridge.cpp)
+ target_include_directories(nmmp_semantic PRIVATE "${NMMP_CPP_ROOT}" "${NMMP_CPP_ROOT}/vm")
+ target_link_libraries(nmmp_semantic nmmvm log)
++option(NMMP_TEST_DECODE_WIPE "Observe actual interpreter decoded-state exits (tests only)" OFF)
++if (NMMP_TEST_DECODE_WIPE)
++    target_sources(nmmvm PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/DecodedWipeBridge.cpp")
++    target_compile_definitions(nmmvm PRIVATE NMMP_TEST_DECODE_WIPE=1)
++endif ()
+ if (NMMP_BASELINE)
+     target_compile_definitions(nmmp_semantic PRIVATE NMMP_BASELINE=1)
+ endif ()
+--- /dev/null
++++ b/nmmvm/nmmvm/src/main/cpp/vm/include/VmDecodedState.h
+@@ -0,0 +1,43 @@
++#ifndef NMMP_VM_DECODED_STATE_H
++#define NMMP_VM_DECODED_STATE_H
++
++#include <stddef.h>
++#include <stdint.h>
++#include <type_traits>
++
++// Explicit decoded storage only. VM values, JNI references and return values
++// retain their existing ownership. No per-instruction allocation or cache.
++struct VmDecodedState {
++    uint64_t tmp64;
++    int64_t arrayData, switchData;
++    uint32_t ref, tmp32, arg5, count;
++    int32_t tmpSigned, offset;
++    int branchOffset, catchRelPc;
++    uint16_t inst, vdst, vsrc1, vsrc2, regs, srcRegs, litInfo, arrayInfo;
++    bool methodCallRange;
++};
++static_assert(std::is_pod<VmDecodedState>::value, "Decoded state must remain POD");
++
++static inline void nmmpWipeDecoded(void *memory, size_t size) {
++    volatile unsigned char *p = static_cast<volatile unsigned char *>(memory);
++    while (size--) *p++ = 0;
++}
++
++enum { NMMP_DECODE_ENTER, NMMP_DECODE_BEFORE_WIPE, NMMP_DECODE_AFTER_WIPE };
++enum { NMMP_DECODE_RETURN, NMMP_DECODE_UNCAUGHT, NMMP_DECODE_READER_FAILED };
++#if defined(NMMP_TEST_DECODE_WIPE)
++extern "C" void nmmpObserveDecodedState(const VmDecodedState *, unsigned phase, unsigned reason);
++extern "C" void nmmpObserveDecodedWord(const uint16_t *);
++#endif
++
++static inline uint16_t nmmpTakeDecodedWord(uint16_t *word) {
++    // The necessary return-value copy is not a promise to erase CPU/spill copies.
++    const uint16_t result = *word;
++    nmmpWipeDecoded(word, sizeof(*word));
++#if defined(NMMP_TEST_DECODE_WIPE)
++    nmmpObserveDecodedWord(word);
++#endif
++    return result;
++}
++
++#endif
+--- /dev/null
++++ b/nmmvm/nmmvm/src/test/semantic/DecodedWipeBridge.cpp
+@@ -0,0 +1,129 @@
++#include "vm.h"
++#include "VmReader.h"
++#include "VmDecodedState.h"
++#include "DexOpcodes.h"
++#include <atomic>
++#include <cstring>
++#include <mutex>
++#include <set>
++#include <vector>
++
++#ifndef NMMP_TEST_DECODE_WIPE
++#error This bridge is test-only
++#endif
++
++namespace {
++std::mutex lock;
++std::set<const VmDecodedState *> active;
++// errors, enter, before, after, normal, uncaught, readerFailed, words, nested, dirty
++std::atomic<long> counts[10];
++struct Frame { const VmDecodedState *state; VmDecodedState parent; bool before; };
++thread_local std::vector<Frame> frames;
++bool zero(const void *p, size_t n) {
++    const unsigned char *b = static_cast<const unsigned char *>(p);
++    while (n--) if (*b++) return false;
++    return true;
++}
++// Aggregate initialization initializes members; do not require entry padding.
++bool membersZero(const VmDecodedState &s) {
++    return s.tmp64 == 0 && s.arrayData == 0 && s.switchData == 0 && s.ref == 0 &&
++           s.tmp32 == 0 && s.arg5 == 0 && s.count == 0 && s.tmpSigned == 0 &&
++           s.offset == 0 && s.branchOffset == 0 && s.catchRelPc == 0 && s.inst == 0 &&
++           s.vdst == 0 && s.vsrc1 == 0 && s.vsrc2 == 0 && s.regs == 0 &&
++           s.srcRegs == 0 && s.litInfo == 0 && s.arrayInfo == 0 && !s.methodCallRange;
++}
++void check(bool ok) { if (!ok) ++counts[0]; }
++jclass callbackClass(JNIEnv *env, u4) { return env->FindClass("com/nmmedit/semantic/DecodedWipeMain"); }
++const vmMethod *callbackMethod(JNIEnv *env, u4, bool) {
++    static thread_local vmMethod method;
++    jclass cls = callbackClass(env, 0);
++    method.classIdx = 0;
++    method.shorty = "I";
++    method.methodId = env->GetStaticMethodID(cls, "callback", "()I");
++    env->DeleteLocalRef(cls);
++    return &method;
++}
++const vmResolver resolver = [] {
++    vmResolver r = {};
++    r.dvmResolveClass = callbackClass;
++    r.dvmResolveMethod = callbackMethod;
++    return r;
++}();
++}
++
++extern "C" void nmmpObserveDecodedWord(const uint16_t *word) {
++    check(*word == 0);
++    ++counts[7];
++}
++extern "C" void nmmpObserveDecodedState(const VmDecodedState *state, unsigned phase, unsigned reason) {
++    if (phase == NMMP_DECODE_ENTER) {
++        check(membersZero(*state));
++        Frame frame = {state, {}, false};
++        if (!frames.empty()) {
++            std::memcpy(&frame.parent, frames.back().state, sizeof(frame.parent));
++            ++counts[8];
++        }
++        { std::lock_guard<std::mutex> guard(lock); check(active.insert(state).second); }
++        frames.push_back(frame);
++        ++counts[1];
++        return;
++    }
++    check(!frames.empty() && frames.back().state == state);
++    if (frames.empty()) return;
++    if (phase == NMMP_DECODE_BEFORE_WIPE) {
++        check(!frames.back().before);
++        frames.back().before = true;
++        ++counts[2];
++        if (!membersZero(*state)) ++counts[9];
++        check(reason <= NMMP_DECODE_READER_FAILED);
++        if (reason <= NMMP_DECODE_READER_FAILED) ++counts[4 + reason];
++    } else {
++        check(phase == NMMP_DECODE_AFTER_WIPE && frames.back().before);
++        check(zero(state, sizeof(*state)));
++        if (frames.size() > 1)
++            check(std::memcmp(&frames.back().parent, frames[frames.size() - 2].state, sizeof(*state)) == 0);
++        { std::lock_guard<std::mutex> guard(lock); check(active.erase(state) == 1); }
++        frames.pop_back();
++        ++counts[3];
++    }
++}
++
++extern "C" JNIEXPORT jlongArray JNICALL
++Java_com_nmmedit_semantic_DecodedWipeMain_snapshot(JNIEnv *env, jclass) {
++    jlong result[11];
++    for (unsigned i = 0; i < 10; ++i) result[i] = counts[i].load();
++    { std::lock_guard<std::mutex> guard(lock); result[10] = active.size(); }
++    jlongArray out = env->NewLongArray(11);
++    if (out) env->SetLongArrayRegion(out, 0, 11, result);
++    return out;
++}
++
++extern "C" JNIEXPORT jint JNICALL
++Java_com_nmmedit_semantic_DecodedWipeMain_eval(JNIEnv *env, jclass, jint scenario, jthrowable pending) {
++    regptr_t regs[8] = {};
++    u1 flags[8] = {};
++    regs[0] = 5;
++    std::vector<u2> words;
++    std::vector<u1> tries;
++    switch (scenario) {
++        case 0: words = {u2(OP_ADD_INT_LIT8 | 0x0100), 0x0700, u2(OP_RETURN | 0x0100)}; break;
++        case 1: words = {OP_CONST_4, OP_THROW}; break;
++        case 2: case 5: words = {OP_CONST_WIDE, 0}; break;
++        case 3:
++            words = {OP_CONST_4, OP_THROW, u2(OP_MOVE_EXCEPTION | 0x0100),
++                     u2(OP_CONST_16 | 0x0200), 77, u2(OP_RETURN | 0x0200)};
++            tries = {1,0,0,0, 0,0,0,0,2,0,1,0, 1,0,2};
++            break;
++        case 4:
++            words = {OP_INVOKE_STATIC, 0, 0, OP_MOVE_RESULT,
++                     u2(OP_ADD_INT_LIT8 | 0x0100), 0x0300, u2(OP_RETURN | 0x0100)};
++            break;
++        default: env->FatalError("Unknown wipe fixture"); return 0;
++    }
++    VmReader reader(reinterpret_cast<const uint8_t *>(words.data()), words.size() * 2,
++                    tries.data(), tries.size());
++    const vmCode code = {words.data(), u4(words.size()), regs, flags, tries.data(), u4(tries.size()), &reader, 8};
++    if (pending) env->Throw(pending);
++    jvalue value = vmInterpret(env, &code, &resolver);
++    return value.i;
++}
+--- /dev/null
++++ b/nmmvm/nmmvm/src/test/semantic/DecodedWipeMain.java
+@@ -0,0 +1,50 @@
++package com.nmmedit.semantic;
++
++import java.util.Arrays;
++import java.util.concurrent.CountDownLatch;
++import java.util.concurrent.atomic.AtomicReference;
++
++public final class DecodedWipeMain {
++    private static native int eval(int scenario, Throwable pending);
++    private static native long[] snapshot();
++    private static void require(boolean ok) { if (!ok) throw new AssertionError(); }
++    public static int callback() { return eval(0, null) + eval(0, null); }
++    private static void run() {
++        require(eval(0, null) == 12);
++        try { eval(1, null); throw new AssertionError(); }
++        catch (NullPointerException expected) { }
++        try { eval(2, null); throw new AssertionError(); }
++        catch (InternalError expected) { }
++        require(eval(3, null) == 77);
++        require(eval(4, null) == 27);
++        IllegalStateException original = new IllegalStateException("preserve identity");
++        try { eval(5, original); throw new AssertionError(); }
++        catch (IllegalStateException actual) { require(actual == original); }
++    }
++    public static void main(String[] args) throws Exception {
++        System.load(args[0]);
++        long[] start = snapshot();
++        run();
++        CountDownLatch go = new CountDownLatch(1);
++        AtomicReference<Throwable> failure = new AtomicReference<>();
++        Thread[] threads = new Thread[8];
++        for (int i = 0; i < threads.length; ++i) {
++            threads[i] = new Thread(() -> {
++                try { go.await(); for (int j = 0; j < 100; ++j) run(); }
++                catch (Throwable ex) { failure.compareAndSet(null, ex); }
++            });
++            threads[i].start();
++        }
++        go.countDown();
++        for (Thread thread : threads) thread.join();
++        if (failure.get() != null) throw new AssertionError(failure.get());
++        long[] end = snapshot();
++        for (int i = 0; i < end.length; ++i) end[i] -= start[i];
++        // Each run: 8 entries (6 direct, 2 nested), 5 normal incl caught, 1 uncaught, 2 read failures.
++        long runs = 801;
++        require(end[0] == 0 && end[1] == runs * 8 && end[2] == end[1] && end[3] == end[1]);
++        require(end[4] == runs * 5 && end[5] == runs && end[6] == runs * 2);
++        require(end[7] > runs * 8 && end[8] == runs * 2 && end[9] > 0 && end[10] == 0);
++        System.out.println("DECODE_WIPE_PASS runs=" + runs + " counters=" + Arrays.toString(end));
++    }
++}

@@ -1,0 +1,7 @@
+{
+  "api": "27",
+  "device": "g6pa_ica2",
+  "abi": "arm64-v8a",
+  "batteryBefore": "Current Battery Service state:\n  AC powered: true\n  USB powered: false\n  Wireless powered: false\n  Max charging current: 0\n  Max charging voltage: 0\n  Charge counter: 0\n  status: 5\n  health: 2\n  present: false\n  level: 100\n  scale: 100\n  voltage: 0\n  temperature: 0\n  technology: \n",
+  "loadBefore": "7.68 6.84 6.76 1/2806 32259\n"
+}

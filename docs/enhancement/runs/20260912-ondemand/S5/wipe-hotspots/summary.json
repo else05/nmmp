@@ -1,0 +1,83 @@
+{
+  "arithmetic": {
+    "A": {
+      "count": 20,
+      "medianNs": 1378926301.5,
+      "p95Ns": 1487220104,
+      "minNs": 1235990364,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": 0.0
+    },
+    "C": {
+      "count": 20,
+      "medianNs": 3084287967.0,
+      "p95Ns": 3096999374,
+      "minNs": 3072199478,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": 123.6731552400518
+    },
+    "D": {
+      "count": 20,
+      "medianNs": 3287741900.0,
+      "p95Ns": 3311457083,
+      "minNs": 3248248696,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": 138.42767350391276,
+      "regressionPercentVsC": 6.596463597978941
+    }
+  },
+  "branch": {
+    "A": {
+      "count": 20,
+      "medianNs": 1496651718.0,
+      "p95Ns": 1503440468,
+      "minNs": 1490625312,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": 0.0
+    },
+    "C": {
+      "count": 20,
+      "medianNs": 3560284321.5,
+      "p95Ns": 3591815572,
+      "minNs": 3538379269,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": 137.883288321592
+    },
+    "D": {
+      "count": 20,
+      "medianNs": 3684596222.5,
+      "p95Ns": 3718790311,
+      "minNs": 3648563749,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": 146.18928894317412,
+      "regressionPercentVsC": 3.491628470493202
+    }
+  },
+  "shortCall": {
+    "A": {
+      "count": 20,
+      "medianNs": 1958133541.0,
+      "p95Ns": 1982503020,
+      "minNs": 1914277134,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": 0.0
+    },
+    "C": {
+      "count": 20,
+      "medianNs": 1487917708.0,
+      "p95Ns": 1494492031,
+      "minNs": 1477288698,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": -24.013471152731768
+    },
+    "D": {
+      "count": 20,
+      "medianNs": 1733667942.0,
+      "p95Ns": 1764343698,
+      "minNs": 1700815624,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": -11.463242638975867,
+      "regressionPercentVsC": 16.51638613336539
+    }
+  }
+}

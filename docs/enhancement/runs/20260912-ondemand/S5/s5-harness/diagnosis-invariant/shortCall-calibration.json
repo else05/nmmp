@@ -1,0 +1,122 @@
+[
+  {
+    "case": "shortCall",
+    "round": -1,
+    "iterations": 10000,
+    "elapsedNs": 22400365,
+    "checksum": 3819240,
+    "variant": "L"
+  },
+  {
+    "case": "shortCall",
+    "round": 0,
+    "iterations": 10000,
+    "elapsedNs": 14985729,
+    "checksum": 3819240,
+    "variant": "L"
+  },
+  {
+    "case": "shortCall",
+    "round": 1,
+    "iterations": 10000,
+    "elapsedNs": 17772031,
+    "checksum": 3819240,
+    "variant": "L"
+  },
+  {
+    "case": "shortCall",
+    "round": -1,
+    "iterations": 10000,
+    "elapsedNs": 16122240,
+    "checksum": 3819240,
+    "variant": "C"
+  },
+  {
+    "case": "shortCall",
+    "round": 0,
+    "iterations": 10000,
+    "elapsedNs": 10285156,
+    "checksum": 3819240,
+    "variant": "C"
+  },
+  {
+    "case": "shortCall",
+    "round": 1,
+    "iterations": 10000,
+    "elapsedNs": 10479844,
+    "checksum": 3819240,
+    "variant": "C"
+  },
+  {
+    "case": "shortCall",
+    "round": -1,
+    "iterations": 10000,
+    "elapsedNs": 21193386,
+    "checksum": 3819240,
+    "variant": "IL"
+  },
+  {
+    "case": "shortCall",
+    "round": 0,
+    "iterations": 10000,
+    "elapsedNs": 15213125,
+    "checksum": 3819240,
+    "variant": "IL"
+  },
+  {
+    "case": "shortCall",
+    "round": 1,
+    "iterations": 10000,
+    "elapsedNs": 15101667,
+    "checksum": 3819240,
+    "variant": "IL"
+  },
+  {
+    "case": "shortCall",
+    "round": -1,
+    "iterations": 10000,
+    "elapsedNs": 15952916,
+    "checksum": 3819240,
+    "variant": "IC"
+  },
+  {
+    "case": "shortCall",
+    "round": 0,
+    "iterations": 10000,
+    "elapsedNs": 11064687,
+    "checksum": 3819240,
+    "variant": "IC"
+  },
+  {
+    "case": "shortCall",
+    "round": 1,
+    "iterations": 10000,
+    "elapsedNs": 10144479,
+    "checksum": 3819240,
+    "variant": "IC"
+  },
+  {
+    "case": "shortCall",
+    "round": -1,
+    "iterations": 10000,
+    "elapsedNs": 20891615,
+    "checksum": 3819240,
+    "variant": "A"
+  },
+  {
+    "case": "shortCall",
+    "round": 0,
+    "iterations": 10000,
+    "elapsedNs": 12742604,
+    "checksum": 3819240,
+    "variant": "A"
+  },
+  {
+    "case": "shortCall",
+    "round": 1,
+    "iterations": 10000,
+    "elapsedNs": 12523073,
+    "checksum": 3819240,
+    "variant": "A"
+  }
+]

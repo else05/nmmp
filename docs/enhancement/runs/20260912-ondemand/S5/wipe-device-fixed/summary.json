@@ -1,0 +1,48 @@
+[
+  {
+    "mode": "Release",
+    "librarySha256": {
+      "libnmmp_semantic.so": "9df2160cb178d323a4b18113873cff22a3b6fa8db6891a28ae7b7a79e7171362",
+      "libnmmvm.so": "4d7e6819544dff4677e62509dd9cc817fd34e0e7c80f5b0f3ef978ab81fe6813",
+      "nmmp_native_vm_test": "f48e75d9291bae49bd2ea0cb7c2d3f8c4a34a9459d933ff95c3ae7fa8757293a",
+      "nmmp_native_root_test": "7e1a0f0cc926ce3ef97af696cab8f34ff31ab7d55f4527bda403e3c76ba20f7a"
+    },
+    "outputs": {
+      "nativeVm": "PASS: 105 independent Java/native program vectors\n",
+      "root": "PASS: native VM recovers and publishes root once across 1600 concurrent activations\n",
+      "semantic": "SEMANTIC_PASS checks=1351\n",
+      "wipe": "DECODE_WIPE_PASS runs=801 counters=[0, 6408, 6408, 6408, 4005, 801, 1602, 23229, 1602, 6408, 0]\n"
+    }
+  },
+  {
+    "mode": "Debug",
+    "librarySha256": {
+      "libnmmp_semantic.so": "9d8f1a756e793bf6ad3fda8a676c5e9859a4e788f8c1cb22e92a784687af2bea",
+      "libnmmvm.so": "b34f16f25e727c936a3b5068cc116b4a6c2778017782812e254161b1b045d55e",
+      "nmmp_native_vm_test": "58a4aa27326dca198e12adbae8b8657687fe94129d5a72cc66824f5f4c2362a8",
+      "nmmp_native_root_test": "a4ab36b02f9814087866029e97c3495fa6bfec3e7891957eca92a353f5195e56"
+    },
+    "outputs": {
+      "nativeVm": "PASS: 105 independent Java/native program vectors\n",
+      "root": "PASS: native VM recovers and publishes root once across 1600 concurrent activations\n",
+      "semantic": "SEMANTIC_PASS checks=1351\n",
+      "wipe": "DECODE_WIPE_PASS runs=801 counters=[0, 6408, 6408, 6408, 4005, 801, 1602, 23229, 1602, 6408, 0]\n"
+    }
+  },
+  {
+    "mode": "legacy-Release",
+    "librarySha256": {
+      "libnmmp_semantic.so": "b232ed5dbcd738754f74079e32914d4283eb030f89d252dfb6dbcfe5a0dd5476",
+      "libnmmvm.so": "d9e4d9cf172992f29847729dbe6c19f0555d75a02144ac6d41b824a0e850ca1d"
+    },
+    "output": "SEMANTIC_PASS checks=1338\n"
+  },
+  {
+    "mode": "legacy-Debug",
+    "librarySha256": {
+      "libnmmp_semantic.so": "26bc93fcee9a0925d55ea4f5a4bbcb5ac299be81d95c894eb5bb06526272c87e",
+      "libnmmvm.so": "f7ca9f46f24018b52b1871844c0862977170945e720ea6a7a460124930ae72d7"
+    },
+    "output": "SEMANTIC_PASS checks=1338\n"
+  }
+]

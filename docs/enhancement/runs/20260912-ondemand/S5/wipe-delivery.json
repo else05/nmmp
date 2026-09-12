@@ -1,0 +1,7 @@
+{
+  "jar": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\libs\\vm-protect-2026-09-13-0526.jar",
+  "jarSha256": "28d6f83f8d099fecbcbdfbbd7acc3b41cb7e9b0347260920430d742fa9530ad7",
+  "previousCandidate": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\final-acceptance\\protected-signed.apk",
+  "reason": "Explicit decoded scratch cleanup found during final contract review",
+  "frozenS5ArtifactsChanged": false
+}

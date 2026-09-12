@@ -2,6 +2,7 @@ package com.nmmedit.apkprotect.util;
 
 import com.nmmedit.apkprotect.BuildNativeLib;
 import com.nmmedit.apkprotect.dex2c.MethodCodec;
+import com.nmmedit.apkprotect.dex2c.GeneratorRandom;
 import com.nmmedit.apkprotect.dex2c.NativeProgram;
 import com.nmmedit.apkprotect.dex2c.ProtectionContext;
 import com.nmmedit.apkprotect.dex2c.converter.instructionrewriter.InstructionRewriter;
@@ -280,7 +281,7 @@ public class CmakeUtils {
             try (Writer fileWriter = new OutputStreamWriter(
                     new FileOutputStream(source), StandardCharsets.UTF_8)) {
                 final String doc = matcherResolver.replaceAll("typedef struct {\n" +
-                        randomList(funcs) +
+                        randomList(funcs, GeneratorRandom.create("resolver-layout")) +
                         "} vmResolver;");
                 fileWriter.write(doc);
             }
@@ -307,18 +308,17 @@ public class CmakeUtils {
             try (Writer fileWriter = new OutputStreamWriter(
                     new FileOutputStream(file), StandardCharsets.UTF_8)) {
                 final String doc = matcherWrapper.replaceAll("typedef struct {\n" +
-                        randomList(funcs) +
+                        randomList(funcs, GeneratorRandom.create("jni-layout")) +
                         "} JNIWrapper;");
                 fileWriter.write(doc);
             }
         }
     }
 
-    private static String randomList(List<String> list) {
+    private static String randomList(List<String> list, Random random) {
         final StringBuilder sb = new StringBuilder();
         final int size = list.size();
         for (int i = 0; i < size; i++) {
-            final Random random = new Random();
             final int idx = random.nextInt(list.size());
             sb.append(list.get(idx));
             sb.append('\n');

@@ -2,7 +2,7 @@ package com.nmmedit.apkprotect.dex2c;
 
 import com.nmmedit.apkprotect.sign.SignatureBinding;
 
-import java.security.SecureRandom;
+import java.util.Random;
 
 public final class ProtectionContext {
 
@@ -31,11 +31,11 @@ public final class ProtectionContext {
     private long dexId;
 
     public static ProtectionContext create() {
-        return new ProtectionContext(new SecureRandom().nextLong(), 0, "", null, configuredOnDemand());
+        return new ProtectionContext(GeneratorRandom.create("context").nextLong(), 0, "", null, configuredOnDemand());
     }
 
     public static ProtectionContext createBound(String packageName, byte[] signerCertificate) {
-        final SecureRandom random = new SecureRandom();
+        final Random random = GeneratorRandom.create("context");
         return new ProtectionContext(
                 random.nextLong(),
                 random.nextLong(),

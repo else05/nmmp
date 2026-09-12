@@ -1,0 +1,98 @@
+[
+  {
+    "case": "arrayPayload",
+    "round": -1,
+    "iterations": 1000,
+    "elapsedNs": 41290520,
+    "checksum": 1061284,
+    "variant": "A"
+  },
+  {
+    "case": "arrayPayload",
+    "round": 0,
+    "iterations": 1000,
+    "elapsedNs": 41555781,
+    "checksum": 1061284,
+    "variant": "A"
+  },
+  {
+    "case": "arrayPayload",
+    "round": 1,
+    "iterations": 1000,
+    "elapsedNs": 39231823,
+    "checksum": 1061284,
+    "variant": "A"
+  },
+  {
+    "case": "arrayPayload",
+    "round": -1,
+    "iterations": 1000,
+    "elapsedNs": 41098282,
+    "checksum": 1061284,
+    "variant": "B"
+  },
+  {
+    "case": "arrayPayload",
+    "round": 0,
+    "iterations": 1000,
+    "elapsedNs": 40475885,
+    "checksum": 1061284,
+    "variant": "B"
+  },
+  {
+    "case": "arrayPayload",
+    "round": 1,
+    "iterations": 1000,
+    "elapsedNs": 39449583,
+    "checksum": 1061284,
+    "variant": "B"
+  },
+  {
+    "case": "arrayPayload",
+    "round": -1,
+    "iterations": 1000,
+    "elapsedNs": 23979583,
+    "checksum": 1061284,
+    "variant": "C"
+  },
+  {
+    "case": "arrayPayload",
+    "round": 0,
+    "iterations": 1000,
+    "elapsedNs": 24255520,
+    "checksum": 1061284,
+    "variant": "C"
+  },
+  {
+    "case": "arrayPayload",
+    "round": 1,
+    "iterations": 1000,
+    "elapsedNs": 23312708,
+    "checksum": 1061284,
+    "variant": "C"
+  },
+  {
+    "case": "arrayPayload",
+    "round": -1,
+    "iterations": 1000,
+    "elapsedNs": 21901927,
+    "checksum": 1061284,
+    "variant": "D"
+  },
+  {
+    "case": "arrayPayload",
+    "round": 0,
+    "iterations": 1000,
+    "elapsedNs": 22546979,
+    "checksum": 1061284,
+    "variant": "D"
+  },
+  {
+    "case": "arrayPayload",
+    "round": 1,
+    "iterations": 1000,
+    "elapsedNs": 23039636,
+    "checksum": 1061284,
+    "variant": "D"
+  }
+]

@@ -1,0 +1,862 @@
+{
+  "complete": true,
+  "unit": "ns",
+  "directory": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5-harness\\report-review\\run-20260912T195618-052891Z\\fixtures\\hotspot-valid",
+  "cases": {
+    "arithmetic": {
+      "variants": {
+        "A": {
+          "count": 20,
+          "median": 1200000000.0,
+          "p95": 1200000000,
+          "minimum": 1200000000,
+          "maximum": 1200000000,
+          "coefficientOfVariation": 0.0,
+          "roundsUnderOneSecond": 0,
+          "processMemory": [
+            {
+              "batch": 0,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            },
+            {
+              "batch": 1,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            }
+          ]
+        },
+        "B": {
+          "count": 20,
+          "median": 1200000000.0,
+          "p95": 1200000000,
+          "minimum": 1200000000,
+          "maximum": 1200000000,
+          "coefficientOfVariation": 0.0,
+          "roundsUnderOneSecond": 0,
+          "processMemory": [
+            {
+              "batch": 0,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            },
+            {
+              "batch": 1,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            }
+          ],
+          "percentVsA": 0.0
+        },
+        "C": {
+          "count": 20,
+          "median": 1200000000.0,
+          "p95": 1200000000,
+          "minimum": 1200000000,
+          "maximum": 1200000000,
+          "coefficientOfVariation": 0.0,
+          "roundsUnderOneSecond": 0,
+          "processMemory": [
+            {
+              "batch": 0,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            },
+            {
+              "batch": 1,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            }
+          ],
+          "percentVsA": 0.0
+        },
+        "D": {
+          "count": 20,
+          "median": 1200000000.0,
+          "p95": 1200000000,
+          "minimum": 1200000000,
+          "maximum": 1200000000,
+          "coefficientOfVariation": 0.0,
+          "roundsUnderOneSecond": 0,
+          "processMemory": [
+            {
+              "batch": 0,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            },
+            {
+              "batch": 1,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            }
+          ],
+          "percentVsA": 0.0,
+          "percentVsC": 0.0
+        }
+      },
+      "iterations": 1,
+      "timingGatePassed": true,
+      "durationProtocolMet": true
+    },
+    "branch": {
+      "variants": {
+        "A": {
+          "count": 20,
+          "median": 1200000000.0,
+          "p95": 1200000000,
+          "minimum": 1200000000,
+          "maximum": 1200000000,
+          "coefficientOfVariation": 0.0,
+          "roundsUnderOneSecond": 0,
+          "processMemory": [
+            {
+              "batch": 0,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            },
+            {
+              "batch": 1,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            }
+          ]
+        },
+        "B": {
+          "count": 20,
+          "median": 1200000000.0,
+          "p95": 1200000000,
+          "minimum": 1200000000,
+          "maximum": 1200000000,
+          "coefficientOfVariation": 0.0,
+          "roundsUnderOneSecond": 0,
+          "processMemory": [
+            {
+              "batch": 0,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            },
+            {
+              "batch": 1,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            }
+          ],
+          "percentVsA": 0.0
+        },
+        "C": {
+          "count": 20,
+          "median": 1200000000.0,
+          "p95": 1200000000,
+          "minimum": 1200000000,
+          "maximum": 1200000000,
+          "coefficientOfVariation": 0.0,
+          "roundsUnderOneSecond": 0,
+          "processMemory": [
+            {
+              "batch": 0,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            },
+            {
+              "batch": 1,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            }
+          ],
+          "percentVsA": 0.0
+        },
+        "D": {
+          "count": 20,
+          "median": 1200000000.0,
+          "p95": 1200000000,
+          "minimum": 1200000000,
+          "maximum": 1200000000,
+          "coefficientOfVariation": 0.0,
+          "roundsUnderOneSecond": 0,
+          "processMemory": [
+            {
+              "batch": 0,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            },
+            {
+              "batch": 1,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            }
+          ],
+          "percentVsA": 0.0,
+          "percentVsC": 0.0
+        }
+      },
+      "iterations": 1,
+      "timingGatePassed": true,
+      "durationProtocolMet": true
+    },
+    "shortCall": {
+      "variants": {
+        "A": {
+          "count": 20,
+          "median": 1200000000.0,
+          "p95": 1200000000,
+          "minimum": 1200000000,
+          "maximum": 1200000000,
+          "coefficientOfVariation": 0.0,
+          "roundsUnderOneSecond": 0,
+          "processMemory": [
+            {
+              "batch": 0,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            },
+            {
+              "batch": 1,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            }
+          ]
+        },
+        "B": {
+          "count": 20,
+          "median": 1200000000.0,
+          "p95": 1200000000,
+          "minimum": 1200000000,
+          "maximum": 1200000000,
+          "coefficientOfVariation": 0.0,
+          "roundsUnderOneSecond": 0,
+          "processMemory": [
+            {
+              "batch": 0,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            },
+            {
+              "batch": 1,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            }
+          ],
+          "percentVsA": 0.0
+        },
+        "C": {
+          "count": 20,
+          "median": 1200000000.0,
+          "p95": 1200000000,
+          "minimum": 1200000000,
+          "maximum": 1200000000,
+          "coefficientOfVariation": 0.0,
+          "roundsUnderOneSecond": 0,
+          "processMemory": [
+            {
+              "batch": 0,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            },
+            {
+              "batch": 1,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            }
+          ],
+          "percentVsA": 0.0
+        },
+        "D": {
+          "count": 20,
+          "median": 1200000000.0,
+          "p95": 1200000000,
+          "minimum": 1200000000,
+          "maximum": 1200000000,
+          "coefficientOfVariation": 0.0,
+          "roundsUnderOneSecond": 0,
+          "processMemory": [
+            {
+              "batch": 0,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            },
+            {
+              "batch": 1,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            }
+          ],
+          "percentVsA": 0.0,
+          "percentVsC": 0.0
+        }
+      },
+      "iterations": 1,
+      "timingGatePassed": true,
+      "durationProtocolMet": true
+    },
+    "jniObject": {
+      "variants": {
+        "A": {
+          "count": 20,
+          "median": 1200000000.0,
+          "p95": 1200000000,
+          "minimum": 1200000000,
+          "maximum": 1200000000,
+          "coefficientOfVariation": 0.0,
+          "roundsUnderOneSecond": 0,
+          "processMemory": [
+            {
+              "batch": 0,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            },
+            {
+              "batch": 1,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            }
+          ]
+        },
+        "B": {
+          "count": 20,
+          "median": 1200000000.0,
+          "p95": 1200000000,
+          "minimum": 1200000000,
+          "maximum": 1200000000,
+          "coefficientOfVariation": 0.0,
+          "roundsUnderOneSecond": 0,
+          "processMemory": [
+            {
+              "batch": 0,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            },
+            {
+              "batch": 1,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            }
+          ],
+          "percentVsA": 0.0
+        },
+        "C": {
+          "count": 20,
+          "median": 1200000000.0,
+          "p95": 1200000000,
+          "minimum": 1200000000,
+          "maximum": 1200000000,
+          "coefficientOfVariation": 0.0,
+          "roundsUnderOneSecond": 0,
+          "processMemory": [
+            {
+              "batch": 0,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            },
+            {
+              "batch": 1,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            }
+          ],
+          "percentVsA": 0.0
+        },
+        "D": {
+          "count": 20,
+          "median": 1200000000.0,
+          "p95": 1200000000,
+          "minimum": 1200000000,
+          "maximum": 1200000000,
+          "coefficientOfVariation": 0.0,
+          "roundsUnderOneSecond": 0,
+          "processMemory": [
+            {
+              "batch": 0,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            },
+            {
+              "batch": 1,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            }
+          ],
+          "percentVsA": 0.0,
+          "percentVsC": 0.0
+        }
+      },
+      "iterations": 1,
+      "timingGatePassed": true,
+      "durationProtocolMet": true
+    },
+    "arrayPayload": {
+      "variants": {
+        "A": {
+          "count": 20,
+          "median": 1200000000.0,
+          "p95": 1200000000,
+          "minimum": 1200000000,
+          "maximum": 1200000000,
+          "coefficientOfVariation": 0.0,
+          "roundsUnderOneSecond": 0,
+          "processMemory": [
+            {
+              "batch": 0,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            },
+            {
+              "batch": 1,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            }
+          ]
+        },
+        "B": {
+          "count": 20,
+          "median": 1200000000.0,
+          "p95": 1200000000,
+          "minimum": 1200000000,
+          "maximum": 1200000000,
+          "coefficientOfVariation": 0.0,
+          "roundsUnderOneSecond": 0,
+          "processMemory": [
+            {
+              "batch": 0,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            },
+            {
+              "batch": 1,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            }
+          ],
+          "percentVsA": 0.0
+        },
+        "C": {
+          "count": 20,
+          "median": 1200000000.0,
+          "p95": 1200000000,
+          "minimum": 1200000000,
+          "maximum": 1200000000,
+          "coefficientOfVariation": 0.0,
+          "roundsUnderOneSecond": 0,
+          "processMemory": [
+            {
+              "batch": 0,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            },
+            {
+              "batch": 1,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            }
+          ],
+          "percentVsA": 0.0
+        },
+        "D": {
+          "count": 20,
+          "median": 1200000000.0,
+          "p95": 1200000000,
+          "minimum": 1200000000,
+          "maximum": 1200000000,
+          "coefficientOfVariation": 0.0,
+          "roundsUnderOneSecond": 0,
+          "processMemory": [
+            {
+              "batch": 0,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            },
+            {
+              "batch": 1,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            }
+          ],
+          "percentVsA": 0.0,
+          "percentVsC": 0.0
+        }
+      },
+      "iterations": 1,
+      "timingGatePassed": true,
+      "durationProtocolMet": true
+    },
+    "exception": {
+      "variants": {
+        "A": {
+          "count": 20,
+          "median": 1200000000.0,
+          "p95": 1200000000,
+          "minimum": 1200000000,
+          "maximum": 1200000000,
+          "coefficientOfVariation": 0.0,
+          "roundsUnderOneSecond": 0,
+          "processMemory": [
+            {
+              "batch": 0,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            },
+            {
+              "batch": 1,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            }
+          ]
+        },
+        "B": {
+          "count": 20,
+          "median": 1200000000.0,
+          "p95": 1200000000,
+          "minimum": 1200000000,
+          "maximum": 1200000000,
+          "coefficientOfVariation": 0.0,
+          "roundsUnderOneSecond": 0,
+          "processMemory": [
+            {
+              "batch": 0,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            },
+            {
+              "batch": 1,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            }
+          ],
+          "percentVsA": 0.0
+        },
+        "C": {
+          "count": 20,
+          "median": 1200000000.0,
+          "p95": 1200000000,
+          "minimum": 1200000000,
+          "maximum": 1200000000,
+          "coefficientOfVariation": 0.0,
+          "roundsUnderOneSecond": 0,
+          "processMemory": [
+            {
+              "batch": 0,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            },
+            {
+              "batch": 1,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            }
+          ],
+          "percentVsA": 0.0
+        },
+        "D": {
+          "count": 20,
+          "median": 1200000000.0,
+          "p95": 1200000000,
+          "minimum": 1200000000,
+          "maximum": 1200000000,
+          "coefficientOfVariation": 0.0,
+          "roundsUnderOneSecond": 0,
+          "processMemory": [
+            {
+              "batch": 0,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            },
+            {
+              "batch": 1,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            }
+          ],
+          "percentVsA": 0.0,
+          "percentVsC": 0.0
+        }
+      },
+      "iterations": 1,
+      "timingGatePassed": true,
+      "durationProtocolMet": true
+    },
+    "recursive": {
+      "variants": {
+        "A": {
+          "count": 20,
+          "median": 1200000000.0,
+          "p95": 1200000000,
+          "minimum": 1200000000,
+          "maximum": 1200000000,
+          "coefficientOfVariation": 0.0,
+          "roundsUnderOneSecond": 0,
+          "processMemory": [
+            {
+              "batch": 0,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            },
+            {
+              "batch": 1,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            }
+          ]
+        },
+        "B": {
+          "count": 20,
+          "median": 1200000000.0,
+          "p95": 1200000000,
+          "minimum": 1200000000,
+          "maximum": 1200000000,
+          "coefficientOfVariation": 0.0,
+          "roundsUnderOneSecond": 0,
+          "processMemory": [
+            {
+              "batch": 0,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            },
+            {
+              "batch": 1,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            }
+          ],
+          "percentVsA": 0.0
+        },
+        "C": {
+          "count": 20,
+          "median": 1200000000.0,
+          "p95": 1200000000,
+          "minimum": 1200000000,
+          "maximum": 1200000000,
+          "coefficientOfVariation": 0.0,
+          "roundsUnderOneSecond": 0,
+          "processMemory": [
+            {
+              "batch": 0,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            },
+            {
+              "batch": 1,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            }
+          ],
+          "percentVsA": 0.0
+        },
+        "D": {
+          "count": 20,
+          "median": 1200000000.0,
+          "p95": 1200000000,
+          "minimum": 1200000000,
+          "maximum": 1200000000,
+          "coefficientOfVariation": 0.0,
+          "roundsUnderOneSecond": 0,
+          "processMemory": [
+            {
+              "batch": 0,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            },
+            {
+              "batch": 1,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            }
+          ],
+          "percentVsA": 0.0,
+          "percentVsC": 0.0
+        }
+      },
+      "iterations": 1,
+      "timingGatePassed": true,
+      "durationProtocolMet": true
+    },
+    "multiThread": {
+      "variants": {
+        "A": {
+          "count": 20,
+          "median": 1200000000.0,
+          "p95": 1200000000,
+          "minimum": 1200000000,
+          "maximum": 1200000000,
+          "coefficientOfVariation": 0.0,
+          "roundsUnderOneSecond": 0,
+          "processMemory": [
+            {
+              "batch": 0,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            },
+            {
+              "batch": 1,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            }
+          ]
+        },
+        "B": {
+          "count": 20,
+          "median": 1200000000.0,
+          "p95": 1200000000,
+          "minimum": 1200000000,
+          "maximum": 1200000000,
+          "coefficientOfVariation": 0.0,
+          "roundsUnderOneSecond": 0,
+          "processMemory": [
+            {
+              "batch": 0,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            },
+            {
+              "batch": 1,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            }
+          ],
+          "percentVsA": 0.0
+        },
+        "C": {
+          "count": 20,
+          "median": 1200000000.0,
+          "p95": 1200000000,
+          "minimum": 1200000000,
+          "maximum": 1200000000,
+          "coefficientOfVariation": 0.0,
+          "roundsUnderOneSecond": 0,
+          "processMemory": [
+            {
+              "batch": 0,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            },
+            {
+              "batch": 1,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            }
+          ],
+          "percentVsA": 0.0
+        },
+        "D": {
+          "count": 20,
+          "median": 1200000000.0,
+          "p95": 1200000000,
+          "minimum": 1200000000,
+          "maximum": 1200000000,
+          "coefficientOfVariation": 0.0,
+          "roundsUnderOneSecond": 0,
+          "processMemory": [
+            {
+              "batch": 0,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            },
+            {
+              "batch": 1,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            }
+          ],
+          "percentVsA": 0.0,
+          "percentVsC": 0.0
+        }
+      },
+      "iterations": 1,
+      "timingGatePassed": true,
+      "durationProtocolMet": true
+    },
+    "largeShort": {
+      "variants": {
+        "A": {
+          "count": 20,
+          "median": 1200000000.0,
+          "p95": 1200000000,
+          "minimum": 1200000000,
+          "maximum": 1200000000,
+          "coefficientOfVariation": 0.0,
+          "roundsUnderOneSecond": 0,
+          "processMemory": [
+            {
+              "batch": 0,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            },
+            {
+              "batch": 1,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            }
+          ]
+        },
+        "B": {
+          "count": 20,
+          "median": 1200000000.0,
+          "p95": 1200000000,
+          "minimum": 1200000000,
+          "maximum": 1200000000,
+          "coefficientOfVariation": 0.0,
+          "roundsUnderOneSecond": 0,
+          "processMemory": [
+            {
+              "batch": 0,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            },
+            {
+              "batch": 1,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            }
+          ],
+          "percentVsA": 0.0
+        },
+        "C": {
+          "count": 20,
+          "median": 1200000000.0,
+          "p95": 1200000000,
+          "minimum": 1200000000,
+          "maximum": 1200000000,
+          "coefficientOfVariation": 0.0,
+          "roundsUnderOneSecond": 0,
+          "processMemory": [
+            {
+              "batch": 0,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            },
+            {
+              "batch": 1,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            }
+          ],
+          "percentVsA": 0.0
+        },
+        "D": {
+          "count": 20,
+          "median": 1200000000.0,
+          "p95": 1200000000,
+          "minimum": 1200000000,
+          "maximum": 1200000000,
+          "coefficientOfVariation": 0.0,
+          "roundsUnderOneSecond": 0,
+          "processMemory": [
+            {
+              "batch": 0,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            },
+            {
+              "batch": 1,
+              "peakRssKb": 123,
+              "finalRssKb": 120
+            }
+          ],
+          "percentVsA": 0.0,
+          "percentVsC": 0.0
+        }
+      },
+      "iterations": 1,
+      "timingGatePassed": true,
+      "durationProtocolMet": true
+    }
+  }
+}

@@ -1,0 +1,5 @@
+{"case":"branch","round":-1,"iterations":100,"elapsedNs":9146718,"checksum":3519200}
+{"case":"branch","round":0,"iterations":100,"elapsedNs":8830729,"checksum":3519200}
+{"case":"branch","round":1,"iterations":100,"elapsedNs":13605052,"checksum":3519200}
+VmHWM:	   42304 kB
+VmRSS:	   42304 kB

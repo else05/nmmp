@@ -1,0 +1,1 @@
+ADB server became unavailable during the first measured install, after 12 warmups. No measured app launch occurred. Preserve all attempts; exclude this incomplete batch from gate calculations and rerun all warmups/rounds in startup-retry1. ADB is now connected again. This is infrastructure failure, not evidence of an app crash.

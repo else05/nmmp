@@ -1,0 +1,17 @@
+{
+  "serial": "192.168.6.118:5555",
+  "adb": "E:\\Scoop\\apps\\adb\\current\\platform-tools\\adb.exe",
+  "package": "org.savior.sync",
+  "activity": "org.savior.sync/.MainActivity",
+  "warmups": 0,
+  "rounds": 1,
+  "purpose": "Final restoration and functionality check only, not a performance batch",
+  "variants": [
+    {
+      "name": "D",
+      "apk": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\final-acceptance\\protected-signed.apk",
+      "loader": true,
+      "loaderId": "7502ffa5"
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "serial": "192.168.6.118:5555",
+  "package": "org.savior.sync",
+  "activity": "org.savior.sync/.MainActivity",
+  "warmups": 3,
+  "rounds": 20,
+  "variants": [
+    {
+      "name": "A",
+      "apk": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed3\\A\\protected-signed.apk",
+      "loader": false,
+      "sha256": "c3d8a7e3013f91bfe78ca0830abc4bc5e7ad4020b9ea3aedc5fb24556d8b68b9"
+    },
+    {
+      "name": "B",
+      "apk": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed3\\B\\protected-signed.apk",
+      "loader": true,
+      "loaderId": "f06294d8",
+      "sha256": "eaa1311460f25b28b716247b3927141ff3bc8f9db65bd6488ab3bc956cfac69e"
+    },
+    {
+      "name": "C",
+      "apk": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed3\\C\\protected-signed.apk",
+      "loader": false,
+      "sha256": "a0678b76465112de2a587a8077b75eee5fd63bd95a4b1abfcdfbd377f76b3ea6"
+    },
+    {
+      "name": "D",
+      "apk": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed3\\D\\protected-signed.apk",
+      "loader": true,
+      "loaderId": "d16632b9",
+      "sha256": "eb868b98d43cb01d8fecc25d330f2f4a336fe06ba3421952ec4225813795cbd2"
+    }
+  ],
+  "adb": "E:\\Scoop\\apps\\adb\\current\\platform-tools\\adb.exe",
+  "resumeFrom": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed3\\startup\\attempts.jsonl",
+  "resumeReason": "Transient local ADB connection failure during A warmup round1 activity validation; see startup/INTERRUPTED.md. Preserve all seven valid attempts and repeat the incomplete eighth attempt.",
+  "resumeHistory": [
+    {
+      "ledgerIndex": 7,
+      "source": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed3\\startup\\attempts.jsonl",
+      "reason": "Transient local ADB connection failure during A warmup round1 activity validation; see startup/INTERRUPTED.md. Preserve all seven valid attempts and repeat the incomplete eighth attempt."
+    }
+  ]
+}

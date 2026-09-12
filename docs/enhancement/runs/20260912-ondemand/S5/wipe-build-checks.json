@@ -1,0 +1,21 @@
+{
+  "java": {
+    "apkprotect": {
+      "tests": 50,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "arsc": {
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "jarSha256": "28d6f83f8d099fecbcbdfbbd7acc3b41cb7e9b0347260920430d742fa9530ad7",
+  "templateSha256": "2fe364067e978e4cbc510449eec31d64374bbba5bfcc8e8955918a4dda7920b9",
+  "packagedTemplateExact": true,
+  "decodedRuntimeSourceExact": true,
+  "testBridgeAbsent": true
+}

@@ -1,0 +1,68 @@
+--------- beginning of main
+         1591020099.156  7678  7678 I NMMP-Loader: ready id=f6957a76 bias=0x7aed07e000 size=1232896 unpack_us=16686 map_us=19517 constructors_us=4 bootstrap_us=469 key_us=53
+         1591020099.290  7678  7678 D NetworkSecurityConfig: No Network Security Config specified, using platform default
+--------- beginning of system
+         1591020099.324  7678  7678 D ActivityThread: [dsv]>>networdId: 2002
+         1591020099.403  7678  7739 D OpenGLRenderer: HWUI GL Pipeline
+         1591020099.585  7678  7683 I zygote64: Compiler allocated 4MB to compile java.util.List גض.אآܔ.אء̀(java.lang.String)
+         1591020099.662  7678  7683 I zygote64: Do partial code cache collection, code=26KB, data=30KB
+         1591020099.664  7678  7683 I zygote64: After code cache collection, code=26KB, data=30KB
+         1591020099.664  7678  7683 I zygote64: Increasing code cache capacity to 128KB
+         1591020099.665  7678  7683 I zygote64: Compiler allocated 4MB to compile java.util.List גض.אآܔ.אء̀(java.lang.String)
+         1591020099.740  7678  7683 I zygote64: Do partial code cache collection, code=49KB, data=53KB
+         1591020099.740  7678  7683 I zygote64: After code cache collection, code=33KB, data=48KB
+         1591020099.740  7678  7683 I zygote64: Increasing code cache capacity to 256KB
+         1591020099.741  7678  7683 I zygote64: Compiler allocated 4MB to compile void בغ.אءܢ.אآ̲(boolean)
+         1591020099.905  7678  7678 V ActivityThread_MultiService: original display: 0 new displayId: -1
+         1591020099.906  7678  7739 I Adreno  : QUALCOMM build                   : 04c6064, Id1257aec33
+         1591020099.906  7678  7739 I Adreno  : Build Date                       : 07/01/19
+         1591020099.906  7678  7739 I Adreno  : OpenGL ES Shader Compiler Version: EV031.23.07.00
+         1591020099.906  7678  7739 I Adreno  : Local Branch                     : 
+         1591020099.906  7678  7739 I Adreno  : Remote Branch                    : 
+         1591020099.906  7678  7739 I Adreno  : Remote Branch                    : 
+         1591020099.906  7678  7739 I Adreno  : Reconstruct Branch               : 
+         1591020099.906  7678  7739 D vndksupport: Loading /vendor/lib64/hw/gralloc.msm8996.so from current namespace instead of sphal namespace.
+         1591020099.917  7678  7739 I Adreno  : PFP: 0x005ff110, ME: 0x005ff066
+         1591020099.924  7678  7739 I zygote64: android::hardware::configstore::V1_0::ISurfaceFlingerConfigs::hasWideColorDisplay retrieved: 0
+         1591020099.934  7678  7739 I OpenGLRenderer: Initialized EGL, version 1.4
+         1591020099.934  7678  7739 D OpenGLRenderer: Swap behavior 2
+         1591020100.017  7678  7683 I zygote64: Do full code cache collection, code=126KB, data=109KB
+         1591020100.018  7678  7683 I zygote64: After code cache collection, code=92KB, data=54KB
+         1591020100.119  7678  7678 I zygote64: Deoptimizing void גت.אآܕ.<init>() due to JIT inline cache
+         1591020100.185  7678  7678 I Choreographer: Skipped 44 frames!  The application may be doing too much work on its main thread.
+         1591020100.254  7678  7683 I zygote64: Do partial code cache collection, code=122KB, data=90KB
+         1591020100.255  7678  7683 I zygote64: After code cache collection, code=120KB, data=89KB
+         1591020100.255  7678  7683 I zygote64: Increasing code cache capacity to 512KB
+         1591020100.298  7678  7678 I zygote64: Deoptimizing void בغ.אءܢ.אئ̨(int, java.lang.Object, java.lang.Object) due to JIT inline cache
+         1591020100.396  7678  7683 I zygote64: Compiler allocated 4MB to compile java.util.List גض.אآܔ.אء̀(java.lang.String)
+         1591020100.470  7678  7683 I zygote64: Compiler allocated 4MB to compile java.util.List גض.אآܔ.אء̀(java.lang.String)
+         1591020100.706  7678  7683 I zygote64: Do full code cache collection, code=247KB, data=192KB
+         1591020100.706  7678  7683 I zygote64: After code cache collection, code=202KB, data=114KB
+         1591020100.820  7678  7683 I zygote64: Compiler allocated 4MB to compile void דص.אءܓ.<init>(דح.אءܭ, דز.אءܕ, דع.אءܒ, java.lang.String, java.util.List, java.util.List)
+         1591020100.827  7678  7678 I zygote64: Deoptimizing void דا.אآܬ.אث̂(דإ.אآܗ) due to JIT inline cache
+         1591020100.877  7678  7683 I zygote64: Do partial code cache collection, code=250KB, data=161KB
+         1591020100.877  7678  7683 I zygote64: After code cache collection, code=240KB, data=157KB
+         1591020100.877  7678  7683 I zygote64: Increasing code cache capacity to 1024KB
+         1591020101.022  7678  7739 D vndksupport: Loading /vendor/lib64/hw/android.hardware.graphics.mapper@2.0-impl.so from current namespace instead of sphal namespace.
+         1591020101.024  7678  7739 D vndksupport: Loading /vendor/lib64/hw/gralloc.msm8996.so from current namespace instead of sphal namespace.
+         1591020101.399  7678  7678 I zygote64: Deoptimizing גت.אآܕ גت.אءܠ.אآ̨(גت.אآܕ, גت.אآܓ) due to JIT inline cache
+         1591020101.487  7678  7678 W ViewRootImpl_MultiService: report resize:  origin displayId= 0 new displayId= 0
+         1591020101.488  7678  7678 D Compose Focus: Owner FocusChanged(true)
+         1591020101.627  7678  7683 I zygote64: Compiler allocated 6MB to compile void androidx.activity.אءܒ.run()
+         1591020101.636  7678  7678 I zygote64: Deoptimizing boolean בا.אءܖ.add(java.lang.Object) due to JIT inline cache
+         1591020101.694  7678  7678 I zygote64: Deoptimizing חع.אءܙ חع.אءܙ.אء̲() due to JIT same target
+         1591020101.696  7678  7678 W ViewRootImpl_MultiService: report resize:  origin displayId= 0 new displayId= 0
+         1591020101.699  7678  7678 I zygote64: Deoptimizing גت.אآܕ גت.אءܠ.אآ̨(גت.אآܕ, גت.אآܓ) due to JIT inline cache
+         1591020101.701  7678  7678 I zygote64: Deoptimizing void בغ.אءܢ.אؤ̧() due to JIT inline cache
+         1591020101.753  7678  7683 I zygote64: Do full code cache collection, code=508KB, data=310KB
+         1591020101.755  7678  7683 I zygote64: After code cache collection, code=375KB, data=207KB
+         1591020101.755  7678  7683 I zygote64: Compiler allocated 6MB to compile android.view.accessibility.AccessibilityNodeInfo androidx.compose.ui.platform.אءܬ.createAccessibilityNodeInfo(int)
+         1591020101.986  7678  7678 I zygote64: Deoptimizing void דإ.אآܢ.אء̈(דإ.אآܢ, דإ.אآܣ, int, int) due to JIT inline cache
+         1591020102.358  7678  7683 I zygote64: Do partial code cache collection, code=504KB, data=328KB
+         1591020102.358  7678  7683 I zygote64: After code cache collection, code=503KB, data=327KB
+         1591020102.358  7678  7683 I zygote64: Increasing code cache capacity to 2MB
+         1591020102.359  7678  7683 I zygote64: Compiler allocated 12MB to compile void org.savior.sync.ui.אبܧ.אء̀(בخ.אءܧ, בغ.אءܞ, int)
+         1591020105.367  7678  7928 D ProfileInstaller: Installing profile for org.savior.sync
+         1591020114.532  7678  7685 I zygote64: Debugger is no longer active
+         1591020145.095  7678  7701 W zygote64: Checksum mismatch for dex base.apk
+         1591020145.095  7678  7701 W zygote64: Checksum mismatch for dex base.apk

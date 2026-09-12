@@ -1,0 +1,5 @@
+{
+  "hostUtc": "2026-09-12T21:03:26.920168+00:00",
+  "battery": "Current Battery Service state:\n  AC powered: true\n  USB powered: false\n  Wireless powered: false\n  Max charging current: 0\n  Max charging voltage: 0\n  Charge counter: 0\n  status: 5\n  health: 2\n  present: false\n  level: 100\n  scale: 100\n  voltage: 0\n  temperature: 0\n  technology: \n",
+  "load": "7.07 7.66 7.62 12/2786 12469\n"
+}

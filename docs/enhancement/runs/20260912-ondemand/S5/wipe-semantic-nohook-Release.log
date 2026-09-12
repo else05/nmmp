@@ -1,0 +1,45 @@
+-- The C compiler identification is Clang 17.0.2
+-- The CXX compiler identification is Clang 17.0.2
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /mnt/d/Android/SDK_WSL/ndk/26.3.11579264/toolchains/llvm/prebuilt/linux-x86_64/bin/clang - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /mnt/d/Android/SDK_WSL/ndk/26.3.11579264/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/wipe-semantic-nohook-Release
+[1/30] Building C object CMakeFiles/nmmp_native_vm_test.dir/mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/wipe-semantic-src/vm/NativeVm.c.o
+[2/30] Building CXX object CMakeFiles/nmmp_native_root_test.dir/mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/wipe-semantic-src/vm/VmCodec.cpp.o
+[3/30] Building C object CMakeFiles/nmmp_native_root_test.dir/mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/wipe-semantic-src/vm/NativeVm.c.o
+[4/30] Building C object CMakeFiles/nmmp_native_root_test.dir/mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/wipe-semantic-src/vm/VmInit.c.o
+[5/30] Building C object CMakeFiles/nmmp_init_semantic.dir/InitBridge.c.o
+[6/30] Building C object CMakeFiles/nmmp_init_semantic.dir/mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/wipe-semantic-src/vm/VmInit.c.o
+[7/30] Building CXX object vm/CMakeFiles/nmmvm.dir/DexCatch.cpp.o
+[8/30] Linking C shared library libnmmp_init_semantic.so
+[9/30] Building CXX object vm/CMakeFiles/nmmvm.dir/Exception.cpp.o
+[10/30] Building CXX object CMakeFiles/nmmp_native_vm_test.dir/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/test/cpp/NativeVmTest.cpp.o
+[11/30] Building CXX object CMakeFiles/nmmp_native_root_test.dir/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/test/cpp/NativeRootTest.cpp.o
+[12/30] Building CXX object vm/CMakeFiles/nmmvm.dir/Interp.cpp.o
+[13/30] Building CXX object CMakeFiles/nmmp_semantic.dir/SemanticBridge.cpp.o
+[14/30] Building CXX object vm/CMakeFiles/nmmvm.dir/GlobalCache.cpp.o
+[15/30] Linking CXX executable nmmp_native_vm_test
+[16/30] Linking CXX executable nmmp_native_root_test
+[17/30] Building CXX object vm/CMakeFiles/nmmvm.dir/Codec.cpp.o
+[18/30] Building C object vm/CMakeFiles/nmmvm.dir/VmInit.c.o
+[19/30] Building C object vm/CMakeFiles/nmmvm.dir/NativeVm.c.o
+[20/30] Building CXX object vm/CMakeFiles/nmmvm.dir/Demand.cpp.o
+[21/30] Building CXX object vm/CMakeFiles/nmmvm.dir/Module.cpp.o
+[22/30] Building CXX object vm/CMakeFiles/nmmvm.dir/VmCodec.cpp.o
+[23/30] Building CXX object vm/CMakeFiles/nmmvm.dir/Arm64Syscall.cpp.o
+[24/30] Building CXX object vm/CMakeFiles/nmmvm.dir/VmBinding.cpp.o
+[25/30] Building CXX object vm/CMakeFiles/nmmvm.dir/ApkV2Signer.cpp.o
+[26/30] Building CXX object vm/CMakeFiles/nmmvm.dir/Sha256.cpp.o
+[27/30] Building C object vm/CMakeFiles/nmmvm.dir/JNIWrapper.c.o
+[28/30] Building CXX object vm/CMakeFiles/nmmvm.dir/InterpC-portable.cpp.o
+[29/30] Linking CXX shared library vm/libnmmvm.so
+[30/30] Linking CXX shared library libnmmp_semantic.so

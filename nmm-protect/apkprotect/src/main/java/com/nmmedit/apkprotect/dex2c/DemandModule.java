@@ -3,7 +3,6 @@ package com.nmmedit.apkprotect.dex2c;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -26,7 +25,7 @@ public final class DemandModule {
     private final Set<Long> methodIds = new HashSet<>();
 
     public DemandModule(long root, long moduleId, long buildId) {
-        this(root, moduleId, buildId, new SecureRandom());
+        this(root, moduleId, buildId, GeneratorRandom.create("demand", moduleId));
     }
 
     // Deterministic randomness is only exposed to tests in this package.

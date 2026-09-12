@@ -1,0 +1,37 @@
+{
+  "largeShort": {
+    "A": {
+      "count": 20,
+      "medianNs": 4280828592.0,
+      "p95Ns": 4290152082,
+      "minNs": 4269584478,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": 0.0
+    },
+    "B": {
+      "count": 20,
+      "medianNs": 4325428774.5,
+      "p95Ns": 4447573280,
+      "minNs": 4292681457,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": 1.0418586388473594
+    },
+    "C": {
+      "count": 20,
+      "medianNs": 9237735.0,
+      "p95Ns": 9805469,
+      "minNs": 9053021,
+      "roundsUnderOneSecond": 20,
+      "regressionPercentVsFirst": -99.7842068468412
+    },
+    "D": {
+      "count": 20,
+      "medianNs": 9381666.5,
+      "p95Ns": 9670417,
+      "minNs": 9218959,
+      "roundsUnderOneSecond": 20,
+      "regressionPercentVsFirst": -99.78084461224324,
+      "regressionPercentVsC": 1.558082148925033
+    }
+  }
+}

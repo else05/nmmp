@@ -1,0 +1,53 @@
+{
+  "events": [
+    {
+      "case": "S5 separate baseline/current generator hashes",
+      "passed": true
+    },
+    {
+      "case": "Current partial wipe evidence renders without claiming pending device success",
+      "checksComplete": false,
+      "cases": [
+        "arithmetic",
+        "branch",
+        "shortCall"
+      ]
+    },
+    {
+      "case": "wrong hotspot library hash",
+      "rejected": "Post-review library role/hash mismatch"
+    },
+    {
+      "case": "wrong hotspot device identity",
+      "rejected": "Post-review device/runner identity mismatch"
+    },
+    {
+      "case": "Complete valid device fixture accepted",
+      "passed": true
+    },
+    {
+      "case": "PASS marker followed by exit139",
+      "rejected": "Wipe device command did not exit successfully"
+    },
+    {
+      "case": "wrong fresh device library hash",
+      "rejected": "Wipe device library hash mismatch"
+    },
+    {
+      "case": "Manifest separates current source hashes and frozen S5 provenance",
+      "passed": true
+    },
+    {
+      "case": "mixed candidate summary",
+      "rejected": "Post-review summary refers to a different delivered candidate"
+    }
+  ],
+  "reportFilesWritten": false,
+  "rawEvidenceChanged": false,
+  "adbCalled": false,
+  "sourceSha256": {
+    "render-s5-report.py": "e14dd1cad996e53f125d1f6587e8f4309fff83e9ad55852c60857aa137b7ef21",
+    "render-wipe-results.py": "744defd1a637c912722265f8b3fd9e45c3d1619e139b717b3cb6870193cfe861",
+    "write-s5-manifest.py": "30e59eabe08ba817474f7608385d4b9371b3b193a4769a9752f5d32e1902a6e5"
+  }
+}

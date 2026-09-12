@@ -1,0 +1,100 @@
+--- a/render-wipe-results.py
++++ b/render-wipe-results.py
+@@ -1,5 +1,6 @@
+ from pathlib import Path
+ import json
++import hashlib
+ import math
+ import statistics
+ 
+@@ -11,6 +12,41 @@
+     return json.loads(path.read_text(encoding='utf-8')) if path.exists() else None
+ 
+ 
++def validate_device_results(rows):
++    modes = {'Release', 'Debug', 'legacy-Release', 'legacy-Debug'}
++    if len(rows) != 4 or {r['mode'] for r in rows} != modes:
++        raise ValueError('Incomplete device mode coverage')
++    base = w / 'wipe-device-fixed'
++    identity = read(base / 'identity.json')
++    if identity['api'] != '27' or identity['abi'] != 'arm64-v8a':
++        raise ValueError('Wipe device identity mismatch')
++    commands = [json.loads(s) for s in (base / 'commands.jsonl').read_text(encoding='utf-8').splitlines() if s]
++    if not commands or any(c['code'] != 0 for c in commands):
++        raise ValueError('Wipe device command did not exit successfully')
++    for row in rows:
++        legacy = row['mode'].startswith('legacy-')
++        mode = row['mode'].removeprefix('legacy-')
++        build = w / ('wipe-fixed-' + ('legacy-' if legacy else '') + 'semantic-' + mode)
++        expected = {'semantic': 'SEMANTIC_PASS checks=' + ('1338' if legacy else '1351')}
++        if not legacy:
++            expected.update(nativeVm='PASS: 105 independent Java/native program vectors',
++                            root='PASS: native VM recovers and publishes root once across 1600 concurrent activations',
++                            wipe='DECODE_WIPE_PASS runs=801')
++        outputs = {'semantic': row['output']} if legacy else row['outputs']
++        for key, marker in expected.items():
++            if marker not in outputs[key] or not any(c['output'] == outputs[key] for c in commands):
++                raise ValueError('Missing successful wipe device output: ' + key)
++        expected_libraries = {'libnmmvm.so', 'libnmmp_semantic.so'}
++        if not legacy:
++            expected_libraries |= {'nmmp_native_vm_test', 'nmmp_native_root_test'}
++        if set(row['librarySha256']) != expected_libraries:
++            raise ValueError('Incomplete wipe device library identity')
++        for name, sha in row['librarySha256'].items():
++            path = build / ('vm/libnmmvm.so' if name == 'libnmmvm.so' else name)
++            if hashlib.sha256(path.read_bytes()).hexdigest() != sha:
++                raise ValueError('Wipe device library hash mismatch')
++
++
+ result = dict(artifact=read(w / 'final-wipe-acceptance/structure-audit.json'),
+               build=read(w / 'wipe-build-checks.json'), device=read(w / 'wipe-device-fixed/summary.json'),
+               legacyDevice=read(w / 'wipe-legacy-device/summary.json'),
+@@ -18,9 +54,31 @@
+               stability=read(w / 'wipe-final-stability/summary.json'),
+               performanceScope='Seed1 arithmetic/branch/shortCall only, not final three-seed acceptance',
+               releaseAcceptancePassed=False, cases={})
++if result['device']:
++    validate_device_results(result['device'])
++result['observerShutdownDiagnosis'] = dict(
++    failedCommands='wipe-device/commands.jsonl', crashBuffer='wipe-device/crash-buffer.log',
++    nohook=read(w / 'wipe-shutdown-diagnosis/nohook-result.json'),
++    fixedBridgeHost=read(w / 'wipe-host/tls-free-review/publication/results.json'))
+ base = w / 'wipe-hotspots'
+ if (base / 'summary.json').exists():
+     plan, stored = read(base / 'plan.json'), read(base / 'summary.json')
++    identity = read(base / 'identity.json')
++    frozen_identity = read(w / 's5/seed1/hotspots/identity.json')
++    frozen_plan = read(w / 's5/seed1/hotspots/plan.json')
++    if (any(identity[k] != frozen_identity[k] for k in ['api', 'abi', 'runnerSha256'])
++            or plan['serial'] != frozen_plan['serial']
++            or hashlib.sha256(Path(plan['runner']).read_bytes()).hexdigest() != identity['runnerSha256']):
++        raise ValueError('Post-review device/runner identity mismatch')
++    expected_libraries = {'A': w / 's5/seed1/hotspot-A', 'C': w / 's5/seed1/hotspot-D', 'D': w / 'wipe-hotspot-D'}
++    if [v['name'] for v in identity['variants']] != ['A', 'C', 'D']:
++        raise ValueError('Post-review library identity order mismatch')
++    for planned, observed in zip(plan['variants'], identity['variants']):
++        path = expected_libraries[observed['name']] / 'build/obj/strip/arm64-v8a/libc++_en.so'
++        if (planned != observed or Path(planned['library']).resolve() != path.resolve()
++                or hashlib.sha256(path.read_bytes()).hexdigest() != observed['sha256']):
++            raise ValueError('Post-review library role/hash mismatch')
++    result['hotspotIdentity'] = {k: identity[k] for k in ['api', 'abi', 'runnerSha256', 'variants']}
+     if ([v['name'] for v in plan['variants']] != ['A', 'C', 'D'] or plan['warmups'] != 5
+             or plan['rounds'] != 20 or set(plan['cases']) != {'arithmetic', 'branch', 'shortCall'}):
+         raise ValueError('Post-review timing protocol changed')
+@@ -66,9 +124,14 @@
+     text = text.replace('源码及主机验证已完成；修复后候选的设备验证进行中。',
+                         '源码、主机/API27功能验证及定向对照已完成；完整发布验收未通过。')
+ lines = [text, '', '<!-- DEVICE_RESULTS -->', '', '## 修复后设备验证', '']
++diagnosis = result['observerShutdownDiagnosis']
++if diagnosis['nohook'] and diagnosis['fixedBridgeHost']:
++    if (diagnosis['nohook']['exitCode'] != 0 or
++            'SEMANTIC_PASS checks=1351' not in diagnosis['nohook']['semantic'] or
++            any(r['processExitCode'] != 0 or not r['bridgeTlsAbsent'] for r in diagnosis['fixedBridgeHost']['results'])):
++        raise ValueError('Observer shutdown diagnosis evidence failed')
++    lines += ['旧hook Release在1351项断言完成后退出139；崩溃位于线程退出析构路径，不能计为完整通过。相同runtime的hook OFF在ART通过1351项且exit0。测试桥随后移除两处TLS，使用受锁保护的线程帧表及一次发布的方法描述符；fresh主机回归、并发首次发布和无TLS符号检查通过。修复后ART结果仅取 `wipe-device-fixed`，不覆盖旧失败。证据见 `wipe-shutdown-diagnosis`、`wipe-device`、`wipe-host/tls-free-review`。', '']
+ if result['device']:
+-    if {row['mode'] for row in result['device']} != {'Release', 'Debug', 'legacy-Release', 'legacy-Debug'}:
+-        raise ValueError('Incomplete device mode coverage')
+     lines.append('ARM64/API27 的按需 Debug/Release 各通过1351语义断言、105条独立 native VM 向量及root测试；两组实际擦除观察各通过6408次退出。legacy Debug/Release 各通过1338语义断言。完整库SHA、命令及输出见 `wipe-device-fixed/summary.json` 和 `commands.jsonl`。')
+ else:
+     lines.append('尚未完成。')

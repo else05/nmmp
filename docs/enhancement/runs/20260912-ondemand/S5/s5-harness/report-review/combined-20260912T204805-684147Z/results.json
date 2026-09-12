@@ -1,0 +1,19 @@
+{
+  "events": [
+    "PASS: diagnostic remains duration-ineligible even with all rounds >1s",
+    "PASS rejection api: Diagnostic device/runner identity mismatch",
+    "PASS rejection abi: Diagnostic device/runner identity mismatch",
+    "PASS rejection runnerSha256: Diagnostic device/runner identity mismatch",
+    "PASS rejection library: Diagnostic library identity mismatch",
+    "PASS rejection serial: Diagnostic serial mismatch",
+    "PASS rejection replacement: Separate diagnostic would replace existing measured results",
+    "PASS: deferred middle/last cases preserve ordinary iterations and rotation; fixed large affects only large",
+    "PASS: calibration timeout ceiling 2250s / fixed-large 15000s / minimum 600s",
+    "PASS: missing independent batch prevents completion/pass",
+    "FINDING: copying the old batches into startup-independent incorrectly marks noise review complete",
+    "FINDING: independent batch with changed own APK hash/device identity is not compared to original"
+  ],
+  "originalsUnchanged": true,
+  "adbInvocations": 0,
+  "limits": "Synthetic transport-free scheduling tail, reused synthetic hotspot fixtures, real startup copies. Aggregate tests stub only combined_hotspots with its already validated diagnostic result. These are not device or performance tests; fixed diagnostic iterations imply no user duration approval."
+}

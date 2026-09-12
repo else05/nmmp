@@ -1,0 +1,74 @@
+[
+  {
+    "case": "shortCall",
+    "round": -1,
+    "iterations": 10000,
+    "elapsedNs": 18433959,
+    "checksum": 3819240,
+    "variant": "D"
+  },
+  {
+    "case": "shortCall",
+    "round": 0,
+    "iterations": 10000,
+    "elapsedNs": 12134167,
+    "checksum": 3819240,
+    "variant": "D"
+  },
+  {
+    "case": "shortCall",
+    "round": 1,
+    "iterations": 10000,
+    "elapsedNs": 11946667,
+    "checksum": 3819240,
+    "variant": "D"
+  },
+  {
+    "case": "shortCall",
+    "round": -1,
+    "iterations": 10000,
+    "elapsedNs": 19869114,
+    "checksum": 3819240,
+    "variant": "A"
+  },
+  {
+    "case": "shortCall",
+    "round": 0,
+    "iterations": 10000,
+    "elapsedNs": 14326146,
+    "checksum": 3819240,
+    "variant": "A"
+  },
+  {
+    "case": "shortCall",
+    "round": 1,
+    "iterations": 10000,
+    "elapsedNs": 14059166,
+    "checksum": 3819240,
+    "variant": "A"
+  },
+  {
+    "case": "shortCall",
+    "round": -1,
+    "iterations": 10000,
+    "elapsedNs": 17539895,
+    "checksum": 3819240,
+    "variant": "C"
+  },
+  {
+    "case": "shortCall",
+    "round": 0,
+    "iterations": 10000,
+    "elapsedNs": 10599896,
+    "checksum": 3819240,
+    "variant": "C"
+  },
+  {
+    "case": "shortCall",
+    "round": 1,
+    "iterations": 10000,
+    "elapsedNs": 10613958,
+    "checksum": 3819240,
+    "variant": "C"
+  }
+]

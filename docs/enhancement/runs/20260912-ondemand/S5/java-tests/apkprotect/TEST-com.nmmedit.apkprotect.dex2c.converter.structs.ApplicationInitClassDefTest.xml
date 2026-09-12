@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.nmmedit.apkprotect.dex2c.converter.structs.ApplicationInitClassDefTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-09-12T17:36:04" hostname="DESKTOP-MHK8Q30" time="0.058">
+  <properties/>
+  <testcase name="generatedClassesCanBeWrittenAndRead" classname="com.nmmedit.apkprotect.dex2c.converter.structs.ApplicationInitClassDefTest" time="0.058"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

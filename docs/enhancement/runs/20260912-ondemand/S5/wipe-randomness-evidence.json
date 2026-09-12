@@ -1,0 +1,10 @@
+{
+  "testSeedAbsentInSameEnvironmentProbe": true,
+  "secureRandomInSameEnvironmentProbe": true,
+  "explicitBuildSeedUnset": true,
+  "jvmOptionInjectionBannerAbsentInCapturedBuildLog": true,
+  "environmentScriptSha256": "d36591d00acb9056ab206ee7833683bbd671c33d0ffaf76aa90f69f24aa57e18",
+  "buildLogSha256": "945114e17749a648e86270b7072df3d95efb75013cc771b6af311d42e8bfb2dc",
+  "javaExecutable": "/usr/bin/java",
+  "scope": "Retrospective command/log evidence plus a same-environment runtime probe; the original generation JVM did not emit an in-process randomness attestation."
+}

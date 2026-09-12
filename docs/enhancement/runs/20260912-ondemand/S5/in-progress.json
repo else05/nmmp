@@ -1,0 +1,106 @@
+{
+  "snapshotKind": "Historical progress notes; latest status is manifest.json",
+  "baselineCommit": "14bc959",
+  "implementationStages": {
+    "S1": "18dc5b1",
+    "S2": "2a86c65",
+    "S3": "a32211d",
+    "S4": "fbcf0ef",
+    "P5": "d54abcd"
+  },
+  "testSeeds": [
+    "0123456789abcdef",
+    "fedcba9876543210",
+    "6a09e667f3bcc909"
+  ],
+  "functional": {
+    "javaCurrent": 66,
+    "javaBaseline": 48,
+    "selectedMethodsPerApk": 526,
+    "newModeNativeAuditedApks": 7,
+    "api27StartupCandidate": {
+      "pid": "655",
+      "apkSha256": "d6947ef04d9defa93e1245d13f26fa3bf29b1e5283b8e5e0ee5b900eadae5c2b",
+      "crashMarkers": [],
+      "mainWindowDrawnAndOnScreen": true,
+      "api": "27"
+    },
+    "negativePackageCertificateSeed": {
+      "results": [
+        {
+          "mutation": "package",
+          "apkSha256": "6e2408e22cf3cf66703878a172490f7d29b8607dfe8b09e66cd77947ba748cb7",
+          "pid": "32000",
+          "internalError": true,
+          "errors": [
+            "NMMP initialization is not ready"
+          ]
+        },
+        {
+          "mutation": "certificate",
+          "apkSha256": "4c455ed17e7940b61531b1091e4fd617dd87249d8fe023f78ee6908a6557b921",
+          "pid": "32302",
+          "internalError": true,
+          "errors": [
+            "NMMP initialization is not ready"
+          ]
+        },
+        {
+          "mutation": "seed",
+          "apkSha256": "60546e6ba7a4969f7e58de0346023077b07e664f52906e0cffccfbdbf659b5d2",
+          "pid": "32607",
+          "internalError": true,
+          "errors": [
+            "string pool decode failed"
+          ]
+        }
+      ],
+      "unseededCandidateRestoredAndVerified": true
+    },
+    "nativeAllocationReadProbe": {
+      "all18ProbeScenariosReturnCorrectResults": true,
+      "legacyLargeMethodAllocationBytesPerCall": 7896,
+      "newLargeMethodMaxReadByteOffset": 7,
+      "newNativeAllocationRequestsObserved": 0,
+      "nativeAllocationScope": "Wrapped requests from this SO; excludes ART, dependency allocators and mmap",
+      "note": "Initial driver incorrectly required positive allocations for every variant. C correctly makes zero wrapped requests in these small-frame methods; corrected assertion and revalidated saved results."
+    }
+  },
+  "unseededCandidate": {
+    "apkSha256": "d6947ef04d9defa93e1245d13f26fa3bf29b1e5283b8e5e0ee5b900eadae5c2b",
+    "jarSha256": "28c13bbb3952d69640ad5bae626f0f5b7d04346e701e43dded0efd5e3734b469",
+    "mode": "on-demand-v1",
+    "codecVersion": 3,
+    "templateVersion": 4,
+    "signatureBinding": true,
+    "privateLinker": true,
+    "stage0Vm": true,
+    "fixedTestSeedUsed": false,
+    "selectedMethods": 526,
+    "outerStage0Vm": true,
+    "outerBusinessVmAbsent": true,
+    "innerTokenAndNativeVm": true,
+    "oldOrTransitionalExecutionAbsent": true,
+    "probeSymbolsAbsent": true,
+    "oldKeySharesAbsent": true,
+    "directInnerNeededAbsent": true,
+    "tlsSegmentAbsent": true,
+    "wxLoadAbsent": true,
+    "innerSha256": "9194c9c8052106b7b82a652d5e4675da82790ca49c2c7669ef4551bce7bb8898",
+    "apkLibraries": [
+      "lib/arm64-v8a/libapssdk.so",
+      "lib/arm64-v8a/libimage_processing_util_jni.so",
+      "lib/arm64-v8a/libc++_en.so"
+    ]
+  },
+  "pending": [
+    "remaining fixed-seed startup samples",
+    "formal hotspots and stage attribution",
+    "current default legacy device check",
+    "final device restoration"
+  ],
+  "unavailableCoverage": [
+    "ARM64 API26 device",
+    "activated/server-backed full business flow"
+  ]
+}

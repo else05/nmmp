@@ -3,6 +3,7 @@ package com.nmmedit.apkprotect.dex2c.converter.instructionrewriter;
 
 import com.android.tools.smali.dexlib2.Opcode;
 import com.android.tools.smali.dexlib2.Opcodes;
+import com.nmmedit.apkprotect.dex2c.GeneratorRandom;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -26,10 +27,11 @@ public class RandomInstructionRewriter extends InstructionRewriter {
             }
         }
         //随机opcode
+        final Random random = GeneratorRandom.create("opcode");
         for (int i = 1; i < opcodeList.size(); i++) {
             final Opcode opcode = opcodeList.get(i);
             if (opcode != null) {
-                final int randIdx = new Random().nextInt(randOpcodes.size());
+                final int randIdx = random.nextInt(randOpcodes.size());
                 final Opcode remove = randOpcodes.remove(randIdx);
                 opcodeList.set(i, remove);
             }

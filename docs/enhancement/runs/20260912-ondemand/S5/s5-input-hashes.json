@@ -1,0 +1,23 @@
+{
+  "apk": {
+    "path": "D:\\AndroidProjects\\sync-ui\\app\\build\\outputs\\apk\\release\\MdoHelper_v1.6.0M_202609092340_release.apk",
+    "sha256": "660e2ddc18a500b86ed4ab076b5fe72cbc37ec6400f2ff3ae9200344befb84a5",
+    "unchangedSinceS0": true
+  },
+  "rules": {
+    "path": "D:\\AndroidProjects\\sync-ui\\app\\convertRules.txt",
+    "sha256": "08a96e71a206cda3947c1ffccfe14e214926991bcdcdf7a64e71b06592112ed5",
+    "unchangedSinceS0": true
+  },
+  "mapping": {
+    "path": "D:\\AndroidProjects\\sync-ui\\app\\build\\outputs\\mapping\\release\\mapping.txt",
+    "sha256": "52a3e30a401704195733e2a997d54376465846645df9ff748e5afd32e37c683e",
+    "unchangedSinceS0": true
+  },
+  "omvll_config": {
+    "path": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\scripts\\wsl\\omvll-config.py",
+    "sha256": "50ab29382b8249572c3b77b7ce311747667dc5064873504533d5dd7d52f259bd",
+    "note": "Same current repository whitelist supplied to all S5 native builds"
+  },
+  "verifiedAtUtc": "2026-09-12T19:24:48.058565+00:00"
+}

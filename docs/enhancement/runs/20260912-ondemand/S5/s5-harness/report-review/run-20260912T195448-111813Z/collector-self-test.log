@@ -1,0 +1,11 @@
+test_bad_ledger_rejected (__main__.local_fixtures.<locals>.Fixtures.test_bad_ledger_rejected) ... ok
+test_device_cycle_and_finished_source_rejected (__main__.local_fixtures.<locals>.Fixtures.test_device_cycle_and_finished_source_rejected) ... ok
+test_history_reasons_and_prefix_required (__main__.local_fixtures.<locals>.Fixtures.test_history_reasons_and_prefix_required) ... ok
+test_multiple_interruptions_and_successful_retry (__main__.local_fixtures.<locals>.Fixtures.test_multiple_interruptions_and_successful_retry) ... ok
+test_protocol_changes_rejected (__main__.local_fixtures.<locals>.Fixtures.test_protocol_changes_rejected) ... ok
+test_saved_seed2_and_summary (__main__.local_fixtures.<locals>.Fixtures.test_saved_seed2_and_summary) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.025s
+
+OK

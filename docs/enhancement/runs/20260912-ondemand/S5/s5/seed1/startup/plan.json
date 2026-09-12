@@ -1,0 +1,33 @@
+{
+  "serial": "192.168.6.118:5555",
+  "package": "org.savior.sync",
+  "activity": "org.savior.sync/.MainActivity",
+  "warmups": 3,
+  "rounds": 20,
+  "variants": [
+    {
+      "name": "A",
+      "apk": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed1\\A\\protected-signed.apk",
+      "loader": false,
+      "sha256": "0162330fb1750933a5514da8090757209b1c00f699cfc5aac98697cea2a010ec"
+    },
+    {
+      "name": "B",
+      "apk": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed1\\B\\protected-signed.apk",
+      "loader": true,
+      "sha256": "9d8e1508e6bb8a81fd21678bee4dd4d722f99e57d3a4f3ef9ad0357ec5cec3f5"
+    },
+    {
+      "name": "C",
+      "apk": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed1\\C\\protected-signed.apk",
+      "loader": false,
+      "sha256": "8a7c1d65716e3481a972fda92957400ee291aa823fee7e50944471bd0b608566"
+    },
+    {
+      "name": "D",
+      "apk": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed1\\D\\protected-signed.apk",
+      "loader": true,
+      "sha256": "f346442e2ac4478332674db2751c0d7f5d1ab6d7f62b9f9f13c1b3e05c5c4995"
+    }
+  ]
+}

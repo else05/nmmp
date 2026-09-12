@@ -1,0 +1,12 @@
+{
+  "final-wipe-acceptance": {
+    "apkBytes": 9220037,
+    "apkSha256": "0e11e1b2191c53a0b99ea028f4c3a8ed17a610edc722f24a493921287d0cbb96",
+    "soBytes": 800544
+  },
+  "wipe-legacy-default": {
+    "apkBytes": 9142213,
+    "apkSha256": "2f34e190485d57e00041257a6c072e3a2c8df600e2fac020797c9f8bc5023cc5",
+    "soBytes": 1273384
+  }
+}

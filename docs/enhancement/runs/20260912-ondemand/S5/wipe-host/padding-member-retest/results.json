@@ -1,0 +1,17 @@
+{
+  "results": [
+    {
+      "mode": "debug-hook",
+      "result": "DECODE_WIPE_PASS runs=801 counters=[0, 6408, 6408, 6408, 4005, 801, 1602, 23229, 1602, 6408, 0]\n",
+      "librarySha256": "20fc98bb49794f8b9efd1dec71de194f7e416799cfd9a880522ce96a5fe190f9"
+    },
+    {
+      "mode": "release-hook",
+      "result": "DECODE_WIPE_PASS runs=801 counters=[0, 6408, 6408, 6408, 4005, 801, 1602, 23229, 1602, 6408, 0]\n",
+      "librarySha256": "04bd521183b6cc50e48ec573bd71a65683e9bcd0f4a48c2878f60fbbebbf85e4"
+    }
+  ],
+  "sizeof": "sizeof(VmDecodedState)=80 alignof=8\n",
+  "bridgeSha256": "5cd2e007cca9710b48f618de49193a2300d3d474b9ee2dec4ed5e18d651e6fb9",
+  "reusedInterpreterManifest": "/mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/wipe-host/run2/manifest.json"
+}

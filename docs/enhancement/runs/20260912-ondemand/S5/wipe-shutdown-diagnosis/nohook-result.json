@@ -1,0 +1,9 @@
+{
+  "semantic": "SEMANTIC_PASS checks=1351\n",
+  "exitCode": 0,
+  "librarySha256": {
+    "wipe-semantic-nohook-Release\\libnmmp_init_semantic.so": "c20103644750926d5089f2dad52c4f0e9d5d59c499c663bf8e17a621d620f202",
+    "wipe-semantic-nohook-Release\\libnmmp_semantic.so": "f96ab3c43a60b2e4314e1acffbefdd944461cf5f6b05ae2fd963c5871cc89a49",
+    "wipe-semantic-nohook-Release\\vm\\libnmmvm.so": "cebb12deed96faea833dbac142b3871e58e5750d901ae12dc3d8a3ffcc6591e2"
+  }
+}

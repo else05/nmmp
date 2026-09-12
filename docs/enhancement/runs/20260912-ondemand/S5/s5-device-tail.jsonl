@@ -1,0 +1,2 @@
+{"job": "invariant-diagnosis", "startedUtc": "2026-09-12T19:38:54.063881+00:00", "completedUtc": "2026-09-12T19:50:27.077709+00:00", "exitCode": 0}
+{"job": "seed1-hotspots", "completedUtc": "2026-09-12T20:26:40.903968+00:00", "exitCode": null, "interruptedByCoordinator": true, "completedScenarios": 8, "reason": "largeShort expected round exceeds 600s watchdog; warmup interrupted, no largeShort measured round accepted"}

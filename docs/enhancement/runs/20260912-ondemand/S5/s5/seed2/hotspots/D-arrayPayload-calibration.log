@@ -1,0 +1,5 @@
+{"case":"arrayPayload","round":-1,"iterations":1000,"elapsedNs":21901927,"checksum":1061284}
+{"case":"arrayPayload","round":0,"iterations":1000,"elapsedNs":22546979,"checksum":1061284}
+{"case":"arrayPayload","round":1,"iterations":1000,"elapsedNs":23039636,"checksum":1061284}
+VmHWM:	   45356 kB
+VmRSS:	   45356 kB

@@ -1,0 +1,282 @@
+{
+  "arithmetic": {
+    "A": {
+      "count": 20,
+      "medianNs": 1847624712.5,
+      "p95Ns": 1867822656,
+      "minNs": 1830366510,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": 0.0
+    },
+    "B": {
+      "count": 20,
+      "medianNs": 1535474453.0,
+      "p95Ns": 1657363853,
+      "minNs": 1455319427,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": -16.894678740123204
+    },
+    "C": {
+      "count": 20,
+      "medianNs": 4486970519.0,
+      "p95Ns": 4535551457,
+      "minNs": 4408402446,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": 142.8507525713234
+    },
+    "D": {
+      "count": 20,
+      "medianNs": 4628975884.0,
+      "p95Ns": 4846077446,
+      "minNs": 4429687915,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": 150.53658639024076,
+      "regressionPercentVsC": 3.1648383781146094
+    }
+  },
+  "branch": {
+    "A": {
+      "count": 20,
+      "medianNs": 1411973854.0,
+      "p95Ns": 1482447500,
+      "minNs": 1333777603,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": 0.0
+    },
+    "B": {
+      "count": 20,
+      "medianNs": 1465241770.5,
+      "p95Ns": 1521934635,
+      "minNs": 1405975052,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": 3.772585189810451
+    },
+    "C": {
+      "count": 20,
+      "medianNs": 3504127551.0,
+      "p95Ns": 3550928384,
+      "minNs": 3485441301,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": 148.17226898877124
+    },
+    "D": {
+      "count": 20,
+      "medianNs": 3579683592.5,
+      "p95Ns": 3614294895,
+      "minNs": 3545016092,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": 153.52336251546484,
+      "regressionPercentVsC": 2.1562012341256764
+    }
+  },
+  "shortCall": {
+    "A": {
+      "count": 20,
+      "medianNs": 2028388645.0,
+      "p95Ns": 2078729686,
+      "minNs": 1965045781,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": 0.0
+    },
+    "B": {
+      "count": 20,
+      "medianNs": 1990201483.5,
+      "p95Ns": 2062429531,
+      "minNs": 1913762395,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": -1.8826353418084696
+    },
+    "C": {
+      "count": 20,
+      "medianNs": 1473991588.0,
+      "p95Ns": 1491524375,
+      "minNs": 1456113385,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": -27.3318951161847
+    },
+    "D": {
+      "count": 20,
+      "medianNs": 1591568358.5,
+      "p95Ns": 1644837759,
+      "minNs": 1520131874,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": -21.535334837175647,
+      "regressionPercentVsC": 7.976759939283995
+    }
+  },
+  "jniObject": {
+    "A": {
+      "count": 20,
+      "medianNs": 1358934114.0,
+      "p95Ns": 1374423645,
+      "minNs": 1347480416,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": 0.0
+    },
+    "B": {
+      "count": 20,
+      "medianNs": 1323364035.5,
+      "p95Ns": 1338030625,
+      "minNs": 1300156770,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": -2.617498385944561
+    },
+    "C": {
+      "count": 20,
+      "medianNs": 1268997082.5,
+      "p95Ns": 1282547239,
+      "minNs": 1244635259,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": -6.618203971292758
+    },
+    "D": {
+      "count": 20,
+      "medianNs": 1381443202.5,
+      "p95Ns": 1395487552,
+      "minNs": 1357883073,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": 1.6563782061328025,
+      "regressionPercentVsC": 8.86102273603926
+    }
+  },
+  "arrayPayload": {
+    "A": {
+      "count": 20,
+      "medianNs": 2858184270.0,
+      "p95Ns": 2870728176,
+      "minNs": 2847198541,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": 0.0
+    },
+    "B": {
+      "count": 20,
+      "medianNs": 2846225207.0,
+      "p95Ns": 2885320832,
+      "minNs": 2793139218,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": -0.4184146951448975
+    },
+    "C": {
+      "count": 20,
+      "medianNs": 1519060910.5,
+      "p95Ns": 1832396926,
+      "minNs": 1502494739,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": -46.85224019863492
+    },
+    "D": {
+      "count": 20,
+      "medianNs": 1528600338.0,
+      "p95Ns": 1544156145,
+      "minNs": 1518722239,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": -46.51848188920303,
+      "regressionPercentVsC": 0.6279818955291283
+    }
+  },
+  "exception": {
+    "A": {
+      "count": 20,
+      "medianNs": 1463335728.5,
+      "p95Ns": 1471601354,
+      "minNs": 1456283593,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": 0.0
+    },
+    "B": {
+      "count": 20,
+      "medianNs": 1474699895.0,
+      "p95Ns": 1505266041,
+      "minNs": 1461372864,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": 0.7765932505214623
+    },
+    "C": {
+      "count": 20,
+      "medianNs": 1500262265.0,
+      "p95Ns": 1515766770,
+      "minNs": 1474942655,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": 2.523449389010124
+    },
+    "D": {
+      "count": 20,
+      "medianNs": 1512207004.5,
+      "p95Ns": 1525422760,
+      "minNs": 1493135156,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": 3.339717267075537,
+      "regressionPercentVsC": 0.7961767604679482
+    }
+  },
+  "recursive": {
+    "A": {
+      "count": 20,
+      "medianNs": 1541838619.5,
+      "p95Ns": 1570153957,
+      "minNs": 1503436353,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": 0.0
+    },
+    "B": {
+      "count": 20,
+      "medianNs": 1577814400.0,
+      "p95Ns": 1583747395,
+      "minNs": 1567740728,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": 2.333303890887528
+    },
+    "C": {
+      "count": 20,
+      "medianNs": 1470450207.5,
+      "p95Ns": 1481158801,
+      "minNs": 1460067760,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": -4.630083271824548
+    },
+    "D": {
+      "count": 20,
+      "medianNs": 1562931171.5,
+      "p95Ns": 1570828489,
+      "minNs": 1548262187,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": 1.3680129511115746,
+      "regressionPercentVsC": 6.289295858391042
+    }
+  },
+  "multiThread": {
+    "A": {
+      "count": 20,
+      "medianNs": 1289190390.0,
+      "p95Ns": 1345990728,
+      "minNs": 1103735156,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": 0.0
+    },
+    "B": {
+      "count": 20,
+      "medianNs": 1284242734.0,
+      "p95Ns": 1408075312,
+      "minNs": 1186193854,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": -0.38378008697380617
+    },
+    "C": {
+      "count": 20,
+      "medianNs": 943562135.5,
+      "p95Ns": 997821667,
+      "minNs": 835573333,
+      "roundsUnderOneSecond": 19,
+      "regressionPercentVsFirst": -26.809713846843053
+    },
+    "D": {
+      "count": 20,
+      "medianNs": 1033717343.5,
+      "p95Ns": 1086517395,
+      "minNs": 919301979,
+      "roundsUnderOneSecond": 6,
+      "regressionPercentVsFirst": -19.816549090161928,
+      "regressionPercentVsC": 9.554771711163056
+    }
+  }
+}

@@ -1,0 +1,3107 @@
+{
+  "seeds": {
+    "seed1": {
+      "startup": {
+        "complete": true,
+        "unit": "ms",
+        "directory": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5-harness\\report-review\\combined-20260912T204805-684147Z\\work\\s5\\seed1\\startup",
+        "variants": {
+          "A": {
+            "count": 20,
+            "median": 2372.5,
+            "p95": 2984,
+            "minimum": 2207,
+            "maximum": 3018,
+            "coefficientOfVariation": 0.12088619652000031,
+            "pssKb": {
+              "count": 0
+            }
+          },
+          "B": {
+            "count": 20,
+            "median": 2361.5,
+            "p95": 2970,
+            "minimum": 2235,
+            "maximum": 3015,
+            "coefficientOfVariation": 0.11056021225260251,
+            "percentVsA": -0.4636459430980011,
+            "pssKb": {
+              "count": 0
+            }
+          },
+          "C": {
+            "count": 20,
+            "median": 2362.0,
+            "p95": 2931,
+            "minimum": 2283,
+            "maximum": 2932,
+            "coefficientOfVariation": 0.10441712999044503,
+            "percentVsA": -0.4425711275026334,
+            "pssKb": {
+              "count": 0
+            }
+          },
+          "D": {
+            "count": 20,
+            "median": 2391.0,
+            "p95": 2979,
+            "minimum": 2274,
+            "maximum": 3001,
+            "coefficientOfVariation": 0.10714357832771135,
+            "percentVsA": 0.7797681770284504,
+            "percentVsC": 1.2277730736663939,
+            "pssKb": {
+              "count": 0
+            }
+          }
+        },
+        "validAttempts": 92,
+        "invalidAttempts": [],
+        "timingGatePassed": true
+      },
+      "startupIndependent": {
+        "complete": true,
+        "unit": "ms",
+        "directory": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5-harness\\report-review\\combined-20260912T204805-684147Z\\work\\s5\\seed1\\startup-independent",
+        "variants": {
+          "A": {
+            "count": 20,
+            "median": 2372.5,
+            "p95": 2984,
+            "minimum": 2207,
+            "maximum": 3018,
+            "coefficientOfVariation": 0.12088619652000031,
+            "pssKb": {
+              "count": 0
+            }
+          },
+          "B": {
+            "count": 20,
+            "median": 2361.5,
+            "p95": 2970,
+            "minimum": 2235,
+            "maximum": 3015,
+            "coefficientOfVariation": 0.11056021225260251,
+            "percentVsA": -0.4636459430980011,
+            "pssKb": {
+              "count": 0
+            }
+          },
+          "C": {
+            "count": 20,
+            "median": 2362.0,
+            "p95": 2931,
+            "minimum": 2283,
+            "maximum": 2932,
+            "coefficientOfVariation": 0.10441712999044503,
+            "percentVsA": -0.4425711275026334,
+            "pssKb": {
+              "count": 0
+            }
+          },
+          "D": {
+            "count": 20,
+            "median": 2391.0,
+            "p95": 2979,
+            "minimum": 2274,
+            "maximum": 3001,
+            "coefficientOfVariation": 0.10714357832771135,
+            "percentVsA": 0.7797681770284504,
+            "percentVsC": 1.2277730736663939,
+            "pssKb": {
+              "count": 0
+            }
+          }
+        },
+        "validAttempts": 92,
+        "invalidAttempts": [],
+        "timingGatePassed": true
+      },
+      "hotspots": {
+        "complete": true,
+        "unit": "ns",
+        "directory": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5-harness\\report-review\\combined-20260912T204805-684147Z\\combined-fixture\\hotspots",
+        "cases": {
+          "arithmetic": {
+            "variants": {
+              "A": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ]
+              },
+              "B": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "C": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "D": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0,
+                "percentVsC": 0.0
+              }
+            },
+            "iterations": 1,
+            "durationLimitedDiagnostic": false,
+            "timingGatePassed": true,
+            "durationProtocolMet": true
+          },
+          "branch": {
+            "variants": {
+              "A": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ]
+              },
+              "B": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "C": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "D": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0,
+                "percentVsC": 0.0
+              }
+            },
+            "iterations": 1,
+            "durationLimitedDiagnostic": false,
+            "timingGatePassed": true,
+            "durationProtocolMet": true
+          },
+          "shortCall": {
+            "variants": {
+              "A": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ]
+              },
+              "B": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "C": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "D": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0,
+                "percentVsC": 0.0
+              }
+            },
+            "iterations": 1,
+            "durationLimitedDiagnostic": false,
+            "timingGatePassed": true,
+            "durationProtocolMet": true
+          },
+          "jniObject": {
+            "variants": {
+              "A": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ]
+              },
+              "B": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "C": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "D": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0,
+                "percentVsC": 0.0
+              }
+            },
+            "iterations": 1,
+            "durationLimitedDiagnostic": false,
+            "timingGatePassed": true,
+            "durationProtocolMet": true
+          },
+          "arrayPayload": {
+            "variants": {
+              "A": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ]
+              },
+              "B": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "C": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "D": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0,
+                "percentVsC": 0.0
+              }
+            },
+            "iterations": 1,
+            "durationLimitedDiagnostic": false,
+            "timingGatePassed": true,
+            "durationProtocolMet": true
+          },
+          "exception": {
+            "variants": {
+              "A": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ]
+              },
+              "B": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "C": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "D": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0,
+                "percentVsC": 0.0
+              }
+            },
+            "iterations": 1,
+            "durationLimitedDiagnostic": false,
+            "timingGatePassed": true,
+            "durationProtocolMet": true
+          },
+          "recursive": {
+            "variants": {
+              "A": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ]
+              },
+              "B": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "C": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "D": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0,
+                "percentVsC": 0.0
+              }
+            },
+            "iterations": 1,
+            "durationLimitedDiagnostic": false,
+            "timingGatePassed": true,
+            "durationProtocolMet": true
+          },
+          "multiThread": {
+            "variants": {
+              "A": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ]
+              },
+              "B": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "C": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "D": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0,
+                "percentVsC": 0.0
+              }
+            },
+            "iterations": 1,
+            "durationLimitedDiagnostic": false,
+            "timingGatePassed": true,
+            "durationProtocolMet": true
+          },
+          "largeShort": {
+            "variants": {
+              "A": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ]
+              },
+              "B": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "C": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "D": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0,
+                "percentVsC": 0.0
+              }
+            },
+            "iterations": 1,
+            "durationLimitedDiagnostic": true,
+            "timingGatePassed": true,
+            "durationProtocolMet": false
+          }
+        },
+        "separateDiagnosticDirectory": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5-harness\\report-review\\combined-20260912T204805-684147Z\\combined-fixture\\hotspots-large-diagnostic"
+      }
+    },
+    "seed2": {
+      "startup": {
+        "complete": true,
+        "unit": "ms",
+        "directory": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5-harness\\report-review\\combined-20260912T204805-684147Z\\work\\s5\\seed2\\startup-resumed",
+        "variants": {
+          "A": {
+            "count": 20,
+            "median": 2857.0,
+            "p95": 2934,
+            "minimum": 2250,
+            "maximum": 2963,
+            "coefficientOfVariation": 0.08257179609906692,
+            "pssKb": {
+              "count": 2,
+              "median": 56197.0,
+              "p95": 58004,
+              "minimum": 54390,
+              "maximum": 58004,
+              "coefficientOfVariation": 0.03215474135630016
+            }
+          },
+          "B": {
+            "count": 20,
+            "median": 2875.0,
+            "p95": 3032,
+            "minimum": 2229,
+            "maximum": 3035,
+            "coefficientOfVariation": 0.08443125805171892,
+            "percentVsA": 0.630031501575079,
+            "pssKb": {
+              "count": 2,
+              "median": 54893.5,
+              "p95": 55226,
+              "minimum": 54561,
+              "maximum": 55226,
+              "coefficientOfVariation": 0.006057183455236048
+            }
+          },
+          "C": {
+            "count": 20,
+            "median": 2867.0,
+            "p95": 2973,
+            "minimum": 2267,
+            "maximum": 3002,
+            "coefficientOfVariation": 0.07598681726177248,
+            "percentVsA": 0.3500175008750439,
+            "pssKb": {
+              "count": 2,
+              "median": 54222.5,
+              "p95": 54267,
+              "minimum": 54178,
+              "maximum": 54267,
+              "coefficientOfVariation": 0.000820692516944073
+            }
+          },
+          "D": {
+            "count": 20,
+            "median": 2908.5,
+            "p95": 3089,
+            "minimum": 2303,
+            "maximum": 3103,
+            "coefficientOfVariation": 0.07705192648248402,
+            "percentVsA": 1.8025901295064761,
+            "percentVsC": 1.4475061039413983,
+            "pssKb": {
+              "count": 2,
+              "median": 58644.0,
+              "p95": 60988,
+              "minimum": 56300,
+              "maximum": 60988,
+              "coefficientOfVariation": 0.03996998840461087
+            }
+          }
+        },
+        "validAttempts": 92,
+        "invalidAttempts": [
+          {
+            "variant": "D",
+            "round": 13,
+            "warmup": false,
+            "apkSha256": "bcb7e07426f36e030a2b37f4078c2132239a588eacb169d44d5f159dce9c3008",
+            "installedOverExisting": true,
+            "hostUtc": "2026-09-12T18:33:55.811909+00:00",
+            "amStart": "Starting: Intent { cmp=org.savior.sync/.MainActivity }\nStatus: ok\nActivity: org.savior.sync/.MainActivity\nThisTime: 2658\nTotalTime: 2658\nWaitTime: 2742\nComplete\n",
+            "thisTimeMs": 2658,
+            "pid": "17676",
+            "oldPid": "",
+            "oldPidExited": true,
+            "mainWindowDrawnAndOnScreen": true,
+            "drawnObservationUpperBoundMs": 3212.06,
+            "resumed": true,
+            "crashMarkers": [
+              "FATAL EXCEPTION",
+              "UnsatisfiedLinkError"
+            ],
+            "valid": false,
+            "error": "['FATAL EXCEPTION', 'UnsatisfiedLinkError']"
+          }
+        ],
+        "timingGatePassed": true
+      },
+      "startupIndependent": {
+        "complete": true,
+        "unit": "ms",
+        "directory": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5-harness\\report-review\\combined-20260912T204805-684147Z\\work\\s5\\seed2\\startup-independent",
+        "variants": {
+          "A": {
+            "count": 20,
+            "median": 2857.0,
+            "p95": 2934,
+            "minimum": 2250,
+            "maximum": 2963,
+            "coefficientOfVariation": 0.08257179609906692,
+            "pssKb": {
+              "count": 2,
+              "median": 56197.0,
+              "p95": 58004,
+              "minimum": 54390,
+              "maximum": 58004,
+              "coefficientOfVariation": 0.03215474135630016
+            }
+          },
+          "B": {
+            "count": 20,
+            "median": 2875.0,
+            "p95": 3032,
+            "minimum": 2229,
+            "maximum": 3035,
+            "coefficientOfVariation": 0.08443125805171892,
+            "percentVsA": 0.630031501575079,
+            "pssKb": {
+              "count": 2,
+              "median": 54893.5,
+              "p95": 55226,
+              "minimum": 54561,
+              "maximum": 55226,
+              "coefficientOfVariation": 0.006057183455236048
+            }
+          },
+          "C": {
+            "count": 20,
+            "median": 2867.0,
+            "p95": 2973,
+            "minimum": 2267,
+            "maximum": 3002,
+            "coefficientOfVariation": 0.07598681726177248,
+            "percentVsA": 0.3500175008750439,
+            "pssKb": {
+              "count": 2,
+              "median": 54222.5,
+              "p95": 54267,
+              "minimum": 54178,
+              "maximum": 54267,
+              "coefficientOfVariation": 0.000820692516944073
+            }
+          },
+          "D": {
+            "count": 20,
+            "median": 2908.5,
+            "p95": 3089,
+            "minimum": 2303,
+            "maximum": 3103,
+            "coefficientOfVariation": 0.07705192648248402,
+            "percentVsA": 1.8025901295064761,
+            "percentVsC": 1.4475061039413983,
+            "pssKb": {
+              "count": 2,
+              "median": 58644.0,
+              "p95": 60988,
+              "minimum": 56300,
+              "maximum": 60988,
+              "coefficientOfVariation": 0.03996998840461087
+            }
+          }
+        },
+        "validAttempts": 92,
+        "invalidAttempts": [
+          {
+            "variant": "D",
+            "round": 13,
+            "warmup": false,
+            "apkSha256": "bcb7e07426f36e030a2b37f4078c2132239a588eacb169d44d5f159dce9c3008",
+            "installedOverExisting": true,
+            "hostUtc": "2026-09-12T18:33:55.811909+00:00",
+            "amStart": "Starting: Intent { cmp=org.savior.sync/.MainActivity }\nStatus: ok\nActivity: org.savior.sync/.MainActivity\nThisTime: 2658\nTotalTime: 2658\nWaitTime: 2742\nComplete\n",
+            "thisTimeMs": 2658,
+            "pid": "17676",
+            "oldPid": "",
+            "oldPidExited": true,
+            "mainWindowDrawnAndOnScreen": true,
+            "drawnObservationUpperBoundMs": 3212.06,
+            "resumed": true,
+            "crashMarkers": [
+              "FATAL EXCEPTION",
+              "UnsatisfiedLinkError"
+            ],
+            "valid": false,
+            "error": "['FATAL EXCEPTION', 'UnsatisfiedLinkError']"
+          }
+        ],
+        "timingGatePassed": true
+      },
+      "hotspots": {
+        "complete": true,
+        "unit": "ns",
+        "directory": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5-harness\\report-review\\combined-20260912T204805-684147Z\\combined-fixture\\hotspots",
+        "cases": {
+          "arithmetic": {
+            "variants": {
+              "A": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ]
+              },
+              "B": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "C": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "D": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0,
+                "percentVsC": 0.0
+              }
+            },
+            "iterations": 1,
+            "durationLimitedDiagnostic": false,
+            "timingGatePassed": true,
+            "durationProtocolMet": true
+          },
+          "branch": {
+            "variants": {
+              "A": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ]
+              },
+              "B": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "C": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "D": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0,
+                "percentVsC": 0.0
+              }
+            },
+            "iterations": 1,
+            "durationLimitedDiagnostic": false,
+            "timingGatePassed": true,
+            "durationProtocolMet": true
+          },
+          "shortCall": {
+            "variants": {
+              "A": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ]
+              },
+              "B": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "C": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "D": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0,
+                "percentVsC": 0.0
+              }
+            },
+            "iterations": 1,
+            "durationLimitedDiagnostic": false,
+            "timingGatePassed": true,
+            "durationProtocolMet": true
+          },
+          "jniObject": {
+            "variants": {
+              "A": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ]
+              },
+              "B": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "C": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "D": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0,
+                "percentVsC": 0.0
+              }
+            },
+            "iterations": 1,
+            "durationLimitedDiagnostic": false,
+            "timingGatePassed": true,
+            "durationProtocolMet": true
+          },
+          "arrayPayload": {
+            "variants": {
+              "A": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ]
+              },
+              "B": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "C": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "D": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0,
+                "percentVsC": 0.0
+              }
+            },
+            "iterations": 1,
+            "durationLimitedDiagnostic": false,
+            "timingGatePassed": true,
+            "durationProtocolMet": true
+          },
+          "exception": {
+            "variants": {
+              "A": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ]
+              },
+              "B": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "C": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "D": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0,
+                "percentVsC": 0.0
+              }
+            },
+            "iterations": 1,
+            "durationLimitedDiagnostic": false,
+            "timingGatePassed": true,
+            "durationProtocolMet": true
+          },
+          "recursive": {
+            "variants": {
+              "A": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ]
+              },
+              "B": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "C": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "D": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0,
+                "percentVsC": 0.0
+              }
+            },
+            "iterations": 1,
+            "durationLimitedDiagnostic": false,
+            "timingGatePassed": true,
+            "durationProtocolMet": true
+          },
+          "multiThread": {
+            "variants": {
+              "A": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ]
+              },
+              "B": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "C": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "D": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0,
+                "percentVsC": 0.0
+              }
+            },
+            "iterations": 1,
+            "durationLimitedDiagnostic": false,
+            "timingGatePassed": true,
+            "durationProtocolMet": true
+          },
+          "largeShort": {
+            "variants": {
+              "A": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ]
+              },
+              "B": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "C": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "D": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0,
+                "percentVsC": 0.0
+              }
+            },
+            "iterations": 1,
+            "durationLimitedDiagnostic": true,
+            "timingGatePassed": true,
+            "durationProtocolMet": false
+          }
+        },
+        "separateDiagnosticDirectory": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5-harness\\report-review\\combined-20260912T204805-684147Z\\combined-fixture\\hotspots-large-diagnostic"
+      }
+    },
+    "seed3": {
+      "startup": {
+        "complete": true,
+        "unit": "ms",
+        "directory": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5-harness\\report-review\\combined-20260912T204805-684147Z\\work\\s5\\seed3\\startup-resumed",
+        "variants": {
+          "A": {
+            "count": 20,
+            "median": 2556.5,
+            "p95": 2975,
+            "minimum": 2229,
+            "maximum": 3057,
+            "coefficientOfVariation": 0.11382791597874437,
+            "pssKb": {
+              "count": 0
+            }
+          },
+          "B": {
+            "count": 20,
+            "median": 2717.0,
+            "p95": 2907,
+            "minimum": 2291,
+            "maximum": 3077,
+            "coefficientOfVariation": 0.09481705800897969,
+            "percentVsA": 6.278114609818108,
+            "pssKb": {
+              "count": 0
+            }
+          },
+          "C": {
+            "count": 20,
+            "median": 2739.0,
+            "p95": 3001,
+            "minimum": 2284,
+            "maximum": 3011,
+            "coefficientOfVariation": 0.1126985629384877,
+            "percentVsA": 7.138666145120287,
+            "pssKb": {
+              "count": 0
+            }
+          },
+          "D": {
+            "count": 20,
+            "median": 2757.0,
+            "p95": 3104,
+            "minimum": 2262,
+            "maximum": 3112,
+            "coefficientOfVariation": 0.11481164801789562,
+            "percentVsA": 7.842753764912969,
+            "percentVsC": 0.6571741511500528,
+            "pssKb": {
+              "count": 0
+            }
+          }
+        },
+        "validAttempts": 92,
+        "invalidAttempts": [
+          {
+            "variant": "A",
+            "round": 1,
+            "warmup": true,
+            "apkSha256": "c3d8a7e3013f91bfe78ca0830abc4bc5e7ad4020b9ea3aedc5fb24556d8b68b9",
+            "installedOverExisting": true,
+            "hostUtc": "2026-09-12T19:14:41.618650+00:00",
+            "deviceStartEpoch": 1591011422,
+            "amStart": "Starting: Intent { cmp=org.savior.sync/.MainActivity }\nStatus: ok\nActivity: org.savior.sync/.MainActivity\nThisTime: 2294\nTotalTime: 2294\nWaitTime: 2373\nComplete\n",
+            "thisTimeMs": 2294,
+            "pid": "25413",
+            "oldPid": "",
+            "oldPidExited": true,
+            "mainWindowDrawnAndOnScreen": true,
+            "drawnObservationUpperBoundMs": 2828.93,
+            "valid": false,
+            "error": "* daemon not running; starting now at tcp:5037\ncould not read ok from ADB Server\n* failed to start daemon\nadb.exe: cannot connect to daemon\n"
+          }
+        ],
+        "timingGatePassed": true
+      },
+      "startupIndependent": {
+        "complete": true,
+        "unit": "ms",
+        "directory": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5-harness\\report-review\\combined-20260912T204805-684147Z\\work\\s5\\seed3\\startup-independent",
+        "variants": {
+          "A": {
+            "count": 20,
+            "median": 2556.5,
+            "p95": 2975,
+            "minimum": 2229,
+            "maximum": 3057,
+            "coefficientOfVariation": 0.11382791597874437,
+            "pssKb": {
+              "count": 0
+            }
+          },
+          "B": {
+            "count": 20,
+            "median": 2717.0,
+            "p95": 2907,
+            "minimum": 2291,
+            "maximum": 3077,
+            "coefficientOfVariation": 0.09481705800897969,
+            "percentVsA": 6.278114609818108,
+            "pssKb": {
+              "count": 0
+            }
+          },
+          "C": {
+            "count": 20,
+            "median": 2739.0,
+            "p95": 3001,
+            "minimum": 2284,
+            "maximum": 3011,
+            "coefficientOfVariation": 0.1126985629384877,
+            "percentVsA": 7.138666145120287,
+            "pssKb": {
+              "count": 0
+            }
+          },
+          "D": {
+            "count": 20,
+            "median": 2757.0,
+            "p95": 3104,
+            "minimum": 2262,
+            "maximum": 3112,
+            "coefficientOfVariation": 0.11481164801789562,
+            "percentVsA": 7.842753764912969,
+            "percentVsC": 0.6571741511500528,
+            "pssKb": {
+              "count": 0
+            }
+          }
+        },
+        "validAttempts": 92,
+        "invalidAttempts": [
+          {
+            "variant": "A",
+            "round": 1,
+            "warmup": true,
+            "apkSha256": "c3d8a7e3013f91bfe78ca0830abc4bc5e7ad4020b9ea3aedc5fb24556d8b68b9",
+            "installedOverExisting": true,
+            "hostUtc": "2026-09-12T19:14:41.618650+00:00",
+            "deviceStartEpoch": 1591011422,
+            "amStart": "Starting: Intent { cmp=org.savior.sync/.MainActivity }\nStatus: ok\nActivity: org.savior.sync/.MainActivity\nThisTime: 2294\nTotalTime: 2294\nWaitTime: 2373\nComplete\n",
+            "thisTimeMs": 2294,
+            "pid": "25413",
+            "oldPid": "",
+            "oldPidExited": true,
+            "mainWindowDrawnAndOnScreen": true,
+            "drawnObservationUpperBoundMs": 2828.93,
+            "valid": false,
+            "error": "* daemon not running; starting now at tcp:5037\ncould not read ok from ADB Server\n* failed to start daemon\nadb.exe: cannot connect to daemon\n"
+          }
+        ],
+        "timingGatePassed": true
+      },
+      "hotspots": {
+        "complete": true,
+        "unit": "ns",
+        "directory": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5-harness\\report-review\\combined-20260912T204805-684147Z\\combined-fixture\\hotspots",
+        "cases": {
+          "arithmetic": {
+            "variants": {
+              "A": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ]
+              },
+              "B": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "C": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "D": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0,
+                "percentVsC": 0.0
+              }
+            },
+            "iterations": 1,
+            "durationLimitedDiagnostic": false,
+            "timingGatePassed": true,
+            "durationProtocolMet": true
+          },
+          "branch": {
+            "variants": {
+              "A": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ]
+              },
+              "B": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "C": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "D": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0,
+                "percentVsC": 0.0
+              }
+            },
+            "iterations": 1,
+            "durationLimitedDiagnostic": false,
+            "timingGatePassed": true,
+            "durationProtocolMet": true
+          },
+          "shortCall": {
+            "variants": {
+              "A": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ]
+              },
+              "B": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "C": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "D": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0,
+                "percentVsC": 0.0
+              }
+            },
+            "iterations": 1,
+            "durationLimitedDiagnostic": false,
+            "timingGatePassed": true,
+            "durationProtocolMet": true
+          },
+          "jniObject": {
+            "variants": {
+              "A": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ]
+              },
+              "B": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "C": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "D": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0,
+                "percentVsC": 0.0
+              }
+            },
+            "iterations": 1,
+            "durationLimitedDiagnostic": false,
+            "timingGatePassed": true,
+            "durationProtocolMet": true
+          },
+          "arrayPayload": {
+            "variants": {
+              "A": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ]
+              },
+              "B": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "C": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "D": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0,
+                "percentVsC": 0.0
+              }
+            },
+            "iterations": 1,
+            "durationLimitedDiagnostic": false,
+            "timingGatePassed": true,
+            "durationProtocolMet": true
+          },
+          "exception": {
+            "variants": {
+              "A": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ]
+              },
+              "B": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "C": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "D": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0,
+                "percentVsC": 0.0
+              }
+            },
+            "iterations": 1,
+            "durationLimitedDiagnostic": false,
+            "timingGatePassed": true,
+            "durationProtocolMet": true
+          },
+          "recursive": {
+            "variants": {
+              "A": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ]
+              },
+              "B": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "C": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "D": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0,
+                "percentVsC": 0.0
+              }
+            },
+            "iterations": 1,
+            "durationLimitedDiagnostic": false,
+            "timingGatePassed": true,
+            "durationProtocolMet": true
+          },
+          "multiThread": {
+            "variants": {
+              "A": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ]
+              },
+              "B": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "C": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "D": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0,
+                "percentVsC": 0.0
+              }
+            },
+            "iterations": 1,
+            "durationLimitedDiagnostic": false,
+            "timingGatePassed": true,
+            "durationProtocolMet": true
+          },
+          "largeShort": {
+            "variants": {
+              "A": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ]
+              },
+              "B": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "C": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0
+              },
+              "D": {
+                "count": 20,
+                "median": 1200000000.0,
+                "p95": 1200000000,
+                "minimum": 1200000000,
+                "maximum": 1200000000,
+                "coefficientOfVariation": 0.0,
+                "roundsUnderOneSecond": 0,
+                "processMemory": [
+                  {
+                    "batch": 0,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  },
+                  {
+                    "batch": 1,
+                    "peakRssKb": 123,
+                    "finalRssKb": 120
+                  }
+                ],
+                "percentVsA": 0.0,
+                "percentVsC": 0.0
+              }
+            },
+            "iterations": 1,
+            "durationLimitedDiagnostic": true,
+            "timingGatePassed": true,
+            "durationProtocolMet": false
+          }
+        },
+        "separateDiagnosticDirectory": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5-harness\\report-review\\combined-20260912T204805-684147Z\\combined-fixture\\hotspots-large-diagnostic"
+      }
+    }
+  },
+  "measurementComplete": true,
+  "performanceGatePassed": false,
+  "releaseAcceptancePassed": false,
+  "externalGaps": [
+    "No API26 device validation",
+    "Activated/server-backed business paths not validated"
+  ],
+  "startupNoiseReviewComplete": true,
+  "memoryScope": "APK PSS is sampled after startup; harness VmHWM is process peak RSS, including ART. Neither proves absence of leaks."
+}

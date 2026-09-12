@@ -1,0 +1,22 @@
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/wipe-semantic-Release
+[1/19] Building CXX object vm/CMakeFiles/nmmvm.dir/DexCatch.cpp.o
+[2/19] Building CXX object vm/CMakeFiles/nmmvm.dir/GlobalCache.cpp.o
+[3/19] Building CXX object vm/CMakeFiles/nmmvm.dir/Interp.cpp.o
+[4/19] Building CXX object vm/CMakeFiles/nmmvm.dir/Exception.cpp.o
+[5/19] Building C object vm/CMakeFiles/nmmvm.dir/VmInit.c.o
+[6/19] Building CXX object vm/CMakeFiles/nmmvm.dir/Codec.cpp.o
+[7/19] Building CXX object vm/CMakeFiles/nmmvm.dir/Demand.cpp.o
+[8/19] Building CXX object vm/CMakeFiles/nmmvm.dir/Module.cpp.o
+[9/19] Building C object vm/CMakeFiles/nmmvm.dir/NativeVm.c.o
+[10/19] Building CXX object vm/CMakeFiles/nmmvm.dir/VmCodec.cpp.o
+[11/19] Building CXX object vm/CMakeFiles/nmmvm.dir/VmBinding.cpp.o
+[12/19] Building CXX object vm/CMakeFiles/nmmvm.dir/Arm64Syscall.cpp.o
+[13/19] Building CXX object vm/CMakeFiles/nmmvm.dir/Sha256.cpp.o
+[14/19] Building CXX object vm/CMakeFiles/nmmvm.dir/ApkV2Signer.cpp.o
+[15/19] Building C object vm/CMakeFiles/nmmvm.dir/JNIWrapper.c.o
+[16/19] Building CXX object vm/CMakeFiles/nmmvm.dir/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/test/semantic/DecodedWipeBridge.cpp.o
+[17/19] Building CXX object vm/CMakeFiles/nmmvm.dir/InterpC-portable.cpp.o
+[18/19] Linking CXX shared library vm/libnmmvm.so
+[19/19] Linking CXX shared library libnmmp_semantic.so

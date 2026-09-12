@@ -1,0 +1,17 @@
+{"case":"arrayPayload","round":-5,"iterations":72257,"elapsedNs":2897993957,"checksum":78183395}
+{"case":"arrayPayload","round":-4,"iterations":72257,"elapsedNs":2783996509,"checksum":78183395}
+{"case":"arrayPayload","round":-3,"iterations":72257,"elapsedNs":2802851822,"checksum":78183395}
+{"case":"arrayPayload","round":-2,"iterations":72257,"elapsedNs":2798934582,"checksum":78183395}
+{"case":"arrayPayload","round":-1,"iterations":72257,"elapsedNs":2798396874,"checksum":78183395}
+{"case":"arrayPayload","round":0,"iterations":72257,"elapsedNs":2800859061,"checksum":78183395}
+{"case":"arrayPayload","round":1,"iterations":72257,"elapsedNs":2793326248,"checksum":78183395}
+{"case":"arrayPayload","round":2,"iterations":72257,"elapsedNs":2808245572,"checksum":78183395}
+{"case":"arrayPayload","round":3,"iterations":72257,"elapsedNs":2793804113,"checksum":78183395}
+{"case":"arrayPayload","round":4,"iterations":72257,"elapsedNs":2799339999,"checksum":78183395}
+{"case":"arrayPayload","round":5,"iterations":72257,"elapsedNs":2803010311,"checksum":78183395}
+{"case":"arrayPayload","round":6,"iterations":72257,"elapsedNs":2793139218,"checksum":78183395}
+{"case":"arrayPayload","round":7,"iterations":72257,"elapsedNs":2795096822,"checksum":78183395}
+{"case":"arrayPayload","round":8,"iterations":72257,"elapsedNs":2823471301,"checksum":78183395}
+{"case":"arrayPayload","round":9,"iterations":72257,"elapsedNs":2797050572,"checksum":78183395}
+VmHWM:	   51972 kB
+VmRSS:	   44392 kB

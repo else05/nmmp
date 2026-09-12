@@ -1,0 +1,5 @@
+# Independent startup interruption
+
+Local5037 timeout on B round4 Activity query also occurred in non-sandboxed execution. Preserve17 valid attempts and this invalid attempt; appPID14286 remains. Existing5037 serverPID5972 retained. Create task-owned local5038 serverPID26740 and connect same authorized device; continue with this server. Client-path and sandbox changes did not resolve the issue; root cause remains unproven.
+
+Host follow-up: 2026-09-12T22:31:46.531483+00:00

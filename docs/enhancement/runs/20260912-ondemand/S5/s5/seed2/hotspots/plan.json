@@ -1,0 +1,54 @@
+{
+  "serial": "192.168.6.118:5555",
+  "adb": "E:\\Scoop\\apps\\adb\\current\\platform-tools\\adb.exe",
+  "runner": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5-harness\\runner-dex\\classes.dex",
+  "warmups": 5,
+  "rounds": 20,
+  "cases": {
+    "arithmetic": 100,
+    "branch": 100,
+    "shortCall": 10000,
+    "jniObject": 1000,
+    "arrayPayload": 1000,
+    "exception": 1000,
+    "recursive": 1000,
+    "multiThread": 10000,
+    "largeShort": 10000
+  },
+  "variants": [
+    {
+      "name": "A",
+      "library": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed2\\hotspot-A\\build\\obj\\strip\\arm64-v8a\\libc++_en.so",
+      "sha256": "f0c449d6eb2a925618658391b5c1c4a87d3ed25071d6ec2f81e6d65f4615abc4"
+    },
+    {
+      "name": "B",
+      "library": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed2\\hotspot-B\\build\\obj\\strip\\arm64-v8a\\libc++_en.so",
+      "sha256": "109abbe0d18abc0a8ef0110a205c7c94ea2e42e7455f832d187fba7018c35c76"
+    },
+    {
+      "name": "C",
+      "library": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed2\\hotspot-C\\build\\obj\\strip\\arm64-v8a\\libc++_en.so",
+      "sha256": "e4be032d2d6dcdc37c3ebbeef99640735565fc93d659f92cd2c2b64e99bb3d02"
+    },
+    {
+      "name": "D",
+      "library": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed2\\hotspot-D\\build\\obj\\strip\\arm64-v8a\\libc++_en.so",
+      "sha256": "2ab4af2ee8b59a8f9642097436e87a45df3a717d26164311e4540038117a3ce1"
+    }
+  ],
+  "deferredCases": [
+    "largeShort"
+  ],
+  "deferralReason": "largeShort calibration projects 695-712s old-mode rounds beyond original 600s watchdog; duration preference pending. All eight other scenarios retain the frozen protocol.",
+  "selectedIterations": {
+    "arithmetic": 44079,
+    "branch": 38005,
+    "shortCall": 1438609,
+    "jniObject": 240037,
+    "arrayPayload": 65809,
+    "exception": 75702,
+    "recursive": 35539,
+    "multiThread": 870725
+  }
+}

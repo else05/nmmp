@@ -1,0 +1,47 @@
+{
+  "serial": "192.168.6.118:5555",
+  "package": "org.savior.sync",
+  "activity": "org.savior.sync/.MainActivity",
+  "warmups": 3,
+  "rounds": 20,
+  "variants": [
+    {
+      "name": "A",
+      "apk": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed3\\A\\protected-signed.apk",
+      "loader": false,
+      "sha256": "c3d8a7e3013f91bfe78ca0830abc4bc5e7ad4020b9ea3aedc5fb24556d8b68b9"
+    },
+    {
+      "name": "B",
+      "apk": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed3\\B\\protected-signed.apk",
+      "loader": true,
+      "loaderId": "f06294d8",
+      "sha256": "eaa1311460f25b28b716247b3927141ff3bc8f9db65bd6488ab3bc956cfac69e"
+    },
+    {
+      "name": "C",
+      "apk": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed3\\C\\protected-signed.apk",
+      "loader": false,
+      "sha256": "a0678b76465112de2a587a8077b75eee5fd63bd95a4b1abfcdfbd377f76b3ea6"
+    },
+    {
+      "name": "D",
+      "apk": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed3\\D\\protected-signed.apk",
+      "loader": true,
+      "loaderId": "d16632b9",
+      "sha256": "eb868b98d43cb01d8fecc25d330f2f4a336fe06ba3421952ec4225813795cbd2"
+    }
+  ],
+  "adb": "D:\\Android\\SDK\\platform-tools\\adb.exe",
+  "clientChangeReason": "Local ADB5037 timeout during Activity query on A round14. ThisTime2844/PID31311/window drawn recorded; follow-up retains same app PID and adb server5972 startedSep9. Preserve 56 valid attempts plus this invalid attempt. Switch to existing SDK client path matching server installation; version equal but binary hashes differ, recorded in wipe-adb-client-switch.json. Cause remains unproven; repeat A14.",
+  "adbServerPort": 5038,
+  "resumeFrom": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed3\\startup-independent\\attempts.jsonl",
+  "resumeReason": "Local5037 timeout on B round4 Activity query also occurred in non-sandboxed execution. Preserve17 valid attempts and this invalid attempt; appPID14286 remains. Existing5037 serverPID5972 retained. Create task-owned local5038 serverPID26740 and connect same authorized device; continue with this server. Client-path and sandbox changes did not resolve the issue; root cause remains unproven.",
+  "resumeHistory": [
+    {
+      "ledgerIndex": 17,
+      "source": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed3\\startup-independent\\attempts.jsonl",
+      "reason": "Local5037 timeout on B round4 Activity query also occurred in non-sandboxed execution. Preserve17 valid attempts and this invalid attempt; appPID14286 remains. Existing5037 serverPID5972 retained. Create task-owned local5038 serverPID26740 and connect same authorized device; continue with this server. Client-path and sandbox changes did not resolve the issue; root cause remains unproven."
+    }
+  ]
+}

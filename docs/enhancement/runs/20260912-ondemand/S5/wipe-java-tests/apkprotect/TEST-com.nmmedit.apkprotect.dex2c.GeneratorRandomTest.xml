@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.nmmedit.apkprotect.dex2c.GeneratorRandomTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-09-12T21:26:23" hostname="DESKTOP-MHK8Q30" time="1.245">
+  <properties/>
+  <testcase name="productionSettingsPrecedenceAndSecureDefault" classname="com.nmmedit.apkprotect.dex2c.GeneratorRandomTest" time="1.184"/>
+  <testcase name="streamsAreIndependentOfOtherConsumersAndStableIds" classname="com.nmmedit.apkprotect.dex2c.GeneratorRandomTest" time="0.001"/>
+  <testcase name="productionLayoutWritersUseSeparateReproducibleStreams" classname="com.nmmedit.apkprotect.dex2c.GeneratorRandomTest" time="0.029"/>
+  <testcase name="strictUnsignedHexAndInvalidSeedStopsGenerators" classname="com.nmmedit.apkprotect.dex2c.GeneratorRandomTest" time="0.005"/>
+  <testcase name="realOpcodeNativeModuleAndContextReproduceAcrossThreeSeeds" classname="com.nmmedit.apkprotect.dex2c.GeneratorRandomTest" time="0.026"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

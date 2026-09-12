@@ -1,0 +1,32 @@
+{
+  "input": {
+    "classes.dex": {
+      "adler32": true,
+      "sha1": true
+    },
+    "classes2.dex": {
+      "adler32": true,
+      "sha1": true
+    }
+  },
+  "frozen-A": {
+    "classes.dex": {
+      "adler32": true,
+      "sha1": true
+    },
+    "classes2.dex": {
+      "adler32": true,
+      "sha1": true
+    }
+  },
+  "final": {
+    "classes.dex": {
+      "adler32": true,
+      "sha1": true
+    },
+    "classes2.dex": {
+      "adler32": true,
+      "sha1": true
+    }
+  }
+}

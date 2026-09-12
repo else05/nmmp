@@ -1,0 +1,21 @@
+06-01 18:32:13.032 32607 32607 D AndroidRuntime: Shutting down VM
+06-01 18:32:13.033 32607 32607 E AndroidRuntime: FATAL EXCEPTION: main
+06-01 18:32:13.033 32607 32607 E AndroidRuntime: Process: org.savior.sync, PID: 32607
+06-01 18:32:13.033 32607 32607 E AndroidRuntime: java.lang.InternalError: string pool decode failed
+06-01 18:32:13.033 32607 32607 E AndroidRuntime: 	at com.google.libc.ReactNative.js(Native Method)
+06-01 18:32:13.033 32607 32607 E AndroidRuntime: 	at com.google.libc.ReactNative.js(Unknown Source:3)
+06-01 18:32:13.033 32607 32607 E AndroidRuntime: 	at org.savior.sync.SyncApplication.attachBaseContext(Unknown Source:0)
+06-01 18:32:13.033 32607 32607 E AndroidRuntime: 	at android.app.Application.attach(Application.java:189)
+06-01 18:32:13.033 32607 32607 E AndroidRuntime: 	at android.app.Instrumentation.newApplication(Instrumentation.java:1104)
+06-01 18:32:13.033 32607 32607 E AndroidRuntime: 	at android.app.Instrumentation.newApplication(Instrumentation.java:1088)
+06-01 18:32:13.033 32607 32607 E AndroidRuntime: 	at android.app.LoadedApk.makeApplication(LoadedApk.java:983)
+06-01 18:32:13.033 32607 32607 E AndroidRuntime: 	at android.app.ActivityThread.handleBindApplication(ActivityThread.java:5751)
+06-01 18:32:13.033 32607 32607 E AndroidRuntime: 	at android.app.ActivityThread.-wrap1(Unknown Source:0)
+06-01 18:32:13.033 32607 32607 E AndroidRuntime: 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1658)
+06-01 18:32:13.033 32607 32607 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:106)
+06-01 18:32:13.033 32607 32607 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:164)
+06-01 18:32:13.033 32607 32607 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:6547)
+06-01 18:32:13.033 32607 32607 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+06-01 18:32:13.033 32607 32607 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:438)
+06-01 18:32:13.033 32607 32607 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:821)
+06-01 18:32:13.059 32607 32607 I Process : Sending signal. PID: 32607 SIG: 9

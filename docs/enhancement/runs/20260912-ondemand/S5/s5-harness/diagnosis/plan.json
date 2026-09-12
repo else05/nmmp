@@ -1,0 +1,42 @@
+{
+  "serial": "192.168.6.118:5555",
+  "adb": "E:\\Scoop\\apps\\adb\\current\\platform-tools\\adb.exe",
+  "runner": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5-harness\\runner-dex\\classes.dex",
+  "warmups": 5,
+  "rounds": 20,
+  "cases": {
+    "arithmetic": 100,
+    "shortCall": 10000
+  },
+  "variants": [
+    {
+      "name": "A",
+      "library": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed1\\hotspot-A\\build\\obj\\strip\\arm64-v8a\\libc++_en.so",
+      "sha256": "e689bb37801fe5374a3e406fa7bca1d30f44b523ec0ab9c62cb4b9c37295cb38"
+    },
+    {
+      "name": "S1",
+      "library": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5-harness\\stage-S1\\build\\obj\\strip\\arm64-v8a\\libc++_en.so",
+      "sha256": "b7c821c5447b0aedaead2cd665a47550d573662140bbec595848da9311285483"
+    },
+    {
+      "name": "L",
+      "library": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5-harness\\current-legacy\\build\\obj\\strip\\arm64-v8a\\libc++_en.so",
+      "sha256": "98ee223a212bd30e2963c883c1494926904843d988da00e2a7af44664b0b0374"
+    },
+    {
+      "name": "C",
+      "library": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed1\\hotspot-C\\build\\obj\\strip\\arm64-v8a\\libc++_en.so",
+      "sha256": "b3eb770474fc242608a1c8fff37be671da775bfd093f795b23c9f3f8f3b454ef"
+    },
+    {
+      "name": "O",
+      "library": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5-harness\\opt-word-C\\build\\obj\\strip\\arm64-v8a\\libc++_en.so",
+      "sha256": "7fb256e8279212c82ce08878dd208e05299eab0bfd5ce8c84a1d6d31b00f9888"
+    }
+  ],
+  "selectedIterations": {
+    "arithmetic": 43363,
+    "shortCall": 1458675
+  }
+}

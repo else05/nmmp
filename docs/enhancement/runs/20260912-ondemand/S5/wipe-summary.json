@@ -1,0 +1,273 @@
+{
+  "artifact": {
+    "apkSha256": "0e11e1b2191c53a0b99ea028f4c3a8ed17a610edc722f24a493921287d0cbb96",
+    "jarSha256": "28d6f83f8d099fecbcbdfbbd7acc3b41cb7e9b0347260920430d742fa9530ad7",
+    "mode": "on-demand-v1",
+    "codecVersion": 3,
+    "templateVersion": 4,
+    "signatureBinding": true,
+    "privateLinker": true,
+    "stage0Vm": true,
+    "fixedTestSeedUsed": false,
+    "selectedMethods": 526,
+    "explicitDecodedScratchCleanup": true,
+    "innerSha256": "4f7241240a8e53ff24b4a3cf9b16c5b8eee46f419455aefa0e3ca92d2b29ea60",
+    "apkLibraries": [
+      "lib/arm64-v8a/libapssdk.so",
+      "lib/arm64-v8a/libimage_processing_util_jni.so",
+      "lib/arm64-v8a/libc++_en.so"
+    ],
+    "outerStage0Vm": true,
+    "outerBusinessVmAbsent": true,
+    "innerTokenAndNativeVm": true,
+    "oldOrTransitionalExecutionAbsent": true,
+    "probeSymbolsAbsent": true,
+    "oldKeySharesAbsent": true,
+    "directInnerNeededAbsent": true,
+    "tlsSegmentAbsent": true,
+    "wxLoadAbsent": true,
+    "randomnessEvidence": {
+      "testSeedAbsentInSameEnvironmentProbe": true,
+      "secureRandomInSameEnvironmentProbe": true,
+      "explicitBuildSeedUnset": true,
+      "jvmOptionInjectionBannerAbsentInCapturedBuildLog": true,
+      "environmentScriptSha256": "d36591d00acb9056ab206ee7833683bbd671c33d0ffaf76aa90f69f24aa57e18",
+      "buildLogSha256": "945114e17749a648e86270b7072df3d95efb75013cc771b6af311d42e8bfb2dc",
+      "javaExecutable": "/usr/bin/java",
+      "scope": "Retrospective command/log evidence plus a same-environment runtime probe; the original generation JVM did not emit an in-process randomness attestation."
+    }
+  },
+  "build": {
+    "java": {
+      "apkprotect": {
+        "tests": 50,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "arsc": {
+        "tests": 16,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "jarSha256": "28d6f83f8d099fecbcbdfbbd7acc3b41cb7e9b0347260920430d742fa9530ad7",
+    "templateSha256": "2fe364067e978e4cbc510449eec31d64374bbba5bfcc8e8955918a4dda7920b9",
+    "packagedTemplateExact": true,
+    "decodedRuntimeSourceExact": true,
+    "testBridgeAbsent": true
+  },
+  "device": [
+    {
+      "mode": "Release",
+      "librarySha256": {
+        "libnmmp_semantic.so": "9df2160cb178d323a4b18113873cff22a3b6fa8db6891a28ae7b7a79e7171362",
+        "libnmmvm.so": "4d7e6819544dff4677e62509dd9cc817fd34e0e7c80f5b0f3ef978ab81fe6813",
+        "nmmp_native_vm_test": "f48e75d9291bae49bd2ea0cb7c2d3f8c4a34a9459d933ff95c3ae7fa8757293a",
+        "nmmp_native_root_test": "7e1a0f0cc926ce3ef97af696cab8f34ff31ab7d55f4527bda403e3c76ba20f7a"
+      },
+      "outputs": {
+        "nativeVm": "PASS: 105 independent Java/native program vectors\n",
+        "root": "PASS: native VM recovers and publishes root once across 1600 concurrent activations\n",
+        "semantic": "SEMANTIC_PASS checks=1351\n",
+        "wipe": "DECODE_WIPE_PASS runs=801 counters=[0, 6408, 6408, 6408, 4005, 801, 1602, 23229, 1602, 6408, 0]\n"
+      }
+    },
+    {
+      "mode": "Debug",
+      "librarySha256": {
+        "libnmmp_semantic.so": "9d8f1a756e793bf6ad3fda8a676c5e9859a4e788f8c1cb22e92a784687af2bea",
+        "libnmmvm.so": "b34f16f25e727c936a3b5068cc116b4a6c2778017782812e254161b1b045d55e",
+        "nmmp_native_vm_test": "58a4aa27326dca198e12adbae8b8657687fe94129d5a72cc66824f5f4c2362a8",
+        "nmmp_native_root_test": "a4ab36b02f9814087866029e97c3495fa6bfec3e7891957eca92a353f5195e56"
+      },
+      "outputs": {
+        "nativeVm": "PASS: 105 independent Java/native program vectors\n",
+        "root": "PASS: native VM recovers and publishes root once across 1600 concurrent activations\n",
+        "semantic": "SEMANTIC_PASS checks=1351\n",
+        "wipe": "DECODE_WIPE_PASS runs=801 counters=[0, 6408, 6408, 6408, 4005, 801, 1602, 23229, 1602, 6408, 0]\n"
+      }
+    },
+    {
+      "mode": "legacy-Release",
+      "librarySha256": {
+        "libnmmp_semantic.so": "b232ed5dbcd738754f74079e32914d4283eb030f89d252dfb6dbcfe5a0dd5476",
+        "libnmmvm.so": "d9e4d9cf172992f29847729dbe6c19f0555d75a02144ac6d41b824a0e850ca1d"
+      },
+      "output": "SEMANTIC_PASS checks=1338\n"
+    },
+    {
+      "mode": "legacy-Debug",
+      "librarySha256": {
+        "libnmmp_semantic.so": "26bc93fcee9a0925d55ea4f5a4bbcb5ac299be81d95c894eb5bb06526272c87e",
+        "libnmmvm.so": "f7ca9f46f24018b52b1871844c0862977170945e720ea6a7a460124930ae72d7"
+      },
+      "output": "SEMANTIC_PASS checks=1338\n"
+    }
+  ],
+  "legacyDevice": {
+    "L": {
+      "count": 1,
+      "medianMs": 2354,
+      "p95Ms": 2354,
+      "minMs": 2354,
+      "maxMs": 2354,
+      "regressionPercentVsFirst": 0.0
+    }
+  },
+  "finalDevice": {
+    "D": {
+      "count": 1,
+      "medianMs": 2362,
+      "p95Ms": 2362,
+      "minMs": 2362,
+      "maxMs": 2362,
+      "regressionPercentVsFirst": 0.0
+    }
+  },
+  "stability": {
+    "apkSha256": "0e11e1b2191c53a0b99ea028f4c3a8ed17a610edc722f24a493921287d0cbb96",
+    "elapsedSeconds": 300.98714009998366,
+    "pid": "32474",
+    "samePidAllSamples": true,
+    "crashMarkers": [],
+    "mainWindowVisible": true,
+    "resumed": true,
+    "note": "Idle unactivated application observation, not a full business or leak test"
+  },
+  "performanceScope": "Seed1 arithmetic/branch/shortCall only, not final three-seed acceptance",
+  "releaseAcceptancePassed": false,
+  "cases": {
+    "arithmetic": {
+      "variants": {
+        "A": {
+          "count": 20,
+          "medianNs": 1378926301.5,
+          "p95Ns": 1487220104,
+          "roundsUnderOneSecond": 0
+        },
+        "C": {
+          "count": 20,
+          "medianNs": 3084287967.0,
+          "p95Ns": 3096999374,
+          "roundsUnderOneSecond": 0
+        },
+        "D": {
+          "count": 20,
+          "medianNs": 3287741900.0,
+          "p95Ns": 3311457083,
+          "roundsUnderOneSecond": 0
+        }
+      },
+      "percentVsOriginal": 138.42767350391276,
+      "percentVsBeforeWipe": 6.596463597978941,
+      "durationProtocolMet": true
+    },
+    "branch": {
+      "variants": {
+        "A": {
+          "count": 20,
+          "medianNs": 1496651718.0,
+          "p95Ns": 1503440468,
+          "roundsUnderOneSecond": 0
+        },
+        "C": {
+          "count": 20,
+          "medianNs": 3560284321.5,
+          "p95Ns": 3591815572,
+          "roundsUnderOneSecond": 0
+        },
+        "D": {
+          "count": 20,
+          "medianNs": 3684596222.5,
+          "p95Ns": 3718790311,
+          "roundsUnderOneSecond": 0
+        }
+      },
+      "percentVsOriginal": 146.18928894317412,
+      "percentVsBeforeWipe": 3.491628470493202,
+      "durationProtocolMet": true
+    },
+    "shortCall": {
+      "variants": {
+        "A": {
+          "count": 20,
+          "medianNs": 1958133541.0,
+          "p95Ns": 1982503020,
+          "roundsUnderOneSecond": 0
+        },
+        "C": {
+          "count": 20,
+          "medianNs": 1487917708.0,
+          "p95Ns": 1494492031,
+          "roundsUnderOneSecond": 0
+        },
+        "D": {
+          "count": 20,
+          "medianNs": 1733667942.0,
+          "p95Ns": 1764343698,
+          "roundsUnderOneSecond": 0
+        }
+      },
+      "percentVsOriginal": -11.463242638975867,
+      "percentVsBeforeWipe": 16.51638613336539,
+      "durationProtocolMet": true
+    }
+  },
+  "observerShutdownDiagnosis": {
+    "failedCommands": "wipe-device/commands.jsonl",
+    "crashBuffer": "wipe-device/crash-buffer.log",
+    "nohook": {
+      "semantic": "SEMANTIC_PASS checks=1351\n",
+      "exitCode": 0,
+      "librarySha256": {
+        "wipe-semantic-nohook-Release\\libnmmp_init_semantic.so": "c20103644750926d5089f2dad52c4f0e9d5d59c499c663bf8e17a621d620f202",
+        "wipe-semantic-nohook-Release\\libnmmp_semantic.so": "f96ab3c43a60b2e4314e1acffbefdd944461cf5f6b05ae2fd963c5871cc89a49",
+        "wipe-semantic-nohook-Release\\vm\\libnmmvm.so": "cebb12deed96faea833dbac142b3871e58e5750d901ae12dc3d8a3ffcc6591e2"
+      }
+    },
+    "fixedBridgeHost": {
+      "results": [
+        {
+          "mode": "debug-hook",
+          "output": "COLD_PUBLICATION_PASS calls=1600 threads=16 counters=[0, 4800, 4800, 4800, 4800, 0, 0, 20800, 3200, 4800, 0]\n",
+          "bridgeTlsAbsent": true,
+          "processExitCode": 0
+        },
+        {
+          "mode": "release-hook",
+          "output": "COLD_PUBLICATION_PASS calls=1600 threads=16 counters=[0, 4800, 4800, 4800, 4800, 0, 0, 20800, 3200, 4800, 0]\n",
+          "bridgeTlsAbsent": true,
+          "processExitCode": 0
+        }
+      ],
+      "productionRuntimeUnchanged": true,
+      "frozenBridgeSha256": "45e39f70bf76bedac449b862c17b62e5ef53ffd29a4d83b0029b915c05bccd18",
+      "androidTestPerformed": false
+    }
+  },
+  "hotspotIdentity": {
+    "api": "27",
+    "abi": "arm64-v8a",
+    "runnerSha256": "84af96d591a44a02cb9fc3da0c86d716aabcd57176759053d28b07183138b493",
+    "variants": [
+      {
+        "name": "A",
+        "library": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed1\\hotspot-A\\build\\obj\\strip\\arm64-v8a\\libc++_en.so",
+        "sha256": "e689bb37801fe5374a3e406fa7bca1d30f44b523ec0ab9c62cb4b9c37295cb38"
+      },
+      {
+        "name": "C",
+        "library": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed1\\hotspot-D\\build\\obj\\strip\\arm64-v8a\\libc++_en.so",
+        "sha256": "482eee05ad5dc5639b51aadb413e0337173ede3c356bedd89e333b827961e830"
+      },
+      {
+        "name": "D",
+        "library": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\wipe-hotspot-D\\build\\obj\\strip\\arm64-v8a\\libc++_en.so",
+        "sha256": "4deecfd9555bc7360458a53df89f3dc48cc11b4226c4d32d5df7713eaa42047c"
+      }
+    ]
+  },
+  "checksComplete": true
+}

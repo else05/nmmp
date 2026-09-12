@@ -1,0 +1,110 @@
+--- a/nmmvm/nmmvm/src/test/semantic/DecodedWipeBridge.cpp
++++ b/nmmvm/nmmvm/src/test/semantic/DecodedWipeBridge.cpp
+@@ -4,8 +4,10 @@
+ #include "DexOpcodes.h"
+ #include <atomic>
+ #include <cstring>
++#include <map>
+ #include <mutex>
+ #include <set>
++#include <thread>
+ #include <vector>
+ 
+ #ifndef NMMP_TEST_DECODE_WIPE
+@@ -18,7 +20,9 @@
+ // errors, enter, before, after, normal, uncaught, readerFailed, words, nested, dirty
+ std::atomic<long> counts[10];
+ struct Frame { const VmDecodedState *state; VmDecodedState parent; bool before; };
+-thread_local std::vector<Frame> frames;
++std::map<std::thread::id, std::vector<Frame>> framesByThread;
++vmMethod method = {};
++bool methodReady = false; // Published once under lock, then immutable.
+ bool zero(const void *p, size_t n) {
+     const unsigned char *b = static_cast<const unsigned char *>(p);
+     while (n--) if (*b++) return false;
+@@ -35,12 +39,26 @@
+ void check(bool ok) { if (!ok) ++counts[0]; }
+ jclass callbackClass(JNIEnv *env, u4) { return env->FindClass("com/nmmedit/semantic/DecodedWipeMain"); }
+ const vmMethod *callbackMethod(JNIEnv *env, u4, bool) {
+-    static thread_local vmMethod method;
++    {
++        std::lock_guard<std::mutex> guard(lock);
++        if (methodReady) return &method;
++    }
++    // JNI resolution may reenter Java. Never perform it under the observer lock.
++    vmMethod resolved = {};
+     jclass cls = callbackClass(env, 0);
+-    method.classIdx = 0;
+-    method.shorty = "I";
+-    method.methodId = env->GetStaticMethodID(cls, "callback", "()I");
++    if (!cls) return nullptr;
++    resolved.classIdx = 0;
++    resolved.shorty = "I";
++    resolved.methodId = env->GetStaticMethodID(cls, "callback", "()I");
+     env->DeleteLocalRef(cls);
++    if (!resolved.methodId) return nullptr;
++    {
++        std::lock_guard<std::mutex> guard(lock);
++        if (!methodReady) {
++            method = resolved;
++            methodReady = true;
++        }
++    }
+     return &method;
+ }
+ const vmResolver resolver = [] {
+@@ -56,6 +74,9 @@
+     ++counts[7];
+ }
+ extern "C" void nmmpObserveDecodedState(const VmDecodedState *state, unsigned phase, unsigned reason) {
++    std::lock_guard<std::mutex> guard(lock);
++    const std::thread::id thread = std::this_thread::get_id();
++    std::vector<Frame> &frames = framesByThread[thread];
+     if (phase == NMMP_DECODE_ENTER) {
+         check(membersZero(*state));
+         Frame frame = {state, {}, false};
+@@ -63,13 +84,16 @@
+             std::memcpy(&frame.parent, frames.back().state, sizeof(frame.parent));
+             ++counts[8];
+         }
+-        { std::lock_guard<std::mutex> guard(lock); check(active.insert(state).second); }
++        check(active.insert(state).second);
+         frames.push_back(frame);
+         ++counts[1];
+         return;
+     }
+     check(!frames.empty() && frames.back().state == state);
+-    if (frames.empty()) return;
++    if (frames.empty()) {
++        framesByThread.erase(thread);
++        return;
++    }
+     if (phase == NMMP_DECODE_BEFORE_WIPE) {
+         check(!frames.back().before);
+         frames.back().before = true;
+@@ -82,8 +106,9 @@
+         check(zero(state, sizeof(*state)));
+         if (frames.size() > 1)
+             check(std::memcmp(&frames.back().parent, frames[frames.size() - 2].state, sizeof(*state)) == 0);
+-        { std::lock_guard<std::mutex> guard(lock); check(active.erase(state) == 1); }
++        check(active.erase(state) == 1);
+         frames.pop_back();
++        if (frames.empty()) framesByThread.erase(thread);
+         ++counts[3];
+     }
+ }
+@@ -91,8 +116,12 @@
+ extern "C" JNIEXPORT jlongArray JNICALL
+ Java_com_nmmedit_semantic_DecodedWipeMain_snapshot(JNIEnv *env, jclass) {
+     jlong result[11];
+-    for (unsigned i = 0; i < 10; ++i) result[i] = counts[i].load();
+-    { std::lock_guard<std::mutex> guard(lock); result[10] = active.size(); }
++    {
++        std::lock_guard<std::mutex> guard(lock);
++        check(active.empty() == framesByThread.empty());
++        for (unsigned i = 0; i < 10; ++i) result[i] = counts[i].load();
++        result[10] = active.size();
++    }
+     jlongArray out = env->NewLongArray(11);
+     if (out) env->SetLongArrayRegion(out, 0, 11, result);
+     return out;

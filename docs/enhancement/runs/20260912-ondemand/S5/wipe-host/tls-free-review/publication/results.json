@@ -1,0 +1,19 @@
+{
+  "results": [
+    {
+      "mode": "debug-hook",
+      "output": "COLD_PUBLICATION_PASS calls=1600 threads=16 counters=[0, 4800, 4800, 4800, 4800, 0, 0, 20800, 3200, 4800, 0]\n",
+      "bridgeTlsAbsent": true,
+      "processExitCode": 0
+    },
+    {
+      "mode": "release-hook",
+      "output": "COLD_PUBLICATION_PASS calls=1600 threads=16 counters=[0, 4800, 4800, 4800, 4800, 0, 0, 20800, 3200, 4800, 0]\n",
+      "bridgeTlsAbsent": true,
+      "processExitCode": 0
+    }
+  ],
+  "productionRuntimeUnchanged": true,
+  "frozenBridgeSha256": "45e39f70bf76bedac449b862c17b62e5ef53ffd29a4d83b0029b915c05bccd18",
+  "androidTestPerformed": false
+}

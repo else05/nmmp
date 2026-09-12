@@ -1,0 +1,51 @@
+> Task :apkprotect:checkNativeFormats
+> Task :apkprotect:checkReaderFormats
+> Task :arsc:compileJava UP-TO-DATE
+> Task :arsc:processResources NO-SOURCE
+> Task :apkprotect:extractIncludeProto UP-TO-DATE
+> Task :apkprotect:extractProto UP-TO-DATE
+> Task :apkprotect:generateProto UP-TO-DATE
+> Task :apkprotect:compileJava
+> Task :apkprotect:processResources UP-TO-DATE
+> Task :apkprotect:classes
+> Task :apkprotect:jar
+> Task :compileJava
+> Task :processResources NO-SOURCE
+> Task :classes
+> Task :compileTestJava NO-SOURCE
+> Task :processTestResources NO-SOURCE
+> Task :testClasses UP-TO-DATE
+> Task :arsc:classes UP-TO-DATE
+> Task :arsc:jar UP-TO-DATE
+> Task :test NO-SOURCE
+> Task :apkprotect:extractIncludeTestProto
+> Task :apkprotect:extractTestProto UP-TO-DATE
+> Task :apkprotect:generateTestProto NO-SOURCE
+> Task :apkprotect:compileTestJava
+> Task :apkprotect:processTestResources UP-TO-DATE
+> Task :apkprotect:testClasses
+
+> Task :apkprotect:test
+
+com.nmmedit.apkprotect.dex2c.GeneratorRandomTest > productionLayoutWritersUseSeparateReproducibleStreams FAILED
+    java.nio.file.FileSystemException at GeneratorRandomTest.java:212
+
+50 tests completed, 1 failed
+
+> Task :apkprotect:test FAILED
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':apkprotect:test'.
+> There were failing tests. See the report at: file:///E:/OtherProject/safe-toolchain/nmmp/nmm-protect/apkprotect/build/reports/tests/test/index.html
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+
+* Get more help at https://help.gradle.org
+
+BUILD FAILED in 7s
+16 actionable tasks: 8 executed, 8 up-to-date

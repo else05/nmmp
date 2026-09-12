@@ -1,0 +1,278 @@
+{
+  "seed1": {
+    "complete": true,
+    "unit": "ms",
+    "directory": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed1\\startup",
+    "variants": {
+      "A": {
+        "count": 20,
+        "median": 2372.5,
+        "p95": 2984,
+        "minimum": 2207,
+        "maximum": 3018,
+        "coefficientOfVariation": 0.12088619652000031,
+        "pssKb": {
+          "count": 5,
+          "median": 54365,
+          "p95": 58553,
+          "minimum": 52880,
+          "maximum": 58553,
+          "coefficientOfVariation": 0.0353358991708842
+        }
+      },
+      "B": {
+        "count": 20,
+        "median": 2361.5,
+        "p95": 2970,
+        "minimum": 2235,
+        "maximum": 3015,
+        "coefficientOfVariation": 0.11056021225260251,
+        "percentVsA": -0.4636459430980011,
+        "pssKb": {
+          "count": 5,
+          "median": 56666,
+          "p95": 58338,
+          "minimum": 55043,
+          "maximum": 58338,
+          "coefficientOfVariation": 0.02075714588485428
+        }
+      },
+      "C": {
+        "count": 20,
+        "median": 2362.0,
+        "p95": 2931,
+        "minimum": 2283,
+        "maximum": 2932,
+        "coefficientOfVariation": 0.10441712999044503,
+        "percentVsA": -0.4425711275026334,
+        "pssKb": {
+          "count": 5,
+          "median": 55290,
+          "p95": 55865,
+          "minimum": 54570,
+          "maximum": 55865,
+          "coefficientOfVariation": 0.007790197256514243
+        }
+      },
+      "D": {
+        "count": 20,
+        "median": 2391.0,
+        "p95": 2979,
+        "minimum": 2274,
+        "maximum": 3001,
+        "coefficientOfVariation": 0.10714357832771135,
+        "percentVsA": 0.7797681770284504,
+        "percentVsC": 1.2277730736663939,
+        "pssKb": {
+          "count": 5,
+          "median": 55686,
+          "p95": 56566,
+          "minimum": 55309,
+          "maximum": 56566,
+          "coefficientOfVariation": 0.008878779012464378
+        }
+      }
+    },
+    "validAttempts": 92,
+    "invalidAttempts": [],
+    "timingGatePassed": true
+  },
+  "seed2": {
+    "complete": true,
+    "unit": "ms",
+    "directory": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed2\\startup-resumed",
+    "variants": {
+      "A": {
+        "count": 20,
+        "median": 2857.0,
+        "p95": 2934,
+        "minimum": 2250,
+        "maximum": 2963,
+        "coefficientOfVariation": 0.08257179609906692,
+        "pssKb": {
+          "count": 5,
+          "median": 54390,
+          "p95": 58004,
+          "minimum": 53106,
+          "maximum": 58004,
+          "coefficientOfVariation": 0.032110540591638474
+        }
+      },
+      "B": {
+        "count": 20,
+        "median": 2875.0,
+        "p95": 3032,
+        "minimum": 2229,
+        "maximum": 3035,
+        "coefficientOfVariation": 0.08443125805171892,
+        "percentVsA": 0.630031501575079,
+        "pssKb": {
+          "count": 5,
+          "median": 55048,
+          "p95": 65541,
+          "minimum": 53970,
+          "maximum": 65541,
+          "coefficientOfVariation": 0.07662768069583728
+        }
+      },
+      "C": {
+        "count": 20,
+        "median": 2867.0,
+        "p95": 2973,
+        "minimum": 2267,
+        "maximum": 3002,
+        "coefficientOfVariation": 0.07598681726177248,
+        "percentVsA": 0.3500175008750439,
+        "pssKb": {
+          "count": 5,
+          "median": 54267,
+          "p95": 56923,
+          "minimum": 53763,
+          "maximum": 56923,
+          "coefficientOfVariation": 0.024154498901868594
+        }
+      },
+      "D": {
+        "count": 20,
+        "median": 2908.5,
+        "p95": 3089,
+        "minimum": 2303,
+        "maximum": 3103,
+        "coefficientOfVariation": 0.07705192648248402,
+        "percentVsA": 1.8025901295064761,
+        "percentVsC": 1.4475061039413983,
+        "pssKb": {
+          "count": 5,
+          "median": 56300,
+          "p95": 60988,
+          "minimum": 54707,
+          "maximum": 60988,
+          "coefficientOfVariation": 0.04209637574845245
+        }
+      }
+    },
+    "validAttempts": 92,
+    "invalidAttempts": [
+      {
+        "variant": "D",
+        "round": 13,
+        "warmup": false,
+        "apkSha256": "bcb7e07426f36e030a2b37f4078c2132239a588eacb169d44d5f159dce9c3008",
+        "installedOverExisting": true,
+        "hostUtc": "2026-09-12T18:33:55.811909+00:00",
+        "amStart": "Starting: Intent { cmp=org.savior.sync/.MainActivity }\nStatus: ok\nActivity: org.savior.sync/.MainActivity\nThisTime: 2658\nTotalTime: 2658\nWaitTime: 2742\nComplete\n",
+        "thisTimeMs": 2658,
+        "pid": "17676",
+        "oldPid": "",
+        "oldPidExited": true,
+        "mainWindowDrawnAndOnScreen": true,
+        "drawnObservationUpperBoundMs": 3212.06,
+        "resumed": true,
+        "crashMarkers": [
+          "FATAL EXCEPTION",
+          "UnsatisfiedLinkError"
+        ],
+        "valid": false,
+        "error": "['FATAL EXCEPTION', 'UnsatisfiedLinkError']"
+      }
+    ],
+    "timingGatePassed": true
+  },
+  "seed3": {
+    "complete": true,
+    "unit": "ms",
+    "directory": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed3\\startup-resumed",
+    "variants": {
+      "A": {
+        "count": 20,
+        "median": 2556.5,
+        "p95": 2975,
+        "minimum": 2229,
+        "maximum": 3057,
+        "coefficientOfVariation": 0.11382791597874437,
+        "pssKb": {
+          "count": 5,
+          "median": 54241,
+          "p95": 55399,
+          "minimum": 53664,
+          "maximum": 55399,
+          "coefficientOfVariation": 0.010917916220830706
+        }
+      },
+      "B": {
+        "count": 20,
+        "median": 2717.0,
+        "p95": 2907,
+        "minimum": 2291,
+        "maximum": 3077,
+        "coefficientOfVariation": 0.09481705800897969,
+        "percentVsA": 6.278114609818108,
+        "pssKb": {
+          "count": 5,
+          "median": 54743,
+          "p95": 65619,
+          "minimum": 53640,
+          "maximum": 65619,
+          "coefficientOfVariation": 0.07723067396684027
+        }
+      },
+      "C": {
+        "count": 20,
+        "median": 2739.0,
+        "p95": 3001,
+        "minimum": 2284,
+        "maximum": 3011,
+        "coefficientOfVariation": 0.1126985629384877,
+        "percentVsA": 7.138666145120287,
+        "pssKb": {
+          "count": 5,
+          "median": 55116,
+          "p95": 56332,
+          "minimum": 54146,
+          "maximum": 56332,
+          "coefficientOfVariation": 0.01419926179784771
+        }
+      },
+      "D": {
+        "count": 20,
+        "median": 2757.0,
+        "p95": 3104,
+        "minimum": 2262,
+        "maximum": 3112,
+        "coefficientOfVariation": 0.11481164801789562,
+        "percentVsA": 7.842753764912969,
+        "percentVsC": 0.6571741511500528,
+        "pssKb": {
+          "count": 5,
+          "median": 55948,
+          "p95": 64561,
+          "minimum": 54646,
+          "maximum": 64561,
+          "coefficientOfVariation": 0.06293651424606009
+        }
+      }
+    },
+    "validAttempts": 92,
+    "invalidAttempts": [
+      {
+        "variant": "A",
+        "round": 1,
+        "warmup": true,
+        "apkSha256": "c3d8a7e3013f91bfe78ca0830abc4bc5e7ad4020b9ea3aedc5fb24556d8b68b9",
+        "installedOverExisting": true,
+        "hostUtc": "2026-09-12T19:14:41.618650+00:00",
+        "deviceStartEpoch": 1591011422,
+        "amStart": "Starting: Intent { cmp=org.savior.sync/.MainActivity }\nStatus: ok\nActivity: org.savior.sync/.MainActivity\nThisTime: 2294\nTotalTime: 2294\nWaitTime: 2373\nComplete\n",
+        "thisTimeMs": 2294,
+        "pid": "25413",
+        "oldPid": "",
+        "oldPidExited": true,
+        "mainWindowDrawnAndOnScreen": true,
+        "drawnObservationUpperBoundMs": 2828.93,
+        "valid": false,
+        "error": "* daemon not running; starting now at tcp:5037\ncould not read ok from ADB Server\n* failed to start daemon\nadb.exe: cannot connect to daemon\n"
+      }
+    ],
+    "timingGatePassed": true
+  }
+}

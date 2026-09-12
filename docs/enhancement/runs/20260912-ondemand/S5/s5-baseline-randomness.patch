@@ -1,0 +1,129 @@
+--- a/nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/dex2c/ProtectionContext.java
++++ b/nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/dex2c/ProtectionContext.java
+@@ -2,7 +2,7 @@
+ 
+ import com.nmmedit.apkprotect.sign.SignatureBinding;
+ 
+-import java.security.SecureRandom;
++import java.util.Random;
+ 
+ public final class ProtectionContext {
+ 
+@@ -20,11 +20,11 @@
+     private long dexId;
+ 
+     public static ProtectionContext create() {
+-        return new ProtectionContext(new SecureRandom().nextLong());
++        return new ProtectionContext(GeneratorRandom.create("context").nextLong());
+     }
+ 
+     public static ProtectionContext createBound(String packageName, byte[] signerCertificate) {
+-        final SecureRandom random = new SecureRandom();
++        final Random random = GeneratorRandom.create("context");
+         return new ProtectionContext(
+                 random.nextLong(),
+                 random.nextLong(),
+--- a/nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/dex2c/converter/instructionrewriter/RandomInstructionRewriter.java
++++ b/nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/dex2c/converter/instructionrewriter/RandomInstructionRewriter.java
+@@ -3,6 +3,7 @@
+ 
+ import com.android.tools.smali.dexlib2.Opcode;
+ import com.android.tools.smali.dexlib2.Opcodes;
++import com.nmmedit.apkprotect.dex2c.GeneratorRandom;
+ 
+ import javax.annotation.Nonnull;
+ import java.util.ArrayList;
+@@ -26,10 +27,11 @@
+             }
+         }
+         //随机opcode
++        final Random random = GeneratorRandom.create("opcode");
+         for (int i = 1; i < opcodeList.size(); i++) {
+             final Opcode opcode = opcodeList.get(i);
+             if (opcode != null) {
+-                final int randIdx = new Random().nextInt(randOpcodes.size());
++                final int randIdx = random.nextInt(randOpcodes.size());
+                 final Opcode remove = randOpcodes.remove(randIdx);
+                 opcodeList.set(i, remove);
+             }
+--- a/nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/util/CmakeUtils.java
++++ b/nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/util/CmakeUtils.java
+@@ -2,6 +2,7 @@
+ 
+ import com.nmmedit.apkprotect.BuildNativeLib;
+ import com.nmmedit.apkprotect.dex2c.MethodCodec;
++import com.nmmedit.apkprotect.dex2c.GeneratorRandom;
+ import com.nmmedit.apkprotect.dex2c.ProtectionContext;
+ import com.nmmedit.apkprotect.dex2c.converter.instructionrewriter.InstructionRewriter;
+ import com.nmmedit.apkprotect.sign.ApkVerifyCodeGenerator;
+@@ -265,7 +266,7 @@
+             try (Writer fileWriter = new OutputStreamWriter(
+                     new FileOutputStream(source), StandardCharsets.UTF_8)) {
+                 final String doc = matcherResolver.replaceAll("typedef struct {\n" +
+-                        randomList(funcs) +
++                        randomList(funcs, GeneratorRandom.create("resolver-layout")) +
+                         "} vmResolver;");
+                 fileWriter.write(doc);
+             }
+@@ -292,18 +293,17 @@
+             try (Writer fileWriter = new OutputStreamWriter(
+                     new FileOutputStream(file), StandardCharsets.UTF_8)) {
+                 final String doc = matcherWrapper.replaceAll("typedef struct {\n" +
+-                        randomList(funcs) +
++                        randomList(funcs, GeneratorRandom.create("jni-layout")) +
+                         "} JNIWrapper;");
+                 fileWriter.write(doc);
+             }
+         }
+     }
+ 
+-    private static String randomList(List<String> list) {
++    private static String randomList(List<String> list, Random random) {
+         final StringBuilder sb = new StringBuilder();
+         final int size = list.size();
+         for (int i = 0; i < size; i++) {
+-            final Random random = new Random();
+             final int idx = random.nextInt(list.size());
+             sb.append(list.get(idx));
+             sb.append('\n');
+--- /dev/null
++++ b/nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/dex2c/GeneratorRandom.java
+@@ -0,0 +1,38 @@
++package com.nmmedit.apkprotect.dex2c;
++
++import java.nio.ByteBuffer;
++import java.nio.charset.StandardCharsets;
++import java.security.MessageDigest;
++import java.security.NoSuchAlgorithmException;
++import java.security.SecureRandom;
++import java.util.Random;
++
++/** Explicit test-only reproducibility; production randomness remains independent and secure. */
++public final class GeneratorRandom {
++    private GeneratorRandom() {}
++
++    public static Long configuredTestSeed() {
++        String value = System.getProperty("nmmp.testSeed");
++        if (value == null) value = System.getenv("NMMP_TEST_SEED");
++        if (value == null) return null;
++        if (!value.matches("[0-9a-fA-F]{16}"))
++            throw new IllegalArgumentException("nmmp.testSeed/NMMP_TEST_SEED must be exactly 16 hexadecimal digits");
++        return Long.parseUnsignedLong(value, 16);
++    }
++
++    public static Random create(String purpose) { return create(purpose, 0); }
++
++    public static Random create(String purpose, long identity) {
++        Long seed = configuredTestSeed();
++        if (seed == null) return new SecureRandom();
++        try {
++            MessageDigest digest = MessageDigest.getInstance("SHA-256");
++            digest.update("nmmp-test-random-v1".getBytes(StandardCharsets.UTF_8));
++            digest.update(ByteBuffer.allocate(16).putLong(seed).putLong(identity).array());
++            byte[] hash = digest.digest(purpose.getBytes(StandardCharsets.UTF_8));
++            return new Random(ByteBuffer.wrap(hash).getLong());
++        } catch (NoSuchAlgorithmException e) {
++            throw new IllegalStateException("SHA-256 unavailable", e);
++        }
++    }
++}

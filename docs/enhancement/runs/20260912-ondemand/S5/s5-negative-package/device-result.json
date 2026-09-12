@@ -1,0 +1,9 @@
+{
+  "mutation": "package",
+  "apkSha256": "6e2408e22cf3cf66703878a172490f7d29b8607dfe8b09e66cd77947ba748cb7",
+  "pid": "32000",
+  "internalError": true,
+  "errors": [
+    "NMMP initialization is not ready"
+  ]
+}

@@ -1,0 +1,5 @@
+{"case":"exception","round":-1,"iterations":1000,"elapsedNs":20538750,"checksum":9000}
+{"case":"exception","round":0,"iterations":1000,"elapsedNs":20482969,"checksum":9000}
+{"case":"exception","round":1,"iterations":1000,"elapsedNs":19146354,"checksum":9000}
+VmHWM:	   44380 kB
+VmRSS:	   44048 kB

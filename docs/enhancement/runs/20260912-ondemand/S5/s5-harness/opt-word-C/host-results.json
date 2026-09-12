@@ -1,0 +1,144 @@
+{
+  "tests": [
+    {
+      "name": "original-reader",
+      "profile": "release",
+      "exitCode": 0,
+      "output": "reader scalar, bounds and LEB128 vectors passed\n",
+      "compileCommand": [
+        "g++",
+        "-std=c++11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-O2",
+        "/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/test/cpp/VmReaderTest.cpp",
+        "-I",
+        "/mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/s5/seed1/hotspot-C/build/dex2c/vm/include",
+        "-o",
+        "/mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/s5-harness/opt-word-C/host/original-reader-release"
+      ]
+    },
+    {
+      "name": "optimized-reader",
+      "profile": "release",
+      "exitCode": 0,
+      "output": "reader scalar, bounds and LEB128 vectors passed\n",
+      "compileCommand": [
+        "g++",
+        "-std=c++11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-O2",
+        "/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/test/cpp/VmReaderTest.cpp",
+        "-I",
+        "/mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/s5-harness/opt-word-C/build/dex2c/vm/include",
+        "-o",
+        "/mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/s5-harness/opt-word-C/host/optimized-reader-release"
+      ]
+    },
+    {
+      "name": "word-differential",
+      "profile": "release",
+      "exitCode": 0,
+      "output": "PASS: 1312133 differential value/failure/cache-state checks; 64 seeds; 64-byte cache\n",
+      "compileCommand": [
+        "g++",
+        "-std=c++11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-O2",
+        "/mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/s5-harness/opt-word-C/tests/WordDifferentialTest.cpp",
+        "-I",
+        "/mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/s5-harness/opt-word-C/build/dex2c/vm/include",
+        "-o",
+        "/mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/s5-harness/opt-word-C/host/word-differential-release"
+      ]
+    },
+    {
+      "name": "original-reader",
+      "profile": "asan-ubsan",
+      "exitCode": 0,
+      "output": "reader scalar, bounds and LEB128 vectors passed\n",
+      "compileCommand": [
+        "g++",
+        "-std=c++11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-O1",
+        "-g",
+        "-fno-omit-frame-pointer",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/test/cpp/VmReaderTest.cpp",
+        "-I",
+        "/mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/s5/seed1/hotspot-C/build/dex2c/vm/include",
+        "-o",
+        "/mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/s5-harness/opt-word-C/host/original-reader-asan-ubsan"
+      ]
+    },
+    {
+      "name": "optimized-reader",
+      "profile": "asan-ubsan",
+      "exitCode": 0,
+      "output": "reader scalar, bounds and LEB128 vectors passed\n",
+      "compileCommand": [
+        "g++",
+        "-std=c++11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-O1",
+        "-g",
+        "-fno-omit-frame-pointer",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/test/cpp/VmReaderTest.cpp",
+        "-I",
+        "/mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/s5-harness/opt-word-C/build/dex2c/vm/include",
+        "-o",
+        "/mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/s5-harness/opt-word-C/host/optimized-reader-asan-ubsan"
+      ]
+    },
+    {
+      "name": "word-differential",
+      "profile": "asan-ubsan",
+      "exitCode": 0,
+      "output": "PASS: 1312133 differential value/failure/cache-state checks; 64 seeds; 64-byte cache\n",
+      "compileCommand": [
+        "g++",
+        "-std=c++11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-O1",
+        "-g",
+        "-fno-omit-frame-pointer",
+        "-fsanitize=address,undefined",
+        "-fno-pie",
+        "-no-pie",
+        "/mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/s5-harness/opt-word-C/tests/WordDifferentialTest.cpp",
+        "-I",
+        "/mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/s5-harness/opt-word-C/build/dex2c/vm/include",
+        "-o",
+        "/mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/s5-harness/opt-word-C/host/word-differential-asan-ubsan"
+      ]
+    }
+  ],
+  "passed": 6,
+  "nativeMethods": 8,
+  "sourceAndCopyMatchManifest": true,
+  "productionHeaderAndJarSha256": {
+    "/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/include/VmReader.h": "e6b695b6fb2d0211947c8070e0e564c4648177f4b7855f6ea11486c1322ecdcb",
+    "/mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/libs/vm-protect-2026-09-13-0136.jar": "28c13bbb3952d69640ad5bae626f0f5b7d04346e701e43dded0efd5e3734b469",
+    "/mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/s5/seed1/hotspot-C/vm-protect.jar": "28c13bbb3952d69640ad5bae626f0f5b7d04346e701e43dded0efd5e3734b469"
+  },
+  "androidBuild": false,
+  "deviceExecution": false,
+  "performanceMeasured": false
+}

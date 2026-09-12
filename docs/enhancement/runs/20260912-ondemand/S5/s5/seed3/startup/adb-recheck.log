@@ -1,0 +1,13 @@
+usb_backend: NATIVE
+mdns_backend: OPENSCREEN
+mdns_backend_forced: true
+version: "37.0.0"
+build: "14910828"
+executable_absolute_path: "D:\\Android\\SDK\\platform-tools\\adb.exe"
+log_absolute_path: "C:\\Users\\AI_BOT\\AppData\\Local\\Temp\\adb.log"
+os: "Windows 10.0.26100"
+trace_level: ""
+burst_mode: false
+mdns_enabled: true
+keystore_path: "C:\\Users\\AI_BOT\\.android\\adbkey"
+known_hosts_path: "C:\\Users\\AI_BOT\\.android\\adb_known_hosts.pb"

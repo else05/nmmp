@@ -1,0 +1,48 @@
+{
+  "serial": "192.168.6.118:5555",
+  "adb": "E:\\Scoop\\apps\\adb\\current\\platform-tools\\adb.exe",
+  "runner": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5-harness\\runner-dex\\classes.dex",
+  "warmups": 5,
+  "rounds": 20,
+  "cases": {
+    "arithmetic": 100,
+    "branch": 100,
+    "shortCall": 10000,
+    "jniObject": 1000,
+    "arrayPayload": 1000,
+    "exception": 1000,
+    "recursive": 1000,
+    "multiThread": 10000,
+    "largeShort": 10000
+  },
+  "variants": [
+    {
+      "name": "A",
+      "library": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed1\\hotspot-A\\build\\obj\\strip\\arm64-v8a\\libc++_en.so"
+    },
+    {
+      "name": "B",
+      "library": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed1\\hotspot-B\\build\\obj\\strip\\arm64-v8a\\libc++_en.so"
+    },
+    {
+      "name": "C",
+      "library": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed1\\hotspot-C\\build\\obj\\strip\\arm64-v8a\\libc++_en.so"
+    },
+    {
+      "name": "D",
+      "library": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed1\\hotspot-D\\build\\obj\\strip\\arm64-v8a\\libc++_en.so"
+    }
+  ],
+  "deferredCases": [
+    "arithmetic",
+    "branch",
+    "shortCall",
+    "jniObject",
+    "arrayPayload",
+    "exception",
+    "recursive",
+    "multiThread"
+  ],
+  "samplingPurpose": "PREPARED OPTION ONLY: shorter equal-count largeShort; duration nonconformance must remain explicit. Awaiting user choice.",
+  "largeShortIterations": 10000
+}

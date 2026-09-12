@@ -1,0 +1,519 @@
+{
+  "commit": "18dc5b1799e1177f0f5a2a1488fa8f2917d64696",
+  "jar": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s1-stage-snapshot\\nmm-protect\\build\\libs\\vm-protect-2026-09-13-0244.jar",
+  "stageJar": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5-harness\\stage-S1\\vm-protect.jar",
+  "jarSha256": "4a35f3eface61c248c0d5ccd298cbb3c9a6fd2c5722e473e46c9d5606650b5f6",
+  "templateSha256": "0e79d7d5ca367eda99498cd7ed03717309de772e8013705fe57a1721d561defc",
+  "javaSuites": {
+    "apkprotect": {
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "arsc": {
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "snapshotSourcesUnchangedAfterBuild": true,
+  "runtimeTemplateFilesUnchanged": 122,
+  "templateSourceChecks": {
+    "vm/ApkV2Signer.cpp": {
+      "templateSha256": "6ba7ad4448287d944a1b930a43a14db145ad35ac5e9a29f44fefe14030c7c747",
+      "sourceSha256": "b38e868a57314d6c8b44c94d029e0ce23487c833d1e0458433e54bef5c2971a7",
+      "source": "nmmvm\\nmmvm\\src\\main\\cpp\\vm\\ApkV2Signer.cpp",
+      "equalIgnoringCRLF": true
+    },
+    "vm/Arm64Syscall.cpp": {
+      "templateSha256": "92edab39105fa15ef6d904925c8bcc2b198d6196ac2264bb90d137919a6bbeaf",
+      "sourceSha256": "735c6556be0ccda26210b37eb4e31ad37b06258da0ec391fe374512d0e49392c",
+      "source": "nmmvm\\nmmvm\\src\\main\\cpp\\vm\\Arm64Syscall.cpp",
+      "equalIgnoringCRLF": true
+    },
+    "vm/Codec.cpp": {
+      "templateSha256": "0ccaa010f6cc1487ddf1758e25987f9a83fbd11fea1d7b5389bbab76415d6fd4",
+      "sourceSha256": "344b2d8893f2545d108df38e8b1f1e49c01e979b3a73cad35632fc235a54b359",
+      "source": "nmmvm\\nmmvm\\src\\main\\cpp\\vm\\Codec.cpp",
+      "equalIgnoringCRLF": true
+    },
+    "vm/DexCatch.cpp": {
+      "templateSha256": "4a84a9fec3112757f2470b28266b2ab24b31d1c8a4d33ed1eebbb2dbedb09d93",
+      "sourceSha256": "4a84a9fec3112757f2470b28266b2ab24b31d1c8a4d33ed1eebbb2dbedb09d93",
+      "source": "nmmvm\\nmmvm\\src\\main\\cpp\\vm\\DexCatch.cpp",
+      "equalIgnoringCRLF": true
+    },
+    "vm/DexCatch.h": {
+      "templateSha256": "422f32663553fed779603c53cd72e2eef63ec896f2d5cba728f326d6d3b706e3",
+      "sourceSha256": "422f32663553fed779603c53cd72e2eef63ec896f2d5cba728f326d6d3b706e3",
+      "source": "nmmvm\\nmmvm\\src\\main\\cpp\\vm\\DexCatch.h",
+      "equalIgnoringCRLF": true
+    },
+    "vm/DexOpcodes.h": {
+      "templateSha256": "f0dea95935e4bab90e145154ec408b7ca651b3c08ce7a47a9db1a4019219f2c5",
+      "sourceSha256": "f0dea95935e4bab90e145154ec408b7ca651b3c08ce7a47a9db1a4019219f2c5",
+      "source": "nmmvm\\nmmvm\\src\\main\\cpp\\vm\\DexOpcodes.h",
+      "equalIgnoringCRLF": true
+    },
+    "vm/Exception.cpp": {
+      "templateSha256": "e838cdd231f1bb2fc57da4570c777a18e92fdbf6cb3ada5f6b26e321307c2204",
+      "sourceSha256": "fc308970d907221d6a1ef602a54572496926d93c457ed1d9f8ccc7b9fb51abbc",
+      "source": "nmmvm\\nmmvm\\src\\main\\cpp\\vm\\Exception.cpp",
+      "equalIgnoringCRLF": true
+    },
+    "vm/Exception.h": {
+      "templateSha256": "acd5735c34b07565e3b69fd22de609f9cbc9075ac100b0bdffd642038ad73c36",
+      "sourceSha256": "5b5da36c1d3e77d3310df9cbd5c37467a01b2bacd8567b76bc434f2ecc33fcdf",
+      "source": "nmmvm\\nmmvm\\src\\main\\cpp\\vm\\Exception.h",
+      "equalIgnoringCRLF": true
+    },
+    "vm/GlobalCache.cpp": {
+      "templateSha256": "8231effd4ff86de34932b9d85d25f6b1deb164cfcb8425ea13816625069c25e7",
+      "sourceSha256": "522a9ed89e3442ee46e1bc02f807f7a2a1810977e4fd4cd2a62cca644d42b311",
+      "source": "nmmvm\\nmmvm\\src\\main\\cpp\\vm\\GlobalCache.cpp",
+      "equalIgnoringCRLF": true
+    },
+    "vm/include/ApkV2Signer.h": {
+      "templateSha256": "4dd773ce26aeda7181527abe48c9c291ca90582940c336cad10477377ee44e1d",
+      "sourceSha256": "ce6aadc2af3371e258825b49ffd42d22b5098507d7e61a2172d4e1d251b01ee0",
+      "source": "nmmvm\\nmmvm\\src\\main\\cpp\\vm\\include\\ApkV2Signer.h",
+      "equalIgnoringCRLF": true
+    },
+    "vm/include/Arm64Syscall.h": {
+      "templateSha256": "c321de01767c37ee3ac98f4096aaccd4fbfa4fba3c51f64e60c1892683ede5c0",
+      "sourceSha256": "9aab11eb62aaef84cff766cfa26ee3bae93ed95889474e52507a35129b101703",
+      "source": "nmmvm\\nmmvm\\src\\main\\cpp\\vm\\include\\Arm64Syscall.h",
+      "equalIgnoringCRLF": true
+    },
+    "vm/include/Common.h": {
+      "templateSha256": "5c5e1a385d41056589f7d8fc41d6eda22793f54f8aac3125b140a40bc65530db",
+      "sourceSha256": "5c5e1a385d41056589f7d8fc41d6eda22793f54f8aac3125b140a40bc65530db",
+      "source": "nmmvm\\nmmvm\\src\\main\\cpp\\vm\\include\\Common.h",
+      "equalIgnoringCRLF": true
+    },
+    "vm/include/GlobalCache.h": {
+      "templateSha256": "f55508eec55372d872e9742567ffb343c04a59a48955951473e0f6dd154cf805",
+      "sourceSha256": "f55508eec55372d872e9742567ffb343c04a59a48955951473e0f6dd154cf805",
+      "source": "nmmvm\\nmmvm\\src\\main\\cpp\\vm\\include\\GlobalCache.h",
+      "equalIgnoringCRLF": true
+    },
+    "vm/include/JNIWrapper.h": {
+      "templateSha256": "dc406e5cdbfcfbb119042b996165bf36843ce792805a52ba0b3a791ee4dcf4d5",
+      "sourceSha256": "dc406e5cdbfcfbb119042b996165bf36843ce792805a52ba0b3a791ee4dcf4d5",
+      "source": "nmmvm\\nmmvm\\src\\main\\cpp\\vm\\include\\JNIWrapper.h",
+      "equalIgnoringCRLF": true
+    },
+    "vm/include/PrivateLoaderState.h": {
+      "templateSha256": "aed662e72f63548a8bc3376b08f59b2847c9f9c674968e6cbaa66624e14e55d7",
+      "sourceSha256": "00ccf5d5774ca21b479afeb0f3715081fdb280d28f276f44c48ad03be4ef5563",
+      "source": "nmmvm\\nmmvm\\src\\main\\cpp\\vm\\include\\PrivateLoaderState.h",
+      "equalIgnoringCRLF": true
+    },
+    "vm/include/ScopedLocalRef.h": {
+      "templateSha256": "7c821a55de43618d28e588cc2ff89863fd3389423f8948d60cfe4f01733aa497",
+      "sourceSha256": "7c821a55de43618d28e588cc2ff89863fd3389423f8948d60cfe4f01733aa497",
+      "source": "nmmvm\\nmmvm\\src\\main\\cpp\\vm\\include\\ScopedLocalRef.h",
+      "equalIgnoringCRLF": true
+    },
+    "vm/include/Sha256.h": {
+      "templateSha256": "6c7413bc7c17ed38a6defdfc9093ef6ebf61166ed2354034cef3c9cc05beefc7",
+      "sourceSha256": "9a2678caa238c29f4e85bd17423743f6c38600b02230c715d1b1c81f71d7545c",
+      "source": "nmmvm\\nmmvm\\src\\main\\cpp\\vm\\include\\Sha256.h",
+      "equalIgnoringCRLF": true
+    },
+    "vm/include/vm.h": {
+      "templateSha256": "e64527fd84250aaa1b0d4c1241f41bd2f3bb778c43572d7435aed9a12aa72dc1",
+      "sourceSha256": "69c8920bf3a1e1e3b5de321f9bf2b41db614458e3dc5d62503f202abe601f650",
+      "source": "nmmvm\\nmmvm\\src\\main\\cpp\\vm\\include\\vm.h",
+      "equalIgnoringCRLF": true
+    },
+    "vm/include/VmBinding.h": {
+      "templateSha256": "b7da5eec55672cd9566e8031ed9b4e47bf97e8060bccdfafc0d1b41e9722b571",
+      "sourceSha256": "603741b9cb6861662d5345fb99c44f1f45cc00fec9289dab22d51c4c1cf9fa4c",
+      "source": "nmmvm\\nmmvm\\src\\main\\cpp\\vm\\include\\VmBinding.h",
+      "equalIgnoringCRLF": true
+    },
+    "vm/include/VmCodec.h": {
+      "templateSha256": "e698e32a6e45377bca36c2a8cb596d63786f25ec18aa0a4df0fb9f4b5fe8463f",
+      "sourceSha256": "2b0aa8cb671efeda8319359d8da472911a52e1c36a6a5a380380ea02b3017a30",
+      "source": "nmmvm\\nmmvm\\src\\main\\cpp\\vm\\include\\VmCodec.h",
+      "equalIgnoringCRLF": true
+    },
+    "vm/include/VmCodecConfig.h": {
+      "templateSha256": "e2704cbb2252b61f1b43067df71c5a7d13e39af736edb5842b4e0e5aa54a4565",
+      "sourceSha256": "5e89f5204bc1c06a9899ee0e269380048f4d167d32e4ad65063f401466aede92",
+      "source": "nmmvm\\nmmvm\\src\\main\\cpp\\vm\\include\\VmCodecConfig.h",
+      "equalIgnoringCRLF": true
+    },
+    "vm/include/VmReader.h": {
+      "templateSha256": "220ba40ff43bd707d5d59faa355eceeb5a63c932daeff4647e92ace79592702e",
+      "sourceSha256": "2fc9540d33dc13b041c96f0093e1cef951c7b829f743ad3e3738b731d7786835",
+      "source": "nmmvm\\nmmvm\\src\\main\\cpp\\vm\\include\\VmReader.h",
+      "equalIgnoringCRLF": true
+    },
+    "vm/Interp.cpp": {
+      "templateSha256": "956759b6dc78c4cc1c5eeb1947766606edbb968d7015542177de698a474b2d65",
+      "sourceSha256": "5649f6b6d2d417c81cdb4209e444f8f8360289278b926d33948b4f361e92fe4d",
+      "source": "nmmvm\\nmmvm\\src\\main\\cpp\\vm\\Interp.cpp",
+      "equalIgnoringCRLF": true
+    },
+    "vm/Interp.h": {
+      "templateSha256": "52a0b3b8aa7529ad83411ad0c03988a3f7220a5a87f01babfd16e68b9b0e23f8",
+      "sourceSha256": "52a0b3b8aa7529ad83411ad0c03988a3f7220a5a87f01babfd16e68b9b0e23f8",
+      "source": "nmmvm\\nmmvm\\src\\main\\cpp\\vm\\Interp.h",
+      "equalIgnoringCRLF": true
+    },
+    "vm/InterpC-portable.cpp": {
+      "templateSha256": "9ef9ff91db19f5ee79ce7561832805748663120d01b1a5582cbd89e07bc6d680",
+      "sourceSha256": "9ef9ff91db19f5ee79ce7561832805748663120d01b1a5582cbd89e07bc6d680",
+      "source": "nmmvm\\nmmvm\\src\\main\\cpp\\vm\\InterpC-portable.cpp",
+      "equalIgnoringCRLF": true
+    },
+    "vm/JNIWrapper.c": {
+      "templateSha256": "c2aea1bdf1a90ad20f1e24c21036846f4a198fb71aa672ce016f2b3da76c1305",
+      "sourceSha256": "c2aea1bdf1a90ad20f1e24c21036846f4a198fb71aa672ce016f2b3da76c1305",
+      "source": "nmmvm\\nmmvm\\src\\main\\cpp\\vm\\JNIWrapper.c",
+      "equalIgnoringCRLF": true
+    },
+    "vm/Leb128.h": {
+      "templateSha256": "4596ca56336beacf5c0e3fa6839b8904998fa1d34a94ee86cc4c3f02039654a9",
+      "sourceSha256": "4596ca56336beacf5c0e3fa6839b8904998fa1d34a94ee86cc4c3f02039654a9",
+      "source": "nmmvm\\nmmvm\\src\\main\\cpp\\vm\\Leb128.h",
+      "equalIgnoringCRLF": true
+    },
+    "vm/Sha256.cpp": {
+      "templateSha256": "d088792e9b6568318664e23ae69f72f05a2ae82035448be6754d6311500e3c8e",
+      "sourceSha256": "2530c00cd556b12c7f2e8c3a587278c829b53b4417e3d6b2680fbe1e009c0425",
+      "source": "nmmvm\\nmmvm\\src\\main\\cpp\\vm\\Sha256.cpp",
+      "equalIgnoringCRLF": true
+    },
+    "vm/VmBinding.cpp": {
+      "templateSha256": "ae8ba1a9c52327fb163563ee65c2a8e8d492dbaaa485036007535ab46d457b26",
+      "sourceSha256": "afe2194106acc487fbe3899baa00a5564cbafce9ba0cb15e47268e4be479d6b0",
+      "source": "nmmvm\\nmmvm\\src\\main\\cpp\\vm\\VmBinding.cpp",
+      "equalIgnoringCRLF": true
+    },
+    "vm/VmCodec.cpp": {
+      "templateSha256": "b3bbc70bcb5ac89f6a7a8b2e744d31e7ca6c796fc88956bd70a74ccdc1ed6299",
+      "sourceSha256": "62181266e73ccfdefa40afbeef2d8ac545bc4de93aab47bef35ab3aee11d45a7",
+      "source": "nmmvm\\nmmvm\\src\\main\\cpp\\vm\\VmCodec.cpp",
+      "equalIgnoringCRLF": true
+    },
+    "cutils/log.h": {
+      "templateSha256": "173dc1c0c2f051fe1e23a611fc88c10bb224d7ead58cc752ebd52fea699c10ef",
+      "sourceSha256": "173dc1c0c2f051fe1e23a611fc88c10bb224d7ead58cc752ebd52fea699c10ef",
+      "source": "nmmvm\\nmmvm\\src\\main\\cpp\\cutils\\log.h",
+      "equalIgnoringCRLF": true
+    },
+    "ConstantPool.c": {
+      "templateSha256": "3f8dd6ca1bbefbcb45544d11d61cf250e2641268dcc4d1e72510bb276e2e8ea8",
+      "sourceSha256": "3f8dd6ca1bbefbcb45544d11d61cf250e2641268dcc4d1e72510bb276e2e8ea8",
+      "source": "nmmvm\\nmmvm\\src\\main\\cpp\\ConstantPool.c",
+      "equalIgnoringCRLF": true
+    },
+    "ConstantPool.h": {
+      "templateSha256": "4a14ad4a4cbe1e35b688c4d7c2b399fa2a77d39af867f124d63f3d54d4b16627",
+      "sourceSha256": "4a14ad4a4cbe1e35b688c4d7c2b399fa2a77d39af867f124d63f3d54d4b16627",
+      "source": "nmmvm\\nmmvm\\src\\main\\cpp\\ConstantPool.h",
+      "equalIgnoringCRLF": true
+    },
+    "vm/CMakeLists.txt": {
+      "templateSha256": "84dfcd53a5052d569ef9bad2fbba97269744b2ea303008058b7223140812f154",
+      "sourceSha256": "160c46d78b786ee99cda617827305139eeb2fa52de1205391391aa8b5260195a",
+      "source": "nmm-protect\\mksrc\\vm\\CMakeLists.txt",
+      "equalIgnoringCRLF": true
+    },
+    "CMakeLists.txt": {
+      "templateSha256": "91319e0e9097778b319e02ff61110afd6703230011f94838d47de8abeb217650",
+      "sourceSha256": "94ea474965c2e3e4272bbe927eea8bd116297bb3ebc96b6a637c1b15d14971d1",
+      "source": "nmm-protect\\mksrc\\CMakeLists.txt",
+      "equalIgnoringCRLF": true
+    },
+    "loader/.gitignore": {
+      "templateSha256": "4d21bfccdadc6beeecb3216e768ec818eb9f6f095e830bcd2fef9ed332d3be6f",
+      "sourceSha256": "cb80978516f91372c02364b84e277b19e0b8acc6698cd4496f90df55b1484ba0",
+      "source": "nmm-protect\\mksrc\\loader\\.gitignore",
+      "equalIgnoringCRLF": true
+    },
+    "loader/Bootstrap.h": {
+      "templateSha256": "2c1533df957540569b1094f867068da2bc531ad75f309bb47a7068d3ac02b3f5",
+      "sourceSha256": "300bf2f44813b84aef4d07fb9c93711e44c72787eef6795aa346227cea65a377",
+      "source": "nmm-protect\\mksrc\\loader\\Bootstrap.h",
+      "equalIgnoringCRLF": true
+    },
+    "loader/Envelope.c": {
+      "templateSha256": "7a0caa4a330aa11fe2cfe8955801cf207e7942f1fe4fb1b2330516f8bdccffa8",
+      "sourceSha256": "eb33492409b19983ff84469f0b7bc2d0591c4270d9e1246a6f120960690c5a3e",
+      "source": "nmm-protect\\mksrc\\loader\\Envelope.c",
+      "equalIgnoringCRLF": true
+    },
+    "loader/Envelope.h": {
+      "templateSha256": "52dbc272ddc6a58c071b9da08da5d5e5b4556ba65bc17d747209b9ca00b9fe3e",
+      "sourceSha256": "87bdf5ee3ad3cda7ea7b111a2bd1a2ce479530a9b3ada7e650f361bbb2f7ebaf",
+      "source": "nmm-protect\\mksrc\\loader\\Envelope.h",
+      "equalIgnoringCRLF": true
+    },
+    "loader/inner.exports": {
+      "templateSha256": "578668082bfe028bcda46f286f5bb06f97ee09ccca4d3d21b4b0082dd0c63753",
+      "sourceSha256": "505a9556fa1c5863a568657f24f2df327993dea112345731aa107b4eefc044f9",
+      "source": "nmm-protect\\mksrc\\loader\\inner.exports",
+      "equalIgnoringCRLF": true
+    },
+    "loader/InnerBootstrap.c": {
+      "templateSha256": "ec9ef6b1d2049b34f274f7a044f347b12c6f543c45256116252e6b7c4e8720ee",
+      "sourceSha256": "30f59c16aa14f163810da705ee2c1db5240ed54f342f30836cbb4a29469a3d82",
+      "source": "nmm-protect\\mksrc\\loader\\InnerBootstrap.c",
+      "equalIgnoringCRLF": true
+    },
+    "loader/LICENSE": {
+      "templateSha256": "1eb85fc97224598dad1852b5d6483bbcf0aa8608790dcc657a5a2a761ae9c8c6",
+      "sourceSha256": "1eb85fc97224598dad1852b5d6483bbcf0aa8608790dcc657a5a2a761ae9c8c6",
+      "source": "nmm-protect\\mksrc\\loader\\LICENSE",
+      "equalIgnoringCRLF": true
+    },
+    "loader/Loader.c": {
+      "templateSha256": "8bf049ebcf2289d009ca9dd33301bb6a72aa9ba76b87cc54754d8c8a046b19a2",
+      "sourceSha256": "39d79d032fd8eb3986d6565b4ed112a304ff8edf4fc748675e2675c1173aaa58",
+      "source": "nmm-protect\\mksrc\\loader\\Loader.c",
+      "equalIgnoringCRLF": true
+    },
+    "loader/Loader.h": {
+      "templateSha256": "40c5b4af8e675839ff9d1456d8469b8aad4e3fbe7d02627957a1a2ede2e67836",
+      "sourceSha256": "3379bae579e3f2d5918b2527e08a030ed44b56dcde264815fb5794264fde95ca",
+      "source": "nmm-protect\\mksrc\\loader\\Loader.h",
+      "equalIgnoringCRLF": true
+    },
+    "loader/LoaderVersion.h": {
+      "templateSha256": "9c47dda0e7f3139ed6d1f8210a74aa53bc0a8857b7247df133562c943905946d",
+      "sourceSha256": "cd06e7faa2eb5093dc69655c91ded6f337d85af23d00b395d1f564b498b905db",
+      "source": "nmm-protect\\mksrc\\loader\\LoaderVersion.h",
+      "equalIgnoringCRLF": true
+    },
+    "loader/Once.c": {
+      "templateSha256": "0e70700dc0ff988e86258ea213dc9fad16fafb75c5389a0427dbbf2815311490",
+      "sourceSha256": "952c5eaf80f31ddee4e896b71c37fc5c1b00f66cb306f2e6cd0457e73a400ee5",
+      "source": "nmm-protect\\mksrc\\loader\\Once.c",
+      "equalIgnoringCRLF": true
+    },
+    "loader/Once.h": {
+      "templateSha256": "3892a018a63d1736529c755ac2ca3c5742972db6d193cdbcef39ad81d86ecf33",
+      "sourceSha256": "b309bc10130d8b7f5837c1b4e94bc6300b8b99f70db0d689d24aaaa5c5b8084a",
+      "source": "nmm-protect\\mksrc\\loader\\Once.h",
+      "equalIgnoringCRLF": true
+    },
+    "loader/Outer.c": {
+      "templateSha256": "757a8b251bc2c8eb699925d1f8329dd705a8c99a5284cddc0409a4071fdd2af1",
+      "sourceSha256": "0b782af20d63235db168ab8d6b27079e8599e21ec84447e4985b571ebcd2507e",
+      "source": "nmm-protect\\mksrc\\loader\\Outer.c",
+      "equalIgnoringCRLF": true
+    },
+    "loader/outer.exports": {
+      "templateSha256": "ad5003b15e7668333f41e2b98a5985f0ecd89853e0618ae8dd550c4ad88960f3",
+      "sourceSha256": "b29f8352f196c33f4ef245319f58222d4e69e18ff2030d6671bfba6c25b98c99",
+      "source": "nmm-protect\\mksrc\\loader\\outer.exports",
+      "equalIgnoringCRLF": true
+    },
+    "loader/pack.py": {
+      "templateSha256": "cd5982ed6ceee16f0b80c9fefb50e0d8a09eefedcd32722f071714237aa300d6",
+      "sourceSha256": "1a9e22f81880fb0024af2c335cd09db3fdd4183c8adfdc75448f6b788aa7dad5",
+      "source": "nmm-protect\\mksrc\\loader\\pack.py",
+      "equalIgnoringCRLF": true
+    },
+    "loader/PrivateLinker.cmake": {
+      "templateSha256": "86c6da8d81cc6da60a97de668cb6522a09e59c037ea4a79f8acc5f631197c839",
+      "sourceSha256": "1b1008e6e90e9728741ecbf15f3e23f8d12677756925defa32f6074ffc54aadf",
+      "source": "nmm-protect\\mksrc\\loader\\PrivateLinker.cmake",
+      "equalIgnoringCRLF": true
+    },
+    "loader/Seal.java": {
+      "templateSha256": "6c0655583dfd68951a8a506f50a25bb640c9a84a70ed6f4bb07db21d31d6fcc9",
+      "sourceSha256": "f5ced8b3fb163cc796f23e5ea788c9c9c1c5133fcf9b3f3b97db9a6f4ca77796",
+      "source": "nmm-protect\\mksrc\\loader\\Seal.java",
+      "equalIgnoringCRLF": true
+    },
+    "loader/vendor/monocypher/LICENCE.md": {
+      "templateSha256": "a5781770269d2516e52ba4863f790c10a16da4089a1e81823aee19ff1e9026b0",
+      "sourceSha256": "035c7355e948ce49e49f7c4e500ebabe79135f1b46080149649d144a02c23fe5",
+      "source": "nmm-protect\\mksrc\\loader\\vendor\\monocypher\\LICENCE.md",
+      "equalIgnoringCRLF": true
+    },
+    "loader/vendor/monocypher/monocypher.c": {
+      "templateSha256": "02174117935699d418443c75a558a287deb06ef8cf7c1adced61d9047d2f323d",
+      "sourceSha256": "2d11099891e01e51b50ae2f5fe865b554e25c79d1ec252741356d36a1eab4f68",
+      "source": "nmm-protect\\mksrc\\loader\\vendor\\monocypher\\monocypher.c",
+      "equalIgnoringCRLF": true
+    },
+    "loader/vendor/monocypher/monocypher.h": {
+      "templateSha256": "fcaf6ed771358bb4f40fba016f6518ae86ec02b1b877d2cc35ad92d3a26fd7b3",
+      "sourceSha256": "7911a870e0b26d301ec552015b89abc70091ae81e8830385791e936a8f828c65",
+      "source": "nmm-protect\\mksrc\\loader\\vendor\\monocypher\\monocypher.h",
+      "equalIgnoringCRLF": true
+    }
+  },
+  "inputHashes": {
+    "implDex": {
+      "path": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5-harness\\impl-dex\\classes.dex",
+      "sha256": "0d49d1bddd30584325d8c5fffb4893357802d270f16cbe2a5523ea767f9bbca6"
+    },
+    "runnerDex": {
+      "path": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5-harness\\runner-dex\\classes.dex",
+      "sha256": "84af96d591a44a02cb9fc3da0c86d716aabcd57176759053d28b07183138b493"
+    },
+    "generateBench": {
+      "path": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5-harness\\stage-S1\\GenerateBench.java",
+      "sha256": "033d901b3b3e76afbd82379fb5635c8fcf017dc55605dfd93970436ebe189b9f"
+    },
+    "omvllConfig": {
+      "path": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\scripts\\wsl\\omvll-config.py",
+      "sha256": "50ab29382b8249572c3b77b7ce311747667dc5064873504533d5dd7d52f259bd"
+    }
+  },
+  "seed": "0123456789abcdef",
+  "androidApi": 26,
+  "abi": "arm64-v8a",
+  "privateLinker": false,
+  "androidBuildComplete": true,
+  "deviceExecution": false,
+  "androidBuildExitCode": 0,
+  "nativeMethods": 8,
+  "sharedSeedCompatibilityAllThree": true,
+  "snapshotSourcesUnchangedAfterNativeBuild": true,
+  "frozenCurrentBaselineJarsUnchanged": true,
+  "generatedTemplateUnchangedFiles": [
+    "vm/ApkV2Signer.cpp",
+    "vm/Arm64Syscall.cpp",
+    "vm/Codec.cpp",
+    "vm/DexCatch.cpp",
+    "vm/DexCatch.h",
+    "vm/Exception.cpp",
+    "vm/Exception.h",
+    "vm/GlobalCache.cpp",
+    "vm/include/ApkV2Signer.h",
+    "vm/include/Arm64Syscall.h",
+    "vm/include/Common.h",
+    "vm/include/GlobalCache.h",
+    "vm/include/PrivateLoaderState.h",
+    "vm/include/ScopedLocalRef.h",
+    "vm/include/Sha256.h",
+    "vm/include/VmBinding.h",
+    "vm/include/VmCodec.h",
+    "vm/include/VmReader.h",
+    "vm/Interp.cpp",
+    "vm/Interp.h",
+    "vm/InterpC-portable.cpp",
+    "vm/JNIWrapper.c",
+    "vm/Leb128.h",
+    "vm/Sha256.cpp",
+    "vm/VmBinding.cpp",
+    "vm/VmCodec.cpp",
+    "cutils/log.h",
+    "ConstantPool.c",
+    "ConstantPool.h",
+    "loader/.gitignore",
+    "loader/Bootstrap.h",
+    "loader/Envelope.c",
+    "loader/Envelope.h",
+    "loader/inner.exports",
+    "loader/InnerBootstrap.c",
+    "loader/LICENSE",
+    "loader/Loader.c",
+    "loader/Loader.h",
+    "loader/LoaderVersion.h",
+    "loader/Once.c",
+    "loader/Once.h",
+    "loader/Outer.c",
+    "loader/outer.exports",
+    "loader/pack.py",
+    "loader/PrivateLinker.cmake",
+    "loader/Seal.java",
+    "loader/vendor/monocypher/LICENCE.md",
+    "loader/vendor/monocypher/monocypher.c",
+    "loader/vendor/monocypher/monocypher.h"
+  ],
+  "productionGeneratedTemplateChanges": [
+    "vm/DexOpcodes.h",
+    "vm/include/JNIWrapper.h",
+    "vm/include/vm.h",
+    "vm/include/VmCodecConfig.h",
+    "vm/CMakeLists.txt",
+    "CMakeLists.txt"
+  ],
+  "libraries": {
+    "sym": {
+      "path": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5-harness\\stage-S1\\build\\obj\\sym\\arm64-v8a\\libc++_en.so",
+      "sha256": "aeb52c61e5cc9eb2dc959c5f50327cd4fd5956c3c7832953aa92bf4d62d4e410",
+      "bytes": 1104072
+    },
+    "strip": {
+      "path": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5-harness\\stage-S1\\build\\obj\\strip\\arm64-v8a\\libc++_en.so",
+      "sha256": "b7c821c5447b0aedaead2cd665a47550d573662140bbec595848da9311285483",
+      "bytes": 394656
+    }
+  },
+  "compileCommandsSha256": "2ff6062d18c951f53b907a089d9be6b39f1e27fcae8e2ae051504de7710978cd",
+  "generatedSourceSha256": {
+    "CMakeLists.txt": "d2d843b03a762756faa5a8cfda297c04e379f6e1d725a1c585ec22274e6564b3",
+    "ConstantPool.c": "3f8dd6ca1bbefbcb45544d11d61cf250e2641268dcc4d1e72510bb276e2e8ea8",
+    "ConstantPool.h": "4a14ad4a4cbe1e35b688c4d7c2b399fa2a77d39af867f124d63f3d54d4b16627",
+    "cutils/log.h": "173dc1c0c2f051fe1e23a611fc88c10bb224d7ead58cc752ebd52fea699c10ef",
+    "generated/classes_impl.dex": "4addb4be50033aa86dc3291d880f141264f658a270ea816fd8e07b6312c9feee",
+    "generated/classes_native_functions.c": "cccb93e66c482c4fbf6785d8d2c063c3c8eb6bd1a15c021a65c4d5596b10c672",
+    "generated/classes_resolver.c": "938494a95420e4508cfdb894618bad16859321776db56688eca436833104ffec",
+    "generated/classes_shell.dex": "bfeedfcfaefa33c4915a01288abaad559c09a7ef9b3de26b491a69fef60e4736",
+    "generated/jni_init.c": "e23bcc720d3cb7e71ff5aacc0104d94c1d7fb59c556eae0e8d9dbe9bdb859d3b",
+    "loader/.gitignore": "4d21bfccdadc6beeecb3216e768ec818eb9f6f095e830bcd2fef9ed332d3be6f",
+    "loader/Bootstrap.h": "2c1533df957540569b1094f867068da2bc531ad75f309bb47a7068d3ac02b3f5",
+    "loader/Envelope.c": "7a0caa4a330aa11fe2cfe8955801cf207e7942f1fe4fb1b2330516f8bdccffa8",
+    "loader/Envelope.h": "52dbc272ddc6a58c071b9da08da5d5e5b4556ba65bc17d747209b9ca00b9fe3e",
+    "loader/inner.exports": "578668082bfe028bcda46f286f5bb06f97ee09ccca4d3d21b4b0082dd0c63753",
+    "loader/InnerBootstrap.c": "ec9ef6b1d2049b34f274f7a044f347b12c6f543c45256116252e6b7c4e8720ee",
+    "loader/LICENSE": "1eb85fc97224598dad1852b5d6483bbcf0aa8608790dcc657a5a2a761ae9c8c6",
+    "loader/Loader.c": "8bf049ebcf2289d009ca9dd33301bb6a72aa9ba76b87cc54754d8c8a046b19a2",
+    "loader/Loader.h": "40c5b4af8e675839ff9d1456d8469b8aad4e3fbe7d02627957a1a2ede2e67836",
+    "loader/LoaderVersion.h": "9c47dda0e7f3139ed6d1f8210a74aa53bc0a8857b7247df133562c943905946d",
+    "loader/Once.c": "0e70700dc0ff988e86258ea213dc9fad16fafb75c5389a0427dbbf2815311490",
+    "loader/Once.h": "3892a018a63d1736529c755ac2ca3c5742972db6d193cdbcef39ad81d86ecf33",
+    "loader/Outer.c": "757a8b251bc2c8eb699925d1f8329dd705a8c99a5284cddc0409a4071fdd2af1",
+    "loader/outer.exports": "ad5003b15e7668333f41e2b98a5985f0ecd89853e0618ae8dd550c4ad88960f3",
+    "loader/pack.py": "cd5982ed6ceee16f0b80c9fefb50e0d8a09eefedcd32722f071714237aa300d6",
+    "loader/PrivateLinker.cmake": "86c6da8d81cc6da60a97de668cb6522a09e59c037ea4a79f8acc5f631197c839",
+    "loader/Seal.java": "6c0655583dfd68951a8a506f50a25bb640c9a84a70ed6f4bb07db21d31d6fcc9",
+    "loader/vendor/monocypher/LICENCE.md": "a5781770269d2516e52ba4863f790c10a16da4089a1e81823aee19ff1e9026b0",
+    "loader/vendor/monocypher/monocypher.c": "02174117935699d418443c75a558a287deb06ef8cf7c1adced61d9047d2f323d",
+    "loader/vendor/monocypher/monocypher.h": "fcaf6ed771358bb4f40fba016f6518ae86ec02b1b877d2cc35ad92d3a26fd7b3",
+    "vm/ApkV2Signer.cpp": "6ba7ad4448287d944a1b930a43a14db145ad35ac5e9a29f44fefe14030c7c747",
+    "vm/Arm64Syscall.cpp": "92edab39105fa15ef6d904925c8bcc2b198d6196ac2264bb90d137919a6bbeaf",
+    "vm/CMakeLists.txt": "1179d6d1a50b0276d4a77af17820c6c1fe57e9e4d04b55e6d4ba58f23a4c4faf",
+    "vm/Codec.cpp": "0ccaa010f6cc1487ddf1758e25987f9a83fbd11fea1d7b5389bbab76415d6fd4",
+    "vm/DexCatch.cpp": "4a84a9fec3112757f2470b28266b2ab24b31d1c8a4d33ed1eebbb2dbedb09d93",
+    "vm/DexCatch.h": "422f32663553fed779603c53cd72e2eef63ec896f2d5cba728f326d6d3b706e3",
+    "vm/DexOpcodes.h": "7438b88fca284661a07578c0b26f9ac452263e16e9d12113be9545a2e69a3444",
+    "vm/Exception.cpp": "e838cdd231f1bb2fc57da4570c777a18e92fdbf6cb3ada5f6b26e321307c2204",
+    "vm/Exception.h": "acd5735c34b07565e3b69fd22de609f9cbc9075ac100b0bdffd642038ad73c36",
+    "vm/GlobalCache.cpp": "8231effd4ff86de34932b9d85d25f6b1deb164cfcb8425ea13816625069c25e7",
+    "vm/include/ApkV2Signer.h": "4dd773ce26aeda7181527abe48c9c291ca90582940c336cad10477377ee44e1d",
+    "vm/include/Arm64Syscall.h": "c321de01767c37ee3ac98f4096aaccd4fbfa4fba3c51f64e60c1892683ede5c0",
+    "vm/include/Common.h": "5c5e1a385d41056589f7d8fc41d6eda22793f54f8aac3125b140a40bc65530db",
+    "vm/include/GlobalCache.h": "f55508eec55372d872e9742567ffb343c04a59a48955951473e0f6dd154cf805",
+    "vm/include/JNIWrapper.h": "f596fde9dfdd8ec5bfd40d4af96f4ddf1a052a090cba42a8abd4141aeacc993a",
+    "vm/include/PrivateLoaderState.h": "aed662e72f63548a8bc3376b08f59b2847c9f9c674968e6cbaa66624e14e55d7",
+    "vm/include/ScopedLocalRef.h": "7c821a55de43618d28e588cc2ff89863fd3389423f8948d60cfe4f01733aa497",
+    "vm/include/Sha256.h": "6c7413bc7c17ed38a6defdfc9093ef6ebf61166ed2354034cef3c9cc05beefc7",
+    "vm/include/vm.h": "9eb39ebf6aba2f5ab200d412a01c0b5f43bb8aa7eb75c23ac8a541403a830a95",
+    "vm/include/VmBinding.h": "b7da5eec55672cd9566e8031ed9b4e47bf97e8060bccdfafc0d1b41e9722b571",
+    "vm/include/VmCodec.h": "e698e32a6e45377bca36c2a8cb596d63786f25ec18aa0a4df0fb9f4b5fe8463f",
+    "vm/include/VmCodecConfig.h": "43248c19177e594d6a5fbbbdd9cf3e6ca79464db44b9bea4f6780e1fa181cba4",
+    "vm/include/VmReader.h": "220ba40ff43bd707d5d59faa355eceeb5a63c932daeff4647e92ace79592702e",
+    "vm/Interp.cpp": "956759b6dc78c4cc1c5eeb1947766606edbb968d7015542177de698a474b2d65",
+    "vm/Interp.h": "52a0b3b8aa7529ad83411ad0c03988a3f7220a5a87f01babfd16e68b9b0e23f8",
+    "vm/InterpC-portable.cpp": "9ef9ff91db19f5ee79ce7561832805748663120d01b1a5582cbd89e07bc6d680",
+    "vm/JNIWrapper.c": "c2aea1bdf1a90ad20f1e24c21036846f4a198fb71aa672ce016f2b3da76c1305",
+    "vm/Leb128.h": "4596ca56336beacf5c0e3fa6839b8904998fa1d34a94ee86cc4c3f02039654a9",
+    "vm/Sha256.cpp": "d088792e9b6568318664e23ae69f72f05a2ae82035448be6754d6311500e3c8e",
+    "vm/VmBinding.cpp": "ae8ba1a9c52327fb163563ee65c2a8e8d492dbaaa485036007535ab46d457b26",
+    "vm/VmCodec.cpp": "b3bbc70bcb5ac89f6a7a8b2e744d31e7ca6c796fc88956bd70a74ccdc1ed6299"
+  },
+  "performanceMeasured": false
+}

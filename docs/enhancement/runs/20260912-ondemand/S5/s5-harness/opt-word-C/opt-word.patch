@@ -1,0 +1,39 @@
+--- a/vm/include/VmReader.h
++++ b/vm/include/VmReader.h
+@@ -97,8 +97,7 @@
+         x = (x ^ (x >> 27)) * UINT64_C(0x94d049bb133111eb);
+         return x ^ (x >> 31);
+     }
+-    uint8_t decode(uint8_t byte, uint32_t pos, uint32_t domain) {
+-        if (!boundaries_) return byte;
++    uint64_t keyBlock(uint32_t pos, uint32_t domain) {
+         uint32_t window = pos & ~uint32_t(63);
+         if (cacheDomain_ != domain || cacheWindow_ != window) {
+             cacheDomain_ = domain; cacheWindow_ = window;
+@@ -110,15 +109,23 @@
+             cache_[slot] = mix(input ^ (pos / 8));
+             cacheValid_ |= 1u << slot;
+         }
+-        return byte ^ uint8_t(cache_[slot] >> ((pos & 7) * 8));
++        return cache_[slot];
++    }
++    uint8_t decode(uint8_t byte, uint32_t pos, uint32_t domain) {
++        if (!boundaries_) return byte;
++        return byte ^ uint8_t(keyBlock(pos, domain) >> ((pos & 7) * 8));
+     }
+     uint16_t word(int64_t pc, uint32_t domain) {
+         if (pc < 0 || !code_ || !range(uint64_t(pc) * 2, 2, codeBytes_)) {
+             fail(); return 0;
+         }
+         uint64_t pos = uint64_t(pc) * 2;
+-        uint16_t low = decode(code_[pos], uint32_t(pos), domain);
+-        return low | (uint16_t(decode(code_[pos + 1], uint32_t(pos + 1), domain)) << 8);
++        // An even byte position and its successor share one 8-byte key block.
++        uint16_t key = boundaries_
++                ? uint16_t(keyBlock(uint32_t(pos), domain) >> ((pos & 7) * 8)) : 0;
++        uint16_t low = code_[pos] ^ uint8_t(key);
++        uint16_t high = code_[pos + 1] ^ uint8_t(key >> 8);
++        return low | (high << 8);
+     }
+     uint32_t leb(uint32_t &cursor, bool isSigned) {
+         uint32_t value = 0;

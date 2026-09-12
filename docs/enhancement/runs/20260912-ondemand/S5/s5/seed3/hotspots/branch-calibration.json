@@ -1,0 +1,98 @@
+[
+  {
+    "case": "branch",
+    "round": -1,
+    "iterations": 100,
+    "elapsedNs": 3790000,
+    "checksum": 3519200,
+    "variant": "B"
+  },
+  {
+    "case": "branch",
+    "round": 0,
+    "iterations": 100,
+    "elapsedNs": 3874896,
+    "checksum": 3519200,
+    "variant": "B"
+  },
+  {
+    "case": "branch",
+    "round": 1,
+    "iterations": 100,
+    "elapsedNs": 3791667,
+    "checksum": 3519200,
+    "variant": "B"
+  },
+  {
+    "case": "branch",
+    "round": -1,
+    "iterations": 100,
+    "elapsedNs": 9334896,
+    "checksum": 3519200,
+    "variant": "C"
+  },
+  {
+    "case": "branch",
+    "round": 0,
+    "iterations": 100,
+    "elapsedNs": 9438281,
+    "checksum": 3519200,
+    "variant": "C"
+  },
+  {
+    "case": "branch",
+    "round": 1,
+    "iterations": 100,
+    "elapsedNs": 8945000,
+    "checksum": 3519200,
+    "variant": "C"
+  },
+  {
+    "case": "branch",
+    "round": -1,
+    "iterations": 100,
+    "elapsedNs": 9414792,
+    "checksum": 3519200,
+    "variant": "D"
+  },
+  {
+    "case": "branch",
+    "round": 0,
+    "iterations": 100,
+    "elapsedNs": 9404010,
+    "checksum": 3519200,
+    "variant": "D"
+  },
+  {
+    "case": "branch",
+    "round": 1,
+    "iterations": 100,
+    "elapsedNs": 9167604,
+    "checksum": 3519200,
+    "variant": "D"
+  },
+  {
+    "case": "branch",
+    "round": -1,
+    "iterations": 100,
+    "elapsedNs": 3890781,
+    "checksum": 3519200,
+    "variant": "A"
+  },
+  {
+    "case": "branch",
+    "round": 0,
+    "iterations": 100,
+    "elapsedNs": 3774844,
+    "checksum": 3519200,
+    "variant": "A"
+  },
+  {
+    "case": "branch",
+    "round": 1,
+    "iterations": 100,
+    "elapsedNs": 3797448,
+    "checksum": 3519200,
+    "variant": "A"
+  }
+]

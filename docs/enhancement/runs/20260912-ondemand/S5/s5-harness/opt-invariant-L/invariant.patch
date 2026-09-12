@@ -1,0 +1,187 @@
+--- a/vm/InterpC-portable.cpp
++++ b/vm/InterpC-portable.cpp
+@@ -46,14 +46,14 @@
+ 
+ 
+ #define RINDEX(_idx, _width) ({ uint32_t index = (_idx); \
+-    if (code->reader && (index >= code->registerCapacity || (_width) > code->registerCapacity - index)) \
++    if (checkedRegisters && (index >= registerCapacity || (_width) > registerCapacity - index)) \
+         goto readerFailed; index; })
+ #define GET_REGISTER_FLAGS(_idx)           ((u1)fp_flags[RINDEX(_idx, 1)])
+ #define SET_REGISTER_FLAGS(_idx, _val)     (fp_flags[RINDEX(_idx, 1)] =(u1) (_val))
+ 
+ 
+ #define GET_REGISTER_AS_OBJECT(_idx) ({ uint32_t reg_src = RINDEX(_idx, 1); \
+-    if (code->reader && !fp_flags[reg_src] && fp[reg_src] != 0) goto readerFailed; \
++    if (checkedRegisters && !fp_flags[reg_src] && fp[reg_src] != 0) goto readerFailed; \
+     (jobject)fp[reg_src]; })
+ 
+ #define DELETE_LOCAL_REF(_idx)                                  \
+@@ -964,7 +964,7 @@
+     for (const char *type = paramTypes; *type; ++type) \
+         expectedWords += (*type == 'J' || *type == 'D') ? 2 : 1; \
+     if (expectedWords != (methodCallRange ? vsrc1 : vsrc1 >> 4)) goto readerFailed; \
+-    if (code->reader && methodCallRange && (uint64_t(vdst) + expectedWords > code->registerCapacity)) goto readerFailed; \
++    if (checkedRegisters && methodCallRange && (uint64_t(vdst) + expectedWords > registerCapacity)) goto readerFailed; \
+                                                                                \
+     /*                                                                         \
+      * Copy args.  This may corrupt vsrc1/vdst.                                \
+@@ -1032,7 +1032,7 @@
+     for (const char *type = paramTypes; *type; ++type) \
+         expectedWords += (*type == 'J' || *type == 'D') ? 2 : 1; \
+     if (expectedWords != (methodCallRange ? vsrc1 : vsrc1 >> 4)) goto readerFailed; \
+-    if (code->reader && methodCallRange && (uint64_t(vdst) + expectedWords > code->registerCapacity)) goto readerFailed; \
++    if (checkedRegisters && methodCallRange && (uint64_t(vdst) + expectedWords > registerCapacity)) goto readerFailed; \
+                                                                                \
+     /*                                                                         \
+      * Copy args.  This may corrupt vsrc1/vdst.                                \
+@@ -1115,6 +1115,8 @@
+ 
+ jvalue vmInterpretReader(JNIEnv *env, const vmCode *code,
+                          const vmResolver *dvmResolver, VmReader *inputReader) {
++    const bool checkedRegisters = code->reader != nullptr;
++    const uint32_t registerCapacity = checkedRegisters ? code->registerCapacity : 0;
+     jvalue *activeArgs = nullptr;
+     jvalue args_tmp[5];//方法调用时参数传递(参数数量小于等于5)
+     jvalue retval = {};
+@@ -1144,7 +1146,7 @@
+ 
+     /* File: c/OP_NOP.cpp */
+     HANDLE_OPCODE(OP_NOP)
+-    if (code->reader && inst != 0) goto readerFailed;
++    if (checkedRegisters && inst != 0) goto readerFailed;
+     FINISH(1);
+     OP_END
+ 
+@@ -1927,32 +1929,32 @@
+ 
+ /* File: c/OP_UNUSED_3E.cpp */
+     HANDLE_OPCODE(OP_UNUSED_3E)
+-    if (code->reader) goto readerFailed;
++    if (checkedRegisters) goto readerFailed;
+     OP_END
+ 
+ /* File: c/OP_UNUSED_3F.cpp */
+     HANDLE_OPCODE(OP_UNUSED_3F)
+-    if (code->reader) goto readerFailed;
++    if (checkedRegisters) goto readerFailed;
+     OP_END
+ 
+ /* File: c/OP_UNUSED_40.cpp */
+     HANDLE_OPCODE(OP_UNUSED_40)
+-    if (code->reader) goto readerFailed;
++    if (checkedRegisters) goto readerFailed;
+     OP_END
+ 
+ /* File: c/OP_UNUSED_41.cpp */
+     HANDLE_OPCODE(OP_UNUSED_41)
+-    if (code->reader) goto readerFailed;
++    if (checkedRegisters) goto readerFailed;
+     OP_END
+ 
+ /* File: c/OP_UNUSED_42.cpp */
+     HANDLE_OPCODE(OP_UNUSED_42)
+-    if (code->reader) goto readerFailed;
++    if (checkedRegisters) goto readerFailed;
+     OP_END
+ 
+ /* File: c/OP_UNUSED_43.cpp */
+     HANDLE_OPCODE(OP_UNUSED_43)
+-    if (code->reader) goto readerFailed;
++    if (checkedRegisters) goto readerFailed;
+     OP_END
+ 
+ /* File: c/OP_AGET.cpp */
+@@ -2386,7 +2388,7 @@
+ 
+ /* File: c/OP_UNUSED_73.cpp */
+     HANDLE_OPCODE(OP_UNUSED_73)
+-    if (code->reader) goto readerFailed;
++    if (checkedRegisters) goto readerFailed;
+     OP_END
+ 
+ /* File: c/OP_INVOKE_VIRTUAL_RANGE.cpp */
+@@ -2421,12 +2423,12 @@
+ 
+ /* File: c/OP_UNUSED_79.cpp */
+     HANDLE_OPCODE(OP_UNUSED_79)
+-    if (code->reader) goto readerFailed;
++    if (checkedRegisters) goto readerFailed;
+     OP_END
+ 
+ /* File: c/OP_UNUSED_7A.cpp */
+     HANDLE_OPCODE(OP_UNUSED_7A)
+-    if (code->reader) goto readerFailed;
++    if (checkedRegisters) goto readerFailed;
+     OP_END
+ 
+ /* File: c/OP_NEG_INT.cpp */
+@@ -2945,46 +2947,46 @@
+     OP_END
+ 
+     HANDLE_OPCODE(OP_UNUSED_F3)
+-    if (code->reader) goto readerFailed;
++    if (checkedRegisters) goto readerFailed;
+     OP_END
+     HANDLE_OPCODE(OP_UNUSED_F4)
+-    if (code->reader) goto readerFailed;
++    if (checkedRegisters) goto readerFailed;
+     OP_END
+     HANDLE_OPCODE(OP_UNUSED_F5)
+-    if (code->reader) goto readerFailed;
++    if (checkedRegisters) goto readerFailed;
+     OP_END
+     HANDLE_OPCODE(OP_UNUSED_F6)
+-    if (code->reader) goto readerFailed;
++    if (checkedRegisters) goto readerFailed;
+     OP_END
+     HANDLE_OPCODE(OP_UNUSED_F7)
+-    if (code->reader) goto readerFailed;
++    if (checkedRegisters) goto readerFailed;
+     OP_END
+     HANDLE_OPCODE(OP_UNUSED_F8)
+-    if (code->reader) goto readerFailed;
++    if (checkedRegisters) goto readerFailed;
+     OP_END
+     HANDLE_OPCODE(OP_UNUSED_F9)
+-    if (code->reader) goto readerFailed;
++    if (checkedRegisters) goto readerFailed;
+     OP_END
+ 
+     //todo 实现高版本指令
+     HANDLE_OPCODE(OP_INVOKE_POLYMORPHIC)
+-    if (code->reader) goto readerFailed;
++    if (checkedRegisters) goto readerFailed;
+     OP_END
+     HANDLE_OPCODE(OP_INVOKE_POLYMORPHIC_RANGE)
+-    if (code->reader) goto readerFailed;
++    if (checkedRegisters) goto readerFailed;
+     OP_END
+ 
+     HANDLE_OPCODE(OP_INVOKE_CUSTOM)
+-    if (code->reader) goto readerFailed;
++    if (checkedRegisters) goto readerFailed;
+     OP_END
+     HANDLE_OPCODE(OP_INVOKE_CUSTOM_RANGE)
+-    if (code->reader) goto readerFailed;
++    if (checkedRegisters) goto readerFailed;
+     OP_END
+     HANDLE_OPCODE(OP_CONST_METHOD_HANDLE)
+-    if (code->reader) goto readerFailed;
++    if (checkedRegisters) goto readerFailed;
+     OP_END
+     HANDLE_OPCODE(OP_CONST_METHOD_TYPE)
+-    if (code->reader) goto readerFailed;
++    if (checkedRegisters) goto readerFailed;
+     OP_END
+ /*
+  * In portable interp, most unused opcodes will fall through to here.
+@@ -3663,7 +3665,7 @@
+  * the "catch" blocks.
+  */
+         // Legacy development fixtures without a sized exception span retain their explicit adapter.
+-        catchRelPc = (!code->reader && code->triesHandlers && !code->triesByteSize)
++        catchRelPc = (!checkedRegisters && code->triesHandlers && !code->triesByteSize)
+                 ? dvmFindCatchBlock(env, dvmResolver, pc, exception.get(),
+                                     (TryCatchHandler *) code->triesHandlers)
+                 : dvmFindCatchBlockReader(env, dvmResolver, pc, exception.get(), reader);

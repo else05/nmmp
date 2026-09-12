@@ -1,0 +1,122 @@
+[
+  {
+    "case": "arithmetic",
+    "round": -1,
+    "iterations": 100,
+    "elapsedNs": 3463281,
+    "checksum": 34350822000,
+    "variant": "A"
+  },
+  {
+    "case": "arithmetic",
+    "round": 0,
+    "iterations": 100,
+    "elapsedNs": 3526875,
+    "checksum": 34350822000,
+    "variant": "A"
+  },
+  {
+    "case": "arithmetic",
+    "round": 1,
+    "iterations": 100,
+    "elapsedNs": 3391510,
+    "checksum": 34350822000,
+    "variant": "A"
+  },
+  {
+    "case": "arithmetic",
+    "round": -1,
+    "iterations": 100,
+    "elapsedNs": 4233697,
+    "checksum": 34350822000,
+    "variant": "S1"
+  },
+  {
+    "case": "arithmetic",
+    "round": 0,
+    "iterations": 100,
+    "elapsedNs": 4187552,
+    "checksum": 34350822000,
+    "variant": "S1"
+  },
+  {
+    "case": "arithmetic",
+    "round": 1,
+    "iterations": 100,
+    "elapsedNs": 4303386,
+    "checksum": 34350822000,
+    "variant": "S1"
+  },
+  {
+    "case": "arithmetic",
+    "round": -1,
+    "iterations": 100,
+    "elapsedNs": 5190261,
+    "checksum": 34350822000,
+    "variant": "L"
+  },
+  {
+    "case": "arithmetic",
+    "round": 0,
+    "iterations": 100,
+    "elapsedNs": 5155104,
+    "checksum": 34350822000,
+    "variant": "L"
+  },
+  {
+    "case": "arithmetic",
+    "round": 1,
+    "iterations": 100,
+    "elapsedNs": 5168698,
+    "checksum": 34350822000,
+    "variant": "L"
+  },
+  {
+    "case": "arithmetic",
+    "round": -1,
+    "iterations": 100,
+    "elapsedNs": 8333021,
+    "checksum": 34350822000,
+    "variant": "C"
+  },
+  {
+    "case": "arithmetic",
+    "round": 0,
+    "iterations": 100,
+    "elapsedNs": 8532135,
+    "checksum": 34350822000,
+    "variant": "C"
+  },
+  {
+    "case": "arithmetic",
+    "round": 1,
+    "iterations": 100,
+    "elapsedNs": 8248125,
+    "checksum": 34350822000,
+    "variant": "C"
+  },
+  {
+    "case": "arithmetic",
+    "round": -1,
+    "iterations": 100,
+    "elapsedNs": 7632136,
+    "checksum": 34350822000,
+    "variant": "O"
+  },
+  {
+    "case": "arithmetic",
+    "round": 0,
+    "iterations": 100,
+    "elapsedNs": 7553907,
+    "checksum": 34350822000,
+    "variant": "O"
+  },
+  {
+    "case": "arithmetic",
+    "round": 1,
+    "iterations": 100,
+    "elapsedNs": 7843073,
+    "checksum": 34350822000,
+    "variant": "O"
+  }
+]

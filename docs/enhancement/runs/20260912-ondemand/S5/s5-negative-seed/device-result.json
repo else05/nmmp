@@ -1,0 +1,9 @@
+{
+  "mutation": "seed",
+  "apkSha256": "60546e6ba7a4969f7e58de0346023077b07e664f52906e0cffccfbdbf659b5d2",
+  "pid": "32607",
+  "internalError": true,
+  "errors": [
+    "string pool decode failed"
+  ]
+}

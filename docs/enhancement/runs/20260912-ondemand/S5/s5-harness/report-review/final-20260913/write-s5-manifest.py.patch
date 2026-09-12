@@ -1,0 +1,47 @@
+--- a/write-s5-manifest.py
++++ b/write-s5-manifest.py
+@@ -23,6 +23,10 @@
+     frozenUnseededCandidate=read(w / 'final-acceptance/structure-audit.json'),
+     deliveredCandidate=read(w / 'final-wipe-acceptance/structure-audit.json'),
+     postReview=read(w / 'wipe-summary.json'),
++    observerShutdownDiagnosis=dict(
++        nohook=read(w / 'wipe-shutdown-diagnosis/nohook-result.json'),
++        fixedBridgeHost=read(w / 'wipe-host/tls-free-review/publication/results.json'),
++        failedRun='wipe-device/commands.jsonl', fixedRun='wipe-device-fixed/summary.json'),
+     frozenPerformanceScope='The three-seed S5 libraries precede the explicit decoded scratch cleanup; they are not final candidate acceptance',
+     frozenDefaultLegacyDevice=read(w / 'current-legacy-default/device-check.json'),
+     currentDefaultLegacyDevice=read(w / 'wipe-legacy-device/summary.json') if (w / 'wipe-legacy-device/summary.json').exists() else None,
+@@ -33,6 +37,16 @@
+     unavailableCoverage=['ARM64 API26 device', 'Activated/server-backed complete business flow'],
+     attributionLimit='S1, current legacy and current demand measured separately; S2/S3/S4 not individually timed',
+     releaseAcceptancePassed=False)
++if manifest['postReview']['artifact'] != manifest['deliveredCandidate']:
++    raise ValueError('Post-review summary refers to a different delivered candidate')
++for build in manifest['java'].values():
++    if 'jar' in build and hashlib.sha256(Path(build['jar']).read_bytes()).hexdigest() != build['sha256']:
++        raise ValueError('Frozen generator JAR changed')
++delivery = read(w / 'wipe-delivery.json')
++if (hashlib.sha256(Path(delivery['jar']).read_bytes()).hexdigest() != delivery['jarSha256']
++        or delivery['jarSha256'] != manifest['deliveredCandidate']['jarSha256']):
++    raise ValueError('Delivered generator JAR changed')
++manifest['deliveredGenerator'] = dict(jar=delivery['jar'], sha256=delivery['jarSha256'])
+ audits = {}
+ descriptors = None
+ for index in range(1, 4):
+@@ -63,10 +77,16 @@
+ if (w / 'wipe-final-stability/summary.json').exists():
+     manifest['finalStability'] = read(w / 'wipe-final-stability/summary.json')
+ manifest['sourceFiles'] = {}
++manifest['sourceFilesScope'] = 'Current working tree at manifest generation; these hashes do not describe the frozen pre-wipe S5 build sources.'
+ for folder in ['nmm-protect/apkprotect/src/main/java', 'nmm-protect/apkprotect/src/test/performance',
+                'nmmvm/nmmvm/src/main/cpp/vm', 'nmmvm/nmmvm/src/test/semantic', 'nmm-protect/mksrc/loader']:
+     for path in (root / folder).rglob('*'):
+         if path.is_file() and path.suffix in ['.java', '.c', '.cpp', '.h', '.py', '.json']:
+             manifest['sourceFiles'][path.relative_to(root).as_posix()] = hashlib.sha256(path.read_bytes()).hexdigest()
++for path in [w / name for name in ['render-s5-report.py', 'render-wipe-results.py', 'write-s5-manifest.py']] + [
++        root / 'nmm-protect/scripts/summarize-enhancement.py',
++        root / 'nmm-protect/scripts/measure-startup.py', root / 'nmm-protect/scripts/measure-hotspots.py',
++        root / 'nmmvm/nmmvm/src/test/semantic/CMakeLists.txt']:
++    manifest['sourceFiles'][path.relative_to(root).as_posix()] = hashlib.sha256(path.read_bytes()).hexdigest()
+ (out / 'manifest.json').write_text(json.dumps(manifest, indent=2), encoding='utf-8')
+ print('S5 manifest written; full measurement complete:', report['measurementComplete'])

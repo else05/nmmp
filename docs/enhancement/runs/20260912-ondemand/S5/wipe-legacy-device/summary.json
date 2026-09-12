@@ -1,0 +1,10 @@
+{
+  "L": {
+    "count": 1,
+    "medianMs": 2354,
+    "p95Ms": 2354,
+    "minMs": 2354,
+    "maxMs": 2354,
+    "regressionPercentVsFirst": 0.0
+  }
+}

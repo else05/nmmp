@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="apk.arsc.ResourceFileTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-09-12T21:26:06" hostname="DESKTOP-MHK8Q30" time="0.041">
+  <properties/>
+  <testcase name="testArsc" classname="apk.arsc.ResourceFileTest" time="0.031"/>
+  <testcase name="testModifyXmlAttr" classname="apk.arsc.ResourceFileTest" time="0.007"/>
+  <testcase name="testToByteArray" classname="apk.arsc.ResourceFileTest" time="0.003"/>
+  <system-out><![CDATA[127
+2
+mipmap
+mdpi-v4
+2
+mipmap
+hdpi-v4
+2
+mipmap
+xhdpi-v4
+2
+mipmap
+xxhdpi-v4
+2
+mipmap
+xxxhdpi-v4
+3
+layout
+default
+3
+layout
+v17
+4
+dimen
+default
+4
+dimen
+w820dp-v13
+5
+string
+default
+6
+style
+default
+7
+id
+default
+attr string(0x00000018)   mao.hello.ShellApplication  24
+STRING
+new Attr XmlAttribute{namespace=http://schemas.android.com/apk/res/android, name=name, value=string(0x00000020)}  mao.myapp.app
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

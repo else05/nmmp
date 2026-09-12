@@ -1,0 +1,98 @@
+[
+  {
+    "case": "multiThread",
+    "round": -1,
+    "iterations": 10000,
+    "elapsedNs": 33951563,
+    "checksum": 15276960,
+    "variant": "D"
+  },
+  {
+    "case": "multiThread",
+    "round": 0,
+    "iterations": 10000,
+    "elapsedNs": 17872812,
+    "checksum": 15276960,
+    "variant": "D"
+  },
+  {
+    "case": "multiThread",
+    "round": 1,
+    "iterations": 10000,
+    "elapsedNs": 16581250,
+    "checksum": 15276960,
+    "variant": "D"
+  },
+  {
+    "case": "multiThread",
+    "round": -1,
+    "iterations": 10000,
+    "elapsedNs": 35684166,
+    "checksum": 15276960,
+    "variant": "A"
+  },
+  {
+    "case": "multiThread",
+    "round": 0,
+    "iterations": 10000,
+    "elapsedNs": 27892708,
+    "checksum": 15276960,
+    "variant": "A"
+  },
+  {
+    "case": "multiThread",
+    "round": 1,
+    "iterations": 10000,
+    "elapsedNs": 20032656,
+    "checksum": 15276960,
+    "variant": "A"
+  },
+  {
+    "case": "multiThread",
+    "round": -1,
+    "iterations": 10000,
+    "elapsedNs": 38692604,
+    "checksum": 15276960,
+    "variant": "B"
+  },
+  {
+    "case": "multiThread",
+    "round": 0,
+    "iterations": 10000,
+    "elapsedNs": 30666146,
+    "checksum": 15276960,
+    "variant": "B"
+  },
+  {
+    "case": "multiThread",
+    "round": 1,
+    "iterations": 10000,
+    "elapsedNs": 33856563,
+    "checksum": 15276960,
+    "variant": "B"
+  },
+  {
+    "case": "multiThread",
+    "round": -1,
+    "iterations": 10000,
+    "elapsedNs": 25446979,
+    "checksum": 15276960,
+    "variant": "C"
+  },
+  {
+    "case": "multiThread",
+    "round": 0,
+    "iterations": 10000,
+    "elapsedNs": 19045833,
+    "checksum": 15276960,
+    "variant": "C"
+  },
+  {
+    "case": "multiThread",
+    "round": 1,
+    "iterations": 10000,
+    "elapsedNs": 19421615,
+    "checksum": 15276960,
+    "variant": "C"
+  }
+]

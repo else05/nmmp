@@ -1,0 +1,10 @@
+{
+  "apkSha256": "0e11e1b2191c53a0b99ea028f4c3a8ed17a610edc722f24a493921287d0cbb96",
+  "elapsedSeconds": 300.98714009998366,
+  "pid": "32474",
+  "samePidAllSamples": true,
+  "crashMarkers": [],
+  "mainWindowVisible": true,
+  "resumed": true,
+  "note": "Idle unactivated application observation, not a full business or leak test"
+}

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="apk.arsc.ResourceIdentifierTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-09-12T07:27:50" hostname="DESKTOP-MHK8Q30" time="0.004">
+  <properties/>
+  <testcase name="resourceIdentifier_comparePackage[0]" classname="apk.arsc.ResourceIdentifierTest" time="0.002"/>
+  <testcase name="resourceIdentifier_compareType[0]" classname="apk.arsc.ResourceIdentifierTest" time="0.0"/>
+  <testcase name="resourceIdentifier_compareEntry[0]" classname="apk.arsc.ResourceIdentifierTest" time="0.0"/>
+  <testcase name="resourceIdentifier_comparePackage[1]" classname="apk.arsc.ResourceIdentifierTest" time="0.0"/>
+  <testcase name="resourceIdentifier_compareType[1]" classname="apk.arsc.ResourceIdentifierTest" time="0.0"/>
+  <testcase name="resourceIdentifier_compareEntry[1]" classname="apk.arsc.ResourceIdentifierTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

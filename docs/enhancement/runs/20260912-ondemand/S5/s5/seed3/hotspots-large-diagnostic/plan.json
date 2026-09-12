@@ -1,0 +1,67 @@
+{
+  "serial": "192.168.6.118:5555",
+  "adb": "D:\\Android\\SDK\\platform-tools\\adb.exe",
+  "runner": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5-harness\\runner-dex\\classes.dex",
+  "warmups": 5,
+  "rounds": 20,
+  "cases": {
+    "arithmetic": 100,
+    "branch": 100,
+    "shortCall": 10000,
+    "jniObject": 1000,
+    "arrayPayload": 1000,
+    "exception": 1000,
+    "recursive": 1000,
+    "multiThread": 10000,
+    "largeShort": 10000
+  },
+  "variants": [
+    {
+      "name": "A",
+      "library": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed3\\hotspot-A\\build\\obj\\strip\\arm64-v8a\\libc++_en.so",
+      "sha256": "b8cba00b126ad01cd10fd2fff5cfb44d8273d4c342119a83e62f7e9e53cfec53"
+    },
+    {
+      "name": "B",
+      "library": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed3\\hotspot-B\\build\\obj\\strip\\arm64-v8a\\libc++_en.so",
+      "sha256": "21a829bf2edb3e539883a55d579f75d03558f296901a648c426dca0c603389c2"
+    },
+    {
+      "name": "C",
+      "library": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed3\\hotspot-C\\build\\obj\\strip\\arm64-v8a\\libc++_en.so",
+      "sha256": "28fb28501c7701532b7ea4507829fade9ad1489b16c366d124914f817af7761a"
+    },
+    {
+      "name": "D",
+      "library": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed3\\hotspot-D\\build\\obj\\strip\\arm64-v8a\\libc++_en.so",
+      "sha256": "244d25db33d060ddaa23402d0f051d9eb0b72d1d3b29b8152c202ac17ad337f1"
+    }
+  ],
+  "deferredCases": [
+    "arithmetic",
+    "branch",
+    "shortCall",
+    "jniObject",
+    "arrayPayload",
+    "exception",
+    "recursive",
+    "multiThread"
+  ],
+  "samplingPurpose": "Equal-count largeShort duration-limited diagnosis; explicitly not formal-duration acceptance",
+  "largeShortIterations": 10000,
+  "durationDecision": {
+    "decidedAtUtc": "2026-09-12T20:40:59.827019+00:00",
+    "userReplyReceived": false,
+    "decision": "Use equal 10000-call diagnostic rounds for largeShort; record formal-duration nonconformance. Do not claim acceptance or relax the 10% gate. Strict plans remain available.",
+    "basis": "Optional preference question remained unanswered while independent work continued; existing calibration projects approximately 35 hours for the full strict scenario."
+  },
+  "clientChangeReason": "Local ADB5037 timeout during Activity query on A round14. ThisTime2844/PID31311/window drawn recorded; follow-up retains same app PID and adb server5972 startedSep9. Preserve 56 valid attempts plus this invalid attempt. Switch to existing SDK client path matching server installation; version equal but binary hashes differ, recorded in wipe-adb-client-switch.json. Cause remains unproven; repeat A14.",
+  "adbServerPort": 5038,
+  "serverChangeReason": "Local5037 timeout on B round4 Activity query also occurred in non-sandboxed execution. Preserve17 valid attempts and this invalid attempt; appPID14286 remains. Existing5037 serverPID5972 retained. Create task-owned local5038 serverPID26740 and connect same authorized device; continue with this server. Client-path and sandbox changes did not resolve the issue; root cause remains unproven.",
+  "selectedIterations": {
+    "largeShort": 10000
+  },
+  "selectedTimeoutSeconds": {
+    "largeShort": 600
+  }
+}

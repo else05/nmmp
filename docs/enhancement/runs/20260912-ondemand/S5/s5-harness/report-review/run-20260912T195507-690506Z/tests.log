@@ -1,0 +1,17 @@
+test_01_real_startups (__main__.Review.test_01_real_startups) ... ok
+test_02_dropped_interruption (__main__.Review.test_02_dropped_interruption) ... ok
+test_03_wrong_loader_id (__main__.Review.test_03_wrong_loader_id) ... ok
+test_04_zero_measured_time (__main__.Review.test_04_zero_measured_time) ... ok
+test_05_resume_reason_and_protocol (__main__.Review.test_05_resume_reason_and_protocol) ... ok
+test_06_full_hotspot_positive_control (__main__.Review.test_06_full_hotspot_positive_control) ... ok
+test_07_formal_protocol_mutations (__main__.Review.test_07_formal_protocol_mutations) ... ok
+test_08_raw_ledger_mismatch (__main__.Review.test_08_raw_ledger_mismatch) ... ok
+test_09_self_test_entry (__main__.Review.test_09_self_test_entry) ... ok
+test_10_cli_fresh_repeated_closures (__main__.Review.test_10_cli_fresh_repeated_closures) ... ok
+test_11_cli_resume_closures (__main__.Review.test_11_cli_resume_closures) ... ok
+test_12_cli_failure_ledger (__main__.Review.test_12_cli_failure_ledger) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 1.194s
+
+OK

@@ -1,0 +1,5 @@
+{"case":"recursive","round":-1,"iterations":1000,"elapsedNs":41420781,"checksum":37000}
+{"case":"recursive","round":0,"iterations":1000,"elapsedNs":41623333,"checksum":37000}
+{"case":"recursive","round":1,"iterations":1000,"elapsedNs":39828125,"checksum":37000}
+VmHWM:	   43964 kB
+VmRSS:	   43720 kB

@@ -1,0 +1,26 @@
+{
+  "final": {
+    "changedEntries": [
+      "META-INF/versions/11/OSGI-INF/MANIFEST.MF",
+      "META-INF/versions/15/OSGI-INF/MANIFEST.MF",
+      "META-INF/versions/21/OSGI-INF/MANIFEST.MF",
+      "META-INF/versions/9/OSGI-INF/MANIFEST.MF",
+      "classes.dex",
+      "classes2.dex",
+      "lib/arm64-v8a/libc++_en.so"
+    ],
+    "otherChanges": []
+  },
+  "frozen-D": {
+    "changedEntries": [
+      "META-INF/versions/11/OSGI-INF/MANIFEST.MF",
+      "META-INF/versions/15/OSGI-INF/MANIFEST.MF",
+      "META-INF/versions/21/OSGI-INF/MANIFEST.MF",
+      "META-INF/versions/9/OSGI-INF/MANIFEST.MF",
+      "classes.dex",
+      "classes2.dex",
+      "lib/arm64-v8a/libc++_en.so"
+    ],
+    "otherChanges": []
+  }
+}

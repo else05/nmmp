@@ -1,0 +1,7 @@
+PASS: 105 independent Java/native program vectors
+
+PASS: native VM recovers and publishes root once across 1600 concurrent activations
+
+SEMANTIC_PASS checks=1351
+
+DECODE_WIPE_PASS runs=801 counters=[0, 6408, 6408, 6408, 4005, 801, 1602, 23229, 1602, 6408, 0]

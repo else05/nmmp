@@ -1,0 +1,10 @@
+{
+  "D": {
+    "count": 1,
+    "medianMs": 2362,
+    "p95Ms": 2362,
+    "minMs": 2362,
+    "maxMs": 2362,
+    "regressionPercentVsFirst": 0.0
+  }
+}

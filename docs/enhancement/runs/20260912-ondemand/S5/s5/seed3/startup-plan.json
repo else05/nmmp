@@ -1,0 +1,32 @@
+{
+  "serial": "192.168.6.118:5555",
+  "package": "org.savior.sync",
+  "activity": "org.savior.sync/.MainActivity",
+  "warmups": 3,
+  "rounds": 20,
+  "variants": [
+    {
+      "name": "A",
+      "apk": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed3\\A\\protected-signed.apk",
+      "loader": false
+    },
+    {
+      "name": "B",
+      "apk": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed3\\B\\protected-signed.apk",
+      "loader": true,
+      "loaderId": "f06294d8"
+    },
+    {
+      "name": "C",
+      "apk": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed3\\C\\protected-signed.apk",
+      "loader": false
+    },
+    {
+      "name": "D",
+      "apk": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed3\\D\\protected-signed.apk",
+      "loader": true,
+      "loaderId": "d16632b9"
+    }
+  ],
+  "adb": "E:\\Scoop\\apps\\adb\\current\\platform-tools\\adb.exe"
+}

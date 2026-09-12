@@ -1,0 +1,24 @@
+{
+  "api": "27",
+  "abi": "arm64-v8a",
+  "battery": "Current Battery Service state:\n  AC powered: true\n  USB powered: false\n  Wireless powered: false\n  Max charging current: 0\n  Max charging voltage: 0\n  Charge counter: 0\n  status: 5\n  health: 2\n  present: false\n  level: 100\n  scale: 100\n  voltage: 0\n  temperature: 0\n  technology: \n",
+  "load": "6.34 6.31 6.87 2/2792 15611\n",
+  "runnerSha256": "84af96d591a44a02cb9fc3da0c86d716aabcd57176759053d28b07183138b493",
+  "variants": [
+    {
+      "name": "A",
+      "library": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed1\\hotspot-A\\build\\obj\\strip\\arm64-v8a\\libc++_en.so",
+      "sha256": "e689bb37801fe5374a3e406fa7bca1d30f44b523ec0ab9c62cb4b9c37295cb38"
+    },
+    {
+      "name": "C",
+      "library": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed1\\hotspot-D\\build\\obj\\strip\\arm64-v8a\\libc++_en.so",
+      "sha256": "482eee05ad5dc5639b51aadb413e0337173ede3c356bedd89e333b827961e830"
+    },
+    {
+      "name": "D",
+      "library": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\wipe-hotspot-D\\build\\obj\\strip\\arm64-v8a\\libc++_en.so",
+      "sha256": "4deecfd9555bc7360458a53df89f3dc48cc11b4226c4d32d5df7713eaa42047c"
+    }
+  ]
+}

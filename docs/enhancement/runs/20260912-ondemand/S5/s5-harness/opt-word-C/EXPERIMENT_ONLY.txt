@@ -1,0 +1,2 @@
+Single-variable word key-block lookup experiment. No probe instrumentation.
+Not a formal performance result; no Android build or device execution by preparer.

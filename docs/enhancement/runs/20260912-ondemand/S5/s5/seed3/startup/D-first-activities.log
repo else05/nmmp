@@ -1,0 +1,341 @@
+ACTIVITY MANAGER ACTIVITIES (dumpsys activity activities)
+Display #0 (activities from top to bottom):
+  Stack #1:
+  mFullscreen=true
+  isSleeping=false
+  mBounds=null
+    Task id #972
+    mFullscreen=true
+    mBounds=null
+    mMinWidth=-1
+    mMinHeight=-1
+    mLastNonFullscreenBounds=null
+    * TaskRecord{b12e44d #972 A=org.savior.sync U=0 StackId=1 sz=1}
+      userId=0 effectiveUid=u0a101 mCallingUid=0 mUserSetupComplete=true mCallingPackage=null
+      affinity=org.savior.sync
+      intent={flg=0x10000000 cmp=org.savior.sync/.MainActivity}
+      realActivity=org.savior.sync/.MainActivity
+      autoRemoveRecents=false isPersistable=true numFullscreen=1 taskType=0 mTaskToReturnTo=0
+      rootWasReset=false mNeverRelinquishIdentity=true mReuseTask=false mLockTaskAuth=LOCK_TASK_AUTH_PINNABLE
+      Activities=[ActivityRecord{2f9ce3a u0 org.savior.sync/.MainActivity t972}]
+      askedCompatMode=false inRecents=true isAvailable=true
+      lastThumbnail=null lastThumbnailFile=/data/system_ce/0/recent_images/972_task_thumbnail.png
+      stackId=1
+      hasBeenVisible=true mResizeMode=RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION mSupportsPictureInPicture=false isResizeable=true firstActiveTime=1591011371697 lastActiveTime=1591011371805 (inactive for 3s)
+      * Hist #0: ActivityRecord{2f9ce3a u0 org.savior.sync/.MainActivity t972}
+          packageName=org.savior.sync processName=org.savior.sync
+          launchedFromUid=0 launchedFromPackage=null userId=0
+          app=ProcessRecord{494f19a 23714:org.savior.sync/u0a101}
+          Intent { flg=0x10000000 cmp=org.savior.sync/.MainActivity }
+          frontOfTask=true task=TaskRecord{b12e44d #972 A=org.savior.sync U=0 StackId=1 sz=1}
+          taskAffinity=org.savior.sync
+          realActivity=org.savior.sync/.MainActivity
+          baseDir=/data/app/org.savior.sync-vmI-9ShCkW5kDzNZj7LPsQ==/base.apk
+          dataDir=/data/user/0/org.savior.sync
+          stateNotNeeded=false componentSpecified=true mActivityType=0
+          compat={160dpi always-compat} labelRes=0x7f0f001d icon=0x7f0c0000 theme=0x7f100243
+          mLastReportedConfigurations:
+           mGlobalConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw756dp w1908dp h672dp 160dpi xlrg long land car finger qwerty/v/v dpad/v appBounds=Rect(108, 0 - 2016, 756) s.5}
+           mOverrideConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw756dp w1908dp h672dp 160dpi xlrg long land car finger qwerty/v/v dpad/v appBounds=Rect(108, 0 - 2016, 756) s.5}
+          CurrentConfiguration={1.0 ?mcc?mnc [zh_CN] ldltr sw756dp w1908dp h672dp 160dpi xlrg long land car finger qwerty/v/v dpad/v appBounds=Rect(108, 0 - 2016, 756) s.5}
+          taskDescription: iconFilename=null label="null" primaryColor=fff5f5f5
+            backgroundColor=fffafafa
+            statusBarColor=ff757575
+            navigationBarColor=ff000000
+          launchFailed=false launchCount=1 lastLaunchTime=-3s50ms
+          haveState=false icicle=null
+          state=RESUMED stopped=false delayedResume=false finishing=false
+          keysPaused=false inHistory=true visible=true sleeping=false idle=false mStartingWindowState=STARTING_WINDOW_SHOWN
+          fullscreen=true noDisplay=false immersive=false launchMode=0
+          frozenBeforeDestroy=false forceNewConfig=false
+          mActivityType=APPLICATION_ACTIVITY_TYPE
+          waitingVisible=false nowVisible=true lastVisibleTime=-700ms
+          connections=[ConnectionRecord{96637f9 u0 CR org.savior.sync/.service.AutoBootService:@81e4ec0}]
+          resizeMode=RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION
+          mLastReportedMultiWindowMode=false mLastReportedPictureInPictureMode=false
+    Task id #710
+    mFullscreen=true
+    mBounds=null
+    mMinWidth=-1
+    mMinHeight=-1
+    mLastNonFullscreenBounds=null
+    * TaskRecord{56dcc9a #710 A=com.dudu.autoui U=0 StackId=1 sz=1}
+      userId=0 effectiveUid=u0a91 mCallingUid=1000 mUserSetupComplete=true mCallingPackage=com.baidu.xiaoduos.launcher
+      affinity=com.dudu.autoui
+      intent={act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10201000 pkg=com.dudu.autoui cmp=com.dudu.autoui/.ui.activity.launcher.LauncherActivity}
+      realActivity=com.dudu.autoui/.ui.activity.launcher.LauncherActivity
+      autoRemoveRecents=false isPersistable=true numFullscreen=1 taskType=0 mTaskToReturnTo=1
+      rootWasReset=true mNeverRelinquishIdentity=true mReuseTask=false mLockTaskAuth=LOCK_TASK_AUTH_PINNABLE
+      Activities=[ActivityRecord{d1a6bac u0 com.dudu.autoui/.ui.activity.launcher.LauncherActivity t710}]
+      askedCompatMode=false inRecents=true isAvailable=true
+      lastThumbnail=null lastThumbnailFile=/data/system_ce/0/recent_images/710_task_thumbnail.png
+      stackId=1
+      hasBeenVisible=true mResizeMode=RESIZE_MODE_UNRESIZEABLE mSupportsPictureInPicture=false isResizeable=false firstActiveTime=1590994904403 lastActiveTime=1591011371702 (inactive for 3s)
+      * Hist #0: ActivityRecord{d1a6bac u0 com.dudu.autoui/.ui.activity.launcher.LauncherActivity t710}
+          packageName=com.dudu.autoui processName=com.dudu.autoui
+          launchedFromUid=1000 launchedFromPackage=com.baidu.xiaoduos.launcher userId=0
+          app=ProcessRecord{a63bb5e 4130:com.dudu.autoui/u0a91}
+          Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10201000 pkg=com.dudu.autoui cmp=com.dudu.autoui/.ui.activity.launcher.LauncherActivity }
+          frontOfTask=true task=TaskRecord{56dcc9a #710 A=com.dudu.autoui U=0 StackId=1 sz=1}
+          taskAffinity=com.dudu.autoui
+          realActivity=com.dudu.autoui/.ui.activity.launcher.LauncherActivity
+          baseDir=/system/app/duduPRO3021.apk
+          dataDir=/data/user/0/com.dudu.autoui
+          stateNotNeeded=true componentSpecified=true mActivityType=0
+          compat={160dpi always-compat} labelRes=0x7f0f0050 icon=0x7f0d003a theme=0x7f100008
+          mLastReportedConfigurations:
+           mGlobalConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw756dp w1908dp h672dp 160dpi xlrg long land car finger qwerty/v/v dpad/v appBounds=Rect(108, 0 - 2016, 756) s.5}
+           mOverrideConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw756dp w1908dp h672dp 160dpi xlrg long land car finger qwerty/v/v dpad/v appBounds=Rect(108, 0 - 2016, 756) s.5}
+          CurrentConfiguration={1.0 ?mcc?mnc [zh_CN] ldltr sw756dp w1908dp h672dp 160dpi xlrg long land car finger qwerty/v/v dpad/v appBounds=Rect(108, 0 - 2016, 756) s.5}
+          taskDescription: iconFilename=null label="null" primaryColor=ff688cc0
+            backgroundColor=fffafafa
+            statusBarColor=ff688cc0
+            navigationBarColor=ff000000
+          launchFailed=false launchCount=0 lastLaunchTime=-4h34m30s424ms
+          haveState=true icicle=Bundle[mParcelledData.dataSize=13364]
+          state=STOPPED stopped=true delayedResume=false finishing=false
+          keysPaused=false inHistory=true visible=false sleeping=false idle=true mStartingWindowState=STARTING_WINDOW_REMOVED
+          fullscreen=true noDisplay=false immersive=false launchMode=2
+          frozenBeforeDestroy=false forceNewConfig=false
+          mActivityType=APPLICATION_ACTIVITY_TYPE
+          waitingVisible=false nowVisible=false lastVisibleTime=-8s448ms
+          resizeMode=RESIZE_MODE_UNRESIZEABLE
+          mLastReportedMultiWindowMode=false mLastReportedPictureInPictureMode=false
+    Task id #613
+    mFullscreen=true
+    mBounds=null
+    mMinWidth=-1
+    mMinHeight=-1
+    mLastNonFullscreenBounds=null
+    * TaskRecord{1ae2d01 #613 A=com.desay.setting U=0 StackId=1 sz=1}
+      userId=0 effectiveUid=1000 mCallingUid=1000 mUserSetupComplete=true mCallingPackage=com.android.systemui
+      affinity=com.desay.setting
+      intent={flg=0x10201000 cmp=com.desay.setting/com.desay.settings.activity.MainActivity}
+      realActivity=com.desay.setting/com.desay.settings.activity.MainActivity
+      autoRemoveRecents=false isPersistable=true numFullscreen=1 taskType=0 mTaskToReturnTo=1
+      rootWasReset=true mNeverRelinquishIdentity=true mReuseTask=false mLockTaskAuth=LOCK_TASK_AUTH_PINNABLE
+      Activities=[ActivityRecord{26a2dbd u0 com.desay.setting/com.desay.settings.activity.MainActivity t613}]
+      askedCompatMode=false inRecents=true isAvailable=true
+      lastThumbnail=null lastThumbnailFile=/data/system_ce/0/recent_images/613_task_thumbnail.png
+      stackId=1
+      hasBeenVisible=true mResizeMode=RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION mSupportsPictureInPicture=false isResizeable=true firstActiveTime=1590969623081 lastActiveTime=1590994895080 (inactive for 16479s)
+      * Hist #0: ActivityRecord{26a2dbd u0 com.desay.setting/com.desay.settings.activity.MainActivity t613}
+          packageName=com.desay.setting processName=com.desay.setting
+          launchedFromUid=1000 launchedFromPackage=com.android.systemui userId=0
+          app=ProcessRecord{b1d49f6 3658:com.desay.setting/1000}
+          Intent { flg=0x10201000 cmp=com.desay.setting/com.desay.settings.activity.MainActivity }
+          frontOfTask=true task=TaskRecord{1ae2d01 #613 A=com.desay.setting U=0 StackId=1 sz=1}
+          taskAffinity=com.desay.setting
+          realActivity=com.desay.setting/com.desay.settings.activity.MainActivity
+          baseDir=/system/app/SVSettings/SVSettings.apk
+          dataDir=/data/user/0/com.desay.setting
+          stateNotNeeded=false componentSpecified=true mActivityType=0
+          compat={160dpi always-compat} labelRes=0x0 icon=0x7f0c0130 theme=0x7f0f000e
+          mLastReportedConfigurations:
+           mGlobalConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw756dp w1908dp h672dp 160dpi xlrg long land car finger qwerty/v/v dpad/v appBounds=Rect(108, 0 - 2016, 756) s.5}
+           mOverrideConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw756dp w1908dp h672dp 160dpi xlrg long land car finger qwerty/v/v dpad/v appBounds=Rect(108, 0 - 2016, 756) s.5}
+          CurrentConfiguration={1.0 ?mcc?mnc [zh_CN] ldltr sw756dp w1908dp h672dp 160dpi xlrg long land car finger qwerty/v/v dpad/v appBounds=Rect(108, 0 - 2016, 756) s.5}
+          launchFailed=false launchCount=0 lastLaunchTime=-11h35m47s775ms
+          haveState=true icicle=Bundle[mParcelledData.dataSize=31880]
+          state=STOPPED stopped=true delayedResume=false finishing=false
+          keysPaused=false inHistory=true visible=false sleeping=false idle=true mStartingWindowState=STARTING_WINDOW_REMOVED
+          fullscreen=true noDisplay=false immersive=false launchMode=2
+          frozenBeforeDestroy=false forceNewConfig=false
+          mActivityType=APPLICATION_ACTIVITY_TYPE
+          waitingVisible=false nowVisible=false lastVisibleTime=-4h34m41s585ms
+          resizeMode=RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION
+          mLastReportedMultiWindowMode=false mLastReportedPictureInPictureMode=false
+    Task id #614
+    mFullscreen=true
+    mBounds=null
+    mMinWidth=-1
+    mMinHeight=-1
+    mLastNonFullscreenBounds=null
+    * TaskRecord{d9a98d #614 A=com.ford.sync.account U=0 StackId=1 sz=1}
+      userId=0 effectiveUid=1000 mCallingUid=1000 mUserSetupComplete=true mCallingPackage=com.ford.sync.account
+      affinity=com.ford.sync.account
+      intent={flg=0x10000000 cmp=com.ford.sync.account/.ui.MainActivity}
+      realActivity=com.ford.sync.account/.ui.MainActivity
+      autoRemoveRecents=false isPersistable=true numFullscreen=1 taskType=0 mTaskToReturnTo=1
+      rootWasReset=false mNeverRelinquishIdentity=true mReuseTask=false mLockTaskAuth=LOCK_TASK_AUTH_PINNABLE
+      Activities=[ActivityRecord{b1a4fe u0 com.ford.sync.account/.ui.MainActivity t614}]
+      askedCompatMode=false inRecents=true isAvailable=true
+      lastThumbnail=null lastThumbnailFile=/data/system_ce/0/recent_images/614_task_thumbnail.png
+      stackId=1
+      hasBeenVisible=true mResizeMode=RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION mSupportsPictureInPicture=false isResizeable=true firstActiveTime=1590969623112 lastActiveTime=1590969627057 (inactive for 41747s)
+      * Hist #0: ActivityRecord{b1a4fe u0 com.ford.sync.account/.ui.MainActivity t614}
+          packageName=com.ford.sync.account processName=com.ford.sync.account
+          launchedFromUid=1000 launchedFromPackage=com.ford.sync.account userId=0
+          app=ProcessRecord{f14ba8b 2094:com.ford.sync.account/1000}
+          Intent { flg=0x10000000 cmp=com.ford.sync.account/.ui.MainActivity (has extras) }
+          frontOfTask=true task=TaskRecord{d9a98d #614 A=com.ford.sync.account U=0 StackId=1 sz=1}
+          taskAffinity=com.ford.sync.account
+          realActivity=com.ford.sync.account/.ui.MainActivity
+          baseDir=/system/app/FordAccount/FordAccount.apk
+          dataDir=/data/user/0/com.ford.sync.account
+          stateNotNeeded=false componentSpecified=true mActivityType=0
+          compat={160dpi always-compat} labelRes=0x7f0e0027 icon=0x7f0c0000 theme=0x7f0f0006
+          mLastReportedConfigurations:
+           mGlobalConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw756dp w1908dp h672dp 160dpi xlrg long land car finger qwerty/v/v dpad/v appBounds=Rect(108, 0 - 2016, 756) s.5}
+           mOverrideConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw756dp w1908dp h672dp 160dpi xlrg long land car finger qwerty/v/v dpad/v appBounds=Rect(108, 0 - 2016, 756) s.5}
+          CurrentConfiguration={1.0 ?mcc?mnc [zh_CN] ldltr sw756dp w1908dp h672dp 160dpi xlrg long land car finger qwerty/v/v dpad/v appBounds=Rect(108, 0 - 2016, 756) s.5}
+          taskDescription: iconFilename=null label="null" primaryColor=ff060e19
+            backgroundColor=ff303030
+            statusBarColor=ff030508
+            navigationBarColor=ff000000
+          launchFailed=false launchCount=0 lastLaunchTime=-11h35m51s704ms
+          haveState=true icicle=Bundle[mParcelledData.dataSize=1628]
+          state=STOPPED stopped=true delayedResume=false finishing=false
+          keysPaused=false inHistory=true visible=false sleeping=false idle=true mStartingWindowState=STARTING_WINDOW_REMOVED
+          fullscreen=true noDisplay=false immersive=false launchMode=2
+          frozenBeforeDestroy=false forceNewConfig=false
+          mActivityType=APPLICATION_ACTIVITY_TYPE
+          waitingVisible=false nowVisible=false lastVisibleTime=-11h35m51s76ms
+          resizeMode=RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION
+          mLastReportedMultiWindowMode=false mLastReportedPictureInPictureMode=false
+
+    Running activities (most recent first):
+      TaskRecord{b12e44d #972 A=org.savior.sync U=0 StackId=1 sz=1}
+        Run #3: ActivityRecord{2f9ce3a u0 org.savior.sync/.MainActivity t972}
+      TaskRecord{56dcc9a #710 A=com.dudu.autoui U=0 StackId=1 sz=1}
+        Run #2: ActivityRecord{d1a6bac u0 com.dudu.autoui/.ui.activity.launcher.LauncherActivity t710}
+      TaskRecord{1ae2d01 #613 A=com.desay.setting U=0 StackId=1 sz=1}
+        Run #1: ActivityRecord{26a2dbd u0 com.desay.setting/com.desay.settings.activity.MainActivity t613}
+      TaskRecord{d9a98d #614 A=com.ford.sync.account U=0 StackId=1 sz=1}
+        Run #0: ActivityRecord{b1a4fe u0 com.ford.sync.account/.ui.MainActivity t614}
+
+    mResumedActivity: ActivityRecord{2f9ce3a u0 org.savior.sync/.MainActivity t972}
+    mLastPausedActivity: ActivityRecord{d1a6bac u0 com.dudu.autoui/.ui.activity.launcher.LauncherActivity t710}
+
+  Stack #0:
+  mFullscreen=true
+  isSleeping=false
+  mBounds=null
+    Task id #1
+    mFullscreen=true
+    mBounds=null
+    mMinWidth=-1
+    mMinHeight=-1
+    mLastNonFullscreenBounds=null
+    * TaskRecord{e645742 #1 A=com.baidu.xiaoduos.launcher U=0 StackId=0 sz=1}
+      userId=0 effectiveUid=1000 mCallingUid=1000 mUserSetupComplete=true mCallingPackage=com.android.systemui
+      affinity=com.baidu.xiaoduos.launcher
+      intent={act=android.intent.action.MAIN cat=[android.intent.category.HOME] flg=0x10000100 cmp=com.baidu.xiaoduos.launcher/.ui.MainActivity}
+      realActivity=com.baidu.xiaoduos.launcher/.ui.MainActivity
+      autoRemoveRecents=false isPersistable=true numFullscreen=1 taskType=1 mTaskToReturnTo=0
+      rootWasReset=false mNeverRelinquishIdentity=true mReuseTask=false mLockTaskAuth=LOCK_TASK_AUTH_PINNABLE
+      Activities=[ActivityRecord{65d2e74 u0 com.baidu.xiaoduos.launcher/.ui.MainActivity t1}]
+      askedCompatMode=false inRecents=true isAvailable=true
+      lastThumbnail=null lastThumbnailFile=/data/system_ce/0/recent_images/1_task_thumbnail.png
+      stackId=0
+      hasBeenVisible=true mResizeMode=RESIZE_MODE_UNRESIZEABLE mSupportsPictureInPicture=false isResizeable=false firstActiveTime=1590969611697 lastActiveTime=1590994904408 (inactive for 16470s)
+      * Hist #0: ActivityRecord{65d2e74 u0 com.baidu.xiaoduos.launcher/.ui.MainActivity t1}
+          packageName=com.baidu.xiaoduos.launcher processName=com.baidu.xiaoduos.launcher
+          launchedFromUid=0 launchedFromPackage=null userId=0
+          app=ProcessRecord{598f6d4 1358:com.baidu.xiaoduos.launcher/1000}
+          Intent { act=android.intent.action.MAIN cat=[android.intent.category.HOME] flg=0x10000100 cmp=com.baidu.xiaoduos.launcher/.ui.MainActivity }
+          frontOfTask=true task=TaskRecord{e645742 #1 A=com.baidu.xiaoduos.launcher U=0 StackId=0 sz=1}
+          taskAffinity=com.baidu.xiaoduos.launcher
+          realActivity=com.baidu.xiaoduos.launcher/.ui.MainActivity
+          baseDir=/system/app/CarLauncher/CarLauncher.apk
+          dataDir=/data/user/0/com.baidu.xiaoduos.launcher
+          stateNotNeeded=false componentSpecified=false mActivityType=1
+          compat={160dpi always-compat} labelRes=0x7f0e0036 icon=0x7f0d0128 theme=0x7f0f00a8
+          mLastReportedConfigurations:
+           mGlobalConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw756dp w1908dp h672dp 160dpi xlrg long land car finger qwerty/v/v dpad/v appBounds=Rect(108, 0 - 2016, 756) s.5}
+           mOverrideConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw756dp w1908dp h672dp 160dpi xlrg long land car finger qwerty/v/v dpad/v appBounds=Rect(108, 0 - 2016, 756) s.5}
+          CurrentConfiguration={1.0 ?mcc?mnc [zh_CN] ldltr sw756dp w1908dp h672dp 160dpi xlrg long land car finger qwerty/v/v dpad/v appBounds=Rect(108, 0 - 2016, 756) s.5}
+          launchFailed=false launchCount=0 lastLaunchTime=-11h36m2s976ms
+          haveState=true icicle=Bundle[mParcelledData.dataSize=1544]
+          state=STOPPED stopped=true delayedResume=false finishing=false
+          keysPaused=false inHistory=true visible=false sleeping=false idle=true mStartingWindowState=STARTING_WINDOW_NOT_SHOWN
+          fullscreen=true noDisplay=false immersive=false launchMode=3
+          frozenBeforeDestroy=false forceNewConfig=false
+          mActivityType=HOME_ACTIVITY_TYPE
+          waitingVisible=false nowVisible=false lastVisibleTime=-4h34m39s101ms
+          resizeMode=RESIZE_MODE_UNRESIZEABLE
+          mLastReportedMultiWindowMode=false mLastReportedPictureInPictureMode=false
+
+    Running activities (most recent first):
+      TaskRecord{e645742 #1 A=com.baidu.xiaoduos.launcher U=0 StackId=0 sz=1}
+        Run #0: ActivityRecord{65d2e74 u0 com.baidu.xiaoduos.launcher/.ui.MainActivity t1}
+
+    mLastPausedActivity: ActivityRecord{65d2e74 u0 com.baidu.xiaoduos.launcher/.ui.MainActivity t1}
+Display #3 (activities from top to bottom):
+
+  Stack #8:
+  mFullscreen=true
+  isSleeping=false
+  mBounds=null
+    Task id #612
+    mFullscreen=true
+    mBounds=null
+    mMinWidth=-1
+    mMinHeight=-1
+    mLastNonFullscreenBounds=null
+    * TaskRecord{a9636cc #612 A=baidu.launcher U=0 StackId=8 sz=1}
+      userId=0 effectiveUid=1000 mCallingUid=1000 mUserSetupComplete=true mCallingPackage=null
+      affinity=baidu.launcher
+      intent={act=android.intent.action.MAIN cat=[android.intent.category.SECOND_HOME] flg=0x10000000 cmp=com.baidu.xiaoduos.launcher/.ui.PassengerMainActivity}
+      realActivity=com.baidu.xiaoduos.launcher/.ui.PassengerMainActivity
+      autoRemoveRecents=false isPersistable=true numFullscreen=1 taskType=0 mTaskToReturnTo=0
+      rootWasReset=false mNeverRelinquishIdentity=true mReuseTask=false mLockTaskAuth=LOCK_TASK_AUTH_PINNABLE
+      Activities=[ActivityRecord{b68ef5d u0 com.baidu.xiaoduos.launcher/.ui.PassengerMainActivity t612}]
+      askedCompatMode=false inRecents=true isAvailable=true
+      lastThumbnail=null lastThumbnailFile=/data/system_ce/0/recent_images/612_task_thumbnail.png
+      stackId=8
+      hasBeenVisible=true mResizeMode=RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION mSupportsPictureInPicture=false isResizeable=true firstActiveTime=1590969612394 lastActiveTime=1590969612420 (inactive for 41762s)
+      * Hist #0: ActivityRecord{b68ef5d u0 com.baidu.xiaoduos.launcher/.ui.PassengerMainActivity t612}
+          packageName=com.baidu.xiaoduos.launcher processName=com.baidu.xiaoduos.launcher
+          launchedFromUid=1000 launchedFromPackage=null userId=0
+          app=ProcessRecord{598f6d4 1358:com.baidu.xiaoduos.launcher/1000}
+          Intent { act=android.intent.action.MAIN cat=[android.intent.category.SECOND_HOME] flg=0x10000000 cmp=com.baidu.xiaoduos.launcher/.ui.PassengerMainActivity }
+          frontOfTask=true task=TaskRecord{a9636cc #612 A=baidu.launcher U=0 StackId=8 sz=1}
+          taskAffinity=baidu.launcher
+          realActivity=com.baidu.xiaoduos.launcher/.ui.PassengerMainActivity
+          baseDir=/system/app/CarLauncher/CarLauncher.apk
+          dataDir=/data/user/0/com.baidu.xiaoduos.launcher
+          stateNotNeeded=false componentSpecified=false mActivityType=0
+          compat={160dpi always-compat} labelRes=0x7f0e0036 icon=0x7f0d0128 theme=0x7f0f00a8
+          mLastReportedConfigurations:
+           mGlobalConfig={1.0 ?mcc?mnc [zh_CN] ldltr sw756dp w1908dp h672dp 160dpi xlrg long land car finger qwerty/v/v dpad/v appBounds=Rect(108, 0 - 2016, 756) s.5}
+           mOverrideConfig={0.0 ?mcc?mnc ?localeList ?layoutDir sw756dp w2016dp h756dp 160dpi xlrg long land ?uimode ?night finger qwerty/v/v dpad/v appBounds=Rect(108, 0 - 2124, 756)}
+          CurrentConfiguration={1.0 ?mcc?mnc [zh_CN] ldltr sw756dp w2016dp h756dp 160dpi xlrg long land car finger qwerty/v/v dpad/v appBounds=Rect(108, 0 - 2124, 756) s.5}
+          launchFailed=false launchCount=1 lastLaunchTime=-11h36m2s429ms
+          haveState=false icicle=null
+          state=RESUMED stopped=false delayedResume=false finishing=false
+          keysPaused=false inHistory=true visible=true sleeping=false idle=true mStartingWindowState=STARTING_WINDOW_SHOWN
+          fullscreen=true noDisplay=false immersive=false launchMode=3
+          frozenBeforeDestroy=false forceNewConfig=false
+          mActivityType=APPLICATION_ACTIVITY_TYPE
+          waitingVisible=false nowVisible=true lastVisibleTime=-11h35m58s110ms
+          resizeMode=RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION
+          mLastReportedMultiWindowMode=false mLastReportedPictureInPictureMode=false
+
+    Running activities (most recent first):
+      TaskRecord{a9636cc #612 A=baidu.launcher U=0 StackId=8 sz=1}
+        Run #0: ActivityRecord{b68ef5d u0 com.baidu.xiaoduos.launcher/.ui.PassengerMainActivity t612}
+
+    mResumedActivity: ActivityRecord{b68ef5d u0 com.baidu.xiaoduos.launcher/.ui.PassengerMainActivity t612}
+Display #4 (activities from top to bottom):
+
+  Stack #7:
+  mFullscreen=true
+  isSleeping=false
+  mBounds=null
+
+  ResumedActivity: ActivityRecord{2f9ce3a u0 org.savior.sync/.MainActivity t972}
+  mFocusedStack=ActivityStack{d3852e8 stackId=1, 4 tasks} mLastFocusedStack=ActivityStack{d3852e8 stackId=1, 4 tasks}
+  mCurTaskIdForUser={0=972}
+  mUserStackInFront={}
+  mStacks={0=ActivityStack{25b7353 stackId=0, 1 tasks}, 1=ActivityStack{d3852e8 stackId=1, 4 tasks}, 7=ActivityStack{3459490 stackId=7, 0 tasks}, 8=ActivityStack{f445189 stackId=8, 1 tasks}}
+  mLockTaskModeState=NONE  mLockTaskPackages (userId:packages)=
+    0:[]
+ mLockTaskModeTasks[]
+  KeyguardController:
+    mKeyguardShowing=false
+    mKeyguardGoingAway=false
+    mOccluded=false
+    mDismissingKeyguardActivity=null
+    mDismissalRequested=false
+    mVisibilityTransactionDepth=0

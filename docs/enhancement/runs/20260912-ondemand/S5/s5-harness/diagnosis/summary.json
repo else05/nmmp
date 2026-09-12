@@ -1,0 +1,86 @@
+{
+  "arithmetic": {
+    "A": {
+      "count": 20,
+      "medianNs": 1430515729.0,
+      "p95Ns": 1450470781,
+      "minNs": 1409588437,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": 0.0
+    },
+    "S1": {
+      "count": 20,
+      "medianNs": 1732533932.0,
+      "p95Ns": 1761396301,
+      "minNs": 1689620468,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": 21.11253982583787
+    },
+    "L": {
+      "count": 20,
+      "medianNs": 2376908072.0,
+      "p95Ns": 2486543697,
+      "minNs": 2266381145,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": 66.15742307577241
+    },
+    "C": {
+      "count": 20,
+      "medianNs": 3641781457.0,
+      "p95Ns": 3716679269,
+      "minNs": 3479281040,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": 154.57821841258485
+    },
+    "O": {
+      "count": 20,
+      "medianNs": 3285014217.5,
+      "p95Ns": 3309169009,
+      "minNs": 3243977655,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": 129.63845492257428
+    }
+  },
+  "shortCall": {
+    "A": {
+      "count": 20,
+      "medianNs": 1976569583.0,
+      "p95Ns": 2026131145,
+      "minNs": 1922972447,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": 0.0
+    },
+    "S1": {
+      "count": 20,
+      "medianNs": 1989801432.0,
+      "p95Ns": 2083270416,
+      "minNs": 1901808124,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": 0.6694350208464206
+    },
+    "L": {
+      "count": 20,
+      "medianNs": 2224427134.5,
+      "p95Ns": 2245246406,
+      "minNs": 2207255989,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": 12.539783756249378
+    },
+    "C": {
+      "count": 20,
+      "medianNs": 1491610807.0,
+      "p95Ns": 1507999635,
+      "minNs": 1482267759,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": -24.535375843634032
+    },
+    "O": {
+      "count": 20,
+      "medianNs": 1464278775.5,
+      "p95Ns": 1469629322,
+      "minNs": 1453929687,
+      "roundsUnderOneSecond": 0,
+      "regressionPercentVsFirst": -25.91817722513238
+    }
+  }
+}

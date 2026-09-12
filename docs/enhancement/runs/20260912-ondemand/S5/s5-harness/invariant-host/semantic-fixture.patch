@@ -1,0 +1,11 @@
+--- a/SemanticBridge.cpp
++++ b/SemanticBridge.cpp
+@@ -27,7 +27,7 @@
+     env->DeleteLocalRef(clazz);
+     return &method;
+ }
+-static const vmResolver resolver = {nullptr, resolveMethod, nullptr, resolveClass, nullptr, nullptr};
++static const vmResolver resolver = [] { vmResolver r = {}; r.dvmResolveMethod = resolveMethod; r.dvmResolveClass = resolveClass; return r; }();
+ 
+ extern "C" JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *) {
+     JNIEnv *env = nullptr;

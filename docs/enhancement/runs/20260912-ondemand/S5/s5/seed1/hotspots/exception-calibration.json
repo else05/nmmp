@@ -1,0 +1,98 @@
+[
+  {
+    "case": "exception",
+    "round": -1,
+    "iterations": 1000,
+    "elapsedNs": 20608959,
+    "checksum": 9000,
+    "variant": "B"
+  },
+  {
+    "case": "exception",
+    "round": 0,
+    "iterations": 1000,
+    "elapsedNs": 21036823,
+    "checksum": 9000,
+    "variant": "B"
+  },
+  {
+    "case": "exception",
+    "round": 1,
+    "iterations": 1000,
+    "elapsedNs": 19099323,
+    "checksum": 9000,
+    "variant": "B"
+  },
+  {
+    "case": "exception",
+    "round": -1,
+    "iterations": 1000,
+    "elapsedNs": 20167708,
+    "checksum": 9000,
+    "variant": "C"
+  },
+  {
+    "case": "exception",
+    "round": 0,
+    "iterations": 1000,
+    "elapsedNs": 20403594,
+    "checksum": 9000,
+    "variant": "C"
+  },
+  {
+    "case": "exception",
+    "round": 1,
+    "iterations": 1000,
+    "elapsedNs": 19388854,
+    "checksum": 9000,
+    "variant": "C"
+  },
+  {
+    "case": "exception",
+    "round": -1,
+    "iterations": 1000,
+    "elapsedNs": 19885208,
+    "checksum": 9000,
+    "variant": "D"
+  },
+  {
+    "case": "exception",
+    "round": 0,
+    "iterations": 1000,
+    "elapsedNs": 20147916,
+    "checksum": 9000,
+    "variant": "D"
+  },
+  {
+    "case": "exception",
+    "round": 1,
+    "iterations": 1000,
+    "elapsedNs": 19158907,
+    "checksum": 9000,
+    "variant": "D"
+  },
+  {
+    "case": "exception",
+    "round": -1,
+    "iterations": 1000,
+    "elapsedNs": 19662083,
+    "checksum": 9000,
+    "variant": "A"
+  },
+  {
+    "case": "exception",
+    "round": 0,
+    "iterations": 1000,
+    "elapsedNs": 20189167,
+    "checksum": 9000,
+    "variant": "A"
+  },
+  {
+    "case": "exception",
+    "round": 1,
+    "iterations": 1000,
+    "elapsedNs": 18912709,
+    "checksum": 9000,
+    "variant": "A"
+  }
+]

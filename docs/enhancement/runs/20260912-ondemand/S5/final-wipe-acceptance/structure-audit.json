@@ -1,0 +1,38 @@
+{
+  "apkSha256": "0e11e1b2191c53a0b99ea028f4c3a8ed17a610edc722f24a493921287d0cbb96",
+  "jarSha256": "28d6f83f8d099fecbcbdfbbd7acc3b41cb7e9b0347260920430d742fa9530ad7",
+  "mode": "on-demand-v1",
+  "codecVersion": 3,
+  "templateVersion": 4,
+  "signatureBinding": true,
+  "privateLinker": true,
+  "stage0Vm": true,
+  "fixedTestSeedUsed": false,
+  "selectedMethods": 526,
+  "explicitDecodedScratchCleanup": true,
+  "innerSha256": "4f7241240a8e53ff24b4a3cf9b16c5b8eee46f419455aefa0e3ca92d2b29ea60",
+  "apkLibraries": [
+    "lib/arm64-v8a/libapssdk.so",
+    "lib/arm64-v8a/libimage_processing_util_jni.so",
+    "lib/arm64-v8a/libc++_en.so"
+  ],
+  "outerStage0Vm": true,
+  "outerBusinessVmAbsent": true,
+  "innerTokenAndNativeVm": true,
+  "oldOrTransitionalExecutionAbsent": true,
+  "probeSymbolsAbsent": true,
+  "oldKeySharesAbsent": true,
+  "directInnerNeededAbsent": true,
+  "tlsSegmentAbsent": true,
+  "wxLoadAbsent": true,
+  "randomnessEvidence": {
+    "testSeedAbsentInSameEnvironmentProbe": true,
+    "secureRandomInSameEnvironmentProbe": true,
+    "explicitBuildSeedUnset": true,
+    "jvmOptionInjectionBannerAbsentInCapturedBuildLog": true,
+    "environmentScriptSha256": "d36591d00acb9056ab206ee7833683bbd671c33d0ffaf76aa90f69f24aa57e18",
+    "buildLogSha256": "945114e17749a648e86270b7072df3d95efb75013cc771b6af311d42e8bfb2dc",
+    "javaExecutable": "/usr/bin/java",
+    "scope": "Retrospective command/log evidence plus a same-environment runtime probe; the original generation JVM did not emit an in-process randomness attestation."
+  }
+}

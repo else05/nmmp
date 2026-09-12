@@ -1,0 +1,117 @@
+{
+  "arithmetic": {
+    "codeBytes": 30,
+    "opcodes": {
+      "add-int/2addr": 1,
+      "add-int/lit8": 1,
+      "const/16": 1,
+      "const/4": 1,
+      "goto": 1,
+      "if-ge": 1,
+      "mul-int/lit8": 1,
+      "return": 1,
+      "ushr-int/lit8": 1,
+      "xor-int/2addr": 1
+    },
+    "registers": 4,
+    "tryBlocks": 0
+  },
+  "arrayPayload": {
+    "codeBytes": 540,
+    "opcodes": {
+      "aget": 1,
+      "array-payload": 1,
+      "const/16": 1,
+      "fill-array-data": 1,
+      "new-array": 1,
+      "return": 1
+    },
+    "registers": 2,
+    "tryBlocks": 0
+  },
+  "branch": {
+    "codeBytes": 38,
+    "opcodes": {
+      "add-int/2addr": 1,
+      "add-int/lit8": 2,
+      "and-int/lit8": 1,
+      "const/4": 1,
+      "goto": 2,
+      "if-ge": 1,
+      "if-nez": 1,
+      "move": 1,
+      "mul-int/lit8": 1,
+      "return": 1,
+      "xor-int/2addr": 1
+    },
+    "registers": 4,
+    "tryBlocks": 0
+  },
+  "exception": {
+    "codeBytes": 14,
+    "opcodes": {
+      "const/16": 2,
+      "div-int/2addr": 1,
+      "return": 2
+    },
+    "registers": 2,
+    "tryBlocks": 1
+  },
+  "jniObject": {
+    "codeBytes": 32,
+    "opcodes": {
+      "add-int/2addr": 1,
+      "const/4": 2,
+      "invoke-virtual": 3,
+      "move-result": 2,
+      "move-result-object": 1,
+      "return": 1
+    },
+    "registers": 3,
+    "tryBlocks": 0
+  },
+  "largeShort": {
+    "codeBytes": 7896,
+    "opcodes": {
+      "add-int/2addr": 175,
+      "add-int/lit16": 336,
+      "add-int/lit8": 1,
+      "const": 175,
+      "const/4": 2,
+      "if-nez": 1,
+      "mul-int/lit16": 503,
+      "mul-int/lit8": 9,
+      "nop": 1,
+      "packed-switch": 1,
+      "packed-switch-payload": 1,
+      "return": 514
+    },
+    "registers": 2,
+    "tryBlocks": 0
+  },
+  "recursive": {
+    "codeBytes": 24,
+    "opcodes": {
+      "add-int/2addr": 1,
+      "add-int/lit8": 1,
+      "const/4": 1,
+      "if-gtz": 1,
+      "invoke-static": 1,
+      "move-result": 1,
+      "return": 2
+    },
+    "registers": 2,
+    "tryBlocks": 0
+  },
+  "shortCall": {
+    "codeBytes": 12,
+    "opcodes": {
+      "mul-int/lit8": 1,
+      "return": 1,
+      "ushr-int/lit8": 1,
+      "xor-int/2addr": 1
+    },
+    "registers": 2,
+    "tryBlocks": 0
+  }
+}

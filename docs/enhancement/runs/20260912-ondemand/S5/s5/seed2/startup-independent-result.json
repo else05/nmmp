@@ -1,0 +1,4 @@
+{
+  "directory": "startup-independent-resumed2",
+  "reason": "Second local5037 timeout in this independent batch, now SDK client, before A round21 installation completed. Preserve all87 valid attempts and both invalid records; no application start result exists for this attempt. Existing serverPID5972 remains, previous B appPID25827 remains. Resume in non-sandboxed tool execution to test network-restriction hypothesis; root cause unproven, no server restart."
+}

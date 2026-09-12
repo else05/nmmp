@@ -1,0 +1,30 @@
+{
+  "files": {
+    "adb.exe": [
+      "957e46b8615f7af5b7292a2ddabe98d2e61940c3fb2b0545756507f080613e71",
+      "7035cf5ec7f99f7b5662a9f5395f9dccfc3b6fe42583d0b9550124a0c3496606"
+    ],
+    "AdbWinApi.dll": [
+      "120bef587119c6cb926b86b9be90fdfbce38937588eae28cd91a94ce63c7b965",
+      "8b83cbfdc6bbb20f79bd8d04f91eb2b94c09b5b0ce5ed311395e7ab8eb9c7e25"
+    ],
+    "AdbWinUsbApi.dll": [
+      "6ca69a2ca0e31309c087d288f058977d421ad03500e4c3e1dbd981241a069c60",
+      "a22db4de3a89595733a3ad34299d7dcaf89dec0f72a20622c7157c55ce36d94d"
+    ]
+  },
+  "identical": false,
+  "versions": [
+    "Android Debug Bridge version 1.0.41\nVersion 37.0.0-14910828\nInstalled as E:\\Scoop\\apps\\adb\\current\\platform-tools\\adb.exe\nRunning on Windows 10.0.26100\n",
+    "Android Debug Bridge version 1.0.41\nVersion 37.0.0-14910828\nInstalled as D:\\Android\\SDK\\platform-tools\\adb.exe\nRunning on Windows 10.0.26100\n"
+  ],
+  "serverPid": 5972,
+  "serverStart": "2026-09-09T21:23:13+08:00",
+  "newClient": "D:\\Android\\SDK\\platform-tools\\adb.exe",
+  "reason": "Repeated local5037 timeouts; use the existing SDK installation matching the server path. Root cause remains unproven.",
+  "sdkClientAlsoTimedOut": true,
+  "nonSandboxedContinuation": true,
+  "rootCauseUnproven": true,
+  "nonSandboxedExecutionAlsoTimedOut": true,
+  "isolatedServerPort": 5038
+}

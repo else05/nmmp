@@ -1,0 +1,73 @@
+{
+  "runs": [
+    {
+      "variant": "L",
+      "interpreter": "original",
+      "test": "com.nmmedit.semantic.SemanticMain",
+      "output": "WARNING: A restricted method in java.lang.System has been called\nWARNING: java.lang.System::load has been called by com.nmmedit.semantic.SemanticMain in an unnamed module (file:/mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/s5-harness/invariant-host/classes/)\nWARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module\nWARNING: Restricted methods will be blocked in a future release unless native access is enabled\n\nSEMANTIC_PASS checks=1338\n",
+      "librarySha256": "1ce5756a0cd78b48a63c4b6684c09e0a8acdcf8c534482bb2bb7dade5dea95cf"
+    },
+    {
+      "variant": "L",
+      "interpreter": "original",
+      "test": "InvariantMain",
+      "output": "WARNING: A restricted method in java.lang.System has been called\nWARNING: java.lang.System::load has been called by InvariantMain in an unnamed module (file:/mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/s5-harness/invariant-host/classes/)\nWARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module\nWARNING: Restricted methods will be blocked in a future release unless native access is enabled\n\nINVARIANT_PASS checks=1616\n",
+      "librarySha256": "1ce5756a0cd78b48a63c4b6684c09e0a8acdcf8c534482bb2bb7dade5dea95cf"
+    },
+    {
+      "variant": "L",
+      "interpreter": "optimized",
+      "test": "com.nmmedit.semantic.SemanticMain",
+      "output": "WARNING: A restricted method in java.lang.System has been called\nWARNING: java.lang.System::load has been called by com.nmmedit.semantic.SemanticMain in an unnamed module (file:/mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/s5-harness/invariant-host/classes/)\nWARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module\nWARNING: Restricted methods will be blocked in a future release unless native access is enabled\n\nSEMANTIC_PASS checks=1338\n",
+      "librarySha256": "504263786aec3f4ae1e7d42925f3c3a6c81e603220dc4c14e6cec8170c8df297"
+    },
+    {
+      "variant": "L",
+      "interpreter": "optimized",
+      "test": "InvariantMain",
+      "output": "WARNING: A restricted method in java.lang.System has been called\nWARNING: java.lang.System::load has been called by InvariantMain in an unnamed module (file:/mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/s5-harness/invariant-host/classes/)\nWARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module\nWARNING: Restricted methods will be blocked in a future release unless native access is enabled\n\nINVARIANT_PASS checks=1616\n",
+      "librarySha256": "504263786aec3f4ae1e7d42925f3c3a6c81e603220dc4c14e6cec8170c8df297"
+    },
+    {
+      "variant": "C",
+      "interpreter": "original",
+      "test": "com.nmmedit.semantic.SemanticMain",
+      "output": "WARNING: A restricted method in java.lang.System has been called\nWARNING: java.lang.System::load has been called by com.nmmedit.semantic.SemanticMain in an unnamed module (file:/mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/s5-harness/invariant-host/classes/)\nWARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module\nWARNING: Restricted methods will be blocked in a future release unless native access is enabled\n\nSEMANTIC_PASS checks=1351\n",
+      "librarySha256": "40da08a4afa214224f8de348ccc4d989b459aa6678050f03e7fbbe073a71200a"
+    },
+    {
+      "variant": "C",
+      "interpreter": "original",
+      "test": "InvariantMain",
+      "output": "WARNING: A restricted method in java.lang.System has been called\nWARNING: java.lang.System::load has been called by InvariantMain in an unnamed module (file:/mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/s5-harness/invariant-host/classes/)\nWARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module\nWARNING: Restricted methods will be blocked in a future release unless native access is enabled\n\nINVARIANT_PASS checks=1616\n",
+      "librarySha256": "40da08a4afa214224f8de348ccc4d989b459aa6678050f03e7fbbe073a71200a"
+    },
+    {
+      "variant": "C",
+      "interpreter": "optimized",
+      "test": "com.nmmedit.semantic.SemanticMain",
+      "output": "WARNING: A restricted method in java.lang.System has been called\nWARNING: java.lang.System::load has been called by com.nmmedit.semantic.SemanticMain in an unnamed module (file:/mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/s5-harness/invariant-host/classes/)\nWARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module\nWARNING: Restricted methods will be blocked in a future release unless native access is enabled\n\nSEMANTIC_PASS checks=1351\n",
+      "librarySha256": "69b10868746adcd9cbcb942f77bf0aff22a157509f6b6bea555250470a2a509a"
+    },
+    {
+      "variant": "C",
+      "interpreter": "optimized",
+      "test": "InvariantMain",
+      "output": "WARNING: A restricted method in java.lang.System has been called\nWARNING: java.lang.System::load has been called by InvariantMain in an unnamed module (file:/mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/on-demand-20260912/s5-harness/invariant-host/classes/)\nWARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module\nWARNING: Restricted methods will be blocked in a future release unless native access is enabled\n\nINVARIANT_PASS checks=1616\n",
+      "librarySha256": "69b10868746adcd9cbcb942f77bf0aff22a157509f6b6bea555250470a2a509a"
+    }
+  ],
+  "passed": 8,
+  "runtime": "Host OpenJDK real JNI; Android log output stubbed",
+  "androidBuild": false,
+  "deviceExecution": false,
+  "performanceMeasured": false,
+  "sourceManifestsUnchanged": true,
+  "fixtureSourceSha256": {
+    "SemanticMain.java": "81d71b7f65e6ce770c025b6d505275951bffcad9fd674ecb0a66a225bd3478ec",
+    "SemanticBridge.cpp": "e51ccb188fa7fe22708fe44f80913d04bbe9024b6fb57eceb8ead0208e854c13",
+    "InvariantMain.java": "9cdb82744a5264b55d38916fb0d78635dc3ac12b6e113367394ad32fe0ec0528",
+    "InvariantBridge.cpp": "fcd406b152d39bd94090881e2c105c22aa877fe79f911e47a2e1e70b3d844bee",
+    "log.h": "ee009320bc26b10d6989acc2385938fbcdb5cc01ddda2c71446604481a07b082"
+  }
+}

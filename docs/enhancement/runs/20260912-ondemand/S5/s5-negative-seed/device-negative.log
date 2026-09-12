@@ -1,0 +1,400 @@
+--------- beginning of main
+06-01 18:32:12.347  4845  4896 I bodyguard.CCS: ccs state failed: auth: unknown old:unknown, location: unknown old:unknown
+06-01 18:32:12.434  1289  1524 D DesayCommonManager: getCCSAuthState: mode=-1
+06-01 18:32:12.435  1289  1524 D DesayCommonManager: Failed to get location sharing
+06-01 18:32:12.435  1289  1524 D DesayCommonManager: getLocationSharing: mode=-1
+06-01 18:32:12.443  9868  9955 I AutoNavi-Patrons: [0] every thing is OK, vss = 1965 mb, current period = 0.47977924, heap = 1024 mb
+06-01 18:32:12.447  7380  7380 D v2i-V2IHandlers: UI_HANDLER.handleMessage, what=1234
+06-01 18:32:12.447  7380  7380 E v2i-V2IApiAidlImpl: connectService, auto connect:true
+--------- beginning of system
+06-01 18:32:12.447  7380  7380 W ContextImpl: Calling a method in the system process without a qualified user: android.app.ContextImpl.bindService:1556 android.content.ContextWrapper.bindService:684 com.baidu.v2i.V2IApiAidlImpl.connectService:4 com.baidu.v2i.V2IApiAidlImpl.access$800:1 com.baidu.v2i.V2IApiAidlImpl$3.handleMessage:1 
+06-01 18:32:12.448   891  3558 W ActivityManager_Service: Unable to start service Intent { act=com.baidu.v2i.V2I_SERVICE_ACTION pkg=com.baidu.naviauto } U=0: not found
+06-01 18:32:12.448  7380  7380 E v2i-V2IApiAidlImpl: connectService ret:false
+06-01 18:32:12.448  7380  7380 D v2i-V2IApiAidlImpl: onServiceDisconnected, isFirst:true
+06-01 18:32:12.449  7380  7380 I V2ISdkProxy: onSettupError i:103,s:连接失败
+06-01 18:32:12.449  7380  7380 E v2i-V2IApiAidlImpl: tryReconnectService after 200ms, auto connect:true
+06-01 18:32:12.495  4689  4711 D DesayCommonManager: getCCS_SynchronizationState: mode=0
+06-01 18:32:12.495  4689  4711 I EngModeService: new ccsstate = 0;old ccssstate =0
+06-01 18:32:12.497   554  2678 I teseo_hal_utils_Time: parseTimeAndDate timeinfo: 121,5,19 22:12:8, dst: 0
+06-01 18:32:12.497   554  2678 I teseo_hal_utils_Time: count()+zone= 1621433528000.
+06-01 18:32:12.500   554  2678 D teseo_hal_nmea_messages: xpj bearing_stop = 0.000000 
+06-01 18:32:12.507   554  2678 I teseo_hal_nmea_messages: Pdop: 99.000000, hdop: 99.000000, vdop: 99.000000, fix: 1
+06-01 18:32:12.508   554  2678 I teseo_hal_nmea_messages: Pdop: 99.000000, hdop: 99.000000, vdop: 99.000000, fix: 1
+06-01 18:32:12.509   554  2678 I teseo_hal_LocServiceProxy: Send satellite list: 0 satellites, 0 gps, 0 glonass, 0 galileo, 0 beidou, 0 others
+06-01 18:32:12.649  3658  3658 D EmergencyManager: mDelayRunnable manager null context com.desay.settings.application.SettingApplication@5f7e128
+06-01 18:32:12.649  3658  3658 W ContextImpl: Calling a method in the system process without a qualified user: android.app.ContextImpl.bindService:1556 android.content.ContextWrapper.bindService:684 com.ford.sync.emergencylibrary.b$3.run:169 android.os.Handler.handleCallback:790 android.os.Handler.dispatchMessage:99 
+06-01 18:32:12.649  7380  7380 D v2i-V2IHandlers: UI_HANDLER.handleMessage, what=1234
+06-01 18:32:12.649  7380  7380 E v2i-V2IApiAidlImpl: connectService, auto connect:true
+06-01 18:32:12.650  7380  7380 W ContextImpl: Calling a method in the system process without a qualified user: android.app.ContextImpl.bindService:1556 android.content.ContextWrapper.bindService:684 com.baidu.v2i.V2IApiAidlImpl.connectService:4 com.baidu.v2i.V2IApiAidlImpl.access$800:1 com.baidu.v2i.V2IApiAidlImpl$3.handleMessage:1 
+06-01 18:32:12.651   891  3558 W ActivityManager_Service: Unable to start service Intent { cmp=com.ford.sync.emergencyassistance/.service.EmergencyService } U=0: not found
+06-01 18:32:12.651   891   934 W ActivityManager_Service: Unable to start service Intent { act=com.baidu.v2i.V2I_SERVICE_ACTION pkg=com.baidu.naviauto } U=0: not found
+06-01 18:32:12.651  3658  3658 I EmergencyManager: bindService retry: false
+06-01 18:32:12.652  7380  7380 E v2i-V2IApiAidlImpl: connectService ret:false
+06-01 18:32:12.652  7380  7380 D v2i-V2IApiAidlImpl: onServiceDisconnected, isFirst:true
+06-01 18:32:12.652  7380  7380 I V2ISdkProxy: onSettupError i:103,s:连接失败
+06-01 18:32:12.652  7380  7380 E v2i-V2IApiAidlImpl: tryReconnectService after 200ms, auto connect:true
+06-01 18:32:12.672  3388  3482 W System.err: java.net.ConnectException: Failed to connect to /180.76.76.112:443
+06-01 18:32:12.672  3388  3482 W System.err: 	at com.android.okhttp.internal.io.RealConnection.connectSocket(RealConnection.java:143)
+06-01 18:32:12.672  3388  3482 W System.err: 	at com.android.okhttp.internal.io.RealConnection.connect(RealConnection.java:112)
+06-01 18:32:12.672  3388  3482 W System.err: 	at com.android.okhttp.internal.http.StreamAllocation.findConnection(StreamAllocation.java:184)
+06-01 18:32:12.672  3388  3482 W System.err: 	at com.android.okhttp.internal.http.StreamAllocation.findHealthyConnection(StreamAllocation.java:126)
+06-01 18:32:12.672  3388  3482 W System.err: 	at com.android.okhttp.internal.http.StreamAllocation.newStream(StreamAllocation.java:95)
+06-01 18:32:12.672  3388  3482 W System.err: 	at com.android.okhttp.internal.http.HttpEngine.connect(HttpEngine.java:281)
+06-01 18:32:12.672  3388  3482 W System.err: 	at com.android.okhttp.internal.http.HttpEngine.sendRequest(HttpEngine.java:224)
+06-01 18:32:12.672  3388  3482 W System.err: 	at com.android.okhttp.internal.huc.HttpURLConnectionImpl.execute(HttpURLConnectionImpl.java:461)
+06-01 18:32:12.672  3388  3482 W System.err: 	at com.android.okhttp.internal.huc.HttpURLConnectionImpl.getResponse(HttpURLConnectionImpl.java:407)
+06-01 18:32:12.672  3388  3482 W System.err: 	at com.android.okhttp.internal.huc.HttpURLConnectionImpl.getResponseCode(HttpURLConnectionImpl.java:538)
+06-01 18:32:12.672  3388  3482 W System.err: 	at com.android.okhttp.internal.huc.DelegatingHttpsURLConnection.getResponseCode(DelegatingHttpsURLConnection.java:105)
+06-01 18:32:12.672  3388  3482 W System.err: 	at com.android.okhttp.internal.huc.HttpsURLConnectionImpl.getResponseCode(Unknown Source:0)
+06-01 18:32:12.672  3388  3482 W System.err: 	at com.baidu.tts.m.e.a(HttpClientUtil.java:36)
+06-01 18:32:12.672  3388  3482 W System.err: 	at com.baidu.tts.m.e.a(HttpClientUtil.java:1)
+06-01 18:32:12.673  3388  3482 W System.err: 	at com.baidu.tts.m.f.b(HttpDNS.java:17)
+06-01 18:32:12.673  3388  3482 W System.err: 	at com.baidu.tts.b.a.b.h$1.run(TimerUtils.java:11)
+06-01 18:32:12.673  3388  3482 W System.err: 	at android.os.Handler.handleCallback(Handler.java:790)
+06-01 18:32:12.673  3388  3482 W System.err: 	at android.os.Handler.dispatchMessage(Handler.java:99)
+06-01 18:32:12.673  3388  3482 W System.err: 	at android.os.Looper.loop(Looper.java:164)
+06-01 18:32:12.673  3388  3482 W System.err: 	at android.os.HandlerThread.run(HandlerThread.java:65)
+06-01 18:32:12.740   891   934 I ActivityManager: START u0 {flg=0x10000000 cmp=org.savior.sync/.MainActivity} from uid 0
+06-01 18:32:12.745   891   934 E ANDR-PERF-JNI: Iop tryGetService failed
+06-01 18:32:12.746   891   934 W ActivityManager: mStartActivity= org.savior.sync/.MainActivity
+06-01 18:32:12.746   891   934 W ActivityManager: setTaskFromReuseOrCreateNewTask:mTargetStack= 1
+06-01 18:32:12.747   891   934 W ActivityManager: save display id
+06-01 18:32:12.747   891   934 D ActivityManager: mMovedOtherTask= false
+06-01 18:32:12.747   891   934 W WindowManager: mFindFocusedWindow::default focusedApp= AppWindowToken{66a9ef1 token=Token{4167075 ActivityRecord{d1a6bac u0 com.dudu.autoui/.ui.activity.launcher.LauncherActivity t710}}}
+06-01 18:32:12.748   891   934 W WindowManager: mCurrentFocus= Window{bcd300c u0;display:0 com.dudu.autoui/com.dudu.autoui.ui.activity.launcher.LauncherActivity}
+06-01 18:32:12.748   891   934 W WindowManager: newFocus= Window{bcd300c u0;display:0 com.dudu.autoui/com.dudu.autoui.ui.activity.launcher.LauncherActivity}
+06-01 18:32:12.749   891   934 D ActivityManager: updateTaskReturnToForTopInsertion: curTaskIndex: 3  com.dudu.autoui org.savior.sync
+06-01 18:32:12.749   891   934 W WindowManager: mFindFocusedWindow::default focusedApp= AppWindowToken{66a9ef1 token=Token{4167075 ActivityRecord{d1a6bac u0 com.dudu.autoui/.ui.activity.launcher.LauncherActivity t710}}}
+06-01 18:32:12.749   891   934 W WindowManager: mCurrentFocus= Window{bcd300c u0;display:0 com.dudu.autoui/com.dudu.autoui.ui.activity.launcher.LauncherActivity}
+06-01 18:32:12.749   891   934 W WindowManager: newFocus= Window{bcd300c u0;display:0 com.dudu.autoui/com.dudu.autoui.ui.activity.launcher.LauncherActivity}
+06-01 18:32:12.751   891   934 W InputApplicationHandle: displayId= -1
+06-01 18:32:12.751   891   934 D ActivityTrigger: activityStartTrigger: Activity is Triggerred in full screen ApplicationInfo{4ce63c5 org.savior.sync}
+06-01 18:32:12.752   891   934 V WindowManager: Checking type of starting window: 2
+06-01 18:32:12.752   891   934 D ActivityTrigger: activityResumeTrigger: The activity in ApplicationInfo{4ce63c5 org.savior.sync} is now in focus and seems to be in full-screen mode
+06-01 18:32:12.752   891   934 E ActivityTrigger: activityResumeTrigger: not whiteListedorg.savior.sync/org.savior.sync.MainActivity/20260824
+06-01 18:32:12.752   891   934 D ActivityTrigger: ActivityTrigger activityPauseTrigger 
+06-01 18:32:12.758   891   934 D WindowManager: layout navigation bar
+06-01 18:32:12.758   891   934 D WindowManager: layout screen decor windows
+06-01 18:32:12.758   891   934 D WindowManager: layout status bar
+06-01 18:32:12.758   891   934 W WindowManager: layoutWindowLw SCREEN_DECOR:win= Window{561d431 u0;display:0 SystemUI_Container} title= SystemUI_Container  2058
+06-01 18:32:12.758   891   934 W WindowManager: layoutWindowLw SCREEN_DECOR:win= Window{331678a u0;display:0 com.baidu.xiaoduos.messageserver} title=   400
+06-01 18:32:12.758   891   934 W WindowManager: layoutWindowLw SCREEN_DECOR:win= Window{bff63ef u0;display:0 com.baidu.xiaoduos.messageserver} title=   -1
+06-01 18:32:12.758   891   934 W WindowManager: layoutWindowLw SCREEN_DECOR:win= Window{2ea3b50 u0;display:0 NavigationBar} title= NavigationBar  -1
+06-01 18:32:12.759   891   934 W WindowManager: layoutWindowLw SCREEN_DECOR:win= Window{b658353 u0;display:0 StatusBar} title= StatusBar  -1
+06-01 18:32:12.759   891   934 W WindowManager: layoutWindowLw SCREEN_DECOR:win= Window{a642eb7 u0;display:0 com.ford.sync.vpa} title=   -2
+06-01 18:32:12.759   891   934 W WindowManager: layoutWindowLw SCREEN_DECOR:win= Window{bcd300c u0;display:0 com.dudu.autoui/com.dudu.autoui.ui.activity.launcher.LauncherActivity} title= com.dudu.autoui/com.dudu.autoui.ui.activity.launcher.LauncherActivity  -1
+06-01 18:32:12.759   891  1129 W WindowManager: addWindow::type= 3
+06-01 18:32:12.764   891  1129 W InputWindowHandle: displayId= 0
+06-01 18:32:12.764   891  1129 V WindowManager: useCurrentBounds
+06-01 18:32:12.765   891  1129 W WindowManager: add inputmethoclient:android.view.inputmethod.InputMethodManager$1@1a0fda to display:0
+06-01 18:32:12.765   891  1129 W WindowManager: InputMethod Window is null
+06-01 18:32:12.765   891  1129 W WindowManager: InputMethod Target is null
+06-01 18:32:12.768   891  3558 D ActivityTrigger: activityResumeTrigger: The activity in ApplicationInfo{4ce63c5 org.savior.sync} is now in focus and seems to be in full-screen mode
+06-01 18:32:12.769   891  3558 E ActivityTrigger: activityResumeTrigger: not whiteListedorg.savior.sync/org.savior.sync.MainActivity/20260824
+06-01 18:32:12.772   891  1129 W WindowManager: relayoutWindow::win= Window{bdcca40 u0;display:0 Splash Screen org.savior.sync}
+06-01 18:32:12.773   891  1129 D WindowManager: layout navigation bar
+06-01 18:32:12.773   891  1129 D WindowManager: layout screen decor windows
+06-01 18:32:12.773   891  1129 D WindowManager: layout status bar
+06-01 18:32:12.773   891  1129 W WindowManager: layoutWindowLw SCREEN_DECOR:win= Window{561d431 u0;display:0 SystemUI_Container} title= SystemUI_Container  2058
+06-01 18:32:12.773   891  1129 W WindowManager: layoutWindowLw SCREEN_DECOR:win= Window{331678a u0;display:0 com.baidu.xiaoduos.messageserver} title=   400
+06-01 18:32:12.774   891  1129 W WindowManager: layoutWindowLw SCREEN_DECOR:win= Window{bff63ef u0;display:0 com.baidu.xiaoduos.messageserver} title=   -1
+06-01 18:32:12.774   891  1129 W WindowManager: layoutWindowLw SCREEN_DECOR:win= Window{2ea3b50 u0;display:0 NavigationBar} title= NavigationBar  -1
+06-01 18:32:12.774   891  1129 W WindowManager: layoutWindowLw SCREEN_DECOR:win= Window{b658353 u0;display:0 StatusBar} title= StatusBar  -1
+06-01 18:32:12.774   891  1129 W WindowManager: layoutWindowLw SCREEN_DECOR:win= Window{a642eb7 u0;display:0 com.ford.sync.vpa} title=   -2
+06-01 18:32:12.774   891  1129 W WindowManager: layoutWindowLw SCREEN_DECOR:win= Window{bdcca40 u0;display:0 Splash Screen org.savior.sync} title= Splash Screen org.savior.sync  -1
+06-01 18:32:12.774   891  1129 W WindowManager: layoutWindowLw SCREEN_DECOR:win= Window{bcd300c u0;display:0 com.dudu.autoui/com.dudu.autoui.ui.activity.launcher.LauncherActivity} title= com.dudu.autoui/com.dudu.autoui.ui.activity.launcher.LauncherActivity  -1
+06-01 18:32:12.780   891  1129 W WindowManager: focusMayChange= true
+06-01 18:32:12.780   891  1129 W WindowManager: relayoutWindow::mIMCDisplayId= 3,win.getDisplayId()= 0
+06-01 18:32:12.780   891  1129 W WindowManager: InputMethod Window is null
+06-01 18:32:12.780   891  1129 W WindowManager: InputMethod Target is null
+06-01 18:32:12.780   891  1129 W WindowManager: mFindFocusedWindow::default focusedApp= AppWindowToken{66a9ef1 token=Token{4167075 ActivityRecord{d1a6bac u0 com.dudu.autoui/.ui.activity.launcher.LauncherActivity t710}}}
+06-01 18:32:12.781   891  1129 W WindowManager: mCurrentFocus= Window{bcd300c u0;display:0 com.dudu.autoui/com.dudu.autoui.ui.activity.launcher.LauncherActivity}
+06-01 18:32:12.781   891  1129 W WindowManager: newFocus= Window{bcd300c u0;display:0 com.dudu.autoui/com.dudu.autoui.ui.activity.launcher.LauncherActivity}
+06-01 18:32:12.781   891  1129 D WindowManager: layout navigation bar
+06-01 18:32:12.781   891  1129 D WindowManager: layout screen decor windows
+06-01 18:32:12.781   891  1129 D WindowManager: layout status bar
+06-01 18:32:12.781   891  1129 W WindowManager: layoutWindowLw SCREEN_DECOR:win= Window{561d431 u0;display:0 SystemUI_Container} title= SystemUI_Container  2058
+06-01 18:32:12.781   891  1129 W WindowManager: layoutWindowLw SCREEN_DECOR:win= Window{331678a u0;display:0 com.baidu.xiaoduos.messageserver} title=   400
+06-01 18:32:12.781   891  1129 W WindowManager: layoutWindowLw SCREEN_DECOR:win= Window{bff63ef u0;display:0 com.baidu.xiaoduos.messageserver} title=   -1
+06-01 18:32:12.781   891  1129 W WindowManager: layoutWindowLw SCREEN_DECOR:win= Window{2ea3b50 u0;display:0 NavigationBar} title= NavigationBar  -1
+06-01 18:32:12.781   891  1129 W WindowManager: layoutWindowLw SCREEN_DECOR:win= Window{b658353 u0;display:0 StatusBar} title= StatusBar  -1
+06-01 18:32:12.781   891  1129 W WindowManager: layoutWindowLw SCREEN_DECOR:win= Window{a642eb7 u0;display:0 com.ford.sync.vpa} title=   -2
+06-01 18:32:12.782   891  1129 W WindowManager: layoutWindowLw SCREEN_DECOR:win= Window{bcd300c u0;display:0 com.dudu.autoui/com.dudu.autoui.ui.activity.launcher.LauncherActivity} title= com.dudu.autoui/com.dudu.autoui.ui.activity.launcher.LauncherActivity  -1
+06-01 18:32:12.794   891  3558 I ActivityManager: Start proc 32607:org.savior.sync/u0a101 for activity org.savior.sync/.MainActivity
+06-01 18:32:12.797   891  3558 W ActivityManager: home activity is stopping:ActivityRecord{65d2e74 u0 com.baidu.xiaoduos.launcher/.ui.MainActivity t1}
+06-01 18:32:12.800   891   990 D ActivityTrigger: ActivityTrigger activityStopTrigger 
+06-01 18:32:12.804   594   594 V lowmem_threshold: find_proc: 4130
+06-01 18:32:12.804   594   594 V lowmem_threshold: change_procprio: 4130:100
+06-01 18:32:12.804   594   594 V lowmem_threshold: change proc:4130:100
+06-01 18:32:12.804   891   990 D CpuController: updateAdj com.dudu.autoui, pid = 4130, adj=100, adjType=service
+06-01 18:32:12.805   594   594 D lowmemorykiller: cmd_procaddcpuctl: pid=4130, cgroup=0 ret = 0
+06-01 18:32:12.805   891   990 D CpuController: updateCgroup pid = 4130, group=0
+06-01 18:32:12.808   891  1129 D WindowManager: layout navigation bar
+06-01 18:32:12.808   891  1129 D WindowManager: layout screen decor windows
+06-01 18:32:12.809   891  1129 D WindowManager: layout status bar
+06-01 18:32:12.809   891  1129 W WindowManager: layoutWindowLw SCREEN_DECOR:win= Window{561d431 u0;display:0 SystemUI_Container} title= SystemUI_Container  2058
+06-01 18:32:12.809   891  1129 W WindowManager: layoutWindowLw SCREEN_DECOR:win= Window{331678a u0;display:0 com.baidu.xiaoduos.messageserver} title=   400
+06-01 18:32:12.809   891  1129 W WindowManager: layoutWindowLw SCREEN_DECOR:win= Window{bff63ef u0;display:0 com.baidu.xiaoduos.messageserver} title=   -1
+06-01 18:32:12.809   891  1129 W WindowManager: layoutWindowLw SCREEN_DECOR:win= Window{2ea3b50 u0;display:0 NavigationBar} title= NavigationBar  -1
+06-01 18:32:12.809   891  1129 W WindowManager: layoutWindowLw SCREEN_DECOR:win= Window{b658353 u0;display:0 StatusBar} title= StatusBar  -1
+06-01 18:32:12.809   891  1129 W WindowManager: layoutWindowLw SCREEN_DECOR:win= Window{a642eb7 u0;display:0 com.ford.sync.vpa} title=   -2
+06-01 18:32:12.809   891  1129 W WindowManager: layoutWindowLw SCREEN_DECOR:win= Window{bdcca40 u0;display:0 Splash Screen org.savior.sync} title= Splash Screen org.savior.sync  -1
+06-01 18:32:12.815   891  1129 W ViewRootImpl_MultiService: report resize:  origin displayId= 0 new displayId= 0
+06-01 18:32:12.817   891   990 W TelecomManager: Telecom Service not found.
+06-01 18:32:12.837  9868 19823 E sliver  : value:channel&dic&div
+06-01 18:32:12.843   891  1231 V ActivityManager_Broadcast: Enqueueing parallel broadcast BroadcastRecord{beab2b1 u-1 android.net.wifi.RSSI_CHANGED}
+06-01 18:32:12.845   891  1252 D ConnectivityService: notifyType CALLBACK_CAP_CHANGED for NetworkAgentInfo [WIFI () - 101]
+06-01 18:32:12.845   891  1252 D ConnectivityService:  sending notification for NetworkRequest [ REQUEST id=2, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-01 18:32:12.845   891  1252 D ConnectivityService:  sending notification for NetworkRequest [ TRACK_DEFAULT id=4, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-01 18:32:12.846   891  1252 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ TRACK_DEFAULT id=4, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-01 18:32:12.846   891  1252 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=5, [ Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-01 18:32:12.846   891  1252 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN id=5, [ Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-01 18:32:12.846   891  1252 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=6, [ Transports: CELLULAR|WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-01 18:32:12.846   891  1252 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN id=6, [ Transports: CELLULAR|WIFI Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-01 18:32:12.846   891  1252 D ConnectivityService:  sending notification for NetworkRequest [ TRACK_DEFAULT id=7, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-01 18:32:12.846   891  1252 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ TRACK_DEFAULT id=7, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-01 18:32:12.846   891  1252 D ConnectivityService:  sending notification for NetworkRequest [ TRACK_DEFAULT id=8, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-01 18:32:12.846   891  1252 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ TRACK_DEFAULT id=8, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-01 18:32:12.846   891  1252 D ConnectivityService:  sending notification for NetworkRequest [ TRACK_DEFAULT id=9, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-01 18:32:12.846   891  1252 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ TRACK_DEFAULT id=9, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-01 18:32:12.846   891  1252 D ConnectivityService:  sending notification for NetworkRequest [ TRACK_DEFAULT id=12, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-01 18:32:12.846   891  1252 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ TRACK_DEFAULT id=12, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-01 18:32:12.847   891  1252 D ConnectivityService:  sending notification for NetworkRequest [ TRACK_DEFAULT id=13, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-01 18:32:12.847   891  1252 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ TRACK_DEFAULT id=13, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-01 18:32:12.847   891  1252 D ConnectivityService:  sending notification for NetworkRequest [ LISTEN id=14, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED] ]
+06-01 18:32:12.847   891  1252 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ LISTEN id=14, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED] ]
+06-01 18:32:12.847   891  1252 D ConnectivityService:  sending notification for NetworkRequest [ REQUEST id=15, [ Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-01 18:32:12.847   891  1252 D ConnectivityService: sending notification CALLBACK_CAP_CHANGED for NetworkRequest [ REQUEST id=15, [ Capabilities: NOT_RESTRICTED&TRUSTED&NOT_VPN] ]
+06-01 18:32:12.847   891   990 V BroadcastQueue_Broadcast: Processing parallel broadcast [background] BroadcastRecord{beab2b1 u-1 android.net.wifi.RSSI_CHANGED}
+06-01 18:32:12.850   891  3558 E WifiService: 12_28:getConnectionInfo
+06-01 18:32:12.850   891  3558 E WifiService: 12_28:getConnectionInfo orgin
+06-01 18:32:12.851  4845  4896 I bodyguard.CCS: state handleMessage>: 3
+06-01 18:32:12.851  4845  4896 I bodyguard.CCS: get auth:>>
+06-01 18:32:12.853  3184  3184 D WifiReceiver: onReceive Intent { act=android.net.wifi.RSSI_CHANGED flg=0x4000010 (has extras) }
+06-01 18:32:12.855  7380  7380 D v2i-V2IHandlers: UI_HANDLER.handleMessage, what=1234
+06-01 18:32:12.855  7380  7380 E v2i-V2IApiAidlImpl: connectService, auto connect:true
+06-01 18:32:12.855  7380  7380 W ContextImpl: Calling a method in the system process without a qualified user: android.app.ContextImpl.bindService:1556 android.content.ContextWrapper.bindService:684 com.baidu.v2i.V2IApiAidlImpl.connectService:4 com.baidu.v2i.V2IApiAidlImpl.access$800:1 com.baidu.v2i.V2IApiAidlImpl$3.handleMessage:1 
+06-01 18:32:12.857  4845  4896 D DesayCommonManager: getCCSAuthState: mode=-1
+06-01 18:32:12.857   891   934 E WifiService: 12_28:getConnectionInfo
+06-01 18:32:12.857   891   934 E WifiService: 12_28:getConnectionInfo orgin
+06-01 18:32:12.858  4845  4896 I bodyguard.CCS: get auth:unknown
+06-01 18:32:12.858  4845  4896 I bodyguard.CCS: get location:>>
+06-01 18:32:12.865   891 17584 W ActivityManager_Service: Unable to start service Intent { act=com.baidu.v2i.V2I_SERVICE_ACTION pkg=com.baidu.naviauto } U=0: not found
+06-01 18:32:12.867   891 20533 E WifiService: 12_28:getConnectionInfo
+06-01 18:32:12.867   891 20533 E WifiService: 12_28:getConnectionInfo orgin
+06-01 18:32:12.869  7380  7380 E v2i-V2IApiAidlImpl: connectService ret:false
+06-01 18:32:12.869  7380  7380 D v2i-V2IApiAidlImpl: onServiceDisconnected, isFirst:true
+06-01 18:32:12.869  7380  7380 I V2ISdkProxy: onSettupError i:103,s:连接失败
+06-01 18:32:12.869  7380  7380 E v2i-V2IApiAidlImpl: tryReconnectService after 200ms, auto connect:true
+06-01 18:32:12.870   891   934 W ActivityManager: home activity is stopping:ActivityRecord{65d2e74 u0 com.baidu.xiaoduos.launcher/.ui.MainActivity t1}
+06-01 18:32:12.873   891  3558 E WifiService: 12_28_getWifiEnabledState
+06-01 18:32:12.873   891  3558 E WifiService: 12_28:12_28_getWifiEnabledState orgin
+06-01 18:32:12.877  4845  4896 D DesayCommonManager: Failed to get location sharing
+06-01 18:32:12.878  4845  4896 D DesayCommonManager: getLocationSharing: mode=-1
+06-01 18:32:12.878  4845  4896 I bodyguard.CCS: get location:unknown
+06-01 18:32:12.878  4845  4896 I bodyguard.CCS: ccs state failed: auth: unknown old:unknown, location: unknown old:unknown
+06-01 18:32:12.884   891   934 D CpuController: updateAdj org.savior.sync, pid = 32607, adj=0, adjType=top-activity
+06-01 18:32:12.884   594   594 V lowmem_threshold: find_proc: 32607
+06-01 18:32:12.884   891   934 D CpuController: updateCgroup pid = 32607, group=1
+06-01 18:32:12.884   594   594 V lowmem_threshold: change_procprio: 32607:0
+06-01 18:32:12.884   594   594 V lowmem_threshold: add proc:32607:0
+06-01 18:32:12.884   594   594 D lowmemorykiller: cmd_procaddcpuctl: pid=32607, cgroup=1 ret = 0
+06-01 18:32:12.885   891   934 D CpuController: updateAdj com.qti.csm, pid = 11776, adj=900, adjType=cch-empty
+06-01 18:32:12.885   891   934 D CpuController: updateCgroup pid = 11776, group=0
+06-01 18:32:12.885   594   594 V lowmem_threshold: find_proc: 11776
+06-01 18:32:12.885   594   594 V lowmem_threshold: change_procprio: 11776:900
+06-01 18:32:12.885   891   934 D CpuController: updateAdj android.process.media, pid = 3047, adj=902, adjType=cch-empty
+06-01 18:32:12.885   594   594 V lowmem_threshold: change proc:11776:900
+06-01 18:32:12.885   891   934 D CpuController: updateCgroup pid = 3047, group=0
+06-01 18:32:12.885   594   594 D lowmemorykiller: cmd_procaddcpuctl: pid=11776, cgroup=0 ret = 0
+06-01 18:32:12.885   594   594 V lowmem_threshold: find_proc: 3047
+06-01 18:32:12.885   594   594 V lowmem_threshold: change_procprio: 3047:902
+06-01 18:32:12.885   594   594 V lowmem_threshold: change proc:3047:902
+06-01 18:32:12.885   594   594 D lowmemorykiller: cmd_procaddcpuctl: pid=3047, cgroup=0 ret = 0
+06-01 18:32:12.885   891   934 D CpuController: updateAdj system:ui, pid = 32075, adj=902, adjType=cch-empty
+06-01 18:32:12.885   891   934 D CpuController: updateCgroup pid = 32075, group=0
+06-01 18:32:12.885   594   594 V lowmem_threshold: find_proc: 32075
+06-01 18:32:12.885   594   594 V lowmem_threshold: change_procprio: 32075:902
+06-01 18:32:12.885   594   594 V lowmem_threshold: change proc:32075:902
+06-01 18:32:12.885   594   594 D lowmemorykiller: cmd_procaddcpuctl: pid=32075, cgroup=0 ret = 0
+06-01 18:32:12.886   891   934 D CpuController: updateAdj net.easyconn, pid = 3828, adj=904, adjType=cch-empty
+06-01 18:32:12.886   891   934 D CpuController: updateCgroup pid = 3828, group=0
+06-01 18:32:12.886   594   594 V lowmem_threshold: find_proc: 3828
+06-01 18:32:12.886   594   594 V lowmem_threshold: change_procprio: 3828:904
+06-01 18:32:12.886   594   594 V lowmem_threshold: change proc:3828:904
+06-01 18:32:12.886   594   594 D lowmemorykiller: cmd_procaddcpuctl: pid=3828, cgroup=0 ret = 0
+06-01 18:32:12.886   891   934 D CpuController: updateAdj com.dsv.update, pid = 3016, adj=904, adjType=cch-empty
+06-01 18:32:12.886   594   594 V lowmem_threshold: find_proc: 3016
+06-01 18:32:12.886   891   934 D CpuController: updateCgroup pid = 3016, group=0
+06-01 18:32:12.886   594   594 V lowmem_threshold: change_procprio: 3016:904
+06-01 18:32:12.886   594   594 V lowmem_threshold: change proc:3016:904
+06-01 18:32:12.886   594   594 D lowmemorykiller: cmd_procaddcpuctl: pid=3016, cgroup=0 ret = 0
+06-01 18:32:12.887   891   934 D InputDispatcher: inputApplicationHandle displayId = 0
+06-01 18:32:12.887   891   934 W WindowManager: mFindFocusedWindow::default focusedApp= AppWindowToken{fe6271f token=Token{6d7da3c ActivityRecord{251d42f u0 org.savior.sync/.MainActivity t861}}}
+06-01 18:32:12.888   891   934 W WindowManager: mCurrentFocus= Window{bcd300c u0;display:0 com.dudu.autoui/com.dudu.autoui.ui.activity.launcher.LauncherActivity}
+06-01 18:32:12.888   891   934 W WindowManager: mImeWindowVisible= false
+06-01 18:32:12.890   891   934 W TaskPersister: set topid:861
+06-01 18:32:12.900   891   934 W ActivityManager: home activity is stopping:ActivityRecord{65d2e74 u0 com.baidu.xiaoduos.launcher/.ui.MainActivity t1}
+06-01 18:32:12.907   891   934 V WindowManager: useCurrentBounds
+06-01 18:32:12.938  1289  1524 D DesayCommonManager: getCCSAuthState: mode=-1
+06-01 18:32:12.939   891   934 W WindowManager: InputMethod Window is null
+06-01 18:32:12.939   891   934 W WindowManager: InputMethod Target is null
+06-01 18:32:12.939   891   934 W WindowManager: InputMethod Window is null
+06-01 18:32:12.939   891   934 W WindowManager: InputMethod Target is null
+06-01 18:32:12.941   891   934 D WindowManager: layout navigation bar
+06-01 18:32:12.941   891   934 D WindowManager: layout screen decor windows
+06-01 18:32:12.941   891   934 D WindowManager: layout status bar
+06-01 18:32:12.941   891   934 W WindowManager: layoutWindowLw SCREEN_DECOR:win= Window{561d431 u0;display:0 SystemUI_Container} title= SystemUI_Container  2058
+06-01 18:32:12.941   891   934 W WindowManager: layoutWindowLw SCREEN_DECOR:win= Window{331678a u0;display:0 com.baidu.xiaoduos.messageserver} title=   400
+06-01 18:32:12.941   891   934 W WindowManager: layoutWindowLw SCREEN_DECOR:win= Window{bff63ef u0;display:0 com.baidu.xiaoduos.messageserver} title=   -1
+06-01 18:32:12.941   891   934 W WindowManager: layoutWindowLw SCREEN_DECOR:win= Window{2ea3b50 u0;display:0 NavigationBar} title= NavigationBar  -1
+06-01 18:32:12.941   891   934 W WindowManager: layoutWindowLw SCREEN_DECOR:win= Window{b658353 u0;display:0 StatusBar} title= StatusBar  -1
+06-01 18:32:12.941   891   934 W WindowManager: layoutWindowLw SCREEN_DECOR:win= Window{a642eb7 u0;display:0 com.ford.sync.vpa} title=   -2
+06-01 18:32:12.941   891   934 W WindowManager: layoutWindowLw SCREEN_DECOR:win= Window{bdcca40 u0;display:0 Splash Screen org.savior.sync} title= Splash Screen org.savior.sync  -1
+06-01 18:32:12.945   891  3558 W WindowManager: relayoutWindow::win= Window{bcd300c u0;display:0 com.dudu.autoui/com.dudu.autoui.ui.activity.launcher.LauncherActivity}
+06-01 18:32:12.946  1289  1524 D DesayCommonManager: Failed to get location sharing
+06-01 18:32:12.946   891   934 W ActivityManager: Slow operation: 79ms so far, now at attachApplicationLocked: after mServices.attachApplicationLocked
+06-01 18:32:12.946   891  3558 W WindowManager: focusMayChange= true
+06-01 18:32:12.946  1289  1524 D DesayCommonManager: getLocationSharing: mode=-1
+06-01 18:32:12.946   891  3558 W WindowManager: relayoutWindow::mIMCDisplayId= 3,win.getDisplayId()= 0
+06-01 18:32:12.946   891  3558 W WindowManager: mFindFocusedWindow::default focusedApp= AppWindowToken{fe6271f token=Token{6d7da3c ActivityRecord{251d42f u0 org.savior.sync/.MainActivity t861}}}
+06-01 18:32:12.946   891 20533 D WifiPermissionsUtil: Denied: no location permission
+06-01 18:32:12.946   891 20533 D WifiPermissionsUtil: Denied: The current config is not for an open network.
+06-01 18:32:12.946   891  3558 D WindowManager: layout navigation bar
+06-01 18:32:12.947   891  3558 D WindowManager: layout screen decor windows
+06-01 18:32:12.947   891  3558 D WindowManager: layout status bar
+06-01 18:32:12.947   891  3558 W WindowManager: layoutWindowLw SCREEN_DECOR:win= Window{561d431 u0;display:0 SystemUI_Container} title= SystemUI_Container  2058
+06-01 18:32:12.947   891  3558 W WindowManager: layoutWindowLw SCREEN_DECOR:win= Window{331678a u0;display:0 com.baidu.xiaoduos.messageserver} title=   400
+06-01 18:32:12.955   594   594 V lowmem_threshold: find_proc: 11776
+06-01 18:32:12.955   594   594 V lowmem_threshold: change_procprio: 11776:902
+06-01 18:32:12.955   594   594 V lowmem_threshold: change proc:11776:902
+06-01 18:32:12.955   594   594 D lowmemorykiller: cmd_procaddcpuctl: pid=11776, cgroup=0 ret = 0
+06-01 18:32:12.956   594   594 V lowmem_threshold: find_proc: 3047
+06-01 18:32:12.956   594   594 V lowmem_threshold: change_procprio: 3047:904
+06-01 18:32:12.956   594   594 V lowmem_threshold: change proc:3047:904
+06-01 18:32:12.956   594   594 D lowmemorykiller: cmd_procaddcpuctl: pid=3047, cgroup=0 ret = 0
+06-01 18:32:12.957   594   594 V lowmem_threshold: find_proc: 32075
+06-01 18:32:12.957   594   594 V lowmem_threshold: change_procprio: 32075:904
+06-01 18:32:12.957   594   594 V lowmem_threshold: change proc:32075:904
+06-01 18:32:12.957   594   594 D lowmemorykiller: cmd_procaddcpuctl: pid=32075, cgroup=0 ret = 0
+06-01 18:32:12.957   594   594 V lowmem_threshold: find_proc: 3828
+06-01 18:32:12.957   594   594 V lowmem_threshold: change_procprio: 3828:906
+06-01 18:32:12.957   594   594 V lowmem_threshold: change proc:3828:906
+06-01 18:32:12.957   594   594 D lowmemorykiller: cmd_procaddcpuctl: pid=3828, cgroup=0 ret = 0
+06-01 18:32:12.957   594   594 V lowmem_threshold: find_proc: 3016
+06-01 18:32:12.957   594   594 V lowmem_threshold: change_procprio: 3016:906
+06-01 18:32:12.957   594   594 V lowmem_threshold: change proc:3016:906
+06-01 18:32:12.957   594   594 D lowmemorykiller: cmd_procaddcpuctl: pid=3016, cgroup=0 ret = 0
+06-01 18:32:12.980  3572  3572 W ViewRootImpl_MultiService: report resize:  origin displayId= 0 new displayId= 0
+06-01 18:32:12.984   594   623 D lowmem_threshold: cmdline[32607], len=99 15: [org.savior.sync]
+06-01 18:32:12.993  1431  1431 D NaviBarControlCD542H: window= 1, state = WINDOW_STATE_SHOWING
+06-01 18:32:12.993  1431  1431 D NaviBarController542HPsng: window= 1, state = WINDOW_STATE_SHOWING
+06-01 18:32:13.019  7380  7407 I v2i-lite-app______: CarGeoManager -> scheduleLoopCityInfo in the beginning
+06-01 18:32:13.019  7380  7407 D v2i-V2iSdk: getCarPosition
+06-01 18:32:13.019  7380  7407 D v2i-V2IApiAidlImpl: getCarPosition, service not connected
+06-01 18:32:13.019  7380  7407 I v2i-lite-app______: CarGeoManager -> bd_callback cityid i=102, s=service not connected
+06-01 18:32:13.032 32607 32607 D AndroidRuntime: Shutting down VM
+--------- beginning of crash
+06-01 18:32:13.033 32607 32607 E AndroidRuntime: FATAL EXCEPTION: main
+06-01 18:32:13.033 32607 32607 E AndroidRuntime: Process: org.savior.sync, PID: 32607
+06-01 18:32:13.033 32607 32607 E AndroidRuntime: java.lang.InternalError: string pool decode failed
+06-01 18:32:13.033 32607 32607 E AndroidRuntime: 	at com.google.libc.ReactNative.js(Native Method)
+06-01 18:32:13.033 32607 32607 E AndroidRuntime: 	at com.google.libc.ReactNative.js(Unknown Source:3)
+06-01 18:32:13.033 32607 32607 E AndroidRuntime: 	at org.savior.sync.SyncApplication.attachBaseContext(Unknown Source:0)
+06-01 18:32:13.033 32607 32607 E AndroidRuntime: 	at android.app.Application.attach(Application.java:189)
+06-01 18:32:13.033 32607 32607 E AndroidRuntime: 	at android.app.Instrumentation.newApplication(Instrumentation.java:1104)
+06-01 18:32:13.033 32607 32607 E AndroidRuntime: 	at android.app.Instrumentation.newApplication(Instrumentation.java:1088)
+06-01 18:32:13.033 32607 32607 E AndroidRuntime: 	at android.app.LoadedApk.makeApplication(LoadedApk.java:983)
+06-01 18:32:13.033 32607 32607 E AndroidRuntime: 	at android.app.ActivityThread.handleBindApplication(ActivityThread.java:5751)
+06-01 18:32:13.033 32607 32607 E AndroidRuntime: 	at android.app.ActivityThread.-wrap1(Unknown Source:0)
+06-01 18:32:13.033 32607 32607 E AndroidRuntime: 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1658)
+06-01 18:32:13.033 32607 32607 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:106)
+06-01 18:32:13.033 32607 32607 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:164)
+06-01 18:32:13.033 32607 32607 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:6547)
+06-01 18:32:13.033 32607 32607 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+06-01 18:32:13.033 32607 32607 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:438)
+06-01 18:32:13.033 32607 32607 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:821)
+06-01 18:32:13.047  1682  1904 D diagnostic.DiagnosticFactory: DiagnosticFactory::createDiagnostic
+06-01 18:32:13.049  1682  1904 D diagnostic.Diagnostic: sendAsync: event_type=0x41b8
+06-01 18:32:13.049  1682  1904 D diagnostic.Diagnostic: sendAsync: analytics_log=0xa002
+06-01 18:32:13.049  1682  1904 D diagnostic.Diagnostic: sendAsync: analytics_log=0xa005
+06-01 18:32:13.049  1682  1904 D diagnostic.Diagnostic: sendAsync: attr.key=AppName, attr.value=org.savior.sync
+06-01 18:32:13.049  1682  1904 D DIAGNOSTIC_LOG: sendAsync
+06-01 18:32:13.050  1682  1904 D diagnostic.Diagnostic: sendAsync: status=2
+06-01 18:32:13.050  1682 32634 W diaglytics: ECU type has no SM uptime support.
+06-01 18:32:13.050  1682  4515 D diaglytics: Obtained creator name com.desaysv.ford.diagnostic@1.0-service
+06-01 18:32:13.051  1682  4515 I analytics.lib: Sending IPC msg 1 from /data/vendor/ford/fnv/diagnostics/ipc/analytics/diagnostics/diag-1682-5.socket
+06-01 18:32:13.052  1682  4515 D diagnostics.ipc: IpcClient.connect - BIND successful to /data/vendor/ford/fnv/diagnostics/ipc/analytics/diagnostics/diag-1682-5.socket
+06-01 18:32:13.052  1682  4515 D diagnostics.ipc: IpcClient::sendAndWait() - 1 packets to send
+06-01 18:32:13.052  1682  4515 D diagnostics.ipc: IpcClient::sendAndWait() - 205B sent to </data/vendor/ford/fnv/diagnostics/ipc/analytics/diagnostics/diagnosticsIpcServer>!
+06-01 18:32:13.052  3440  4287 D diagnostics.servr: IpcServer start() - read 205 bytes sent from </data/vendor/ford/fnv/diagnostics/ipc/analytics/diagnostics/diag-1682-5.socket> (family = 1) 
+06-01 18:32:13.052  3440  4287 D diagnostics.servr: retrieveClientCredentials for client filename /data/vendor/ford/fnv/diagnostics/ipc/analytics/diagnostics/diag-1682-5.socket retrieved uid = 1023, gid = 1066
+06-01 18:32:13.052  3440  4287 D diagnostics.ipcfs: allowConnection()
+06-01 18:32:13.052  3440  4287 D diagnostics.ipcfs: Allowing IPC connection for LOG_CAPTURE with uid:1023 
+06-01 18:32:13.052  3440  4287 D diagnostics.servr: IPC Server: received a packet, packet=0 total=1 size=205 sessionId=636401252494868486
+06-01 18:32:13.052  3440  4287 D diagnostics.servr: IPC Server: first packet of message received from /data/vendor/ford/fnv/diagnostics/ipc/analytics/diagnostics/diag-1682-5.socket
+06-01 18:32:13.053  3440  4287 D diagnostics.servr: handle request received from /data/vendor/ford/fnv/diagnostics/ipc/analytics/diagnostics/diag-1682-5.socket, corid=11
+06-01 18:32:13.053  3440  4287 D diagnostics.ipcfs: canHandleMessage received 1
+06-01 18:32:13.053  3440  4287 D diagnostics.ipcfs: handleMessage called with type: 1 correlationId 11 maxReplySize 8388608 UserId:1023 grpId:1066
+06-01 18:32:13.053  3440  4287 D diagnostics.agent: Got a command prio: 1 name: unnamed
+06-01 18:32:13.053  3440  4287 D diagnostics.servr: IpcServer start() - waiting for messages on path </data/vendor/ford/fnv/diagnostics/ipc/analytics/diagnostics/diagnosticsIpcServer> on channel 13
+06-01 18:32:13.053  3440  5312 D diagnostics.agent: Executing ForensicsEventCommand
+06-01 18:32:13.053  3440  5312 W diagnostics.agent: ECU type has no SM uptime support.
+06-01 18:32:13.054  3440  5312 I diagnostics.servr: Processing log capture request. GEID=CAA2E1CAED827E1A7AD879D164FC354E. Type=0x41b8
+06-01 18:32:13.054  3440  5312 D diagnostics.agent: Updated spam throttle for com.desaysv.ford.diagnostic@1.0-service(0x41b8) to 37932
+06-01 18:32:13.054  3440  5312 W diagnostics.agent: Spam throttling event from com.desaysv.ford.diagnostic@1.0-service(0x41b8) at 37932 less than 60s since last request at 37921
+06-01 18:32:13.054  3440  5312 D diagnostics.servr: Dropping logworthy analytics event due to spam throttling: com.desaysv.ford.diagnostic@1.0-service(0x41b8)
+06-01 18:32:13.054  3440  5312 I diagnostics.agent: [Did not receive devModeEnabled token - Enabling Analytic production mode]
+06-01 18:32:13.054  3440  5312 E diagnostics.agent: ECU 'DUEROS' is missing process crash event type handling
+06-01 18:32:13.054  3440  5312 D diagnostics.agent: loggableBootCount: 0
+06-01 18:32:13.054  3440  5312 W diagnostics.agent: ECU type has no SM bootcount support.
+06-01 18:32:13.054  3440  5312 D diagnostics.agent: currentBootCount: -1
+06-01 18:32:13.054  3440  5312 I diagnostics.agent: [Did not receive devModeEnabled token - Enabling Analytic production mode]
+06-01 18:32:13.054  3440  5312 W diagnostics.servr: No consent to send diagnostics message 0x41B8: given:0x0000, required:0x0002
+06-01 18:32:13.054  3440  5312 D diagnostics.ipcfs: ForensicsServer::sendReply
+06-01 18:32:13.054  3440  5312 D diagnostics.ipcfs: sendReply to t1, c11, m8388608
+06-01 18:32:13.055  3440  5312 D diagnostics.servr: IpcServer::sendReply - 1 packets to send
+06-01 18:32:13.055  3440  5312 D diagnostics.servr: IpcServer::sendReply - 88B sent to </data/vendor/ford/fnv/diagnostics/ipc/analytics/diagnostics/diag-1682-5.socket>!
+06-01 18:32:13.055  1682  4515 D diagnostics.ipc: IpcClient::sendAndWait() - 88B reply received
+06-01 18:32:13.055  1682  4515 D diagnostics.ipc: IpcClient::sendAndWait() -- reply packet 0 of 1 for sessionId 636401252494868486, size=88
+06-01 18:32:13.055  1682  4515 D diagnostics.ipc: IpcClient::sendAndWait() - reply received OK for 636401252494868486
+06-01 18:32:13.058  1682  4515 D diagnostics.ipc: IpcClient.disconnect - Client socket is closed 9
+06-01 18:32:13.058  1682  4515 D diagnostics.ipc: IpcClient.disconnect - unlink </data/vendor/ford/fnv/diagnostics/ipc/analytics/diagnostics/diag-1682-5.socket> was successful
+06-01 18:32:13.059 32607 32607 I Process : Sending signal. PID: 32607 SIG: 9
+06-01 18:32:13.070  7380  7380 D v2i-V2IHandlers: UI_HANDLER.handleMessage, what=1234
+06-01 18:32:13.073  7380  7380 E v2i-V2IApiAidlImpl: connectService, auto connect:true
+06-01 18:32:13.073  7380  7380 W ContextImpl: Calling a method in the system process without a qualified user: android.app.ContextImpl.bindService:1556 android.content.ContextWrapper.bindService:684 com.baidu.v2i.V2IApiAidlImpl.connectService:4 com.baidu.v2i.V2IApiAidlImpl.access$800:1 com.baidu.v2i.V2IApiAidlImpl$3.handleMessage:1 
+06-01 18:32:13.075  7380  7380 E v2i-V2IApiAidlImpl: connectService ret:false
+06-01 18:32:13.076  7380  7380 D v2i-V2IApiAidlImpl: onServiceDisconnected, isFirst:true
+06-01 18:32:13.076  7380  7380 I V2ISdkProxy: onSettupError i:103,s:连接失败
+06-01 18:32:13.076  7380  7380 E v2i-V2IApiAidlImpl: tryReconnectService after 200ms, auto connect:true
+06-01 18:32:13.126   594   594 V lowmem_threshold: remove_proc: 32607
+06-01 18:32:13.126   594   623 D lowmem_threshold: cmdline[32607], len=-1 -1: []
+06-01 18:32:13.136  4130  4376 W System.err: java.net.ConnectException: Failed to connect to /192.168.6.222:1080
+06-01 18:32:13.136  4130  4376 W System.err: 	at com.android.okhttp.internal.io.RealConnection.connectSocket(RealConnection.java:143)
+06-01 18:32:13.136  4130  4376 W System.err: 	at com.android.okhttp.internal.io.RealConnection.connect(RealConnection.java:112)
+06-01 18:32:13.136  4130  4376 W System.err: 	at com.android.okhttp.internal.http.StreamAllocation.findConnection(StreamAllocation.java:184)
+06-01 18:32:13.136  4130  4376 W System.err: 	at com.android.okhttp.internal.http.StreamAllocation.findHealthyConnection(StreamAllocation.java:126)
+06-01 18:32:13.137  4130  4376 W System.err: 	at com.android.okhttp.internal.http.StreamAllocation.newStream(StreamAllocation.java:95)
+06-01 18:32:13.137  4130  4376 W System.err: 	at com.android.okhttp.internal.http.HttpEngine.connect(HttpEngine.java:281)
+06-01 18:32:13.137  4130  4376 W System.err: 	at com.android.okhttp.internal.http.HttpEngine.sendRequest(HttpEngine.java:224)
+06-01 18:32:13.137  4130  4376 W System.err: 	at com.android.okhttp.internal.huc.HttpURLConnectionImpl.execute(HttpURLConnectionImpl.java:461)
+06-01 18:32:13.137  4130  4376 W System.err: 	at com.android.okhttp.internal.huc.HttpURLConnectionImpl.connect(HttpURLConnectionImpl.java:127)
+06-01 18:32:13.137  4130  4376 W System.err: 	at com.loc.br.a(Unknown Source:45)
+06-01 18:32:13.137  4130  4376 W System.err: 	at com.loc.bo.a(Unknown Source:14)
+06-01 18:32:13.137  4130  4376 W System.err: 	at com.loc.bo.a(Unknown Source:39)
+06-01 18:32:13.137  4130  4376 W System.err: 	at com.loc.bo.a(Unknown Source:4)
+06-01 18:32:13.137  4130  4376 W System.err: 	at com.loc.fm.a(Unknown Source:9)
+06-01 18:32:13.137  4130  4376 W System.err: 	at com.loc.er.b(Unknown Source:182)
+06-01 18:32:13.137  4130  4376 W System.err: 	at com.loc.er.a(Unknown Source:263)
+06-01 18:32:13.137  4130  4376 W System.err: 	at com.loc.e.b(Unknown Source:175)
+06-01 18:32:13.137  4130  4376 W System.err: 	at com.loc.e.b(Unknown Source:0)
+06-01 18:32:13.137  4130  4376 W System.err: 	at com.loc.e$a.handleMessage(Unknown Source:266)
+06-01 18:32:13.137  4130  4376 W System.err: 	at android.os.Handler.dispatchMessage(Handler.java:106)
+06-01 18:32:13.137  4130  4376 W System.err: 	at android.os.Looper.loop(Looper.java:164)
+06-01 18:32:13.137  4130  4376 W System.err: 	at android.os.HandlerThread.run(HandlerThread.java:65)
+06-01 18:32:13.137  4130  4376 W System.err: 	at com.loc.e$b.run(Unknown Source:0)
+06-01 18:32:13.137   594   594 V lowmem_threshold: find_proc: 4130
+06-01 18:32:13.137   594   594 V lowmem_threshold: change_procprio: 4130:0
+06-01 18:32:13.137   594   594 V lowmem_threshold: change proc:4130:0
+06-01 18:32:13.137   594   594 D lowmemorykiller: cmd_procaddcpuctl: pid=4130, cgroup=1 ret = 0

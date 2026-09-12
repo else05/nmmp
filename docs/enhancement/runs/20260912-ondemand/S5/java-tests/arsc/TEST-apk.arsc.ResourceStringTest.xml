@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="apk.arsc.ResourceStringTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-09-12T07:27:50" hostname="DESKTOP-MHK8Q30" time="0.025">
+  <properties/>
+  <testcase name="parseMediumUtf16String" classname="apk.arsc.ResourceStringTest" time="0.002"/>
+  <testcase name="decodeUtf8String" classname="apk.arsc.ResourceStringTest" time="0.0"/>
+  <testcase name="encodeUtf8String" classname="apk.arsc.ResourceStringTest" time="0.0"/>
+  <testcase name="parseLargeUtf8String" classname="apk.arsc.ResourceStringTest" time="0.0"/>
+  <testcase name="decodeUtf16String" classname="apk.arsc.ResourceStringTest" time="0.0"/>
+  <testcase name="parseLargeUtf16String" classname="apk.arsc.ResourceStringTest" time="0.02"/>
+  <testcase name="encodeUtf16String" classname="apk.arsc.ResourceStringTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

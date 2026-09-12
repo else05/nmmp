@@ -1,0 +1,5 @@
+{"case":"arithmetic","round":-1,"iterations":100,"elapsedNs":8469114,"checksum":34350822000}
+{"case":"arithmetic","round":0,"iterations":100,"elapsedNs":8273073,"checksum":34350822000}
+{"case":"arithmetic","round":1,"iterations":100,"elapsedNs":8063334,"checksum":34350822000}
+VmHWM:	   42616 kB
+VmRSS:	   42616 kB

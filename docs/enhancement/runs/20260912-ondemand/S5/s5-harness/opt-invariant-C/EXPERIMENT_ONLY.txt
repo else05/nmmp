@@ -1,0 +1,2 @@
+Isolated per-call invariant-load experiment; no word/probe changes.
+No performance or ART result is claimed by source preparation.

@@ -1,0 +1,77 @@
+{
+  "testsRun": 12,
+  "failures": 0,
+  "errors": 0,
+  "passed": true,
+  "originalsUnchanged": true,
+  "readOnlyImportPassed": true,
+  "adbInvocations": 0,
+  "externalProcesses": 0,
+  "rejections": [
+    {
+      "fixture": "fixtures\\startup-dropped-interruption",
+      "exception": "Startup resume did not preserve the complete original ledger"
+    },
+    {
+      "fixture": "fixtures\\startup-wrong-loader",
+      "exception": "Successful sample has wrong loader identity"
+    },
+    {
+      "fixture": "fixtures\\startup-zero-time",
+      "exception": "Invalid successful sample"
+    },
+    {
+      "fixture": "fixtures\\startup-bad-resumeReason",
+      "exception": "Resume requires an explicit interruption reason"
+    },
+    {
+      "fixture": "fixtures\\startup-bad-serial",
+      "exception": "Resume protocol mismatch: serial"
+    },
+    {
+      "fixture": "fixtures\\hotspot-one-case-two-rounds",
+      "exception": "Not the frozen formal ABCD/warmup/20-round protocol"
+    },
+    {
+      "fixture": "fixtures\\hotspot-one-case",
+      "exception": "Formal hotspot report requires all nine declared scenarios"
+    },
+    {
+      "fixture": "fixtures\\hotspot-warmups",
+      "exception": "Not the frozen formal ABCD/warmup/20-round protocol"
+    },
+    {
+      "fixture": "fixtures\\hotspot-rounds",
+      "exception": "Not the frozen formal ABCD/warmup/20-round protocol"
+    },
+    {
+      "fixture": "fixtures\\hotspot-variant-order",
+      "exception": "Not the frozen formal ABCD/warmup/20-round protocol"
+    },
+    {
+      "fixture": "fixtures\\startup-wrong-warmups",
+      "exception": "Not the frozen formal ABCD/warmup/20-round protocol"
+    },
+    {
+      "fixture": "fixtures\\hotspot-uniform-wrong-checksum",
+      "exception": "Raw hotspot result differs from ledger"
+    },
+    {
+      "fixture": "fixtures\\hotspot-raw-missing",
+      "exception": "Raw hotspot log round count differs from ledger"
+    },
+    {
+      "fixture": "fixtures\\hotspot-raw-round",
+      "exception": "Raw hotspot result differs from ledger"
+    },
+    {
+      "fixture": "fixtures\\hotspot-raw-time",
+      "exception": "Raw hotspot result differs from ledger"
+    },
+    {
+      "fixture": "fixtures\\hotspot-raw-checksum",
+      "exception": "Raw hotspot result differs from ledger"
+    }
+  ],
+  "limitation": "CLI transport responses and hotspot samples are synthetic; these are collector/report tests, not device or performance evidence."
+}

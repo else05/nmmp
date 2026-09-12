@@ -1,0 +1,17 @@
+{"case":"jniObject","round":-5,"iterations":230960,"elapsedNs":1262480677,"checksum":29100960}
+{"case":"jniObject","round":-4,"iterations":230960,"elapsedNs":1217528125,"checksum":29100960}
+{"case":"jniObject","round":-3,"iterations":230960,"elapsedNs":1222898333,"checksum":29100960}
+{"case":"jniObject","round":-2,"iterations":230960,"elapsedNs":1217961666,"checksum":29100960}
+{"case":"jniObject","round":-1,"iterations":230960,"elapsedNs":1218936041,"checksum":29100960}
+{"case":"jniObject","round":0,"iterations":230960,"elapsedNs":1218033176,"checksum":29100960}
+{"case":"jniObject","round":1,"iterations":230960,"elapsedNs":1222887968,"checksum":29100960}
+{"case":"jniObject","round":2,"iterations":230960,"elapsedNs":1224502082,"checksum":29100960}
+{"case":"jniObject","round":3,"iterations":230960,"elapsedNs":1230580103,"checksum":29100960}
+{"case":"jniObject","round":4,"iterations":230960,"elapsedNs":1220727812,"checksum":29100960}
+{"case":"jniObject","round":5,"iterations":230960,"elapsedNs":1220589844,"checksum":29100960}
+{"case":"jniObject","round":6,"iterations":230960,"elapsedNs":1224260052,"checksum":29100960}
+{"case":"jniObject","round":7,"iterations":230960,"elapsedNs":1222505000,"checksum":29100960}
+{"case":"jniObject","round":8,"iterations":230960,"elapsedNs":1232195625,"checksum":29100960}
+{"case":"jniObject","round":9,"iterations":230960,"elapsedNs":1222206770,"checksum":29100960}
+VmHWM:	   52056 kB
+VmRSS:	   45168 kB

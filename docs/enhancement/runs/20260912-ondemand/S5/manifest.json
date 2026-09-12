@@ -1,0 +1,4273 @@
+{
+  "baselineCommit": "14bc959",
+  "runtimeBaseCommit": "d54abcd",
+  "implementationStages": {
+    "S1": "18dc5b1",
+    "S2": "2a86c65",
+    "S3": "a32211d",
+    "S4": "fbcf0ef",
+    "P5": "d54abcd"
+  },
+  "s5SourceChange": "Explicit test-only seeded generator streams, real ART performance harness, evidence collectors/reports, and post-review explicit decoded scratch cleanup",
+  "runtimeOptimizationsApplied": false,
+  "modes": {
+    "defaultDecode": "legacy",
+    "defaultPrivateLinker": false,
+    "candidateDecode": "on-demand-v1",
+    "candidatePrivateLinker": true,
+    "candidateStage0Vm": true
+  },
+  "inputs": {
+    "apk": {
+      "path": "D:\\AndroidProjects\\sync-ui\\app\\build\\outputs\\apk\\release\\MdoHelper_v1.6.0M_202609092340_release.apk",
+      "sha256": "660e2ddc18a500b86ed4ab076b5fe72cbc37ec6400f2ff3ae9200344befb84a5",
+      "unchangedSinceS0": true
+    },
+    "rules": {
+      "path": "D:\\AndroidProjects\\sync-ui\\app\\convertRules.txt",
+      "sha256": "08a96e71a206cda3947c1ffccfe14e214926991bcdcdf7a64e71b06592112ed5",
+      "unchangedSinceS0": true
+    },
+    "mapping": {
+      "path": "D:\\AndroidProjects\\sync-ui\\app\\build\\outputs\\mapping\\release\\mapping.txt",
+      "sha256": "52a3e30a401704195733e2a997d54376465846645df9ff748e5afd32e37c683e",
+      "unchangedSinceS0": true
+    },
+    "omvll_config": {
+      "path": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\scripts\\wsl\\omvll-config.py",
+      "sha256": "50ab29382b8249572c3b77b7ce311747667dc5064873504533d5dd7d52f259bd",
+      "note": "Same current repository whitelist supplied to all S5 native builds"
+    },
+    "verifiedAtUtc": "2026-09-12T19:24:48.058565+00:00"
+  },
+  "java": {
+    "current": {
+      "jar": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\libs\\vm-protect-2026-09-13-0136.jar",
+      "sha256": "28c13bbb3952d69640ad5bae626f0f5b7d04346e701e43dded0efd5e3734b469",
+      "suites": {
+        "apkprotect": {
+          "tests": 50,
+          "failures": 0,
+          "errors": 0
+        },
+        "arsc": {
+          "tests": 16,
+          "failures": 0,
+          "errors": 0
+        }
+      }
+    },
+    "baseline": {
+      "jar": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\baseline-14bc959\\nmm-protect\\build\\libs\\vm-protect-2026-09-13-0136.jar",
+      "sha256": "9033d186fe875858552177856c126f51b34264d0d52ca579138fd584be497747",
+      "suites": {
+        "apkprotect": {
+          "tests": 32,
+          "failures": 0,
+          "errors": 0
+        },
+        "arsc": {
+          "tests": 16,
+          "failures": 0,
+          "errors": 0
+        }
+      }
+    },
+    "compatibility": {
+      "seeds": [
+        "0123456789abcdef",
+        "fedcba9876543210",
+        "6a09e667f3bcc909"
+      ],
+      "actual_jars_shared_context_opcode_resolver_jni_equal": true,
+      "raw_output_directory": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\seed-compatibility",
+      "baseline_runtime_template_files_byte_equal_to_14bc959": 121
+    }
+  },
+  "frozenUnseededCandidate": {
+    "apkSha256": "d6947ef04d9defa93e1245d13f26fa3bf29b1e5283b8e5e0ee5b900eadae5c2b",
+    "jarSha256": "28c13bbb3952d69640ad5bae626f0f5b7d04346e701e43dded0efd5e3734b469",
+    "mode": "on-demand-v1",
+    "codecVersion": 3,
+    "templateVersion": 4,
+    "signatureBinding": true,
+    "privateLinker": true,
+    "stage0Vm": true,
+    "fixedTestSeedUsed": false,
+    "selectedMethods": 526,
+    "outerStage0Vm": true,
+    "outerBusinessVmAbsent": true,
+    "innerTokenAndNativeVm": true,
+    "oldOrTransitionalExecutionAbsent": true,
+    "probeSymbolsAbsent": true,
+    "oldKeySharesAbsent": true,
+    "directInnerNeededAbsent": true,
+    "tlsSegmentAbsent": true,
+    "wxLoadAbsent": true,
+    "innerSha256": "9194c9c8052106b7b82a652d5e4675da82790ca49c2c7669ef4551bce7bb8898",
+    "apkLibraries": [
+      "lib/arm64-v8a/libapssdk.so",
+      "lib/arm64-v8a/libimage_processing_util_jni.so",
+      "lib/arm64-v8a/libc++_en.so"
+    ]
+  },
+  "deliveredCandidate": {
+    "apkSha256": "0e11e1b2191c53a0b99ea028f4c3a8ed17a610edc722f24a493921287d0cbb96",
+    "jarSha256": "28d6f83f8d099fecbcbdfbbd7acc3b41cb7e9b0347260920430d742fa9530ad7",
+    "mode": "on-demand-v1",
+    "codecVersion": 3,
+    "templateVersion": 4,
+    "signatureBinding": true,
+    "privateLinker": true,
+    "stage0Vm": true,
+    "fixedTestSeedUsed": false,
+    "selectedMethods": 526,
+    "explicitDecodedScratchCleanup": true,
+    "innerSha256": "4f7241240a8e53ff24b4a3cf9b16c5b8eee46f419455aefa0e3ca92d2b29ea60",
+    "apkLibraries": [
+      "lib/arm64-v8a/libapssdk.so",
+      "lib/arm64-v8a/libimage_processing_util_jni.so",
+      "lib/arm64-v8a/libc++_en.so"
+    ],
+    "outerStage0Vm": true,
+    "outerBusinessVmAbsent": true,
+    "innerTokenAndNativeVm": true,
+    "oldOrTransitionalExecutionAbsent": true,
+    "probeSymbolsAbsent": true,
+    "oldKeySharesAbsent": true,
+    "directInnerNeededAbsent": true,
+    "tlsSegmentAbsent": true,
+    "wxLoadAbsent": true,
+    "randomnessEvidence": {
+      "testSeedAbsentInSameEnvironmentProbe": true,
+      "secureRandomInSameEnvironmentProbe": true,
+      "explicitBuildSeedUnset": true,
+      "jvmOptionInjectionBannerAbsentInCapturedBuildLog": true,
+      "environmentScriptSha256": "d36591d00acb9056ab206ee7833683bbd671c33d0ffaf76aa90f69f24aa57e18",
+      "buildLogSha256": "945114e17749a648e86270b7072df3d95efb75013cc771b6af311d42e8bfb2dc",
+      "javaExecutable": "/usr/bin/java",
+      "scope": "Retrospective command/log evidence plus a same-environment runtime probe; the original generation JVM did not emit an in-process randomness attestation."
+    }
+  },
+  "postReview": {
+    "artifact": {
+      "apkSha256": "0e11e1b2191c53a0b99ea028f4c3a8ed17a610edc722f24a493921287d0cbb96",
+      "jarSha256": "28d6f83f8d099fecbcbdfbbd7acc3b41cb7e9b0347260920430d742fa9530ad7",
+      "mode": "on-demand-v1",
+      "codecVersion": 3,
+      "templateVersion": 4,
+      "signatureBinding": true,
+      "privateLinker": true,
+      "stage0Vm": true,
+      "fixedTestSeedUsed": false,
+      "selectedMethods": 526,
+      "explicitDecodedScratchCleanup": true,
+      "innerSha256": "4f7241240a8e53ff24b4a3cf9b16c5b8eee46f419455aefa0e3ca92d2b29ea60",
+      "apkLibraries": [
+        "lib/arm64-v8a/libapssdk.so",
+        "lib/arm64-v8a/libimage_processing_util_jni.so",
+        "lib/arm64-v8a/libc++_en.so"
+      ],
+      "outerStage0Vm": true,
+      "outerBusinessVmAbsent": true,
+      "innerTokenAndNativeVm": true,
+      "oldOrTransitionalExecutionAbsent": true,
+      "probeSymbolsAbsent": true,
+      "oldKeySharesAbsent": true,
+      "directInnerNeededAbsent": true,
+      "tlsSegmentAbsent": true,
+      "wxLoadAbsent": true,
+      "randomnessEvidence": {
+        "testSeedAbsentInSameEnvironmentProbe": true,
+        "secureRandomInSameEnvironmentProbe": true,
+        "explicitBuildSeedUnset": true,
+        "jvmOptionInjectionBannerAbsentInCapturedBuildLog": true,
+        "environmentScriptSha256": "d36591d00acb9056ab206ee7833683bbd671c33d0ffaf76aa90f69f24aa57e18",
+        "buildLogSha256": "945114e17749a648e86270b7072df3d95efb75013cc771b6af311d42e8bfb2dc",
+        "javaExecutable": "/usr/bin/java",
+        "scope": "Retrospective command/log evidence plus a same-environment runtime probe; the original generation JVM did not emit an in-process randomness attestation."
+      }
+    },
+    "build": {
+      "java": {
+        "apkprotect": {
+          "tests": 50,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "arsc": {
+          "tests": 16,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "jarSha256": "28d6f83f8d099fecbcbdfbbd7acc3b41cb7e9b0347260920430d742fa9530ad7",
+      "templateSha256": "2fe364067e978e4cbc510449eec31d64374bbba5bfcc8e8955918a4dda7920b9",
+      "packagedTemplateExact": true,
+      "decodedRuntimeSourceExact": true,
+      "testBridgeAbsent": true
+    },
+    "device": [
+      {
+        "mode": "Release",
+        "librarySha256": {
+          "libnmmp_semantic.so": "9df2160cb178d323a4b18113873cff22a3b6fa8db6891a28ae7b7a79e7171362",
+          "libnmmvm.so": "4d7e6819544dff4677e62509dd9cc817fd34e0e7c80f5b0f3ef978ab81fe6813",
+          "nmmp_native_vm_test": "f48e75d9291bae49bd2ea0cb7c2d3f8c4a34a9459d933ff95c3ae7fa8757293a",
+          "nmmp_native_root_test": "7e1a0f0cc926ce3ef97af696cab8f34ff31ab7d55f4527bda403e3c76ba20f7a"
+        },
+        "outputs": {
+          "nativeVm": "PASS: 105 independent Java/native program vectors\n",
+          "root": "PASS: native VM recovers and publishes root once across 1600 concurrent activations\n",
+          "semantic": "SEMANTIC_PASS checks=1351\n",
+          "wipe": "DECODE_WIPE_PASS runs=801 counters=[0, 6408, 6408, 6408, 4005, 801, 1602, 23229, 1602, 6408, 0]\n"
+        }
+      },
+      {
+        "mode": "Debug",
+        "librarySha256": {
+          "libnmmp_semantic.so": "9d8f1a756e793bf6ad3fda8a676c5e9859a4e788f8c1cb22e92a784687af2bea",
+          "libnmmvm.so": "b34f16f25e727c936a3b5068cc116b4a6c2778017782812e254161b1b045d55e",
+          "nmmp_native_vm_test": "58a4aa27326dca198e12adbae8b8657687fe94129d5a72cc66824f5f4c2362a8",
+          "nmmp_native_root_test": "a4ab36b02f9814087866029e97c3495fa6bfec3e7891957eca92a353f5195e56"
+        },
+        "outputs": {
+          "nativeVm": "PASS: 105 independent Java/native program vectors\n",
+          "root": "PASS: native VM recovers and publishes root once across 1600 concurrent activations\n",
+          "semantic": "SEMANTIC_PASS checks=1351\n",
+          "wipe": "DECODE_WIPE_PASS runs=801 counters=[0, 6408, 6408, 6408, 4005, 801, 1602, 23229, 1602, 6408, 0]\n"
+        }
+      },
+      {
+        "mode": "legacy-Release",
+        "librarySha256": {
+          "libnmmp_semantic.so": "b232ed5dbcd738754f74079e32914d4283eb030f89d252dfb6dbcfe5a0dd5476",
+          "libnmmvm.so": "d9e4d9cf172992f29847729dbe6c19f0555d75a02144ac6d41b824a0e850ca1d"
+        },
+        "output": "SEMANTIC_PASS checks=1338\n"
+      },
+      {
+        "mode": "legacy-Debug",
+        "librarySha256": {
+          "libnmmp_semantic.so": "26bc93fcee9a0925d55ea4f5a4bbcb5ac299be81d95c894eb5bb06526272c87e",
+          "libnmmvm.so": "f7ca9f46f24018b52b1871844c0862977170945e720ea6a7a460124930ae72d7"
+        },
+        "output": "SEMANTIC_PASS checks=1338\n"
+      }
+    ],
+    "legacyDevice": {
+      "L": {
+        "count": 1,
+        "medianMs": 2354,
+        "p95Ms": 2354,
+        "minMs": 2354,
+        "maxMs": 2354,
+        "regressionPercentVsFirst": 0.0
+      }
+    },
+    "finalDevice": {
+      "D": {
+        "count": 1,
+        "medianMs": 2362,
+        "p95Ms": 2362,
+        "minMs": 2362,
+        "maxMs": 2362,
+        "regressionPercentVsFirst": 0.0
+      }
+    },
+    "stability": {
+      "apkSha256": "0e11e1b2191c53a0b99ea028f4c3a8ed17a610edc722f24a493921287d0cbb96",
+      "elapsedSeconds": 300.98714009998366,
+      "pid": "32474",
+      "samePidAllSamples": true,
+      "crashMarkers": [],
+      "mainWindowVisible": true,
+      "resumed": true,
+      "note": "Idle unactivated application observation, not a full business or leak test"
+    },
+    "performanceScope": "Seed1 arithmetic/branch/shortCall only, not final three-seed acceptance",
+    "releaseAcceptancePassed": false,
+    "cases": {
+      "arithmetic": {
+        "variants": {
+          "A": {
+            "count": 20,
+            "medianNs": 1378926301.5,
+            "p95Ns": 1487220104,
+            "roundsUnderOneSecond": 0
+          },
+          "C": {
+            "count": 20,
+            "medianNs": 3084287967.0,
+            "p95Ns": 3096999374,
+            "roundsUnderOneSecond": 0
+          },
+          "D": {
+            "count": 20,
+            "medianNs": 3287741900.0,
+            "p95Ns": 3311457083,
+            "roundsUnderOneSecond": 0
+          }
+        },
+        "percentVsOriginal": 138.42767350391276,
+        "percentVsBeforeWipe": 6.596463597978941,
+        "durationProtocolMet": true
+      },
+      "branch": {
+        "variants": {
+          "A": {
+            "count": 20,
+            "medianNs": 1496651718.0,
+            "p95Ns": 1503440468,
+            "roundsUnderOneSecond": 0
+          },
+          "C": {
+            "count": 20,
+            "medianNs": 3560284321.5,
+            "p95Ns": 3591815572,
+            "roundsUnderOneSecond": 0
+          },
+          "D": {
+            "count": 20,
+            "medianNs": 3684596222.5,
+            "p95Ns": 3718790311,
+            "roundsUnderOneSecond": 0
+          }
+        },
+        "percentVsOriginal": 146.18928894317412,
+        "percentVsBeforeWipe": 3.491628470493202,
+        "durationProtocolMet": true
+      },
+      "shortCall": {
+        "variants": {
+          "A": {
+            "count": 20,
+            "medianNs": 1958133541.0,
+            "p95Ns": 1982503020,
+            "roundsUnderOneSecond": 0
+          },
+          "C": {
+            "count": 20,
+            "medianNs": 1487917708.0,
+            "p95Ns": 1494492031,
+            "roundsUnderOneSecond": 0
+          },
+          "D": {
+            "count": 20,
+            "medianNs": 1733667942.0,
+            "p95Ns": 1764343698,
+            "roundsUnderOneSecond": 0
+          }
+        },
+        "percentVsOriginal": -11.463242638975867,
+        "percentVsBeforeWipe": 16.51638613336539,
+        "durationProtocolMet": true
+      }
+    },
+    "observerShutdownDiagnosis": {
+      "failedCommands": "wipe-device/commands.jsonl",
+      "crashBuffer": "wipe-device/crash-buffer.log",
+      "nohook": {
+        "semantic": "SEMANTIC_PASS checks=1351\n",
+        "exitCode": 0,
+        "librarySha256": {
+          "wipe-semantic-nohook-Release\\libnmmp_init_semantic.so": "c20103644750926d5089f2dad52c4f0e9d5d59c499c663bf8e17a621d620f202",
+          "wipe-semantic-nohook-Release\\libnmmp_semantic.so": "f96ab3c43a60b2e4314e1acffbefdd944461cf5f6b05ae2fd963c5871cc89a49",
+          "wipe-semantic-nohook-Release\\vm\\libnmmvm.so": "cebb12deed96faea833dbac142b3871e58e5750d901ae12dc3d8a3ffcc6591e2"
+        }
+      },
+      "fixedBridgeHost": {
+        "results": [
+          {
+            "mode": "debug-hook",
+            "output": "COLD_PUBLICATION_PASS calls=1600 threads=16 counters=[0, 4800, 4800, 4800, 4800, 0, 0, 20800, 3200, 4800, 0]\n",
+            "bridgeTlsAbsent": true,
+            "processExitCode": 0
+          },
+          {
+            "mode": "release-hook",
+            "output": "COLD_PUBLICATION_PASS calls=1600 threads=16 counters=[0, 4800, 4800, 4800, 4800, 0, 0, 20800, 3200, 4800, 0]\n",
+            "bridgeTlsAbsent": true,
+            "processExitCode": 0
+          }
+        ],
+        "productionRuntimeUnchanged": true,
+        "frozenBridgeSha256": "45e39f70bf76bedac449b862c17b62e5ef53ffd29a4d83b0029b915c05bccd18",
+        "androidTestPerformed": false
+      }
+    },
+    "hotspotIdentity": {
+      "api": "27",
+      "abi": "arm64-v8a",
+      "runnerSha256": "84af96d591a44a02cb9fc3da0c86d716aabcd57176759053d28b07183138b493",
+      "variants": [
+        {
+          "name": "A",
+          "library": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed1\\hotspot-A\\build\\obj\\strip\\arm64-v8a\\libc++_en.so",
+          "sha256": "e689bb37801fe5374a3e406fa7bca1d30f44b523ec0ab9c62cb4b9c37295cb38"
+        },
+        {
+          "name": "C",
+          "library": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed1\\hotspot-D\\build\\obj\\strip\\arm64-v8a\\libc++_en.so",
+          "sha256": "482eee05ad5dc5639b51aadb413e0337173ede3c356bedd89e333b827961e830"
+        },
+        {
+          "name": "D",
+          "library": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\wipe-hotspot-D\\build\\obj\\strip\\arm64-v8a\\libc++_en.so",
+          "sha256": "4deecfd9555bc7360458a53df89f3dc48cc11b4226c4d32d5df7713eaa42047c"
+        }
+      ]
+    },
+    "checksComplete": true
+  },
+  "observerShutdownDiagnosis": {
+    "nohook": {
+      "semantic": "SEMANTIC_PASS checks=1351\n",
+      "exitCode": 0,
+      "librarySha256": {
+        "wipe-semantic-nohook-Release\\libnmmp_init_semantic.so": "c20103644750926d5089f2dad52c4f0e9d5d59c499c663bf8e17a621d620f202",
+        "wipe-semantic-nohook-Release\\libnmmp_semantic.so": "f96ab3c43a60b2e4314e1acffbefdd944461cf5f6b05ae2fd963c5871cc89a49",
+        "wipe-semantic-nohook-Release\\vm\\libnmmvm.so": "cebb12deed96faea833dbac142b3871e58e5750d901ae12dc3d8a3ffcc6591e2"
+      }
+    },
+    "fixedBridgeHost": {
+      "results": [
+        {
+          "mode": "debug-hook",
+          "output": "COLD_PUBLICATION_PASS calls=1600 threads=16 counters=[0, 4800, 4800, 4800, 4800, 0, 0, 20800, 3200, 4800, 0]\n",
+          "bridgeTlsAbsent": true,
+          "processExitCode": 0
+        },
+        {
+          "mode": "release-hook",
+          "output": "COLD_PUBLICATION_PASS calls=1600 threads=16 counters=[0, 4800, 4800, 4800, 4800, 0, 0, 20800, 3200, 4800, 0]\n",
+          "bridgeTlsAbsent": true,
+          "processExitCode": 0
+        }
+      ],
+      "productionRuntimeUnchanged": true,
+      "frozenBridgeSha256": "45e39f70bf76bedac449b862c17b62e5ef53ffd29a4d83b0029b915c05bccd18",
+      "androidTestPerformed": false
+    },
+    "failedRun": "wipe-device/commands.jsonl",
+    "fixedRun": "wipe-device-fixed/summary.json"
+  },
+  "frozenPerformanceScope": "The three-seed S5 libraries precede the explicit decoded scratch cleanup; they are not final candidate acceptance",
+  "frozenDefaultLegacyDevice": {
+    "pid": "2364",
+    "apkSha256": "85c10bacc327da1ff5f10b41f74e687f1e7effedfe690511d4af558037a4d2dd",
+    "crashMarkers": [],
+    "mainWindowDrawnAndOnScreen": true,
+    "api": "27"
+  },
+  "currentDefaultLegacyDevice": {
+    "L": {
+      "count": 1,
+      "medianMs": 2354,
+      "p95Ms": 2354,
+      "minMs": 2354,
+      "maxMs": 2354,
+      "regressionPercentVsFirst": 0.0
+    }
+  },
+  "taskAdbServer": {
+    "port": 5038,
+    "pid": 26740,
+    "originalServerPort": 5037,
+    "originalServerPid": 5972,
+    "originalServerKept": true,
+    "serial": "192.168.6.118:5555",
+    "reason": "Local5037 timeout on B round4 Activity query also occurred in non-sandboxed execution. Preserve17 valid attempts and this invalid attempt; appPID14286 remains. Existing5037 serverPID5972 retained. Create task-owned local5038 serverPID26740 and connect same authorized device; continue with this server. Client-path and sandbox changes did not resolve the issue; root cause remains unproven.",
+    "cleanupPending": false,
+    "serverStartUtc": "2026-09-12T22:30:21.8549382Z",
+    "executablePath": "D:\\Android\\SDK\\platform-tools\\adb.exe",
+    "stoppedAtUtc": "2026-09-12T23:37:05.4587714Z",
+    "originalServerAfterCleanup": {
+      "pid": 5972,
+      "startUtc": "2026-09-09T13:23:13.9934248Z",
+      "path": "D:\\Android\\SDK\\platform-tools\\adb.exe"
+    }
+  },
+  "negativePackageCertificateSeed": {
+    "results": [
+      {
+        "mutation": "package",
+        "apkSha256": "6e2408e22cf3cf66703878a172490f7d29b8607dfe8b09e66cd77947ba748cb7",
+        "pid": "32000",
+        "internalError": true,
+        "errors": [
+          "NMMP initialization is not ready"
+        ]
+      },
+      {
+        "mutation": "certificate",
+        "apkSha256": "4c455ed17e7940b61531b1091e4fd617dd87249d8fe023f78ee6908a6557b921",
+        "pid": "32302",
+        "internalError": true,
+        "errors": [
+          "NMMP initialization is not ready"
+        ]
+      },
+      {
+        "mutation": "seed",
+        "apkSha256": "60546e6ba7a4969f7e58de0346023077b07e664f52906e0cffccfbdbf659b5d2",
+        "pid": "32607",
+        "internalError": true,
+        "errors": [
+          "string pool decode failed"
+        ]
+      }
+    ],
+    "unseededCandidateRestoredAndVerified": true
+  },
+  "sizes": {
+    "seed1": {
+      "A": {
+        "apkBytes": 9326566,
+        "soBytes": 1072024,
+        "apkSha256": "0162330fb1750933a5514da8090757209b1c00f699cfc5aac98697cea2a010ec",
+        "selectedMethodCount": 526
+      },
+      "B": {
+        "apkBytes": 9039813,
+        "soBytes": 617496,
+        "apkSha256": "9d8e1508e6bb8a81fd21678bee4dd4d722f99e57d3a4f3ef9ad0357ec5cec3f5",
+        "selectedMethodCount": 526
+      },
+      "C": {
+        "apkBytes": 9269189,
+        "soBytes": 1395840,
+        "apkSha256": "8a7c1d65716e3481a972fda92957400ee291aa823fee7e50944471bd0b608566",
+        "selectedMethodCount": 526
+      },
+      "D": {
+        "apkBytes": 9437158,
+        "soBytes": 794800,
+        "apkSha256": "f346442e2ac4478332674db2751c0d7f5d1ab6d7f62b9f9f13c1b3e05c5c4995",
+        "selectedMethodCount": 526
+      }
+    },
+    "seed2": {
+      "A": {
+        "apkBytes": 9330662,
+        "soBytes": 1077544,
+        "apkSha256": "11dc7a0f61c83f99a58ea5a9085db8f0604ee6f2c0f79abcc0ada2551284cec2",
+        "selectedMethodCount": 526
+      },
+      "B": {
+        "apkBytes": 9039813,
+        "soBytes": 617640,
+        "apkSha256": "eb7ca46e185e6010d16a57da0a25ff36f9d9a3470053e887bae097a0e3b22a63",
+        "selectedMethodCount": 526
+      },
+      "C": {
+        "apkBytes": 9269189,
+        "soBytes": 1394304,
+        "apkSha256": "74e0fcce1811e9061ed4ccdfe59cd4f3964bd7bf9bd790c4387eb77b7ea64265",
+        "selectedMethodCount": 526
+      },
+      "D": {
+        "apkBytes": 9437158,
+        "soBytes": 794752,
+        "apkSha256": "bcb7e07426f36e030a2b37f4078c2132239a588eacb169d44d5f159dce9c3008",
+        "selectedMethodCount": 526
+      }
+    },
+    "seed3": {
+      "A": {
+        "apkBytes": 9326566,
+        "soBytes": 1072024,
+        "apkSha256": "c3d8a7e3013f91bfe78ca0830abc4bc5e7ad4020b9ea3aedc5fb24556d8b68b9",
+        "selectedMethodCount": 526
+      },
+      "B": {
+        "apkBytes": 9039813,
+        "soBytes": 617624,
+        "apkSha256": "eaa1311460f25b28b716247b3927141ff3bc8f9db65bd6488ab3bc956cfac69e",
+        "selectedMethodCount": 526
+      },
+      "C": {
+        "apkBytes": 9269189,
+        "soBytes": 1397984,
+        "apkSha256": "a0678b76465112de2a587a8077b75eee5fd63bd95a4b1abfcdfbd377f76b3ea6",
+        "selectedMethodCount": 526
+      },
+      "D": {
+        "apkBytes": 9437158,
+        "soBytes": 794592,
+        "apkSha256": "eb868b98d43cb01d8fecc25d330f2f4a336fe06ba3421952ec4225813795cbd2",
+        "selectedMethodCount": 526
+      }
+    }
+  },
+  "measurements": {
+    "seeds": {
+      "seed1": {
+        "startup": {
+          "complete": true,
+          "unit": "ms",
+          "directory": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed1\\startup",
+          "variants": {
+            "A": {
+              "count": 20,
+              "median": 2372.5,
+              "p95": 2984,
+              "minimum": 2207,
+              "maximum": 3018,
+              "coefficientOfVariation": 0.12088619652000031,
+              "pssKb": {
+                "count": 5,
+                "median": 54365,
+                "p95": 58553,
+                "minimum": 52880,
+                "maximum": 58553,
+                "coefficientOfVariation": 0.0353358991708842
+              }
+            },
+            "B": {
+              "count": 20,
+              "median": 2361.5,
+              "p95": 2970,
+              "minimum": 2235,
+              "maximum": 3015,
+              "coefficientOfVariation": 0.11056021225260251,
+              "percentVsA": -0.4636459430980011,
+              "pssKb": {
+                "count": 5,
+                "median": 56666,
+                "p95": 58338,
+                "minimum": 55043,
+                "maximum": 58338,
+                "coefficientOfVariation": 0.02075714588485428
+              }
+            },
+            "C": {
+              "count": 20,
+              "median": 2362.0,
+              "p95": 2931,
+              "minimum": 2283,
+              "maximum": 2932,
+              "coefficientOfVariation": 0.10441712999044503,
+              "percentVsA": -0.4425711275026334,
+              "pssKb": {
+                "count": 5,
+                "median": 55290,
+                "p95": 55865,
+                "minimum": 54570,
+                "maximum": 55865,
+                "coefficientOfVariation": 0.007790197256514243
+              }
+            },
+            "D": {
+              "count": 20,
+              "median": 2391.0,
+              "p95": 2979,
+              "minimum": 2274,
+              "maximum": 3001,
+              "coefficientOfVariation": 0.10714357832771135,
+              "percentVsA": 0.7797681770284504,
+              "percentVsC": 1.2277730736663939,
+              "pssKb": {
+                "count": 5,
+                "median": 55686,
+                "p95": 56566,
+                "minimum": 55309,
+                "maximum": 56566,
+                "coefficientOfVariation": 0.008878779012464378
+              }
+            }
+          },
+          "validAttempts": 92,
+          "invalidAttempts": [],
+          "timingGatePassed": true
+        },
+        "startupIndependent": {
+          "complete": true,
+          "unit": "ms",
+          "directory": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed1\\startup-independent-resumed",
+          "variants": {
+            "A": {
+              "count": 20,
+              "median": 2329.5,
+              "p95": 2438,
+              "minimum": 2163,
+              "maximum": 2499,
+              "coefficientOfVariation": 0.03346184036078368,
+              "pssKb": {
+                "count": 5,
+                "median": 54471,
+                "p95": 63300,
+                "minimum": 53991,
+                "maximum": 63300,
+                "coefficientOfVariation": 0.06451587193510323
+              }
+            },
+            "B": {
+              "count": 20,
+              "median": 2334.5,
+              "p95": 2465,
+              "minimum": 2232,
+              "maximum": 2593,
+              "coefficientOfVariation": 0.034400591433918506,
+              "percentVsA": 0.21463833440651392,
+              "pssKb": {
+                "count": 5,
+                "median": 56552,
+                "p95": 65458,
+                "minimum": 55349,
+                "maximum": 65458,
+                "coefficientOfVariation": 0.0765151129927914
+              }
+            },
+            "C": {
+              "count": 20,
+              "median": 2319.5,
+              "p95": 2430,
+              "minimum": 2245,
+              "maximum": 2478,
+              "coefficientOfVariation": 0.024806462624363604,
+              "percentVsA": -0.42927666881305004,
+              "pssKb": {
+                "count": 5,
+                "median": 54470,
+                "p95": 65600,
+                "minimum": 53475,
+                "maximum": 65600,
+                "coefficientOfVariation": 0.07957086378680496
+              }
+            },
+            "D": {
+              "count": 20,
+              "median": 2329.0,
+              "p95": 2437,
+              "minimum": 2266,
+              "maximum": 2453,
+              "coefficientOfVariation": 0.02127570906109871,
+              "percentVsA": -0.02146383344064917,
+              "percentVsC": 0.40957102823884206,
+              "pssKb": {
+                "count": 5,
+                "median": 64868,
+                "p95": 66287,
+                "minimum": 55924,
+                "maximum": 66287,
+                "coefficientOfVariation": 0.07433208123772064
+              }
+            }
+          },
+          "validAttempts": 92,
+          "invalidAttempts": [
+            {
+              "variant": "D",
+              "round": 10,
+              "warmup": false,
+              "apkSha256": "f346442e2ac4478332674db2751c0d7f5d1ab6d7f62b9f9f13c1b3e05c5c4995",
+              "installedOverExisting": true,
+              "hostUtc": "2026-09-12T21:39:16.783068+00:00",
+              "deviceStartEpoch": 1591020098,
+              "amStart": "Starting: Intent { cmp=org.savior.sync/.MainActivity }\nStatus: ok\nActivity: org.savior.sync/.MainActivity\nThisTime: 2331\nTotalTime: 2331\nWaitTime: 2394\nComplete\n",
+              "thisTimeMs": 2331,
+              "pid": "7678",
+              "oldPid": "",
+              "oldPidExited": true,
+              "mainWindowDrawnAndOnScreen": true,
+              "drawnObservationUpperBoundMs": 2848.05,
+              "resumed": true,
+              "crashMarkers": [],
+              "loader": [
+                "         1591020099.156  7678  7678 I NMMP-Loader: ready id=f6957a76 bias=0x7aed07e000 size=1232896 unpack_us=16686 map_us=19517 constructors_us=4 bootstrap_us=469 key_us=53"
+              ],
+              "valid": false,
+              "error": "* daemon still not running\nadb.exe: cannot connect to daemon at tcp:5037: cannot connect to 127.0.0.1:5037: \u7531\u4e8e\u8fde\u63a5\u65b9\u5728\u4e00\u6bb5\u65f6\u95f4\u540e\u6ca1\u6709\u6b63\u786e\u7b54\u590d\u6216\u8fde\u63a5\u7684\u4e3b\u673a\u6ca1\u6709\u53cd\u5e94\uff0c\u8fde\u63a5\u5c1d\u8bd5\u5931\u8d25\u3002 (10060)\n"
+            }
+          ],
+          "timingGatePassed": true
+        },
+        "hotspots": {
+          "complete": true,
+          "unit": "ns",
+          "directory": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed1\\hotspots",
+          "cases": {
+            "arithmetic": {
+              "variants": {
+                "A": {
+                  "count": 20,
+                  "median": 1400696666.0,
+                  "p95": 1412362447,
+                  "minimum": 1388261926,
+                  "maximum": 1422691301,
+                  "coefficientOfVariation": 0.0050673806393160626,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43900,
+                      "finalRssKb": 43556
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43900,
+                      "finalRssKb": 43556
+                    }
+                  ]
+                },
+                "B": {
+                  "count": 20,
+                  "median": 1358066614.0,
+                  "p95": 1490502083,
+                  "minimum": 1215899687,
+                  "maximum": 1491071457,
+                  "coefficientOfVariation": 0.09401074714954918,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43928,
+                      "finalRssKb": 43584
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43928,
+                      "finalRssKb": 43584
+                    }
+                  ],
+                  "percentVsA": -3.0434892175291273
+                },
+                "C": {
+                  "count": 20,
+                  "median": 3469597524.5,
+                  "p95": 3620938124,
+                  "minimum": 3355694217,
+                  "maximum": 3627200363,
+                  "coefficientOfVariation": 0.032479529367310286,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43984,
+                      "finalRssKb": 43728
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43992,
+                      "finalRssKb": 43736
+                    }
+                  ],
+                  "percentVsA": 147.7051319332547
+                },
+                "D": {
+                  "count": 20,
+                  "median": 3611352004.0,
+                  "p95": 3654218020,
+                  "minimum": 3440319269,
+                  "maximum": 3656694165,
+                  "coefficientOfVariation": 0.02547226994193409,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 44048,
+                      "finalRssKb": 43792
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 44048,
+                      "finalRssKb": 43792
+                    }
+                  ],
+                  "percentVsA": 157.82541585631216,
+                  "percentVsC": 4.085617380662265
+                }
+              },
+              "iterations": 42350,
+              "durationLimitedDiagnostic": false,
+              "timingGatePassed": false,
+              "durationProtocolMet": true
+            },
+            "branch": {
+              "variants": {
+                "A": {
+                  "count": 20,
+                  "median": 1342687682.0,
+                  "p95": 1391784531,
+                  "minimum": 1268243489,
+                  "maximum": 1397650937,
+                  "coefficientOfVariation": 0.04041912686060617,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43904,
+                      "finalRssKb": 43560
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43900,
+                      "finalRssKb": 43556
+                    }
+                  ]
+                },
+                "B": {
+                  "count": 20,
+                  "median": 1331048098.5,
+                  "p95": 1355341354,
+                  "minimum": 1295550052,
+                  "maximum": 1356359322,
+                  "coefficientOfVariation": 0.019031843239208698,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43932,
+                      "finalRssKb": 43588
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43928,
+                      "finalRssKb": 43584
+                    }
+                  ],
+                  "percentVsA": -0.8668868908264793
+                },
+                "C": {
+                  "count": 20,
+                  "median": 3479397159.5,
+                  "p95": 3517063332,
+                  "minimum": 3435673228,
+                  "maximum": 3530066196,
+                  "coefficientOfVariation": 0.008794471454510767,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43984,
+                      "finalRssKb": 43728
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43988,
+                      "finalRssKb": 43732
+                    }
+                  ],
+                  "percentVsA": 159.13674536115988
+                },
+                "D": {
+                  "count": 20,
+                  "median": 3440792681.0,
+                  "p95": 3595546562,
+                  "minimum": 3419466873,
+                  "maximum": 3713046093,
+                  "coefficientOfVariation": 0.019664001013043116,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 44044,
+                      "finalRssKb": 43788
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 44052,
+                      "finalRssKb": 43796
+                    }
+                  ],
+                  "percentVsA": 156.26158094150148,
+                  "percentVsC": -1.1095162963674854
+                }
+              },
+              "iterations": 38391,
+              "durationLimitedDiagnostic": false,
+              "timingGatePassed": false,
+              "durationProtocolMet": true
+            },
+            "shortCall": {
+              "variants": {
+                "A": {
+                  "count": 20,
+                  "median": 2061861275.5,
+                  "p95": 2089263957,
+                  "minimum": 2019171822,
+                  "maximum": 2089644739,
+                  "coefficientOfVariation": 0.01144634860847725,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43924,
+                      "finalRssKb": 43560
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43924,
+                      "finalRssKb": 43560
+                    }
+                  ]
+                },
+                "B": {
+                  "count": 20,
+                  "median": 2086746900.0,
+                  "p95": 2097239947,
+                  "minimum": 2070581770,
+                  "maximum": 2098442447,
+                  "coefficientOfVariation": 0.00405680479549557,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 44008,
+                      "finalRssKb": 43588
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 44008,
+                      "finalRssKb": 43588
+                    }
+                  ],
+                  "percentVsA": 1.206949507015942
+                },
+                "C": {
+                  "count": 20,
+                  "median": 1501423098.5,
+                  "p95": 1512896302,
+                  "minimum": 1492522760,
+                  "maximum": 1516988906,
+                  "coefficientOfVariation": 0.004562944831449218,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43984,
+                      "finalRssKb": 43728
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43992,
+                      "finalRssKb": 43736
+                    }
+                  ],
+                  "percentVsA": -27.181177689274662
+                },
+                "D": {
+                  "count": 20,
+                  "median": 1550199426.5,
+                  "p95": 1569864947,
+                  "minimum": 1530486093,
+                  "maximum": 1573583802,
+                  "coefficientOfVariation": 0.01060923258525608,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 44056,
+                      "finalRssKb": 43800
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 44048,
+                      "finalRssKb": 43792
+                    }
+                  ],
+                  "percentVsA": -24.815532212559855,
+                  "percentVsC": 3.248673078809694
+                }
+              },
+              "iterations": 1460336,
+              "durationLimitedDiagnostic": false,
+              "timingGatePassed": true,
+              "durationProtocolMet": true
+            },
+            "jniObject": {
+              "variants": {
+                "A": {
+                  "count": 20,
+                  "median": 1286438723.5,
+                  "p95": 1328009218,
+                  "minimum": 1241809531,
+                  "maximum": 1329378906,
+                  "coefficientOfVariation": 0.027826270573462715,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 52012,
+                      "finalRssKb": 45112
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 52012,
+                      "finalRssKb": 44404
+                    }
+                  ]
+                },
+                "B": {
+                  "count": 20,
+                  "median": 1319527707.5,
+                  "p95": 1329915833,
+                  "minimum": 1307908177,
+                  "maximum": 1335840677,
+                  "coefficientOfVariation": 0.005837940135921622,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 52048,
+                      "finalRssKb": 45276
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 52044,
+                      "finalRssKb": 45352
+                    }
+                  ],
+                  "percentVsA": 2.5721383689364608
+                },
+                "C": {
+                  "count": 20,
+                  "median": 1249555026.0,
+                  "p95": 1277117760,
+                  "minimum": 1218033176,
+                  "maximum": 1288701927,
+                  "coefficientOfVariation": 0.02048095750575101,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 52060,
+                      "finalRssKb": 44976
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 52056,
+                      "finalRssKb": 45168
+                    }
+                  ],
+                  "percentVsA": -2.867116546340498
+                },
+                "D": {
+                  "count": 20,
+                  "median": 1308688853.5,
+                  "p95": 1385862343,
+                  "minimum": 1298366926,
+                  "maximum": 1544608385,
+                  "coefficientOfVariation": 0.040368534113712926,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 52376,
+                      "finalRssKb": 44624
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 52376,
+                      "finalRssKb": 45260
+                    }
+                  ],
+                  "percentVsA": 1.7295911257602992,
+                  "percentVsC": 4.732390832702715
+                }
+              },
+              "iterations": 230960,
+              "durationLimitedDiagnostic": false,
+              "timingGatePassed": true,
+              "durationProtocolMet": true
+            },
+            "arrayPayload": {
+              "variants": {
+                "A": {
+                  "count": 20,
+                  "median": 2837527394.5,
+                  "p95": 2899546405,
+                  "minimum": 2775518384,
+                  "maximum": 2922026457,
+                  "coefficientOfVariation": 0.017717262916223688,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 52036,
+                      "finalRssKb": 44156
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 52008,
+                      "finalRssKb": 45500
+                    }
+                  ]
+                },
+                "B": {
+                  "count": 20,
+                  "median": 2777410415.5,
+                  "p95": 2808254635,
+                  "minimum": 2732436301,
+                  "maximum": 2808473280,
+                  "coefficientOfVariation": 0.010549663259922576,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 51948,
+                      "finalRssKb": 45556
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 51980,
+                      "finalRssKb": 45520
+                    }
+                  ],
+                  "percentVsA": -2.1186395985647644
+                },
+                "C": {
+                  "count": 20,
+                  "median": 1516631691.5,
+                  "p95": 1576081718,
+                  "minimum": 1494169896,
+                  "maximum": 1613739270,
+                  "coefficientOfVariation": 0.019438279816564784,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 52324,
+                      "finalRssKb": 45832
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 52056,
+                      "finalRssKb": 45024
+                    }
+                  ],
+                  "percentVsA": -46.55094099039543
+                },
+                "D": {
+                  "count": 20,
+                  "median": 1496947109.0,
+                  "p95": 1571263801,
+                  "minimum": 1477765676,
+                  "maximum": 1857278021,
+                  "coefficientOfVariation": 0.052855930667543696,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 52376,
+                      "finalRssKb": 45592
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 52384,
+                      "finalRssKb": 44800
+                    }
+                  ],
+                  "percentVsA": -47.24466407261676,
+                  "percentVsC": -1.2979144910608587
+                }
+              },
+              "iterations": 72002,
+              "durationLimitedDiagnostic": false,
+              "timingGatePassed": true,
+              "durationProtocolMet": true
+            },
+            "exception": {
+              "variants": {
+                "A": {
+                  "count": 20,
+                  "median": 1482902656.0,
+                  "p95": 1490053333,
+                  "minimum": 1473031041,
+                  "maximum": 1492487187,
+                  "coefficientOfVariation": 0.0032757324161962736,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 51840,
+                      "finalRssKb": 45628
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 51852,
+                      "finalRssKb": 45540
+                    }
+                  ]
+                },
+                "B": {
+                  "count": 20,
+                  "median": 1504753307.0,
+                  "p95": 1518808281,
+                  "minimum": 1483484270,
+                  "maximum": 1534814427,
+                  "coefficientOfVariation": 0.007565578748929674,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 51880,
+                      "finalRssKb": 44836
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 51876,
+                      "finalRssKb": 45516
+                    }
+                  ],
+                  "percentVsA": 1.4735054193604435
+                },
+                "C": {
+                  "count": 20,
+                  "median": 1503219660.5,
+                  "p95": 1525697395,
+                  "minimum": 1477589322,
+                  "maximum": 1535465521,
+                  "coefficientOfVariation": 0.010731550651381637,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 51944,
+                      "finalRssKb": 45496
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 51936,
+                      "finalRssKb": 44464
+                    }
+                  ],
+                  "percentVsA": 1.3700834925202354
+                },
+                "D": {
+                  "count": 20,
+                  "median": 1499979218.5,
+                  "p95": 1514400208,
+                  "minimum": 1486387916,
+                  "maximum": 1516195103,
+                  "coefficientOfVariation": 0.00595439614832555,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 52084,
+                      "finalRssKb": 44784
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 52072,
+                      "finalRssKb": 44552
+                    }
+                  ],
+                  "percentVsA": 1.1515632823844602,
+                  "percentVsC": -0.2155667654667459
+                }
+              },
+              "iterations": 76723,
+              "durationLimitedDiagnostic": false,
+              "timingGatePassed": true,
+              "durationProtocolMet": true
+            },
+            "recursive": {
+              "variants": {
+                "A": {
+                  "count": 20,
+                  "median": 1508048411.0,
+                  "p95": 1528099531,
+                  "minimum": 1485413646,
+                  "maximum": 1530484530,
+                  "coefficientOfVariation": 0.010455189480523198,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43900,
+                      "finalRssKb": 43556
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43892,
+                      "finalRssKb": 43548
+                    }
+                  ]
+                },
+                "B": {
+                  "count": 20,
+                  "median": 1524117186.5,
+                  "p95": 1535530832,
+                  "minimum": 1517579166,
+                  "maximum": 1538071406,
+                  "coefficientOfVariation": 0.0034706849188198036,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43932,
+                      "finalRssKb": 43588
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43932,
+                      "finalRssKb": 43588
+                    }
+                  ],
+                  "percentVsA": 1.065534460484896
+                },
+                "C": {
+                  "count": 20,
+                  "median": 1473262968.0,
+                  "p95": 1560369635,
+                  "minimum": 1437090625,
+                  "maximum": 1806408593,
+                  "coefficientOfVariation": 0.054064567008713885,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43988,
+                      "finalRssKb": 43732
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43980,
+                      "finalRssKb": 43724
+                    }
+                  ],
+                  "percentVsA": -2.306652939406195
+                },
+                "D": {
+                  "count": 20,
+                  "median": 1532571900.5,
+                  "p95": 1549194010,
+                  "minimum": 1517887291,
+                  "maximum": 1554333541,
+                  "coefficientOfVariation": 0.006740995881510205,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 44052,
+                      "finalRssKb": 43796
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 44052,
+                      "finalRssKb": 43796
+                    }
+                  ],
+                  "percentVsA": 1.626173889453475,
+                  "percentVsC": 4.0256854199297365
+                }
+              },
+              "iterations": 36702,
+              "durationLimitedDiagnostic": false,
+              "timingGatePassed": true,
+              "durationProtocolMet": true
+            },
+            "multiThread": {
+              "variants": {
+                "A": {
+                  "count": 20,
+                  "median": 1548573098.5,
+                  "p95": 1705482291,
+                  "minimum": 1450850052,
+                  "maximum": 2058359895,
+                  "coefficientOfVariation": 0.08295980090171302,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43944,
+                      "finalRssKb": 43944
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43936,
+                      "finalRssKb": 43936
+                    }
+                  ]
+                },
+                "B": {
+                  "count": 20,
+                  "median": 1609856536.0,
+                  "p95": 1718360312,
+                  "minimum": 1465078906,
+                  "maximum": 1776491562,
+                  "coefficientOfVariation": 0.05276671467099073,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43884,
+                      "finalRssKb": 43856
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43880,
+                      "finalRssKb": 43856
+                    }
+                  ],
+                  "percentVsA": 3.9574132831935005
+                },
+                "C": {
+                  "count": 20,
+                  "median": 1203795754.5,
+                  "p95": 1241119374,
+                  "minimum": 1090045937,
+                  "maximum": 1318755260,
+                  "coefficientOfVariation": 0.044346715556727374,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43960,
+                      "finalRssKb": 43948
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43960,
+                      "finalRssKb": 43948
+                    }
+                  ],
+                  "percentVsA": -22.264195622018935
+                },
+                "D": {
+                  "count": 20,
+                  "median": 1185254166.0,
+                  "p95": 1275053176,
+                  "minimum": 1135982343,
+                  "maximum": 1300197031,
+                  "coefficientOfVariation": 0.03698376645644041,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 44032,
+                      "finalRssKb": 44008
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 44032,
+                      "finalRssKb": 44008
+                    }
+                  ],
+                  "percentVsA": -23.46152938159154,
+                  "percentVsC": -1.5402603332573928
+                }
+              },
+              "iterations": 793505,
+              "durationLimitedDiagnostic": false,
+              "timingGatePassed": true,
+              "durationProtocolMet": true
+            },
+            "largeShort": {
+              "variants": {
+                "A": {
+                  "count": 20,
+                  "median": 4342978097.0,
+                  "p95": 4358758800,
+                  "minimum": 4301918175,
+                  "maximum": 4358993071,
+                  "coefficientOfVariation": 0.004560742503535249,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43908,
+                      "finalRssKb": 43548
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43904,
+                      "finalRssKb": 43544
+                    }
+                  ]
+                },
+                "B": {
+                  "count": 20,
+                  "median": 4421618384.0,
+                  "p95": 4456157290,
+                  "minimum": 4400195728,
+                  "maximum": 4662138800,
+                  "coefficientOfVariation": 0.012312862631408598,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43932,
+                      "finalRssKb": 43572
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43944,
+                      "finalRssKb": 43584
+                    }
+                  ],
+                  "percentVsA": 1.8107456506474717
+                },
+                "C": {
+                  "count": 20,
+                  "median": 9152265.5,
+                  "p95": 9274896,
+                  "minimum": 8964896,
+                  "maximum": 10198021,
+                  "coefficientOfVariation": 0.026292153687807695,
+                  "roundsUnderOneSecond": 20,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43996,
+                      "finalRssKb": 43740
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43984,
+                      "finalRssKb": 43728
+                    }
+                  ],
+                  "percentVsA": -99.7892629137061
+                },
+                "D": {
+                  "count": 20,
+                  "median": 9229662.0,
+                  "p95": 10089271,
+                  "minimum": 9122239,
+                  "maximum": 12296875,
+                  "coefficientOfVariation": 0.07295393644846214,
+                  "roundsUnderOneSecond": 20,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 44308,
+                      "finalRssKb": 43796
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 44308,
+                      "finalRssKb": 43796
+                    }
+                  ],
+                  "percentVsA": -99.78748080709006,
+                  "percentVsC": 0.84565400774268
+                }
+              },
+              "iterations": 10000,
+              "durationLimitedDiagnostic": true,
+              "timingGatePassed": true,
+              "durationProtocolMet": false
+            }
+          },
+          "separateDiagnosticDirectory": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed1\\hotspots-large-diagnostic"
+        }
+      },
+      "seed2": {
+        "startup": {
+          "complete": true,
+          "unit": "ms",
+          "directory": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed2\\startup-resumed",
+          "variants": {
+            "A": {
+              "count": 20,
+              "median": 2857.0,
+              "p95": 2934,
+              "minimum": 2250,
+              "maximum": 2963,
+              "coefficientOfVariation": 0.08257179609906692,
+              "pssKb": {
+                "count": 5,
+                "median": 54390,
+                "p95": 58004,
+                "minimum": 53106,
+                "maximum": 58004,
+                "coefficientOfVariation": 0.032110540591638474
+              }
+            },
+            "B": {
+              "count": 20,
+              "median": 2875.0,
+              "p95": 3032,
+              "minimum": 2229,
+              "maximum": 3035,
+              "coefficientOfVariation": 0.08443125805171892,
+              "percentVsA": 0.630031501575079,
+              "pssKb": {
+                "count": 5,
+                "median": 55048,
+                "p95": 65541,
+                "minimum": 53970,
+                "maximum": 65541,
+                "coefficientOfVariation": 0.07662768069583728
+              }
+            },
+            "C": {
+              "count": 20,
+              "median": 2867.0,
+              "p95": 2973,
+              "minimum": 2267,
+              "maximum": 3002,
+              "coefficientOfVariation": 0.07598681726177248,
+              "percentVsA": 0.3500175008750439,
+              "pssKb": {
+                "count": 5,
+                "median": 54267,
+                "p95": 56923,
+                "minimum": 53763,
+                "maximum": 56923,
+                "coefficientOfVariation": 0.024154498901868594
+              }
+            },
+            "D": {
+              "count": 20,
+              "median": 2908.5,
+              "p95": 3089,
+              "minimum": 2303,
+              "maximum": 3103,
+              "coefficientOfVariation": 0.07705192648248402,
+              "percentVsA": 1.8025901295064761,
+              "percentVsC": 1.4475061039413983,
+              "pssKb": {
+                "count": 5,
+                "median": 56300,
+                "p95": 60988,
+                "minimum": 54707,
+                "maximum": 60988,
+                "coefficientOfVariation": 0.04209637574845245
+              }
+            }
+          },
+          "validAttempts": 92,
+          "invalidAttempts": [
+            {
+              "variant": "D",
+              "round": 13,
+              "warmup": false,
+              "apkSha256": "bcb7e07426f36e030a2b37f4078c2132239a588eacb169d44d5f159dce9c3008",
+              "installedOverExisting": true,
+              "hostUtc": "2026-09-12T18:33:55.811909+00:00",
+              "amStart": "Starting: Intent { cmp=org.savior.sync/.MainActivity }\nStatus: ok\nActivity: org.savior.sync/.MainActivity\nThisTime: 2658\nTotalTime: 2658\nWaitTime: 2742\nComplete\n",
+              "thisTimeMs": 2658,
+              "pid": "17676",
+              "oldPid": "",
+              "oldPidExited": true,
+              "mainWindowDrawnAndOnScreen": true,
+              "drawnObservationUpperBoundMs": 3212.06,
+              "resumed": true,
+              "crashMarkers": [
+                "FATAL EXCEPTION",
+                "UnsatisfiedLinkError"
+              ],
+              "valid": false,
+              "error": "['FATAL EXCEPTION', 'UnsatisfiedLinkError']"
+            }
+          ],
+          "timingGatePassed": true
+        },
+        "startupIndependent": {
+          "complete": true,
+          "unit": "ms",
+          "directory": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed2\\startup-independent-resumed2",
+          "variants": {
+            "A": {
+              "count": 20,
+              "median": 2806.0,
+              "p95": 3012,
+              "minimum": 2300,
+              "maximum": 3034,
+              "coefficientOfVariation": 0.08846118993418443,
+              "pssKb": {
+                "count": 5,
+                "median": 54188,
+                "p95": 55171,
+                "minimum": 52968,
+                "maximum": 55171,
+                "coefficientOfVariation": 0.015513208435095276
+              }
+            },
+            "B": {
+              "count": 20,
+              "median": 2872.5,
+              "p95": 3064,
+              "minimum": 2198,
+              "maximum": 3106,
+              "coefficientOfVariation": 0.10476024314448247,
+              "percentVsA": 2.3699215965787612,
+              "pssKb": {
+                "count": 5,
+                "median": 55611,
+                "p95": 61911,
+                "minimum": 54188,
+                "maximum": 61911,
+                "coefficientOfVariation": 0.05568092971538091
+              }
+            },
+            "C": {
+              "count": 20,
+              "median": 2905.0,
+              "p95": 3008,
+              "minimum": 2302,
+              "maximum": 3021,
+              "coefficientOfVariation": 0.09320044120700975,
+              "percentVsA": 3.528153955808988,
+              "pssKb": {
+                "count": 5,
+                "median": 55126,
+                "p95": 56408,
+                "minimum": 53644,
+                "maximum": 56408,
+                "coefficientOfVariation": 0.018591692014720343
+              }
+            },
+            "D": {
+              "count": 20,
+              "median": 2885.5,
+              "p95": 3021,
+              "minimum": 2319,
+              "maximum": 3053,
+              "coefficientOfVariation": 0.08522994836256435,
+              "percentVsA": 2.8332145402708564,
+              "percentVsC": -0.6712564543889799,
+              "pssKb": {
+                "count": 5,
+                "median": 55703,
+                "p95": 62024,
+                "minimum": 54846,
+                "maximum": 62024,
+                "coefficientOfVariation": 0.048025573195905634
+              }
+            }
+          },
+          "validAttempts": 92,
+          "invalidAttempts": [
+            {
+              "variant": "A",
+              "round": 14,
+              "warmup": false,
+              "apkSha256": "11dc7a0f61c83f99a58ea5a9085db8f0604ee6f2c0f79abcc0ada2551284cec2",
+              "installedOverExisting": true,
+              "hostUtc": "2026-09-12T22:06:09.549670+00:00",
+              "deviceStartEpoch": 1591021711,
+              "amStart": "Starting: Intent { cmp=org.savior.sync/.MainActivity }\nStatus: ok\nActivity: org.savior.sync/.MainActivity\nThisTime: 2844\nTotalTime: 2844\nWaitTime: 2917\nComplete\n",
+              "thisTimeMs": 2844,
+              "pid": "31311",
+              "oldPid": "",
+              "oldPidExited": true,
+              "mainWindowDrawnAndOnScreen": true,
+              "drawnObservationUpperBoundMs": 3337.26,
+              "valid": false,
+              "error": "* daemon still not running\nerror: cannot connect to daemon at tcp:5037: cannot connect to 127.0.0.1:5037: \u7531\u4e8e\u8fde\u63a5\u65b9\u5728\u4e00\u6bb5\u65f6\u95f4\u540e\u6ca1\u6709\u6b63\u786e\u7b54\u590d\u6216\u8fde\u63a5\u7684\u4e3b\u673a\u6ca1\u6709\u53cd\u5e94\uff0c\u8fde\u63a5\u5c1d\u8bd5\u5931\u8d25\u3002 (10060)\n"
+            },
+            {
+              "variant": "A",
+              "round": 21,
+              "warmup": false,
+              "apkSha256": "11dc7a0f61c83f99a58ea5a9085db8f0604ee6f2c0f79abcc0ada2551284cec2",
+              "installedOverExisting": true,
+              "hostUtc": "2026-09-12T22:17:52.916693+00:00",
+              "valid": false,
+              "error": "* daemon still not running\nadb.exe: cannot connect to daemon at tcp:5037: cannot connect to 127.0.0.1:5037: \u7531\u4e8e\u8fde\u63a5\u65b9\u5728\u4e00\u6bb5\u65f6\u95f4\u540e\u6ca1\u6709\u6b63\u786e\u7b54\u590d\u6216\u8fde\u63a5\u7684\u4e3b\u673a\u6ca1\u6709\u53cd\u5e94\uff0c\u8fde\u63a5\u5c1d\u8bd5\u5931\u8d25\u3002 (10060)\n"
+            }
+          ],
+          "timingGatePassed": true
+        },
+        "hotspots": {
+          "complete": true,
+          "unit": "ns",
+          "directory": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed2\\hotspots",
+          "cases": {
+            "arithmetic": {
+              "variants": {
+                "A": {
+                  "count": 20,
+                  "median": 1504425728.5,
+                  "p95": 1616878125,
+                  "minimum": 1408691979,
+                  "maximum": 1625534375,
+                  "coefficientOfVariation": 0.06302595954417925,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43904,
+                      "finalRssKb": 43560
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43896,
+                      "finalRssKb": 43552
+                    }
+                  ]
+                },
+                "B": {
+                  "count": 20,
+                  "median": 1628700077.5,
+                  "p95": 1757863177,
+                  "minimum": 1500125572,
+                  "maximum": 1759778958,
+                  "coefficientOfVariation": 0.07590138571849682,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43932,
+                      "finalRssKb": 43588
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43924,
+                      "finalRssKb": 43580
+                    }
+                  ],
+                  "percentVsA": 8.26058386570594
+                },
+                "C": {
+                  "count": 20,
+                  "median": 3603312212.0,
+                  "p95": 3620264634,
+                  "minimum": 3577467498,
+                  "maximum": 3621582968,
+                  "coefficientOfVariation": 0.0036223942900929906,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 44000,
+                      "finalRssKb": 43744
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43988,
+                      "finalRssKb": 43732
+                    }
+                  ],
+                  "percentVsA": 139.5141311224923
+                },
+                "D": {
+                  "count": 20,
+                  "median": 3644034686.0,
+                  "p95": 3710624217,
+                  "minimum": 3588625467,
+                  "maximum": 3885724113,
+                  "coefficientOfVariation": 0.019295212385686343,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 44052,
+                      "finalRssKb": 43796
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 44052,
+                      "finalRssKb": 43796
+                    }
+                  ],
+                  "percentVsA": 142.22097621484542,
+                  "percentVsC": 1.1301400379457371
+                }
+              },
+              "iterations": 44079,
+              "durationLimitedDiagnostic": false,
+              "timingGatePassed": false,
+              "durationProtocolMet": true
+            },
+            "branch": {
+              "variants": {
+                "A": {
+                  "count": 20,
+                  "median": 1446973385.0,
+                  "p95": 1557684895,
+                  "minimum": 1319273124,
+                  "maximum": 1557820260,
+                  "coefficientOfVariation": 0.07833916925409486,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43900,
+                      "finalRssKb": 43556
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43900,
+                      "finalRssKb": 43556
+                    }
+                  ]
+                },
+                "B": {
+                  "count": 20,
+                  "median": 1405795207.5,
+                  "p95": 1447994843,
+                  "minimum": 1357637030,
+                  "maximum": 1458195000,
+                  "coefficientOfVariation": 0.030035359004170516,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43928,
+                      "finalRssKb": 43584
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43920,
+                      "finalRssKb": 43572
+                    }
+                  ],
+                  "percentVsA": -2.8458144376995564
+                },
+                "C": {
+                  "count": 20,
+                  "median": 3448666274.5,
+                  "p95": 3485946353,
+                  "minimum": 3412487030,
+                  "maximum": 3487123489,
+                  "coefficientOfVariation": 0.006229183548354446,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43992,
+                      "finalRssKb": 43736
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43988,
+                      "finalRssKb": 43732
+                    }
+                  ],
+                  "percentVsA": 138.336538201081
+                },
+                "D": {
+                  "count": 20,
+                  "median": 3406924556.0,
+                  "p95": 3440622134,
+                  "minimum": 3347997707,
+                  "maximum": 3443589165,
+                  "coefficientOfVariation": 0.008998178123640704,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 44052,
+                      "finalRssKb": 43796
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 44044,
+                      "finalRssKb": 43788
+                    }
+                  ],
+                  "percentVsA": 135.4517775736421,
+                  "percentVsC": -1.2103727985698476
+                }
+              },
+              "iterations": 38005,
+              "durationLimitedDiagnostic": false,
+              "timingGatePassed": false,
+              "durationProtocolMet": true
+            },
+            "shortCall": {
+              "variants": {
+                "A": {
+                  "count": 20,
+                  "median": 1983346067.0,
+                  "p95": 1987787239,
+                  "minimum": 1972375884,
+                  "maximum": 1989106770,
+                  "coefficientOfVariation": 0.0020493819425529526,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43924,
+                      "finalRssKb": 43552
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43924,
+                      "finalRssKb": 43556
+                    }
+                  ]
+                },
+                "B": {
+                  "count": 20,
+                  "median": 1887141405.5,
+                  "p95": 2198727968,
+                  "minimum": 1863891561,
+                  "maximum": 2326408697,
+                  "coefficientOfVariation": 0.061287185321625505,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43952,
+                      "finalRssKb": 43584
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 44016,
+                      "finalRssKb": 43588
+                    }
+                  ],
+                  "percentVsA": -4.850624059043751
+                },
+                "C": {
+                  "count": 20,
+                  "median": 1492451953.0,
+                  "p95": 1542098957,
+                  "minimum": 1456838020,
+                  "maximum": 1542453177,
+                  "coefficientOfVariation": 0.022264210872545143,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43988,
+                      "finalRssKb": 43732
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43996,
+                      "finalRssKb": 43740
+                    }
+                  ],
+                  "percentVsA": -24.750804822605875
+                },
+                "D": {
+                  "count": 20,
+                  "median": 1501274427.0,
+                  "p95": 1508740781,
+                  "minimum": 1498604010,
+                  "maximum": 1511233125,
+                  "coefficientOfVariation": 0.002211406905012716,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 44052,
+                      "finalRssKb": 43796
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 44048,
+                      "finalRssKb": 43792
+                    }
+                  ],
+                  "percentVsA": -24.30597705670092,
+                  "percentVsC": 0.5911395661525765
+                }
+              },
+              "iterations": 1438609,
+              "durationLimitedDiagnostic": false,
+              "timingGatePassed": true,
+              "durationProtocolMet": true
+            },
+            "jniObject": {
+              "variants": {
+                "A": {
+                  "count": 20,
+                  "median": 1397914322.5,
+                  "p95": 1419832864,
+                  "minimum": 1377780104,
+                  "maximum": 1421125156,
+                  "coefficientOfVariation": 0.010148212612938252,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 51996,
+                      "finalRssKb": 45124
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 51996,
+                      "finalRssKb": 45076
+                    }
+                  ]
+                },
+                "B": {
+                  "count": 20,
+                  "median": 1388600884.5,
+                  "p95": 1398545625,
+                  "minimum": 1370078958,
+                  "maximum": 1398653385,
+                  "coefficientOfVariation": 0.004541153293992532,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 52024,
+                      "finalRssKb": 44464
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 52040,
+                      "finalRssKb": 44708
+                    }
+                  ],
+                  "percentVsA": -0.6662381127438555
+                },
+                "C": {
+                  "count": 20,
+                  "median": 1263086093.5,
+                  "p95": 1280194739,
+                  "minimum": 1246306197,
+                  "maximum": 1289698176,
+                  "coefficientOfVariation": 0.009528400269640795,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 52060,
+                      "finalRssKb": 45060
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 52072,
+                      "finalRssKb": 44920
+                    }
+                  ],
+                  "percentVsA": -9.644956549187944
+                },
+                "D": {
+                  "count": 20,
+                  "median": 1306070885.0,
+                  "p95": 1328678958,
+                  "minimum": 1287210417,
+                  "maximum": 1335764114,
+                  "coefficientOfVariation": 0.011597547332497803,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 52388,
+                      "finalRssKb": 44696
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 52384,
+                      "finalRssKb": 44708
+                    }
+                  ],
+                  "percentVsA": -6.5700333719844295,
+                  "percentVsC": 3.4031561048138537
+                }
+              },
+              "iterations": 240037,
+              "durationLimitedDiagnostic": false,
+              "timingGatePassed": true,
+              "durationProtocolMet": true
+            },
+            "arrayPayload": {
+              "variants": {
+                "A": {
+                  "count": 20,
+                  "median": 2592244114.0,
+                  "p95": 2612868749,
+                  "minimum": 2549353592,
+                  "maximum": 2620975051,
+                  "coefficientOfVariation": 0.008909018908003209,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 52044,
+                      "finalRssKb": 45496
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 52040,
+                      "finalRssKb": 45136
+                    }
+                  ]
+                },
+                "B": {
+                  "count": 20,
+                  "median": 2591579009.5,
+                  "p95": 2618339583,
+                  "minimum": 2550507551,
+                  "maximum": 2621582447,
+                  "coefficientOfVariation": 0.01001138860632638,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 51976,
+                      "finalRssKb": 45908
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 51972,
+                      "finalRssKb": 44836
+                    }
+                  ],
+                  "percentVsA": -0.025657479417462437
+                },
+                "C": {
+                  "count": 20,
+                  "median": 1385274765.0,
+                  "p95": 1400725729,
+                  "minimum": 1369950729,
+                  "maximum": 1403799218,
+                  "coefficientOfVariation": 0.006212322943225329,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 52056,
+                      "finalRssKb": 44852
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 52308,
+                      "finalRssKb": 45896
+                    }
+                  ],
+                  "percentVsA": -46.56079041636123
+                },
+                "D": {
+                  "count": 20,
+                  "median": 1386402186.5,
+                  "p95": 1414722031,
+                  "minimum": 1371365364,
+                  "maximum": 1421357187,
+                  "coefficientOfVariation": 0.00929071774541135,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 52380,
+                      "finalRssKb": 46192
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 52372,
+                      "finalRssKb": 44996
+                    }
+                  ],
+                  "percentVsA": -46.51729831259248,
+                  "percentVsC": 0.08138612847683468
+                }
+              },
+              "iterations": 65809,
+              "durationLimitedDiagnostic": false,
+              "timingGatePassed": true,
+              "durationProtocolMet": true
+            },
+            "exception": {
+              "variants": {
+                "A": {
+                  "count": 20,
+                  "median": 1460752916.0,
+                  "p95": 1475397187,
+                  "minimum": 1449900156,
+                  "maximum": 1476394166,
+                  "coefficientOfVariation": 0.004703476182631568,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 51852,
+                      "finalRssKb": 45248
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 51848,
+                      "finalRssKb": 45056
+                    }
+                  ]
+                },
+                "B": {
+                  "count": 20,
+                  "median": 1470196822.5,
+                  "p95": 1486754010,
+                  "minimum": 1461969948,
+                  "maximum": 1487774426,
+                  "coefficientOfVariation": 0.004902807150075999,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 51868,
+                      "finalRssKb": 44308
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 51860,
+                      "finalRssKb": 44652
+                    }
+                  ],
+                  "percentVsA": 0.6465095086621853
+                },
+                "C": {
+                  "count": 20,
+                  "median": 1486026744.5,
+                  "p95": 1504980989,
+                  "minimum": 1467530624,
+                  "maximum": 1506818020,
+                  "coefficientOfVariation": 0.0075403176705183044,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 51940,
+                      "finalRssKb": 44500
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 51936,
+                      "finalRssKb": 44280
+                    }
+                  ],
+                  "percentVsA": 1.73019189098782
+                },
+                "D": {
+                  "count": 20,
+                  "median": 1486365963.5,
+                  "p95": 1503263177,
+                  "minimum": 1465118281,
+                  "maximum": 1503451718,
+                  "coefficientOfVariation": 0.0073012829946004,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 52084,
+                      "finalRssKb": 45432
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 52076,
+                      "finalRssKb": 45788
+                    }
+                  ],
+                  "percentVsA": 1.7534140934756248,
+                  "percentVsC": 0.022827247305978737
+                }
+              },
+              "iterations": 75702,
+              "durationLimitedDiagnostic": false,
+              "timingGatePassed": true,
+              "durationProtocolMet": true
+            },
+            "recursive": {
+              "variants": {
+                "A": {
+                  "count": 20,
+                  "median": 1546198307.0,
+                  "p95": 1574985260,
+                  "minimum": 1514846145,
+                  "maximum": 1575233020,
+                  "coefficientOfVariation": 0.01523923708472172,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43912,
+                      "finalRssKb": 43568
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43912,
+                      "finalRssKb": 43568
+                    }
+                  ]
+                },
+                "B": {
+                  "count": 20,
+                  "median": 1517229609.0,
+                  "p95": 1528407552,
+                  "minimum": 1495343541,
+                  "maximum": 1528489323,
+                  "coefficientOfVariation": 0.007721723045962324,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43932,
+                      "finalRssKb": 43588
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43924,
+                      "finalRssKb": 43580
+                    }
+                  ],
+                  "percentVsA": -1.873543507896236
+                },
+                "C": {
+                  "count": 20,
+                  "median": 1423567994.5,
+                  "p95": 1439819791,
+                  "minimum": 1409735520,
+                  "maximum": 1444627030,
+                  "coefficientOfVariation": 0.007108312343500547,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43996,
+                      "finalRssKb": 43740
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43984,
+                      "finalRssKb": 43728
+                    }
+                  ],
+                  "percentVsA": -7.931085679296379
+                },
+                "D": {
+                  "count": 20,
+                  "median": 1457533776.0,
+                  "p95": 1470367135,
+                  "minimum": 1442223489,
+                  "maximum": 1474842604,
+                  "coefficientOfVariation": 0.007688388084095035,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 44048,
+                      "finalRssKb": 43792
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 44048,
+                      "finalRssKb": 43792
+                    }
+                  ],
+                  "percentVsA": -5.7343570096148095,
+                  "percentVsC": 2.385961305060791
+                }
+              },
+              "iterations": 35539,
+              "durationLimitedDiagnostic": false,
+              "timingGatePassed": true,
+              "durationProtocolMet": true
+            },
+            "multiThread": {
+              "variants": {
+                "A": {
+                  "count": 20,
+                  "median": 1747944583.0,
+                  "p95": 1869378177,
+                  "minimum": 1603169843,
+                  "maximum": 1979780676,
+                  "coefficientOfVariation": 0.05151129885970261,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43920,
+                      "finalRssKb": 43920
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43940,
+                      "finalRssKb": 43940
+                    }
+                  ]
+                },
+                "B": {
+                  "count": 20,
+                  "median": 1774634999.0,
+                  "p95": 1936907916,
+                  "minimum": 1633945780,
+                  "maximum": 1950101249,
+                  "coefficientOfVariation": 0.0423215950750421,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43880,
+                      "finalRssKb": 43856
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43880,
+                      "finalRssKb": 43856
+                    }
+                  ],
+                  "percentVsA": 1.5269600798322402
+                },
+                "C": {
+                  "count": 20,
+                  "median": 1331660416.0,
+                  "p95": 1429015260,
+                  "minimum": 1256208073,
+                  "maximum": 1448401250,
+                  "coefficientOfVariation": 0.04126380631197069,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43964,
+                      "finalRssKb": 43952
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43968,
+                      "finalRssKb": 43956
+                    }
+                  ],
+                  "percentVsA": -23.8156387249721
+                },
+                "D": {
+                  "count": 20,
+                  "median": 1332301327.0,
+                  "p95": 1447447604,
+                  "minimum": 1213617655,
+                  "maximum": 1467247291,
+                  "coefficientOfVariation": 0.05408364977337583,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 44040,
+                      "finalRssKb": 44016
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 44028,
+                      "finalRssKb": 44004
+                    }
+                  ],
+                  "percentVsA": -23.778972173513125,
+                  "percentVsC": 0.04812871151680387
+                }
+              },
+              "iterations": 870725,
+              "durationLimitedDiagnostic": false,
+              "timingGatePassed": true,
+              "durationProtocolMet": true
+            },
+            "largeShort": {
+              "variants": {
+                "A": {
+                  "count": 20,
+                  "median": 4280828592.0,
+                  "p95": 4290152082,
+                  "minimum": 4269584478,
+                  "maximum": 4296785884,
+                  "coefficientOfVariation": 0.001469056795766508,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43916,
+                      "finalRssKb": 43556
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43912,
+                      "finalRssKb": 43552
+                    }
+                  ]
+                },
+                "B": {
+                  "count": 20,
+                  "median": 4325428774.5,
+                  "p95": 4447573280,
+                  "minimum": 4292681457,
+                  "maximum": 4631113227,
+                  "coefficientOfVariation": 0.016972336501819216,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43936,
+                      "finalRssKb": 43576
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43936,
+                      "finalRssKb": 43576
+                    }
+                  ],
+                  "percentVsA": 1.0418586388473594
+                },
+                "C": {
+                  "count": 20,
+                  "median": 9237735.0,
+                  "p95": 9805469,
+                  "minimum": 9053021,
+                  "maximum": 10016562,
+                  "coefficientOfVariation": 0.028755966387850263,
+                  "roundsUnderOneSecond": 20,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43988,
+                      "finalRssKb": 43732
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 44084,
+                      "finalRssKb": 43740
+                    }
+                  ],
+                  "percentVsA": -99.7842068468412
+                },
+                "D": {
+                  "count": 20,
+                  "median": 9381666.5,
+                  "p95": 9670417,
+                  "minimum": 9218959,
+                  "maximum": 9684167,
+                  "coefficientOfVariation": 0.01288057659979379,
+                  "roundsUnderOneSecond": 20,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 44300,
+                      "finalRssKb": 43788
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 44304,
+                      "finalRssKb": 43792
+                    }
+                  ],
+                  "percentVsA": -99.78084461224324,
+                  "percentVsC": 1.558082148925033
+                }
+              },
+              "iterations": 10000,
+              "durationLimitedDiagnostic": true,
+              "timingGatePassed": true,
+              "durationProtocolMet": false
+            }
+          },
+          "separateDiagnosticDirectory": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed2\\hotspots-large-diagnostic"
+        }
+      },
+      "seed3": {
+        "startup": {
+          "complete": true,
+          "unit": "ms",
+          "directory": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed3\\startup-resumed",
+          "variants": {
+            "A": {
+              "count": 20,
+              "median": 2556.5,
+              "p95": 2975,
+              "minimum": 2229,
+              "maximum": 3057,
+              "coefficientOfVariation": 0.11382791597874437,
+              "pssKb": {
+                "count": 5,
+                "median": 54241,
+                "p95": 55399,
+                "minimum": 53664,
+                "maximum": 55399,
+                "coefficientOfVariation": 0.010917916220830706
+              }
+            },
+            "B": {
+              "count": 20,
+              "median": 2717.0,
+              "p95": 2907,
+              "minimum": 2291,
+              "maximum": 3077,
+              "coefficientOfVariation": 0.09481705800897969,
+              "percentVsA": 6.278114609818108,
+              "pssKb": {
+                "count": 5,
+                "median": 54743,
+                "p95": 65619,
+                "minimum": 53640,
+                "maximum": 65619,
+                "coefficientOfVariation": 0.07723067396684027
+              }
+            },
+            "C": {
+              "count": 20,
+              "median": 2739.0,
+              "p95": 3001,
+              "minimum": 2284,
+              "maximum": 3011,
+              "coefficientOfVariation": 0.1126985629384877,
+              "percentVsA": 7.138666145120287,
+              "pssKb": {
+                "count": 5,
+                "median": 55116,
+                "p95": 56332,
+                "minimum": 54146,
+                "maximum": 56332,
+                "coefficientOfVariation": 0.01419926179784771
+              }
+            },
+            "D": {
+              "count": 20,
+              "median": 2757.0,
+              "p95": 3104,
+              "minimum": 2262,
+              "maximum": 3112,
+              "coefficientOfVariation": 0.11481164801789562,
+              "percentVsA": 7.842753764912969,
+              "percentVsC": 0.6571741511500528,
+              "pssKb": {
+                "count": 5,
+                "median": 55948,
+                "p95": 64561,
+                "minimum": 54646,
+                "maximum": 64561,
+                "coefficientOfVariation": 0.06293651424606009
+              }
+            }
+          },
+          "validAttempts": 92,
+          "invalidAttempts": [
+            {
+              "variant": "A",
+              "round": 1,
+              "warmup": true,
+              "apkSha256": "c3d8a7e3013f91bfe78ca0830abc4bc5e7ad4020b9ea3aedc5fb24556d8b68b9",
+              "installedOverExisting": true,
+              "hostUtc": "2026-09-12T19:14:41.618650+00:00",
+              "deviceStartEpoch": 1591011422,
+              "amStart": "Starting: Intent { cmp=org.savior.sync/.MainActivity }\nStatus: ok\nActivity: org.savior.sync/.MainActivity\nThisTime: 2294\nTotalTime: 2294\nWaitTime: 2373\nComplete\n",
+              "thisTimeMs": 2294,
+              "pid": "25413",
+              "oldPid": "",
+              "oldPidExited": true,
+              "mainWindowDrawnAndOnScreen": true,
+              "drawnObservationUpperBoundMs": 2828.93,
+              "valid": false,
+              "error": "* daemon not running; starting now at tcp:5037\ncould not read ok from ADB Server\n* failed to start daemon\nadb.exe: cannot connect to daemon\n"
+            }
+          ],
+          "timingGatePassed": true
+        },
+        "startupIndependent": {
+          "complete": true,
+          "unit": "ms",
+          "directory": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed3\\startup-independent-resumed",
+          "variants": {
+            "A": {
+              "count": 20,
+              "median": 2890.0,
+              "p95": 3037,
+              "minimum": 2690,
+              "maximum": 3051,
+              "coefficientOfVariation": 0.031146471189258815,
+              "pssKb": {
+                "count": 5,
+                "median": 53798,
+                "p95": 63621,
+                "minimum": 53369,
+                "maximum": 63621,
+                "coefficientOfVariation": 0.07050723964019695
+              }
+            },
+            "B": {
+              "count": 20,
+              "median": 2959.0,
+              "p95": 3052,
+              "minimum": 2802,
+              "maximum": 3142,
+              "coefficientOfVariation": 0.029430036256306157,
+              "percentVsA": 2.387543252595159,
+              "pssKb": {
+                "count": 5,
+                "median": 55370,
+                "p95": 61917,
+                "minimum": 54739,
+                "maximum": 61917,
+                "coefficientOfVariation": 0.048276316086306115
+              }
+            },
+            "C": {
+              "count": 20,
+              "median": 2907.0,
+              "p95": 3062,
+              "minimum": 2543,
+              "maximum": 3103,
+              "coefficientOfVariation": 0.047581890285682084,
+              "percentVsA": 0.588235294117645,
+              "pssKb": {
+                "count": 5,
+                "median": 54929,
+                "p95": 55135,
+                "minimum": 53188,
+                "maximum": 55135,
+                "coefficientOfVariation": 0.014569221566102308
+              }
+            },
+            "D": {
+              "count": 20,
+              "median": 2925.5,
+              "p95": 3095,
+              "minimum": 2743,
+              "maximum": 3171,
+              "coefficientOfVariation": 0.03618680801549844,
+              "percentVsA": 1.2283737024221475,
+              "percentVsC": 0.6363949088407317,
+              "pssKb": {
+                "count": 5,
+                "median": 55983,
+                "p95": 64978,
+                "minimum": 54032,
+                "maximum": 64978,
+                "coefficientOfVariation": 0.0687086692846841
+              }
+            }
+          },
+          "validAttempts": 92,
+          "invalidAttempts": [
+            {
+              "variant": "B",
+              "round": 4,
+              "warmup": false,
+              "apkSha256": "eaa1311460f25b28b716247b3927141ff3bc8f9db65bd6488ab3bc956cfac69e",
+              "installedOverExisting": true,
+              "hostUtc": "2026-09-12T22:26:26.635403+00:00",
+              "deviceStartEpoch": 1591022928,
+              "amStart": "Starting: Intent { cmp=org.savior.sync/.MainActivity }\nStatus: ok\nActivity: org.savior.sync/.MainActivity\nThisTime: 2636\nTotalTime: 2636\nWaitTime: 2693\nComplete\n",
+              "thisTimeMs": 2636,
+              "pid": "14286",
+              "oldPid": "",
+              "oldPidExited": true,
+              "mainWindowDrawnAndOnScreen": true,
+              "drawnObservationUpperBoundMs": 3288.32,
+              "valid": false,
+              "error": "* daemon still not running\nerror: cannot connect to daemon at tcp:5037: cannot connect to 127.0.0.1:5037: \u7531\u4e8e\u8fde\u63a5\u65b9\u5728\u4e00\u6bb5\u65f6\u95f4\u540e\u6ca1\u6709\u6b63\u786e\u7b54\u590d\u6216\u8fde\u63a5\u7684\u4e3b\u673a\u6ca1\u6709\u53cd\u5e94\uff0c\u8fde\u63a5\u5c1d\u8bd5\u5931\u8d25\u3002 (10060)\n"
+            }
+          ],
+          "timingGatePassed": true
+        },
+        "hotspots": {
+          "complete": true,
+          "unit": "ns",
+          "directory": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed3\\hotspots",
+          "cases": {
+            "arithmetic": {
+              "variants": {
+                "A": {
+                  "count": 20,
+                  "median": 1847624712.5,
+                  "p95": 1867822656,
+                  "minimum": 1830366510,
+                  "maximum": 1868977395,
+                  "coefficientOfVariation": 0.006045091632576959,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43900,
+                      "finalRssKb": 43556
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43912,
+                      "finalRssKb": 43568
+                    }
+                  ]
+                },
+                "B": {
+                  "count": 20,
+                  "median": 1535474453.0,
+                  "p95": 1657363853,
+                  "minimum": 1455319427,
+                  "maximum": 1660917864,
+                  "coefficientOfVariation": 0.056006704127585925,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43928,
+                      "finalRssKb": 43584
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43920,
+                      "finalRssKb": 43576
+                    }
+                  ],
+                  "percentVsA": -16.894678740123204
+                },
+                "C": {
+                  "count": 20,
+                  "median": 4486970519.0,
+                  "p95": 4535551457,
+                  "minimum": 4408402446,
+                  "maximum": 4551846092,
+                  "coefficientOfVariation": 0.011129617237873809,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43984,
+                      "finalRssKb": 43728
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43984,
+                      "finalRssKb": 43728
+                    }
+                  ],
+                  "percentVsA": 142.8507525713234
+                },
+                "D": {
+                  "count": 20,
+                  "median": 4628975884.0,
+                  "p95": 4846077446,
+                  "minimum": 4429687915,
+                  "maximum": 4848674321,
+                  "coefficientOfVariation": 0.04164618446429737,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 44052,
+                      "finalRssKb": 43796
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 44052,
+                      "finalRssKb": 43796
+                    }
+                  ],
+                  "percentVsA": 150.53658639024076,
+                  "percentVsC": 3.1648383781146094
+                }
+              },
+              "iterations": 55719,
+              "durationLimitedDiagnostic": false,
+              "timingGatePassed": false,
+              "durationProtocolMet": true
+            },
+            "branch": {
+              "variants": {
+                "A": {
+                  "count": 20,
+                  "median": 1411973854.0,
+                  "p95": 1482447500,
+                  "minimum": 1333777603,
+                  "maximum": 1484625416,
+                  "coefficientOfVariation": 0.05013130145546602,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43904,
+                      "finalRssKb": 43560
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43908,
+                      "finalRssKb": 43564
+                    }
+                  ]
+                },
+                "B": {
+                  "count": 20,
+                  "median": 1465241770.5,
+                  "p95": 1521934635,
+                  "minimum": 1405975052,
+                  "maximum": 1528705416,
+                  "coefficientOfVariation": 0.03618081108862136,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43924,
+                      "finalRssKb": 43580
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43928,
+                      "finalRssKb": 43584
+                    }
+                  ],
+                  "percentVsA": 3.772585189810451
+                },
+                "C": {
+                  "count": 20,
+                  "median": 3504127551.0,
+                  "p95": 3550928384,
+                  "minimum": 3485441301,
+                  "maximum": 3561732186,
+                  "coefficientOfVariation": 0.005684035357055843,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43976,
+                      "finalRssKb": 43720
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43984,
+                      "finalRssKb": 43728
+                    }
+                  ],
+                  "percentVsA": 148.17226898877124
+                },
+                "D": {
+                  "count": 20,
+                  "median": 3579683592.5,
+                  "p95": 3614294895,
+                  "minimum": 3545016092,
+                  "maximum": 3623073644,
+                  "coefficientOfVariation": 0.006371920683642048,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 44040,
+                      "finalRssKb": 43784
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 44048,
+                      "finalRssKb": 43792
+                    }
+                  ],
+                  "percentVsA": 153.52336251546484,
+                  "percentVsC": 2.1562012341256764
+                }
+              },
+              "iterations": 39619,
+              "durationLimitedDiagnostic": false,
+              "timingGatePassed": false,
+              "durationProtocolMet": true
+            },
+            "shortCall": {
+              "variants": {
+                "A": {
+                  "count": 20,
+                  "median": 2028388645.0,
+                  "p95": 2078729686,
+                  "minimum": 1965045781,
+                  "maximum": 2081014322,
+                  "coefficientOfVariation": 0.024894206620918038,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43920,
+                      "finalRssKb": 43556
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43924,
+                      "finalRssKb": 43552
+                    }
+                  ]
+                },
+                "B": {
+                  "count": 20,
+                  "median": 1990201483.5,
+                  "p95": 2062429531,
+                  "minimum": 1913762395,
+                  "maximum": 2066297083,
+                  "coefficientOfVariation": 0.034779547277824785,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 44004,
+                      "finalRssKb": 43584
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 44008,
+                      "finalRssKb": 43588
+                    }
+                  ],
+                  "percentVsA": -1.8826353418084696
+                },
+                "C": {
+                  "count": 20,
+                  "median": 1473991588.0,
+                  "p95": 1491524375,
+                  "minimum": 1456113385,
+                  "maximum": 1492430208,
+                  "coefficientOfVariation": 0.008878907924375375,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43980,
+                      "finalRssKb": 43724
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43992,
+                      "finalRssKb": 43736
+                    }
+                  ],
+                  "percentVsA": -27.3318951161847
+                },
+                "D": {
+                  "count": 20,
+                  "median": 1591568358.5,
+                  "p95": 1644837759,
+                  "minimum": 1520131874,
+                  "maximum": 1646652500,
+                  "coefficientOfVariation": 0.03526901461195751,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 44044,
+                      "finalRssKb": 43788
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 44052,
+                      "finalRssKb": 43796
+                    }
+                  ],
+                  "percentVsA": -21.535334837175647,
+                  "percentVsC": 7.976759939283995
+                }
+              },
+              "iterations": 1437625,
+              "durationLimitedDiagnostic": false,
+              "timingGatePassed": true,
+              "durationProtocolMet": true
+            },
+            "jniObject": {
+              "variants": {
+                "A": {
+                  "count": 20,
+                  "median": 1358934114.0,
+                  "p95": 1374423645,
+                  "minimum": 1347480416,
+                  "maximum": 1376294895,
+                  "coefficientOfVariation": 0.006418104789111437,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 52024,
+                      "finalRssKb": 44600
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 52020,
+                      "finalRssKb": 44336
+                    }
+                  ]
+                },
+                "B": {
+                  "count": 20,
+                  "median": 1323364035.5,
+                  "p95": 1338030625,
+                  "minimum": 1300156770,
+                  "maximum": 1346323385,
+                  "coefficientOfVariation": 0.008642654993928637,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 52048,
+                      "finalRssKb": 45860
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 52044,
+                      "finalRssKb": 45704
+                    }
+                  ],
+                  "percentVsA": -2.617498385944561
+                },
+                "C": {
+                  "count": 20,
+                  "median": 1268997082.5,
+                  "p95": 1282547239,
+                  "minimum": 1244635259,
+                  "maximum": 1283692135,
+                  "coefficientOfVariation": 0.010647445527248525,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 52064,
+                      "finalRssKb": 44432
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 52060,
+                      "finalRssKb": 45748
+                    }
+                  ],
+                  "percentVsA": -6.618203971292758
+                },
+                "D": {
+                  "count": 20,
+                  "median": 1381443202.5,
+                  "p95": 1395487552,
+                  "minimum": 1357883073,
+                  "maximum": 1406016458,
+                  "coefficientOfVariation": 0.008902199142661738,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 52372,
+                      "finalRssKb": 44676
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 52372,
+                      "finalRssKb": 45924
+                    }
+                  ],
+                  "percentVsA": 1.6563782061328025,
+                  "percentVsC": 8.86102273603926
+                }
+              },
+              "iterations": 232636,
+              "durationLimitedDiagnostic": false,
+              "timingGatePassed": true,
+              "durationProtocolMet": true
+            },
+            "arrayPayload": {
+              "variants": {
+                "A": {
+                  "count": 20,
+                  "median": 2858184270.0,
+                  "p95": 2870728176,
+                  "minimum": 2847198541,
+                  "maximum": 2874193072,
+                  "coefficientOfVariation": 0.002411991490645678,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 52040,
+                      "finalRssKb": 44480
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 52016,
+                      "finalRssKb": 44868
+                    }
+                  ]
+                },
+                "B": {
+                  "count": 20,
+                  "median": 2846225207.0,
+                  "p95": 2885320832,
+                  "minimum": 2793139218,
+                  "maximum": 2894778124,
+                  "coefficientOfVariation": 0.013888853790197787,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 51984,
+                      "finalRssKb": 45676
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 51972,
+                      "finalRssKb": 44392
+                    }
+                  ],
+                  "percentVsA": -0.4184146951448975
+                },
+                "C": {
+                  "count": 20,
+                  "median": 1519060910.5,
+                  "p95": 1832396926,
+                  "minimum": 1502494739,
+                  "maximum": 1989390311,
+                  "coefficientOfVariation": 0.07719072590647237,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 52056,
+                      "finalRssKb": 45368
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 52056,
+                      "finalRssKb": 45016
+                    }
+                  ],
+                  "percentVsA": -46.85224019863492
+                },
+                "D": {
+                  "count": 20,
+                  "median": 1528600338.0,
+                  "p95": 1544156145,
+                  "minimum": 1518722239,
+                  "maximum": 1549249948,
+                  "coefficientOfVariation": 0.005426077001347974,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 52364,
+                      "finalRssKb": 46308
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 52376,
+                      "finalRssKb": 46100
+                    }
+                  ],
+                  "percentVsA": -46.51848188920303,
+                  "percentVsC": 0.6279818955291283
+                }
+              },
+              "iterations": 72257,
+              "durationLimitedDiagnostic": false,
+              "timingGatePassed": true,
+              "durationProtocolMet": true
+            },
+            "exception": {
+              "variants": {
+                "A": {
+                  "count": 20,
+                  "median": 1463335728.5,
+                  "p95": 1471601354,
+                  "minimum": 1456283593,
+                  "maximum": 1473583646,
+                  "coefficientOfVariation": 0.003221138082233515,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 51844,
+                      "finalRssKb": 44884
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 51860,
+                      "finalRssKb": 45792
+                    }
+                  ]
+                },
+                "B": {
+                  "count": 20,
+                  "median": 1474699895.0,
+                  "p95": 1505266041,
+                  "minimum": 1461372864,
+                  "maximum": 1531629010,
+                  "coefficientOfVariation": 0.010987247567710351,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 51888,
+                      "finalRssKb": 44844
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 51876,
+                      "finalRssKb": 44852
+                    }
+                  ],
+                  "percentVsA": 0.7765932505214623
+                },
+                "C": {
+                  "count": 20,
+                  "median": 1500262265.0,
+                  "p95": 1515766770,
+                  "minimum": 1474942655,
+                  "maximum": 1536969791,
+                  "coefficientOfVariation": 0.009151946022725123,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 51944,
+                      "finalRssKb": 44312
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 51936,
+                      "finalRssKb": 44472
+                    }
+                  ],
+                  "percentVsA": 2.523449389010124
+                },
+                "D": {
+                  "count": 20,
+                  "median": 1512207004.5,
+                  "p95": 1525422760,
+                  "minimum": 1493135156,
+                  "maximum": 1531364166,
+                  "coefficientOfVariation": 0.006675621196506108,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 52076,
+                      "finalRssKb": 45684
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 52076,
+                      "finalRssKb": 45740
+                    }
+                  ],
+                  "percentVsA": 3.339717267075537,
+                  "percentVsC": 0.7961767604679482
+                }
+              },
+              "iterations": 76078,
+              "durationLimitedDiagnostic": false,
+              "timingGatePassed": true,
+              "durationProtocolMet": true
+            },
+            "recursive": {
+              "variants": {
+                "A": {
+                  "count": 20,
+                  "median": 1541838619.5,
+                  "p95": 1570153957,
+                  "minimum": 1503436353,
+                  "maximum": 1571372968,
+                  "coefficientOfVariation": 0.0179137066918788,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43908,
+                      "finalRssKb": 43564
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43900,
+                      "finalRssKb": 43556
+                    }
+                  ]
+                },
+                "B": {
+                  "count": 20,
+                  "median": 1577814400.0,
+                  "p95": 1583747395,
+                  "minimum": 1567740728,
+                  "maximum": 1585815416,
+                  "coefficientOfVariation": 0.002865133535103836,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43932,
+                      "finalRssKb": 43588
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43928,
+                      "finalRssKb": 43584
+                    }
+                  ],
+                  "percentVsA": 2.333303890887528
+                },
+                "C": {
+                  "count": 20,
+                  "median": 1470450207.5,
+                  "p95": 1481158801,
+                  "minimum": 1460067760,
+                  "maximum": 1484856198,
+                  "coefficientOfVariation": 0.004049944561952172,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43988,
+                      "finalRssKb": 43732
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43976,
+                      "finalRssKb": 43720
+                    }
+                  ],
+                  "percentVsA": -4.630083271824548
+                },
+                "D": {
+                  "count": 20,
+                  "median": 1562931171.5,
+                  "p95": 1570828489,
+                  "minimum": 1548262187,
+                  "maximum": 1571910624,
+                  "coefficientOfVariation": 0.0036109077150636585,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 44056,
+                      "finalRssKb": 43800
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 44040,
+                      "finalRssKb": 43784
+                    }
+                  ],
+                  "percentVsA": 1.3680129511115746,
+                  "percentVsC": 6.289295858391042
+                }
+              },
+              "iterations": 36832,
+              "durationLimitedDiagnostic": false,
+              "timingGatePassed": true,
+              "durationProtocolMet": true
+            },
+            "multiThread": {
+              "variants": {
+                "A": {
+                  "count": 20,
+                  "median": 1289190390.0,
+                  "p95": 1345990728,
+                  "minimum": 1103735156,
+                  "maximum": 1350450885,
+                  "coefficientOfVariation": 0.049059472011935404,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43952,
+                      "finalRssKb": 43952
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43940,
+                      "finalRssKb": 43940
+                    }
+                  ]
+                },
+                "B": {
+                  "count": 20,
+                  "median": 1284242734.0,
+                  "p95": 1408075312,
+                  "minimum": 1186193854,
+                  "maximum": 1434945156,
+                  "coefficientOfVariation": 0.045749769495349465,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43868,
+                      "finalRssKb": 43844
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43880,
+                      "finalRssKb": 43856
+                    }
+                  ],
+                  "percentVsA": -0.38378008697380617
+                },
+                "C": {
+                  "count": 20,
+                  "median": 943562135.5,
+                  "p95": 997821667,
+                  "minimum": 835573333,
+                  "maximum": 1013536198,
+                  "coefficientOfVariation": 0.05332323265826426,
+                  "roundsUnderOneSecond": 19,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43952,
+                      "finalRssKb": 43940
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43956,
+                      "finalRssKb": 43944
+                    }
+                  ],
+                  "percentVsA": -26.809713846843053
+                },
+                "D": {
+                  "count": 20,
+                  "median": 1033717343.5,
+                  "p95": 1086517395,
+                  "minimum": 919301979,
+                  "maximum": 1109355729,
+                  "coefficientOfVariation": 0.04821799738612782,
+                  "roundsUnderOneSecond": 6,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 44028,
+                      "finalRssKb": 44004
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 44028,
+                      "finalRssKb": 44004
+                    }
+                  ],
+                  "percentVsA": -19.816549090161928,
+                  "percentVsC": 9.554771711163056
+                }
+              },
+              "iterations": 627463,
+              "durationLimitedDiagnostic": false,
+              "timingGatePassed": true,
+              "durationProtocolMet": false
+            },
+            "largeShort": {
+              "variants": {
+                "A": {
+                  "count": 20,
+                  "median": 4329790285.0,
+                  "p95": 4375734946,
+                  "minimum": 4267082602,
+                  "maximum": 4385954217,
+                  "coefficientOfVariation": 0.01101516313756383,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43908,
+                      "finalRssKb": 43548
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43908,
+                      "finalRssKb": 43548
+                    }
+                  ]
+                },
+                "B": {
+                  "count": 20,
+                  "median": 4284209243.5,
+                  "p95": 4349001353,
+                  "minimum": 4272267967,
+                  "maximum": 4537940935,
+                  "coefficientOfVariation": 0.013285787572227828,
+                  "roundsUnderOneSecond": 0,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43940,
+                      "finalRssKb": 43580
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43932,
+                      "finalRssKb": 43572
+                    }
+                  ],
+                  "percentVsA": -1.052730929207113
+                },
+                "C": {
+                  "count": 20,
+                  "median": 9137916.5,
+                  "p95": 9377136,
+                  "minimum": 9035677,
+                  "maximum": 9394740,
+                  "coefficientOfVariation": 0.010184645150009195,
+                  "roundsUnderOneSecond": 20,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 43980,
+                      "finalRssKb": 43724
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 43988,
+                      "finalRssKb": 43732
+                    }
+                  ],
+                  "percentVsA": -99.78895244576493
+                },
+                "D": {
+                  "count": 20,
+                  "median": 9488281.5,
+                  "p95": 10229375,
+                  "minimum": 9367396,
+                  "maximum": 10409375,
+                  "coefficientOfVariation": 0.02736642283777755,
+                  "roundsUnderOneSecond": 20,
+                  "processMemory": [
+                    {
+                      "batch": 0,
+                      "peakRssKb": 44296,
+                      "finalRssKb": 43784
+                    },
+                    {
+                      "batch": 1,
+                      "peakRssKb": 44304,
+                      "finalRssKb": 43792
+                    }
+                  ],
+                  "percentVsA": -99.78086048340792,
+                  "percentVsC": 3.834189117398923
+                }
+              },
+              "iterations": 10000,
+              "durationLimitedDiagnostic": true,
+              "timingGatePassed": true,
+              "durationProtocolMet": false
+            }
+          },
+          "separateDiagnosticDirectory": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\s5\\seed3\\hotspots-large-diagnostic"
+        }
+      }
+    },
+    "measurementComplete": true,
+    "performanceGatePassed": false,
+    "releaseAcceptancePassed": false,
+    "externalGaps": [
+      "No API26 device validation",
+      "Activated/server-backed business paths not validated"
+    ],
+    "startupNoiseReviewComplete": true,
+    "memoryScope": "APK PSS is sampled after startup; harness VmHWM is process peak RSS, including ART. Neither proves absence of leaks."
+  },
+  "diagnostics": {
+    "diagnosis": {
+      "arithmetic": {
+        "A": {
+          "count": 20,
+          "medianNs": 1430515729.0,
+          "p95Ns": 1450470781,
+          "minNs": 1409588437,
+          "roundsUnderOneSecond": 0,
+          "regressionPercentVsFirst": 0.0
+        },
+        "S1": {
+          "count": 20,
+          "medianNs": 1732533932.0,
+          "p95Ns": 1761396301,
+          "minNs": 1689620468,
+          "roundsUnderOneSecond": 0,
+          "regressionPercentVsFirst": 21.11253982583787
+        },
+        "L": {
+          "count": 20,
+          "medianNs": 2376908072.0,
+          "p95Ns": 2486543697,
+          "minNs": 2266381145,
+          "roundsUnderOneSecond": 0,
+          "regressionPercentVsFirst": 66.15742307577241
+        },
+        "C": {
+          "count": 20,
+          "medianNs": 3641781457.0,
+          "p95Ns": 3716679269,
+          "minNs": 3479281040,
+          "roundsUnderOneSecond": 0,
+          "regressionPercentVsFirst": 154.57821841258485
+        },
+        "O": {
+          "count": 20,
+          "medianNs": 3285014217.5,
+          "p95Ns": 3309169009,
+          "minNs": 3243977655,
+          "roundsUnderOneSecond": 0,
+          "regressionPercentVsFirst": 129.63845492257428,
+          "percentVsC": -9.796503269416256
+        }
+      },
+      "shortCall": {
+        "A": {
+          "count": 20,
+          "medianNs": 1976569583.0,
+          "p95Ns": 2026131145,
+          "minNs": 1922972447,
+          "roundsUnderOneSecond": 0,
+          "regressionPercentVsFirst": 0.0
+        },
+        "S1": {
+          "count": 20,
+          "medianNs": 1989801432.0,
+          "p95Ns": 2083270416,
+          "minNs": 1901808124,
+          "roundsUnderOneSecond": 0,
+          "regressionPercentVsFirst": 0.6694350208464206
+        },
+        "L": {
+          "count": 20,
+          "medianNs": 2224427134.5,
+          "p95Ns": 2245246406,
+          "minNs": 2207255989,
+          "roundsUnderOneSecond": 0,
+          "regressionPercentVsFirst": 12.539783756249378
+        },
+        "C": {
+          "count": 20,
+          "medianNs": 1491610807.0,
+          "p95Ns": 1507999635,
+          "minNs": 1482267759,
+          "roundsUnderOneSecond": 0,
+          "regressionPercentVsFirst": -24.535375843634032
+        },
+        "O": {
+          "count": 20,
+          "medianNs": 1464278775.5,
+          "p95Ns": 1469629322,
+          "minNs": 1453929687,
+          "roundsUnderOneSecond": 0,
+          "regressionPercentVsFirst": -25.91817722513238,
+          "percentVsC": -1.8323835796665744
+        }
+      }
+    },
+    "diagnosis-invariant": {
+      "arithmetic": {
+        "A": {
+          "count": 20,
+          "medianNs": 1543635207.5,
+          "p95Ns": 1668319843,
+          "minNs": 1415825364,
+          "roundsUnderOneSecond": 0,
+          "regressionPercentVsFirst": 0.0
+        },
+        "L": {
+          "count": 20,
+          "medianNs": 2282612603.0,
+          "p95Ns": 2329038853,
+          "minNs": 2240252082,
+          "roundsUnderOneSecond": 0,
+          "regressionPercentVsFirst": 47.87254086390096
+        },
+        "C": {
+          "count": 20,
+          "medianNs": 3494156171.0,
+          "p95Ns": 3634278697,
+          "minNs": 3388493332,
+          "roundsUnderOneSecond": 0,
+          "regressionPercentVsFirst": 126.35893208596696
+        },
+        "IL": {
+          "count": 20,
+          "medianNs": 2303680207.5,
+          "p95Ns": 2326897655,
+          "minNs": 2108701666,
+          "roundsUnderOneSecond": 0,
+          "regressionPercentVsFirst": 49.237345475614916,
+          "percentVsL": 0.9229601410380095
+        },
+        "IC": {
+          "count": 20,
+          "medianNs": 3429073150.0,
+          "p95Ns": 3521324687,
+          "minNs": 3324904165,
+          "roundsUnderOneSecond": 0,
+          "regressionPercentVsFirst": 122.14271437573441,
+          "percentVsC": -1.8626248460260952
+        }
+      },
+      "shortCall": {
+        "A": {
+          "count": 20,
+          "medianNs": 1991176744.0,
+          "p95Ns": 2066010729,
+          "minNs": 1895508125,
+          "roundsUnderOneSecond": 0,
+          "regressionPercentVsFirst": 0.0
+        },
+        "L": {
+          "count": 20,
+          "medianNs": 2213641197.0,
+          "p95Ns": 2236948020,
+          "minNs": 2180045885,
+          "roundsUnderOneSecond": 0,
+          "regressionPercentVsFirst": 11.172511615071379
+        },
+        "C": {
+          "count": 20,
+          "medianNs": 1516772994.0,
+          "p95Ns": 1545513698,
+          "minNs": 1478766145,
+          "roundsUnderOneSecond": 0,
+          "regressionPercentVsFirst": -23.82529584224593
+        },
+        "IL": {
+          "count": 20,
+          "medianNs": 2180995337.5,
+          "p95Ns": 2189317083,
+          "minNs": 2168976770,
+          "roundsUnderOneSecond": 0,
+          "regressionPercentVsFirst": 9.53298566146772,
+          "percentVsL": -1.4747584000624259
+        },
+        "IC": {
+          "count": 20,
+          "medianNs": 1476728385.0,
+          "p95Ns": 1536231667,
+          "minNs": 1460732708,
+          "roundsUnderOneSecond": 0,
+          "regressionPercentVsFirst": -25.836398529170445,
+          "percentVsC": -2.640118802115221
+        }
+      }
+    }
+  },
+  "unavailableCoverage": [
+    "ARM64 API26 device",
+    "Activated/server-backed complete business flow"
+  ],
+  "attributionLimit": "S1, current legacy and current demand measured separately; S2/S3/S4 not individually timed",
+  "releaseAcceptancePassed": false,
+  "deliveredGenerator": {
+    "jar": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\libs\\vm-protect-2026-09-13-0526.jar",
+    "sha256": "28d6f83f8d099fecbcbdfbbd7acc3b41cb7e9b0347260920430d742fa9530ad7"
+  },
+  "methodAudits": {
+    "seed1-A": {
+      "methods": 526,
+      "packagedNativeMethodSetExactMatch": true,
+      "reportSha256": "f128156b73b63517974083023101177570a7c1a35c8ee1cc63e329f0c3e25a40"
+    },
+    "seed1-B": {
+      "methods": 526,
+      "packagedNativeMethodSetExactMatch": true,
+      "reportSha256": "f128156b73b63517974083023101177570a7c1a35c8ee1cc63e329f0c3e25a40"
+    },
+    "seed1-C": {
+      "methods": 526,
+      "packagedNativeMethodSetExactMatch": true,
+      "reportSha256": "05f1da9f7b8129b513004f5d4403cc66ca14765031eacea25a5ef5da0f9df5f2"
+    },
+    "seed1-D": {
+      "methods": 526,
+      "packagedNativeMethodSetExactMatch": true,
+      "reportSha256": "05f1da9f7b8129b513004f5d4403cc66ca14765031eacea25a5ef5da0f9df5f2"
+    },
+    "seed2-A": {
+      "methods": 526,
+      "packagedNativeMethodSetExactMatch": true,
+      "reportSha256": "ee35780c94b8556ec1a575a5cc1df97d3f5d6d5b8a3247ab096985cbbc021676"
+    },
+    "seed2-B": {
+      "methods": 526,
+      "packagedNativeMethodSetExactMatch": true,
+      "reportSha256": "ee35780c94b8556ec1a575a5cc1df97d3f5d6d5b8a3247ab096985cbbc021676"
+    },
+    "seed2-C": {
+      "methods": 526,
+      "packagedNativeMethodSetExactMatch": true,
+      "reportSha256": "42538babd81a1719d257a8e5105cf108f43df953f1146418b04e68928468fdf3"
+    },
+    "seed2-D": {
+      "methods": 526,
+      "packagedNativeMethodSetExactMatch": true,
+      "reportSha256": "42538babd81a1719d257a8e5105cf108f43df953f1146418b04e68928468fdf3"
+    },
+    "seed3-A": {
+      "methods": 526,
+      "packagedNativeMethodSetExactMatch": true,
+      "reportSha256": "7d582d8640fc4d365ea20ab05a759a002be5a863eff23fb80b7980e3b023800a"
+    },
+    "seed3-B": {
+      "methods": 526,
+      "packagedNativeMethodSetExactMatch": true,
+      "reportSha256": "7d582d8640fc4d365ea20ab05a759a002be5a863eff23fb80b7980e3b023800a"
+    },
+    "seed3-C": {
+      "methods": 526,
+      "packagedNativeMethodSetExactMatch": true,
+      "reportSha256": "0d2d7cbeb45a75160bad9a08fdf56028e7d06a5dc6d115a8b3d4535518fa2bfb"
+    },
+    "seed3-D": {
+      "methods": 526,
+      "packagedNativeMethodSetExactMatch": true,
+      "reportSha256": "0d2d7cbeb45a75160bad9a08fdf56028e7d06a5dc6d115a8b3d4535518fa2bfb"
+    }
+  },
+  "selectedDescriptorSetSha256": "e88c3a5d6c03a591ec5b31905a9897a20884fde7d91996cee25f305dbcb3ecda",
+  "finalDeviceRestoration": {
+    "variant": "D",
+    "round": 0,
+    "warmup": false,
+    "apkSha256": "0e11e1b2191c53a0b99ea028f4c3a8ed17a610edc722f24a493921287d0cbb96",
+    "installedOverExisting": true,
+    "hostUtc": "2026-09-12T23:30:00.791049+00:00",
+    "deviceStartEpoch": 1591026741,
+    "amStart": "Starting: Intent { cmp=org.savior.sync/.MainActivity }\nStatus: ok\nActivity: org.savior.sync/.MainActivity\nThisTime: 2362\nTotalTime: 2362\nWaitTime: 2444\nComplete\n",
+    "thisTimeMs": 2362,
+    "pid": "32474",
+    "oldPid": "",
+    "oldPidExited": true,
+    "mainWindowDrawnAndOnScreen": true,
+    "drawnObservationUpperBoundMs": 3189.21,
+    "resumed": true,
+    "crashMarkers": [],
+    "loader": [
+      "         1591026742.359 32474 32474 I NMMP-Loader: ready id=24038432 bias=0x7aed07b000 size=1249280 unpack_us=15759 map_us=13176 constructors_us=5 bootstrap_us=491 key_us=42"
+    ],
+    "battery": "Current Battery Service state:\n  AC powered: true\n  USB powered: false\n  Wireless powered: false\n  Max charging current: 0\n  Max charging voltage: 0\n  Charge counter: 0\n  status: 5\n  health: 2\n  present: false\n  level: 100\n  scale: 100\n  voltage: 0\n  temperature: 0\n  technology: \n",
+    "load": "8.49 7.04 6.83 1/2806 32705\n",
+    "totalPssKb": 56210,
+    "valid": true
+  },
+  "finalStability": {
+    "apkSha256": "0e11e1b2191c53a0b99ea028f4c3a8ed17a610edc722f24a493921287d0cbb96",
+    "elapsedSeconds": 300.98714009998366,
+    "pid": "32474",
+    "samePidAllSamples": true,
+    "crashMarkers": [],
+    "mainWindowVisible": true,
+    "resumed": true,
+    "note": "Idle unactivated application observation, not a full business or leak test"
+  },
+  "sourceFiles": {
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/ApkFolders.java": "b737507845483f027ffe297ad42bf21165bdc5b3311fb4a0ce512d269f40d155",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/ApkProtect.java": "21d3f56ea1f3ffc4c6bc4297c34c906c686d27380348f650301a90aa2639bc65",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/BuildNativeLib.java": "fed9ac6897373bd0cc6c7887f866bb1af97fb063ee90bf40c79ad9d9e8d8bf99",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/aab/AabFolders.java": "ab4d505f2a481a046128096498a0b46d16568f328c40fe00f6386b72265d791c",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/aab/AabProtect.java": "f30f2defc742e9682efe62ff4d32cc3bec48a4affdebe2f23a6f7617c06c0d66",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/aar/AarFolders.java": "efacde0c5ab3fa4e199795284a5c9d17a8a1f74e11beee935d5519ade7f1e3dd",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/aar/AarProtect.java": "4c447a35f1b5d43d480be17d785d44bc48d1013e3a852e1985375b9213aae6ce",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/andres/AxmlEdit.java": "5c8be5f2e8c8e03b739241b98d45c83bf4fa9f622c1cbcdda3a7d772f4263301",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/data/Prefs.java": "51d67c015907afcf5c58348853f0cfb53d782e92cd0c42fad78853c34b8341e2",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/deobfus/MappingProcessor.java": "1355a830f593aaca8d1721027bd73a6dc7f05a6bdc5ba18af23a7aedc28b4353",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/deobfus/MappingReader.java": "70cfad62f1b133f678862172b5d42763418f56925a3ad75eb4d81dd106fe2e7f",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/dex2c/DemandCodec.java": "2682d24da07d3ee5aa39fdae39c0e11d54f985bd00209e39cf29c175d26c822f",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/dex2c/DemandModule.java": "b2395cccc33f8b6a6b54da51463d7911afec3305c008225e9f81a41a5914639a",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/dex2c/Dex2c.java": "eba9c34eba19d4f599132e2dd99315e6be9bfa42299adefa58d14a8d0f29c4cd",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/dex2c/DexConfig.java": "d5b819a09843eac01fbc7eca177ff396f9b74c6af58cb120bddff719a4e067cf",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/dex2c/GeneratorRandom.java": "b72ff53b3e141352704941f1b386464f7d78874011460a89ee5342d22dc34622",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/dex2c/GlobalDexConfig.java": "560d6c9fde4e501b8899130ea5e38c39908c539023c9b035371b3f12d3ef2560",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/dex2c/MethodCodec.java": "ea26412d11a2ec1109157913014706a24d8151f9139266519ce07b3597d73976",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/dex2c/NativeFormats.java": "d79cf7010be7c312d17075343fd44965f7dcb7c1cbc98748033787598f5b7948",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/dex2c/NativeProgram.java": "43affff9229fda494ede11f558d199bfe46f5d8493e1794939d615bcdb6c4f1a",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/dex2c/ProtectionContext.java": "d120ad010779e321fd89882aef8abc9d4851ebfecc76113bf508d4724136d0b6",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/dex2c/ReaderFormats.java": "4b122a8ef0c0f497a76003e71836f9c36e5775edd658265d449b82568c9153df",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/sign/ApkVerifyCodeGenerator.java": "98631df071e711b3da7c61ce38d5de82b0f95668b4d6a44fbfab723be32d98c5",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/sign/PublicKeyUtils.java": "beff11313cde7e4f9c75f32fc67fea6ad8b1715fe0c737fec45484254057e282",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/sign/SignatureBinding.java": "2dc91264f4ca8055c3a5339ef52df243219a1ec6d58f28098e44f445e0238b50",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/util/ApkUtils.java": "77f13606668b3d85df212284a0a94f00f87eab9a5ce74b6f067ffe098017526a",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/util/CmakeUtils.java": "89069bf7fe547e8dd952d819e0a75518e0af11d2acabaea1bbc73d784a541a56",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/util/FileUtils.java": "a9767d4a6aab20eaad7c9b36e5f2dee9e5c9da769e080a13e43e91a3194a9860",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/util/ModifiedUtf8.java": "4dca890c1c0f482e3b344be6227f6c18b51f044b6c404952e958e8fe6af74a76",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/util/OsDetector.java": "b28d5f1649206b1afbf8ed924e83446a27f915305ebb4981299d53502237c4a7",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/util/Pair.java": "7000cc6d936da8f068cdd9468fc0518054975a31f4c0e7d3070f9f70440ed6fe",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/dex2c/converter/ClassAnalyzer.java": "34186f451a03dfba2ddba3dda6fdb563318a8f1a2da941221636d953105b1c36",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/dex2c/converter/JniCodeGenerator.java": "080855918e525acd60c13cb46a6a66d2178e32df213e246a77ced25c8f32a2f8",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/dex2c/converter/MyMethodUtil.java": "d7f17ca8a10cb53f61f43462e7690e532c1a9bbeec38dd2497a18987cb1bdeef",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/dex2c/converter/References.java": "c51fbfc9ee757f6b8fc72d9e709e6e67e5ceed560ba19fb40c1da66bf5d9408f",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/dex2c/converter/ResolverCodeGenerator.java": "ab533024fa3eb1c5eeba284d20bb38df0176e066ce5ec6eea3271304d123efac",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/dex2c/filters/BasicKeepConfig.java": "3e0fd20a4bc8231c199f6406a9b16a97675c74cf7cad9ebff11c979a2b310b7c",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/dex2c/filters/ClassAndMethodFilter.java": "77b7a0673188544ab723df7886a4d82d73aa0756d27678bf421ff1ce8104b829",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/dex2c/filters/MethodConversionReporter.java": "d69177fef5d61f34b1e9de32778d1cfe137c29ed6384c8fdc8fdb5f630208f76",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/dex2c/filters/ProguardMappingConfig.java": "1cc6527c5da8f4efa8619ea9c2c7ffa7104e7825570c8b9cc654641e0f7df08c",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/dex2c/filters/SimpleConvertConfig.java": "8641389eef6d7b58054f2b71c2c019b6175ba9416a063ec2a7aa337c5aa5a3f0",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/dex2c/filters/SimpleRules.java": "0f20af47dff9c09179d211c60a6caa16b3ae5b713b79390ebe203b467fad89ba",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/dex2c/converter/instructionrewriter/InstructionRewriter.java": "0063c437e82c60497fd0de2735e466c73979dc555d6cf59d19d4e32160fc5928",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/dex2c/converter/instructionrewriter/NoneInstructionRewriter.java": "cb9c8f41a3c9f30c5f07ac45f9d84c6f23538dc981110f83466bbe1e0143dbb8",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/dex2c/converter/instructionrewriter/RandomInstructionRewriter.java": "eb888774d2e181c1d3a3ea518d075ac455bd7c7e4b088e89ac1ebb970a6a5b76",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/dex2c/converter/structs/ApplicationInitClassDef.java": "11539353976c47a2d01ebd942f19f28a96e3dee33ec8936798d6f755305f9b6a",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/dex2c/converter/structs/EmptyAnnotationMethodParameter.java": "924b1c14b4cc50765fb2da29cfca5fdf4002220f1eadf139368aa66b96bd9d05",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/dex2c/converter/structs/EmptyConstructorMethod.java": "c9acb01ae8d5fc34bccd4827210a813336d22f2108089443c7c69395a658dbdc",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/dex2c/converter/structs/LoadLibStaticBlockMethod.java": "d46b254bc4569bd672a4b506c9ffc347b9d15540f8a059ec904bb5a62bad6647",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/dex2c/converter/structs/MethodConverter.java": "00a89aae17df3537592e15dd1b280ee75431f8392f1b7da7ec95ac700986ab22",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/dex2c/converter/structs/MyClassDef.java": "32a7fef686d9ca8cb6d5c96b00db27efff3ed5ee1ecd9682ece508b011e1faaf",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/dex2c/converter/structs/RegisterNativesCallerClassDef.java": "5c5cf6cbcd78971d2678c68389f5b992ec5dfb154baed0384a0a572472e6c74e",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/dex2c/converter/structs/RegisterNativesUtilClassDef.java": "042025acdc5f4896ad01683a94e2104500a816e0a49b46cf0e27fb1126fccad5",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/dex2c/converter/testbuild/ClassMethodImplCollection.java": "ccfa98d67b47a150bc7fb24817cc9f03a96bf8717918b6ee2b5ccce27ed3e632",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/dex2c/converter/testbuild/JniTemp.java": "ab01dd7ca8e2914db4c103909dc34d6f2eb190acd010e95a32b1cd3c549b4306",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/data/config/AbiConfig.java": "f6d9ff12111f2b78f4f18b22ef9772cf3e4be91a06eb641b6e91d0b7b3c6c919",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/data/config/Config.java": "13386d9214497fcbcd6b3b896fdceef11db0505b8c46ac83000449aa094d85ba",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/data/config/PathConfig.java": "847a061f6f9ae89566655c49f857e744f2051a23c4da11ad03b66735fde8816d",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/aar/asm/AsmMethod.java": "9b30491dfa1148862088cb72156fbf85adb3393f561a050b10285651dadfd539",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/aar/asm/AsmUtils.java": "d698d25247cdadfc3219b2b175d9516cd8f986df44b4c84d0b74a0e9dd3e6941",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/aar/asm/InjectStaticBlockVisitor.java": "cc6deb1e861bed6b979a425431c0c1a0f43e7fd5d181c112650062f5c4ae2639",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/aar/asm/MethodToNativeVisitor.java": "7a44c61922e28dd8df97b91160ce7e0f79d1e91264dddbc15498252b5b0e6ee7",
+    "nmm-protect/apkprotect/src/main/java/com/nmmedit/apkprotect/aab/proto/ProtoUtils.java": "2641f58a8dec9426667e4558ade23bb4becbd13524fd950596da9a549a4340e8",
+    "nmm-protect/apkprotect/src/test/performance/BenchBody.java": "742b68d4e7d31a7babed141c2561ba101c8508899b418915dd631f05c7b588d6",
+    "nmm-protect/apkprotect/src/test/performance/BenchMain.java": "377d1ef2b8487f161f363068f4d88d02255a5e29018a6d7b29d5269e27981e36",
+    "nmm-protect/apkprotect/src/test/performance/BenchProbe.java": "277ac1426c90532a1d5026c99451d689f351a8243e231e4c7690225baffe2eea",
+    "nmm-protect/apkprotect/src/test/performance/BuildRuntime.java": "cdc0ae9b5e53ed2242f1eb4eaf24e33e3a97ec9b05d8bafdcaed601f7139ab87",
+    "nmm-protect/apkprotect/src/test/performance/GenerateBench.java": "033d901b3b3e76afbd82379fb5635c8fcf017dc55605dfd93970436ebe189b9f",
+    "nmm-protect/apkprotect/src/test/performance/InspectBench.java": "8d444b7bb9c3219f90c82e5da1e61df75e45514ec7fe0cfaf6c87af449731789",
+    "nmm-protect/apkprotect/src/test/performance/ProbeMain.java": "8856a90e9ee87955c2d85995ac7af7ab6ee7c52c883f7e4e2494f78fef4d4382",
+    "nmm-protect/apkprotect/src/test/performance/probe_functions.c": "672682aa02500d900939f0d3c5797574786bafda8b39ebe5f671858dfcff6c82",
+    "nmm-protect/apkprotect/src/test/performance/ReactNative.java": "968c91b947d5bdc6399b9d7bc6f531f69707b432b3eea1a622c1c35156fdd80c",
+    "nmmvm/nmmvm/src/main/cpp/vm/ApkV2Signer.cpp": "6ba7ad4448287d944a1b930a43a14db145ad35ac5e9a29f44fefe14030c7c747",
+    "nmmvm/nmmvm/src/main/cpp/vm/Arm64Syscall.cpp": "92edab39105fa15ef6d904925c8bcc2b198d6196ac2264bb90d137919a6bbeaf",
+    "nmmvm/nmmvm/src/main/cpp/vm/Codec.cpp": "69eecc8372bc77d71ca575c8d380c19dc10aed3e65799cfa24a8823e2f248bd9",
+    "nmmvm/nmmvm/src/main/cpp/vm/Demand.cpp": "3545952a5490b2eefe568bf093b610a56b93dc6f75f4fac1b661c18b2c4ec860",
+    "nmmvm/nmmvm/src/main/cpp/vm/DexCatch.cpp": "4a84a9fec3112757f2470b28266b2ab24b31d1c8a4d33ed1eebbb2dbedb09d93",
+    "nmmvm/nmmvm/src/main/cpp/vm/DexCatch.h": "422f32663553fed779603c53cd72e2eef63ec896f2d5cba728f326d6d3b706e3",
+    "nmmvm/nmmvm/src/main/cpp/vm/DexOpcodes.h": "f0dea95935e4bab90e145154ec408b7ca651b3c08ce7a47a9db1a4019219f2c5",
+    "nmmvm/nmmvm/src/main/cpp/vm/Exception.cpp": "e838cdd231f1bb2fc57da4570c777a18e92fdbf6cb3ada5f6b26e321307c2204",
+    "nmmvm/nmmvm/src/main/cpp/vm/Exception.h": "acd5735c34b07565e3b69fd22de609f9cbc9075ac100b0bdffd642038ad73c36",
+    "nmmvm/nmmvm/src/main/cpp/vm/GlobalCache.cpp": "8231effd4ff86de34932b9d85d25f6b1deb164cfcb8425ea13816625069c25e7",
+    "nmmvm/nmmvm/src/main/cpp/vm/Interp.cpp": "dc0a9f9b0cd9cd10711d48f60399166ed0b600d7661a54639841dde577c84c7c",
+    "nmmvm/nmmvm/src/main/cpp/vm/Interp.h": "52a0b3b8aa7529ad83411ad0c03988a3f7220a5a87f01babfd16e68b9b0e23f8",
+    "nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp": "053fbd8aa836bcdf2627962caaaebb1138b61eeb26aa566e683552a44c8b23d1",
+    "nmmvm/nmmvm/src/main/cpp/vm/JNIWrapper.c": "c2aea1bdf1a90ad20f1e24c21036846f4a198fb71aa672ce016f2b3da76c1305",
+    "nmmvm/nmmvm/src/main/cpp/vm/Leb128.h": "4596ca56336beacf5c0e3fa6839b8904998fa1d34a94ee86cc4c3f02039654a9",
+    "nmmvm/nmmvm/src/main/cpp/vm/Module.cpp": "987918e134ed815bfd2edee4546b917ae1e99950321a527f6338c46bf7491a05",
+    "nmmvm/nmmvm/src/main/cpp/vm/NativeVm.c": "8bb81b38bfe35b705235481ffe787d3d488cdd293dba38fb563242b4e218318a",
+    "nmmvm/nmmvm/src/main/cpp/vm/Sha256.cpp": "d088792e9b6568318664e23ae69f72f05a2ae82035448be6754d6311500e3c8e",
+    "nmmvm/nmmvm/src/main/cpp/vm/VmBinding.cpp": "a07e3c2a2f2a69f840f9a4a619ef66d9973a4f606453e4a77bc34b1ebd06c50b",
+    "nmmvm/nmmvm/src/main/cpp/vm/VmCodec.cpp": "42cf636c469a88f6737d4561f303fbb0b56099b5c717207af8e71f400e8273c1",
+    "nmmvm/nmmvm/src/main/cpp/vm/VmInit.c": "f775cbba0b4d19e8cfe2af20021ce862095d56f6bb1843a502da2b22004a03c5",
+    "nmmvm/nmmvm/src/main/cpp/vm/include/ApkV2Signer.h": "4dd773ce26aeda7181527abe48c9c291ca90582940c336cad10477377ee44e1d",
+    "nmmvm/nmmvm/src/main/cpp/vm/include/Arm64Syscall.h": "c321de01767c37ee3ac98f4096aaccd4fbfa4fba3c51f64e60c1892683ede5c0",
+    "nmmvm/nmmvm/src/main/cpp/vm/include/Common.h": "5c5e1a385d41056589f7d8fc41d6eda22793f54f8aac3125b140a40bc65530db",
+    "nmmvm/nmmvm/src/main/cpp/vm/include/GlobalCache.h": "f55508eec55372d872e9742567ffb343c04a59a48955951473e0f6dd154cf805",
+    "nmmvm/nmmvm/src/main/cpp/vm/include/JNIWrapper.h": "dc406e5cdbfcfbb119042b996165bf36843ce792805a52ba0b3a791ee4dcf4d5",
+    "nmmvm/nmmvm/src/main/cpp/vm/include/NativeFormats.h": "a12ac598a249bba395f09d6c88e79521ec6590c704884afab4423e6f6e2f0b24",
+    "nmmvm/nmmvm/src/main/cpp/vm/include/NativeVm.h": "f9e9d8e1c277269e58b22e49a79bb6855f5564f3f3469896a63e937621d9d99f",
+    "nmmvm/nmmvm/src/main/cpp/vm/include/PrivateLoaderState.h": "aed662e72f63548a8bc3376b08f59b2847c9f9c674968e6cbaa66624e14e55d7",
+    "nmmvm/nmmvm/src/main/cpp/vm/include/ScopedLocalRef.h": "7c821a55de43618d28e588cc2ff89863fd3389423f8948d60cfe4f01733aa497",
+    "nmmvm/nmmvm/src/main/cpp/vm/include/Sha256.h": "6c7413bc7c17ed38a6defdfc9093ef6ebf61166ed2354034cef3c9cc05beefc7",
+    "nmmvm/nmmvm/src/main/cpp/vm/include/vm.h": "845b02027e37292301b4d9ff72411f9b616a8d43124be828849bd62c01e73957",
+    "nmmvm/nmmvm/src/main/cpp/vm/include/VmBinding.h": "b7da5eec55672cd9566e8031ed9b4e47bf97e8060bccdfafc0d1b41e9722b571",
+    "nmmvm/nmmvm/src/main/cpp/vm/include/VmCodec.h": "76f19cbb4ddb16f5b3540316a4cb995cecd759e55445697086fddfa65668ec5a",
+    "nmmvm/nmmvm/src/main/cpp/vm/include/VmCodecConfig.h": "7b96c9e3e2543396197b72af2741e60d80aae8972c315aabbe3f805a63d81b9f",
+    "nmmvm/nmmvm/src/main/cpp/vm/include/VmDecodedState.h": "00b048334b2988fec98574595216f23e9b9e32eb93cd1ff778716697bb6ef677",
+    "nmmvm/nmmvm/src/main/cpp/vm/include/VmInit.h": "c17e5bcad2bb1e759c6395f6b74346f2fb2d88de6d17da10fc51807f0f8defe3",
+    "nmmvm/nmmvm/src/main/cpp/vm/include/VmReader.h": "e6b695b6fb2d0211947c8070e0e564c4648177f4b7855f6ea11486c1322ecdcb",
+    "nmmvm/nmmvm/src/main/cpp/vm/include/VmReaderFormats.h": "6ee83bd75367d6254cb03f0059d5d95d6d47e790cb56bc399dd35da2e89ee51c",
+    "nmmvm/nmmvm/src/test/semantic/DecodedWipeBridge.cpp": "45e39f70bf76bedac449b862c17b62e5ef53ffd29a4d83b0029b915c05bccd18",
+    "nmmvm/nmmvm/src/test/semantic/DecodedWipeMain.java": "f22816b17db665238d283618c57ea959b7235fee5223c2502e3aaf2cd6b633e3",
+    "nmmvm/nmmvm/src/test/semantic/InitBridge.c": "2611c539265309b816e38324fcb7070d1314d657679981f63cfe5fc7cb97c3e0",
+    "nmmvm/nmmvm/src/test/semantic/InitMain.java": "5eeb685df2169d3df6d426b75aab8e5d5b12c663a03ff7269eee5a40b023b1f0",
+    "nmmvm/nmmvm/src/test/semantic/SemanticBridge.cpp": "f409dd75ac9f777ca27e17eab35412b4ec35fbf6b9b48fda016b52fd91a5d0cc",
+    "nmmvm/nmmvm/src/test/semantic/SemanticMain.java": "81d71b7f65e6ce770c025b6d505275951bffcad9fd674ecb0a66a225bd3478ec",
+    "nmm-protect/mksrc/loader/Bootstrap.h": "2c1533df957540569b1094f867068da2bc531ad75f309bb47a7068d3ac02b3f5",
+    "nmm-protect/mksrc/loader/Envelope.c": "7a0caa4a330aa11fe2cfe8955801cf207e7942f1fe4fb1b2330516f8bdccffa8",
+    "nmm-protect/mksrc/loader/Envelope.h": "52dbc272ddc6a58c071b9da08da5d5e5b4556ba65bc17d747209b9ca00b9fe3e",
+    "nmm-protect/mksrc/loader/InnerBootstrap.c": "ec9ef6b1d2049b34f274f7a044f347b12c6f543c45256116252e6b7c4e8720ee",
+    "nmm-protect/mksrc/loader/Loader.c": "8bf049ebcf2289d009ca9dd33301bb6a72aa9ba76b87cc54754d8c8a046b19a2",
+    "nmm-protect/mksrc/loader/Loader.h": "40c5b4af8e675839ff9d1456d8469b8aad4e3fbe7d02627957a1a2ede2e67836",
+    "nmm-protect/mksrc/loader/LoaderVersion.h": "9c47dda0e7f3139ed6d1f8210a74aa53bc0a8857b7247df133562c943905946d",
+    "nmm-protect/mksrc/loader/native_formats.py": "0b330f79dda0fd1f88e7aaf213edd1f11591b35e351cdb8278c5af5aff303365",
+    "nmm-protect/mksrc/loader/Once.c": "0e70700dc0ff988e86258ea213dc9fad16fafb75c5389a0427dbbf2815311490",
+    "nmm-protect/mksrc/loader/Once.h": "3892a018a63d1736529c755ac2ca3c5742972db6d193cdbcef39ad81d86ecf33",
+    "nmm-protect/mksrc/loader/Outer.c": "b692ea413a2937983135632be088aed48c0a7f9f4ad71e027f78c1ba8e277c98",
+    "nmm-protect/mksrc/loader/pack.py": "a6752e065223ce975265c7bfffd673b51229a4b66a2ec45efc49f707fb8981ef",
+    "nmm-protect/mksrc/loader/Seal.java": "6c0655583dfd68951a8a506f50a25bb640c9a84a70ed6f4bb07db21d31d6fcc9",
+    "nmm-protect/mksrc/loader/Stage0.c": "3cab2658f87e154025e88dbed8c41356ba94b6854202f515e94e7db4936fa278",
+    "nmm-protect/mksrc/loader/Stage0.h": "3a5fab5b1ae731bbd3281ae378a8e82d3c3732c06d43a12ba63ce82dd4ccf4ba",
+    "nmm-protect/mksrc/loader/stage0.py": "5f9ebd3afab469feed331fae3361964fbe3b81afa84884d21fa9858c5b49d406",
+    "nmm-protect/mksrc/loader/tests/bootstrap_test.c": "0c6beebaf6d164b24dcca76718964d4b846fad8c1202c3aefd083e6f10570005",
+    "nmm-protect/mksrc/loader/tests/content-golden.json": "3f225bbb29be3817d9e472657a2f092faec438232978fa65555048088b797565",
+    "nmm-protect/mksrc/loader/tests/crypto_test.c": "3a5638bcf858a931517a92aba79a4e1d80137e3282b1367238015bd9e46d687f",
+    "nmm-protect/mksrc/loader/tests/envelope-golden.json": "32b28901833f72d84752306fdf2354c3a92d6c78f07a5622c65c906b4cd74de6",
+    "nmm-protect/mksrc/loader/tests/failure_hooks.c": "5be5f04c08cb7cce2eef37ea96f0659cc15a19da99b31fc6c5cacda37bff2478",
+    "nmm-protect/mksrc/loader/tests/GenerateInitFixtures.java": "93847710df8e061ed2ea9c12ea0390dca626cdefac1d8c86f7bc477a41d57e51",
+    "nmm-protect/mksrc/loader/tests/loader_test.c": "040ef6b941e1b4547110ed63dc0c98aefd4893b09104e5b90f1b46b70d7fba67",
+    "nmm-protect/mksrc/loader/tests/make_golden.py": "a495c655ef11164b1dc3cf482b5817958f24745c6ea096c4a292911ae748867e",
+    "nmm-protect/mksrc/loader/tests/module.c": "8837ebb1fbac50595e64aaab3f22c8bfaf420be51678b530d8f3dd12b17c14ae",
+    "nmm-protect/mksrc/loader/tests/module_test.c": "582f9b45fd4d2bfac1ec9fe41dae09cb93538cbea758426b11d71b985eda9272",
+    "nmm-protect/mksrc/loader/tests/once_test.c": "8d157d164cdf025e3efbaf9dbc737b74b043d3645d6cc111225153f2671cb2e0",
+    "nmm-protect/mksrc/loader/tests/prepare_module.py": "1725afaeb8d64a7cc08a074d1f3062f3bff15d498c41a1ebe656103ad9541ad5",
+    "nmm-protect/mksrc/loader/tests/stage0_test.c": "746ecda15a5d0d594dd65ec111dd7162797d30f9603d872108d39e6ef6f96e92",
+    "nmm-protect/mksrc/loader/tests/test_pack.py": "d1a451410da1d34c3d4a94fea90f21506c139f5fd2e924183fcf95cf46e28c00",
+    "nmm-protect/mksrc/loader/tests/test_stage0.py": "996f67cacd278ce6ec53e1c79c5f64d7ede7064516f85a76bc582cbd1a0e06ec",
+    "nmm-protect/mksrc/loader/vendor/monocypher/monocypher.c": "02174117935699d418443c75a558a287deb06ef8cf7c1adced61d9047d2f323d",
+    "nmm-protect/mksrc/loader/vendor/monocypher/monocypher.h": "fcaf6ed771358bb4f40fba016f6518ae86ec02b1b877d2cc35ad92d3a26fd7b3",
+    "nmm-protect/mksrc/loader/tests/stubs/BuildId.h": "96c0b1ebb6497968a296b855b9faee0611ec8a69d03025b8e3cf33043e7b8530",
+    "nmm-protect/mksrc/loader/tests/stubs/GlobalCache.h": "2325dcb9540f2a3db6f4d94d12064ed54b733d6f273783fa6468d4892098bd7a",
+    "nmm-protect/mksrc/loader/tests/stubs/VmBinding.h": "8d08cc2aabf81a8da50343ee3da9d83918d7282347e3668f1217932bc523547b",
+    "nmm-protect/build/on-demand-20260912/render-s5-report.py": "e14dd1cad996e53f125d1f6587e8f4309fff83e9ad55852c60857aa137b7ef21",
+    "nmm-protect/build/on-demand-20260912/render-wipe-results.py": "744defd1a637c912722265f8b3fd9e45c3d1619e139b717b3cb6870193cfe861",
+    "nmm-protect/build/on-demand-20260912/write-s5-manifest.py": "30e59eabe08ba817474f7608385d4b9371b3b193a4769a9752f5d32e1902a6e5",
+    "nmm-protect/scripts/summarize-enhancement.py": "290ec75435355ef1a046703d2763687df52e5c4fef5565ea9e9ddfe86cd75d1a",
+    "nmm-protect/scripts/measure-startup.py": "11d766d863c526980852612f41fa4fba7268b192c35e58c82809686478b0a2e1",
+    "nmm-protect/scripts/measure-hotspots.py": "31c26db1abed0c35a4dd25588e6e0706e7c26dfd52056b906f75e5a0fb2f701c",
+    "nmmvm/nmmvm/src/test/semantic/CMakeLists.txt": "5e1c94b17ca9310ca6ae2f4395be8e988ae20118e34563c2dca714dbf7b3a81e"
+  },
+  "sourceFilesScope": "Current working tree at manifest generation; these hashes do not describe the frozen pre-wipe S5 build sources."
+}

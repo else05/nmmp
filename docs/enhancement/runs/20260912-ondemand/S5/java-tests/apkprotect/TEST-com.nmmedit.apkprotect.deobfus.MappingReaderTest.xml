@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.nmmedit.apkprotect.deobfus.MappingReaderTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-09-12T17:36:03" hostname="DESKTOP-MHK8Q30" time="0.012">
+  <properties/>
+  <testcase name="textParse" classname="com.nmmedit.apkprotect.deobfus.MappingReaderTest" time="0.012"/>
+  <system-out><![CDATA[
+androidx.versionedparcelable.VersionedParcel
+androidx.core.app.RemoteActionCompat,androidx.versionedparcelable.VersionedParcel
+
+androidx.versionedparcelable.VersionedParcel
+androidx.core.graphics.drawable.IconCompat,androidx.versionedparcelable.VersionedParcel
+
+
+androidx.savedstate.SavedStateRegistryOwner
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+androidx.activity.ComponentActivity
+
+android.os.Bundle
+
+
+
+
+
+
+android.os.Bundle
+android.os.Bundle
+androidx.lifecycle.Lifecycle$State
+android.os.Bundle
+android.os.Bundle
+androidx.activity.ComponentActivity
+
+androidx.activity.ComponentActivity
+androidx.lifecycle.LifecycleOwner,androidx.lifecycle.Lifecycle$Event
+androidx.lifecycle.LifecycleOwner,androidx.lifecycle.Lifecycle$Event
+androidx.activity.ComponentActivity
+androidx.lifecycle.LifecycleOwner,androidx.lifecycle.Lifecycle$Event
+
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

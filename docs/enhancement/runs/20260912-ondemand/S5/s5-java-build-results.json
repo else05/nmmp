@@ -1,0 +1,44 @@
+{
+  "current": {
+    "jar": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\libs\\vm-protect-2026-09-13-0136.jar",
+    "sha256": "28c13bbb3952d69640ad5bae626f0f5b7d04346e701e43dded0efd5e3734b469",
+    "suites": {
+      "apkprotect": {
+        "tests": 50,
+        "failures": 0,
+        "errors": 0
+      },
+      "arsc": {
+        "tests": 16,
+        "failures": 0,
+        "errors": 0
+      }
+    }
+  },
+  "baseline": {
+    "jar": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\baseline-14bc959\\nmm-protect\\build\\libs\\vm-protect-2026-09-13-0136.jar",
+    "sha256": "9033d186fe875858552177856c126f51b34264d0d52ca579138fd584be497747",
+    "suites": {
+      "apkprotect": {
+        "tests": 32,
+        "failures": 0,
+        "errors": 0
+      },
+      "arsc": {
+        "tests": 16,
+        "failures": 0,
+        "errors": 0
+      }
+    }
+  },
+  "compatibility": {
+    "seeds": [
+      "0123456789abcdef",
+      "fedcba9876543210",
+      "6a09e667f3bcc909"
+    ],
+    "actual_jars_shared_context_opcode_resolver_jni_equal": true,
+    "raw_output_directory": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\on-demand-20260912\\seed-compatibility",
+    "baseline_runtime_template_files_byte_equal_to_14bc959": 121
+  }
+}

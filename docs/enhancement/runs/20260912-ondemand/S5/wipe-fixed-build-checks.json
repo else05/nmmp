@@ -1,0 +1,29 @@
+{
+  "bridgeSha256": "45e39f70bf76bedac449b862c17b62e5ef53ffd29a4d83b0029b915c05bccd18",
+  "builds": {
+    "wipe-fixed-semantic-Release": {
+      "libnmmp_init_semantic.so": "203d8570c0f3935c99bdebc421681baca855377446754415ba5217aff53ccc5f",
+      "libnmmp_semantic.so": "9df2160cb178d323a4b18113873cff22a3b6fa8db6891a28ae7b7a79e7171362",
+      "vm\\libnmmvm.so": "4d7e6819544dff4677e62509dd9cc817fd34e0e7c80f5b0f3ef978ab81fe6813"
+    },
+    "wipe-fixed-legacy-semantic-Release": {
+      "libnmmp_init_semantic.so": "c6d80d9f847af0234cb09c89d28ec035ee2204dd74c3507840d657b0820fb1fc",
+      "libnmmp_semantic.so": "b232ed5dbcd738754f74079e32914d4283eb030f89d252dfb6dbcfe5a0dd5476",
+      "vm\\libnmmvm.so": "d9e4d9cf172992f29847729dbe6c19f0555d75a02144ac6d41b824a0e850ca1d"
+    },
+    "wipe-fixed-semantic-Debug": {
+      "libnmmp_init_semantic.so": "e7624c2ee64552869d1448617396ded43ab47ede39719648357668bb0f3ff21c",
+      "libnmmp_semantic.so": "9d8f1a756e793bf6ad3fda8a676c5e9859a4e788f8c1cb22e92a784687af2bea",
+      "vm\\libnmmvm.so": "b34f16f25e727c936a3b5068cc116b4a6c2778017782812e254161b1b045d55e"
+    },
+    "wipe-fixed-legacy-semantic-Debug": {
+      "libnmmp_init_semantic.so": "d5e4d55c28a9a6c077d73854a41da8ffd526c966b96a3adcf386ac717e76b185",
+      "libnmmp_semantic.so": "26bc93fcee9a0925d55ea4f5a4bbcb5ac299be81d95c894eb5bb06526272c87e",
+      "vm\\libnmmvm.so": "f7ca9f46f24018b52b1871844c0862977170945e720ea6a7a460124930ae72d7"
+    }
+  },
+  "productionRuntime": {
+    "nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp": "053fbd8aa836bcdf2627962caaaebb1138b61eeb26aa566e683552a44c8b23d1",
+    "nmmvm/nmmvm/src/main/cpp/vm/include/VmDecodedState.h": "00b048334b2988fec98574595216f23e9b9e32eb93cd1ff778716697bb6ef677"
+  }
+}

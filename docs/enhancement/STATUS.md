@@ -1,8 +1,8 @@
 # NMMP 按需解码升级实施状态
 
-更新：2026-09-13。**S1–S4 及私有 linker P5 已实现并完成主机/ARM64 API27 功能验证；S5 全量性能验收进行中。默认仍为 legacy，私有 linker 默认 OFF。**
+更新：2026-09-13。**S1–S4 及私有 linker P5 已实现并完成主机/ARM64 API27 功能验证；S5 三组对照已采集并重算，但性能验收未通过；最终擦除修复的API27功能复查已通过。默认仍为 legacy，私有 linker 默认 OFF。**
 
-当前实现、526 方法回验和组合 APK 证据见 [ON_DEMAND_WORK.md](ON_DEMAND_WORK.md)，格式见 [ON_DEMAND_FORMAT.md](ON_DEMAND_FORMAT.md)，预先固定的性能规程见 [S5_PLAN.md](S5_PLAN.md)。以下 S0 内容为历史基线，不代表当前源码尚未实施。
+当前实现、526 方法回验和组合 APK 证据见 [ON_DEMAND_WORK.md](ON_DEMAND_WORK.md)，使用见 [USAGE.md](USAGE.md)，格式见 [ON_DEMAND_FORMAT.md](ON_DEMAND_FORMAT.md)。性能规程见 [S5_PLAN.md](S5_PLAN.md)，实测及未通过项见 [S5_RESULTS.md](S5_RESULTS.md)，最终源码修复、产物及定向复查见 [POST_REVIEW.md](POST_REVIEW.md)。以下 S0 内容为历史基线，不代表当前源码尚未实施。
 
 依据 `E:/OtherProject/360_jiagu/360_enhance/` 的 README、IMPLEMENTATION、RE_EVIDENCE、ACCEPTANCE。四份输入文档的 SHA-256 保存在 [plan-hashes.json](runs/20260912-152656/S0/plan-hashes.json)。
 
@@ -47,13 +47,13 @@ Java 构建仍有既有 `:jar` 对 arsc.jar 的隐式依赖警告及 Gradle 弃�
 * 5 次前后台切换通过；302.1 秒驻留观察中主 PID 始终一致，没有观察到 Java 崩溃、InternalError、JNI 错误或进程重启。
 * 全部原始样本保存在 [本轮 S0 目录](runs/20260912-154155/S0/)，[汇总](runs/20260912-154155/S0/summary.json)可由脚本重新计算。
 
-## 阶段门槛与缺口
+## 历史 S0 门槛记录（2026-09-12，实施前）
 
 IMPLEMENTATION §6 明确将 **“旧模式功能及性能基线可复现”** 作为从 S0 进入 S1 的条件；ACCEPTANCE §1 要求业务 APK 由目标任务中用户授权确定。目标 APK、规则、mapping、签名和 O-MVLL 配置现已确定并记录哈希。
 
 设备 `192.168.6.118:5555` 已在线并确认 API 27/ARM64。当前测试页面显示未激活、服务器未连接；启动之外的完整业务差分和代表性热点尚未完成。本轮为单份生产随机构建和顺序批次，不替代三组固定 seed 的正式验收。
 
-因此以下项保持未完成：
+下表保留当时尚未实施的状态；当前阶段状态以本文开头及 S5_RESULTS 为准。
 
 | 阶段 | 状态与缺口 |
 | --- | --- |

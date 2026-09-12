@@ -1,0 +1,143 @@
+         1590993931.934 11846 11951 E AndroidRuntime: FATAL EXCEPTION: StatIo
+         1590993931.934 11846 11951 E AndroidRuntime: Process: com.tencent.qqmusiccar, PID: 11846
+         1590993931.934 11846 11951 E AndroidRuntime: java.lang.OutOfMemoryError: pthread_create (1040KB stack) failed: Try again
+         1590993931.934 11846 11951 E AndroidRuntime: 	at java.lang.Thread.nativeCreate(Native Method)
+         1590993931.934 11846 11951 E AndroidRuntime: 	at java.lang.Thread.start(Thread.java:733)
+         1590993931.934 11846 11951 E AndroidRuntime: 	at java.util.concurrent.ThreadPoolExecutor.addWorker(ThreadPoolExecutor.java:970)
+         1590993931.934 11846 11951 E AndroidRuntime: 	at java.util.concurrent.ThreadPoolExecutor.execute(ThreadPoolExecutor.java:1377)
+         1590993931.934 11846 11951 E AndroidRuntime: 	at ta.d.f(PriorityThreadPool.java:4)
+         1590993931.934 11846 11951 E AndroidRuntime: 	at ta.d.e(Unknown Source:1)
+         1590993931.934 11846 11951 E AndroidRuntime: 	at ta.d.d(Unknown Source:2)
+         1590993931.934 11846 11951 E AndroidRuntime: 	at ka.d.o(NetworkObserver.java:5)
+         1590993931.934 11846 11951 E AndroidRuntime: 	at ka.d.p(Unknown Source:0)
+         1590993931.934 11846 11951 E AndroidRuntime: 	at sk.a.b(Unknown Source:4)
+         1590993931.934 11846 11951 E AndroidRuntime: 	at sk.a.d(Unknown Source:0)
+         1590993931.934 11846 11951 E AndroidRuntime: 	at ul.a.P(StatisticsManager.java:2)
+         1590993931.934 11846 11951 E AndroidRuntime: 	at ul.a.f(Unknown Source:0)
+         1590993931.934 11846 11951 E AndroidRuntime: 	at ul.a$d.handleMessage(StatisticsManager.java:2)
+         1590993931.934 11846 11951 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:106)
+         1590993931.934 11846 11951 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:164)
+         1590993931.934 11846 11951 E AndroidRuntime: 	at android.os.HandlerThread.run(HandlerThread.java:65)
+         1591004844.729 12683 12683 E AndroidRuntime: FATAL EXCEPTION: main
+         1591004844.729 12683 12683 E AndroidRuntime: Process: org.savior.sync, PID: 12683
+         1591004844.729 12683 12683 E AndroidRuntime: java.lang.UnsatisfiedLinkError: JNI_ERR returned from JNI_OnLoad in "/data/app/org.savior.sync-GI2Rkm1AuRfoounlRHLFXQ==/lib/arm64/libc++_en.so"
+         1591004844.729 12683 12683 E AndroidRuntime: 	at java.lang.Runtime.loadLibrary0(Runtime.java:1016)
+         1591004844.729 12683 12683 E AndroidRuntime: 	at java.lang.System.loadLibrary(System.java:1657)
+         1591004844.729 12683 12683 E AndroidRuntime: 	at com.google.libc.ReactNative.<clinit>(Unknown Source:2)
+         1591004844.729 12683 12683 E AndroidRuntime: 	at com.google.libc.ReactNative.js(Unknown Source:0)
+         1591004844.729 12683 12683 E AndroidRuntime: 	at org.savior.sync.SyncApplication.attachBaseContext(Unknown Source:0)
+         1591004844.729 12683 12683 E AndroidRuntime: 	at android.app.Application.attach(Application.java:189)
+         1591004844.729 12683 12683 E AndroidRuntime: 	at android.app.Instrumentation.newApplication(Instrumentation.java:1104)
+         1591004844.729 12683 12683 E AndroidRuntime: 	at android.app.Instrumentation.newApplication(Instrumentation.java:1088)
+         1591004844.729 12683 12683 E AndroidRuntime: 	at android.app.LoadedApk.makeApplication(LoadedApk.java:983)
+         1591004844.729 12683 12683 E AndroidRuntime: 	at android.app.ActivityThread.handleBindApplication(ActivityThread.java:5751)
+         1591004844.729 12683 12683 E AndroidRuntime: 	at android.app.ActivityThread.-wrap1(Unknown Source:0)
+         1591004844.729 12683 12683 E AndroidRuntime: 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1658)
+         1591004844.729 12683 12683 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:106)
+         1591004844.729 12683 12683 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:164)
+         1591004844.729 12683 12683 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:6547)
+         1591004844.729 12683 12683 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+         1591004844.729 12683 12683 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:438)
+         1591004844.729 12683 12683 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:821)
+         1591005049.075 17676 17676 E AndroidRuntime: FATAL EXCEPTION: main
+         1591005049.075 17676 17676 E AndroidRuntime: Process: org.savior.sync, PID: 17676
+         1591005049.075 17676 17676 E AndroidRuntime: java.lang.UnsatisfiedLinkError: JNI_ERR returned from JNI_OnLoad in "/data/app/org.savior.sync-fVOciHPJen30oicVT5-q-w==/lib/arm64/libc++_en.so"
+         1591005049.075 17676 17676 E AndroidRuntime: 	at java.lang.Runtime.loadLibrary0(Runtime.java:1016)
+         1591005049.075 17676 17676 E AndroidRuntime: 	at java.lang.System.loadLibrary(System.java:1657)
+         1591005049.075 17676 17676 E AndroidRuntime: 	at com.google.libc.ReactNative.<clinit>(Unknown Source:2)
+         1591005049.075 17676 17676 E AndroidRuntime: 	at com.google.libc.ReactNative.js(Unknown Source:0)
+         1591005049.075 17676 17676 E AndroidRuntime: 	at org.savior.sync.SyncApplication.attachBaseContext(Unknown Source:0)
+         1591005049.075 17676 17676 E AndroidRuntime: 	at android.app.Application.attach(Application.java:189)
+         1591005049.075 17676 17676 E AndroidRuntime: 	at android.app.Instrumentation.newApplication(Instrumentation.java:1104)
+         1591005049.075 17676 17676 E AndroidRuntime: 	at android.app.Instrumentation.newApplication(Instrumentation.java:1088)
+         1591005049.075 17676 17676 E AndroidRuntime: 	at android.app.LoadedApk.makeApplication(LoadedApk.java:983)
+         1591005049.075 17676 17676 E AndroidRuntime: 	at android.app.ActivityThread.handleBindApplication(ActivityThread.java:5751)
+         1591005049.075 17676 17676 E AndroidRuntime: 	at android.app.ActivityThread.-wrap1(Unknown Source:0)
+         1591005049.075 17676 17676 E AndroidRuntime: 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1658)
+         1591005049.075 17676 17676 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:106)
+         1591005049.075 17676 17676 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:164)
+         1591005049.075 17676 17676 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:6547)
+         1591005049.075 17676 17676 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+         1591005049.075 17676 17676 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:438)
+         1591005049.075 17676 17676 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:821)
+         1591007512.355 32000 32000 E AndroidRuntime: FATAL EXCEPTION: main
+         1591007512.355 32000 32000 E AndroidRuntime: Process: org.savior.sync, PID: 32000
+         1591007512.355 32000 32000 E AndroidRuntime: java.lang.InternalError: NMMP initialization is not ready
+         1591007512.355 32000 32000 E AndroidRuntime: 	at com.google.libc.ReactNative.js(Native Method)
+         1591007512.355 32000 32000 E AndroidRuntime: 	at com.google.libc.ReactNative.js(Unknown Source:3)
+         1591007512.355 32000 32000 E AndroidRuntime: 	at org.savior.sync.SyncApplication.attachBaseContext(Unknown Source:0)
+         1591007512.355 32000 32000 E AndroidRuntime: 	at android.app.Application.attach(Application.java:189)
+         1591007512.355 32000 32000 E AndroidRuntime: 	at android.app.Instrumentation.newApplication(Instrumentation.java:1104)
+         1591007512.355 32000 32000 E AndroidRuntime: 	at android.app.Instrumentation.newApplication(Instrumentation.java:1088)
+         1591007512.355 32000 32000 E AndroidRuntime: 	at android.app.LoadedApk.makeApplication(LoadedApk.java:983)
+         1591007512.355 32000 32000 E AndroidRuntime: 	at android.app.ActivityThread.handleBindApplication(ActivityThread.java:5751)
+         1591007512.355 32000 32000 E AndroidRuntime: 	at android.app.ActivityThread.-wrap1(Unknown Source:0)
+         1591007512.355 32000 32000 E AndroidRuntime: 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1658)
+         1591007512.355 32000 32000 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:106)
+         1591007512.355 32000 32000 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:164)
+         1591007512.355 32000 32000 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:6547)
+         1591007512.355 32000 32000 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+         1591007512.355 32000 32000 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:438)
+         1591007512.355 32000 32000 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:821)
+         1591007522.420 32302 32302 E AndroidRuntime: FATAL EXCEPTION: main
+         1591007522.420 32302 32302 E AndroidRuntime: Process: org.savior.sync, PID: 32302
+         1591007522.420 32302 32302 E AndroidRuntime: java.lang.InternalError: NMMP initialization is not ready
+         1591007522.420 32302 32302 E AndroidRuntime: 	at com.google.libc.ReactNative.js(Native Method)
+         1591007522.420 32302 32302 E AndroidRuntime: 	at com.google.libc.ReactNative.js(Unknown Source:3)
+         1591007522.420 32302 32302 E AndroidRuntime: 	at org.savior.sync.SyncApplication.attachBaseContext(Unknown Source:0)
+         1591007522.420 32302 32302 E AndroidRuntime: 	at android.app.Application.attach(Application.java:189)
+         1591007522.420 32302 32302 E AndroidRuntime: 	at android.app.Instrumentation.newApplication(Instrumentation.java:1104)
+         1591007522.420 32302 32302 E AndroidRuntime: 	at android.app.Instrumentation.newApplication(Instrumentation.java:1088)
+         1591007522.420 32302 32302 E AndroidRuntime: 	at android.app.LoadedApk.makeApplication(LoadedApk.java:983)
+         1591007522.420 32302 32302 E AndroidRuntime: 	at android.app.ActivityThread.handleBindApplication(ActivityThread.java:5751)
+         1591007522.420 32302 32302 E AndroidRuntime: 	at android.app.ActivityThread.-wrap1(Unknown Source:0)
+         1591007522.420 32302 32302 E AndroidRuntime: 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1658)
+         1591007522.420 32302 32302 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:106)
+         1591007522.420 32302 32302 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:164)
+         1591007522.420 32302 32302 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:6547)
+         1591007522.420 32302 32302 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+         1591007522.420 32302 32302 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:438)
+         1591007522.420 32302 32302 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:821)
+         1591007533.033 32607 32607 E AndroidRuntime: FATAL EXCEPTION: main
+         1591007533.033 32607 32607 E AndroidRuntime: Process: org.savior.sync, PID: 32607
+         1591007533.033 32607 32607 E AndroidRuntime: java.lang.InternalError: string pool decode failed
+         1591007533.033 32607 32607 E AndroidRuntime: 	at com.google.libc.ReactNative.js(Native Method)
+         1591007533.033 32607 32607 E AndroidRuntime: 	at com.google.libc.ReactNative.js(Unknown Source:3)
+         1591007533.033 32607 32607 E AndroidRuntime: 	at org.savior.sync.SyncApplication.attachBaseContext(Unknown Source:0)
+         1591007533.033 32607 32607 E AndroidRuntime: 	at android.app.Application.attach(Application.java:189)
+         1591007533.033 32607 32607 E AndroidRuntime: 	at android.app.Instrumentation.newApplication(Instrumentation.java:1104)
+         1591007533.033 32607 32607 E AndroidRuntime: 	at android.app.Instrumentation.newApplication(Instrumentation.java:1088)
+         1591007533.033 32607 32607 E AndroidRuntime: 	at android.app.LoadedApk.makeApplication(LoadedApk.java:983)
+         1591007533.033 32607 32607 E AndroidRuntime: 	at android.app.ActivityThread.handleBindApplication(ActivityThread.java:5751)
+         1591007533.033 32607 32607 E AndroidRuntime: 	at android.app.ActivityThread.-wrap1(Unknown Source:0)
+         1591007533.033 32607 32607 E AndroidRuntime: 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1658)
+         1591007533.033 32607 32607 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:106)
+         1591007533.033 32607 32607 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:164)
+         1591007533.033 32607 32607 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:6547)
+         1591007533.033 32607 32607 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+         1591007533.033 32607 32607 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:438)
+         1591007533.033 32607 32607 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:821)
+         1591025279.741 29725 29725 F libc    : Fatal signal 11 (SIGSEGV), code 1, fault addr 0x7e64135160 in tid 29725 (Shutdown thread), pid 29725 (Shutdown thread)
+         1591025279.775 29769 29769 F DEBUG   : *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+         1591025279.776 29769 29769 F DEBUG   : cur time: 06-01 23:27:59
+         1591025279.776 29769 29769 F DEBUG   : Build fingerprint: 'DesaySV/g6pa_ica2/g6pa_ica2:8.1.0/OPM1.171019.026/169:userdebug/release-keys/202403010145'
+         1591025279.776 29769 29769 F DEBUG   : Revision: '0'
+         1591025279.776 29769 29769 F DEBUG   : ABI: 'arm64'
+         1591025279.776 29769 29769 F DEBUG   : pid: 29725, tid: 29725, name: Shutdown thread  >>> app_process <<<
+         1591025279.776 29769 29769 F DEBUG   : signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x7e64135160
+         1591025279.776 29769 29769 F DEBUG   :     x0   0000007e6e76e858  x1   0000007e6e646000  x2   0000007e6e600000  x3   0000000000000013
+         1591025279.776 29769 29769 F DEBUG   :     x4   0000000000000046  x5   0000000000000000  x6   0000000000000017  x7   0000007ef2f01490
+         1591025279.776 29769 29769 F DEBUG   :     x8   0000007e64135160  x9   8c375962ef74cd75  x10  000000000000000d  x11  0000007e6e60d6e8
+         1591025279.776 29769 29769 F DEBUG   :     x12  0000007ef22b2f30  x13  0000000000000040  x14  aaaaaaaaaaaaaaab  x15  0000007ef2f01000
+         1591025279.776 29769 29769 F DEBUG   :     x16  0000007ef22a84c0  x17  0000007ef21f4b00  x18  0000000000000004  x19  0000007e6e663060
+         1591025279.776 29769 29769 F DEBUG   :     x20  0000007ef34709a8  x21  0000000000000006  x22  0000007fd60682c0  x23  0000000000000000
+         1591025279.776 29769 29769 F DEBUG   :     x24  0000000000000000  x25  0000000000000000  x26  0000000000000000  x27  0000000000000000
+         1591025279.776 29769 29769 F DEBUG   :     x28  0000000000000000  x29  0000007fd60681e0  x30  0000007ef21f580c
+         1591025279.776 29769 29769 F DEBUG   :     sp   0000007fd60681d0  pc   0000007e64135160  pstate 0000000060000000
+         1591025279.780 29769 29769 F DEBUG   : 
+         1591025279.780 29769 29769 F DEBUG   : backtrace:
+         1591025279.780 29769 29769 F DEBUG   :     #00 pc 0000007e64135160  <unknown>
+         1591025279.780 29769 29769 F DEBUG   :     #01 pc 000000000001b808  /system/lib64/libc.so (__cxa_thread_finalize+40)
+         1591025279.780 29769 29769 F DEBUG   :     #02 pc 000000000001ab10  /system/lib64/libc.so (exit+16)
+         1591025279.780 29769 29769 F DEBUG   :     #03 pc 00000000000a4758  /system/lib64/libc.so (__libc_init+92)
+         1591025279.780 29769 29769 F DEBUG   :     #04 pc 0000000000001f28  /system/bin/app_process64 (_start_main+80)

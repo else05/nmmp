@@ -1,0 +1,92 @@
+[
+  {
+    "case": "arithmetic",
+    "driverIterations": 100,
+    "nativeAllocationRequestsA": 100,
+    "nativeAllocationRequestsC": 0,
+    "bytesReadC": 401200,
+    "keystreamBlockMissesC": 180500,
+    "maxFetchOffsetC": 29,
+    "maxPayloadOffsetC": 0
+  },
+  {
+    "case": "branch",
+    "driverIterations": 100,
+    "nativeAllocationRequestsA": 100,
+    "nativeAllocationRequestsC": 0,
+    "bytesReadC": 441000,
+    "keystreamBlockMissesC": 200300,
+    "maxFetchOffsetC": 37,
+    "maxPayloadOffsetC": 0
+  },
+  {
+    "case": "shortCall",
+    "driverIterations": 100,
+    "nativeAllocationRequestsA": 100,
+    "nativeAllocationRequestsC": 0,
+    "bytesReadC": 1200,
+    "keystreamBlockMissesC": 500,
+    "maxFetchOffsetC": 11,
+    "maxPayloadOffsetC": 0
+  },
+  {
+    "case": "largeShort",
+    "driverIterations": 100,
+    "nativeAllocationRequestsA": 100,
+    "nativeAllocationRequestsC": 0,
+    "bytesReadC": 600,
+    "keystreamBlockMissesC": 100,
+    "maxFetchOffsetC": 7,
+    "maxPayloadOffsetC": 0
+  },
+  {
+    "case": "jniObject",
+    "driverIterations": 100,
+    "nativeAllocationRequestsA": 100,
+    "nativeAllocationRequestsC": 0,
+    "bytesReadC": 3400,
+    "keystreamBlockMissesC": 800,
+    "maxFetchOffsetC": 31,
+    "maxPayloadOffsetC": 0
+  },
+  {
+    "case": "arrayPayload",
+    "driverIterations": 100,
+    "nativeAllocationRequestsA": 100,
+    "nativeAllocationRequestsC": 0,
+    "bytesReadC": 54000,
+    "keystreamBlockMissesC": 7500,
+    "maxFetchOffsetC": 19,
+    "maxPayloadOffsetC": 539
+  },
+  {
+    "case": "exception",
+    "driverIterations": 100,
+    "nativeAllocationRequestsA": 200,
+    "nativeAllocationRequestsC": 0,
+    "bytesReadC": 2700,
+    "keystreamBlockMissesC": 800,
+    "maxFetchOffsetC": 13,
+    "maxPayloadOffsetC": 0
+  },
+  {
+    "case": "recursive",
+    "driverIterations": 100,
+    "nativeAllocationRequestsA": 900,
+    "nativeAllocationRequestsC": 0,
+    "bytesReadC": 16600,
+    "keystreamBlockMissesC": 6500,
+    "maxFetchOffsetC": 23,
+    "maxPayloadOffsetC": 0
+  },
+  {
+    "case": "multiThread",
+    "driverIterations": 100,
+    "nativeAllocationRequestsA": 400,
+    "nativeAllocationRequestsC": 0,
+    "bytesReadC": 4800,
+    "keystreamBlockMissesC": 2000,
+    "maxFetchOffsetC": 11,
+    "maxPayloadOffsetC": 0
+  }
+]

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.nmmedit.apkprotect.util.CmakeUtilsTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-09-12T17:36:04" hostname="DESKTOP-MHK8Q30" time="0.002">
+  <properties/>
+  <testcase name="writesOnlyXoredSignerDigestToGeneratedConfig" classname="com.nmmedit.apkprotect.util.CmakeUtilsTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

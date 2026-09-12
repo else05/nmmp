@@ -1,0 +1,8 @@
+{
+  "all18ProbeScenariosReturnCorrectResults": true,
+  "legacyLargeMethodAllocationBytesPerCall": 7896,
+  "newLargeMethodMaxReadByteOffset": 7,
+  "newNativeAllocationRequestsObserved": 0,
+  "nativeAllocationScope": "Wrapped requests from this SO; excludes ART, dependency allocators and mmap",
+  "note": "Initial driver incorrectly required positive allocations for every variant. C correctly makes zero wrapped requests in these small-frame methods; corrected assertion and revalidated saved results."
+}

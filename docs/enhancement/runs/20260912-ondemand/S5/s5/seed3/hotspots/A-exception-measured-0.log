@@ -1,0 +1,17 @@
+{"case":"exception","round":-5,"iterations":76078,"elapsedNs":1484883593,"checksum":684702}
+{"case":"exception","round":-4,"iterations":76078,"elapsedNs":1492379791,"checksum":684702}
+{"case":"exception","round":-3,"iterations":76078,"elapsedNs":1482370573,"checksum":684702}
+{"case":"exception","round":-2,"iterations":76078,"elapsedNs":1477868124,"checksum":684702}
+{"case":"exception","round":-1,"iterations":76078,"elapsedNs":1474662395,"checksum":684702}
+{"case":"exception","round":0,"iterations":76078,"elapsedNs":1466723645,"checksum":684702}
+{"case":"exception","round":1,"iterations":76078,"elapsedNs":1464453646,"checksum":684702}
+{"case":"exception","round":2,"iterations":76078,"elapsedNs":1464006250,"checksum":684702}
+{"case":"exception","round":3,"iterations":76078,"elapsedNs":1470259948,"checksum":684702}
+{"case":"exception","round":4,"iterations":76078,"elapsedNs":1463416301,"checksum":684702}
+{"case":"exception","round":5,"iterations":76078,"elapsedNs":1471601354,"checksum":684702}
+{"case":"exception","round":6,"iterations":76078,"elapsedNs":1463255156,"checksum":684702}
+{"case":"exception","round":7,"iterations":76078,"elapsedNs":1468278021,"checksum":684702}
+{"case":"exception","round":8,"iterations":76078,"elapsedNs":1473583646,"checksum":684702}
+{"case":"exception","round":9,"iterations":76078,"elapsedNs":1462512448,"checksum":684702}
+VmHWM:	   51844 kB
+VmRSS:	   44884 kB

@@ -1,0 +1,98 @@
+[
+  {
+    "case": "recursive",
+    "round": -1,
+    "iterations": 1000,
+    "elapsedNs": 41420781,
+    "checksum": 37000,
+    "variant": "C"
+  },
+  {
+    "case": "recursive",
+    "round": 0,
+    "iterations": 1000,
+    "elapsedNs": 41623333,
+    "checksum": 37000,
+    "variant": "C"
+  },
+  {
+    "case": "recursive",
+    "round": 1,
+    "iterations": 1000,
+    "elapsedNs": 39828125,
+    "checksum": 37000,
+    "variant": "C"
+  },
+  {
+    "case": "recursive",
+    "round": -1,
+    "iterations": 1000,
+    "elapsedNs": 44159739,
+    "checksum": 37000,
+    "variant": "D"
+  },
+  {
+    "case": "recursive",
+    "round": 0,
+    "iterations": 1000,
+    "elapsedNs": 44072500,
+    "checksum": 37000,
+    "variant": "D"
+  },
+  {
+    "case": "recursive",
+    "round": 1,
+    "iterations": 1000,
+    "elapsedNs": 42128229,
+    "checksum": 37000,
+    "variant": "D"
+  },
+  {
+    "case": "recursive",
+    "round": -1,
+    "iterations": 1000,
+    "elapsedNs": 45102135,
+    "checksum": 37000,
+    "variant": "A"
+  },
+  {
+    "case": "recursive",
+    "round": 0,
+    "iterations": 1000,
+    "elapsedNs": 42905052,
+    "checksum": 37000,
+    "variant": "A"
+  },
+  {
+    "case": "recursive",
+    "round": 1,
+    "iterations": 1000,
+    "elapsedNs": 40912344,
+    "checksum": 37000,
+    "variant": "A"
+  },
+  {
+    "case": "recursive",
+    "round": -1,
+    "iterations": 1000,
+    "elapsedNs": 43999791,
+    "checksum": 37000,
+    "variant": "B"
+  },
+  {
+    "case": "recursive",
+    "round": 0,
+    "iterations": 1000,
+    "elapsedNs": 43828229,
+    "checksum": 37000,
+    "variant": "B"
+  },
+  {
+    "case": "recursive",
+    "round": 1,
+    "iterations": 1000,
+    "elapsedNs": 43038594,
+    "checksum": 37000,
+    "variant": "B"
+  }
+]

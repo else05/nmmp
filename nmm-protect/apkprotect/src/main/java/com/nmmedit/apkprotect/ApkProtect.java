@@ -120,6 +120,8 @@ public class ApkProtect {
                     classAnalyzer,
                     apkFolders.getCodeGeneratedDir(),
                     protectionContext);
+            CmakeUtils.writeProtectionManifestConfig(
+                    apkFolders.getDex2cSrcDir(), protectionContext.buildManifest());
 
 
             //需要放在主dex里的类

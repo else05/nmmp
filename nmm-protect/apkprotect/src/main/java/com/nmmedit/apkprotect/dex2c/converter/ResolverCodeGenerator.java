@@ -5,6 +5,7 @@ import com.android.tools.smali.dexlib2.iface.reference.FieldReference;
 import com.android.tools.smali.dexlib2.iface.reference.MethodReference;
 import com.android.tools.smali.dexlib2.util.MethodUtil;
 import com.nmmedit.apkprotect.dex2c.MethodCodec;
+import com.nmmedit.apkprotect.dex2c.ProtectionManifest;
 import com.nmmedit.apkprotect.dex2c.ProtectionContext;
 import com.nmmedit.apkprotect.util.ModifiedUtf8;
 
@@ -26,6 +27,8 @@ public class ResolverCodeGenerator {
     private final References references;
     private final ProtectionContext protectionContext;
     private final long dexId;
+    private byte[] manifestEncodedStringPool;
+    private long[] manifestStringOffsets;
 
     public ResolverCodeGenerator(DexBackedDexFile dexFile,
                                  @Nonnull ClassAnalyzer analyzer,
@@ -47,6 +50,8 @@ public class ResolverCodeGenerator {
         writer.write("#include \"ConstantPool.h\"\n");
         writer.write("#include \"VmCodec.h\"\n");
         writer.write("#include \"VmCodecConfig.h\"\n\n");
+        writer.write("#include \"Sha256.h\"\n");
+        writer.write("#include \"ProtectionManifest.h\"\n\n");
         writer.write("#include <pthread.h>\n");
         writer.write("#include <string.h>\n\n");
 
@@ -119,6 +124,30 @@ public class ResolverCodeGenerator {
                 + "        const char *s=(const char *)gBaseStrPtr+gStringIds[m.shortyIdx].off; if(!*s || !strchr(\"VZBCSIJFDL\", *s)) return false;\n"
                 + "        for (++s; *s; ++s) if(!strchr(\"ZBCSIJFDL\", *s)) return false;\n"
                 + "    }\n    return true;\n}\n");
+        writer.write("static bool nmmp_verify_resolver_manifest(const uint8_t expected[32]) {\n"
+                + "    NmmpSha256Context hash; uint8_t digest[32];\n"
+                + "    nmmpSha256Init(&hash);\n"
+                + "    nmmpSha256Update(&hash, (const uint8_t *)\"NMMP-RSL1\", 9);\n"
+                + "    nmmpSha256UpdateU32(&hash, gStringPoolDexId);\n"
+                + "    nmmpSha256UpdateU32(&hash, gStringPoolByteSize);\n"
+                + "    nmmpSha256Update(&hash, gBaseStrPtr, gStringPoolByteSize);\n"
+                + "    nmmpSha256UpdateU32(&hash, gStringIds_COUNT);\n"
+                + "    for (u4 i=0; i<gStringIds_COUNT; ++i) nmmpSha256UpdateU32(&hash, gStringIds[i].off);\n"
+                + "    nmmpSha256UpdateU32(&hash, gTypeIds_COUNT);\n"
+                + "    for (u4 i=0; i<gTypeIds_COUNT; ++i) nmmpSha256UpdateU32(&hash, gTypeIds[i].idx);\n"
+                + "    nmmpSha256UpdateU32(&hash, gClassIds_COUNT);\n"
+                + "    for (u4 i=0; i<gClassIds_COUNT; ++i) nmmpSha256UpdateU32(&hash, gClassIds[i].idx);\n"
+                + "    nmmpSha256UpdateU32(&hash, gSignatureIds_COUNT);\n"
+                + "    for (u4 i=0; i<gSignatureIds_COUNT; ++i) nmmpSha256UpdateU32(&hash, gSignatureIds[i].idx);\n"
+                + "    nmmpSha256UpdateU32(&hash, gFieldIds_COUNT);\n"
+                + "    for (u4 i=0; i<gFieldIds_COUNT; ++i) { FieldId v=gFieldIds[i]; nmmpSha256UpdateU32(&hash,v.classIdx); nmmpSha256UpdateU32(&hash,v.nameIdx); nmmpSha256UpdateU32(&hash,v.typeIdx); }\n"
+                + "    nmmpSha256UpdateU32(&hash, gMethodIds_COUNT);\n"
+                + "    for (u4 i=0; i<gMethodIds_COUNT; ++i) { MethodId v=gMethodIds[i]; nmmpSha256UpdateU32(&hash,v.classIdx); nmmpSha256UpdateU32(&hash,v.nameIdx); nmmpSha256UpdateU32(&hash,v.shortyIdx); nmmpSha256UpdateU32(&hash,v.sigIdx); }\n"
+                + "    nmmpSha256UpdateU32(&hash, gStringConstantIds_COUNT);\n"
+                + "    for (u4 i=0; i<gStringConstantIds_COUNT; ++i) nmmpSha256UpdateU32(&hash, gStringConstantIds[i].idx);\n"
+                + "    nmmpSha256Final(&hash, digest);\n"
+                + "    return nmmpProtectionDigestEqual(digest, expected);\n"
+                + "}\n");
     }
 
     private void generateResolver(Writer writer) throws IOException {
@@ -470,6 +499,9 @@ public class ResolverCodeGenerator {
                 plainBytes,
                 dexId,
                 MethodCodec.DOMAIN_STRING);
+        manifestEncodedStringPool = encodedBytes.clone();
+        manifestStringOffsets = new long[strOffsets.size()];
+        for (int i = 0; i < strOffsets.size(); ++i) manifestStringOffsets[i] = strOffsets.get(i);
 
         writer.write(String.format(
                 "static u1 gBaseStrPtr[%d] = {\n",
@@ -522,6 +554,57 @@ public class ResolverCodeGenerator {
         writer.write("//ends string ids\n\n");
 
         writer.flush();
+    }
+
+    public int getManifestItemCount() {
+        long count = references.getStringPool().size() + references.getTypePool().size()
+                + references.getClassNamePool().size() + references.getSignaturePool().size()
+                + references.getFieldPool().size() + references.getMethodPool().size()
+                + references.getConstantStringPool().size();
+        if (count > Integer.MAX_VALUE) throw new IllegalStateException("Resolver item count overflow");
+        return (int) count;
+    }
+
+    public byte[] getManifestDigest() {
+        if (manifestEncodedStringPool == null || manifestStringOffsets == null) {
+            throw new IllegalStateException("Resolver manifest requested before generation");
+        }
+        ProtectionManifest.CanonicalDigest digest = new ProtectionManifest.CanonicalDigest("NMMP-RSL1");
+        digest.putU32(dexId).putU32(manifestEncodedStringPool.length).putBytes(manifestEncodedStringPool);
+        digest.putU32(manifestStringOffsets.length);
+        for (long offset : manifestStringOffsets) digest.putU32(offset);
+        digest.putU32(references.getTypePool().size());
+        for (String value : references.getTypePool()) digest.putU32(references.getStringItemIndex(value));
+        digest.putU32(references.getClassNamePool().size());
+        for (String value : references.getClassNamePool()) digest.putU32(references.getStringItemIndex(value));
+        digest.putU32(references.getSignaturePool().size());
+        for (String value : references.getSignaturePool()) digest.putU32(references.getStringItemIndex(value));
+        digest.putU32(references.getFieldPool().size());
+        for (FieldReference value : references.getFieldPool()) {
+            digest.putU32(references.getClassNameItemIndex(className(value.getDefiningClass())))
+                    .putU32(references.getStringItemIndex(value.getName()))
+                    .putU32(references.getTypeItemIndex(value.getType()));
+        }
+        digest.putU32(references.getMethodPool().size());
+        for (MethodReference value : references.getMethodPool()) {
+            digest.putU32(references.getClassNameItemIndex(className(value.getDefiningClass())))
+                    .putU32(references.getStringItemIndex(value.getName()))
+                    .putU32(references.getStringItemIndex(
+                            MethodUtil.getShorty(value.getParameterTypes(), value.getReturnType())))
+                    .putU32(references.getSignatureItemIndex(
+                            MyMethodUtil.getMethodSignature(value.getParameterTypes(), value.getReturnType())));
+        }
+        digest.putU32(references.getConstantStringPool().size());
+        for (String value : references.getConstantStringPool()) {
+            digest.putU32(references.getStringItemIndex(value));
+        }
+        return digest.finish();
+    }
+
+    private static String className(String definingClass) {
+        return definingClass.charAt(0) == 'L'
+                ? definingClass.substring(1, definingClass.length() - 1)
+                : definingClass;
     }
 
     static String stringEsc(String str) throws UTFDataFormatException {

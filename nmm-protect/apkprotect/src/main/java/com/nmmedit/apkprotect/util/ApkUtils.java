@@ -4,6 +4,8 @@ package com.nmmedit.apkprotect.util;
 import com.android.zipflinger.ZipArchive;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -62,16 +64,19 @@ public final class ApkUtils {
 
     public static List<File> extractFiles(File apkFile, Pattern regex, File outDir) throws IOException {
         try (ZipArchive apkZip = new ZipArchive(apkFile.toPath())) {
+            Path root = outDir.getCanonicalFile().toPath();
+            // Validate the complete selection before creating or overwriting files.
+            for (String entry : apkZip.listEntries()) {
+                if (regex.matcher(entry).matches()) extractionTarget(root, entry);
+            }
             List<File> result = new LinkedList<>();
             for (String entry : apkZip.listEntries()) {
-                if (regex.matcher(entry).matches()) {
+                if (regex.matcher(entry).matches() && !entry.endsWith("/")) {
+                    File file = extractionTarget(root, entry);
+                    Files.createDirectories(file.getParentFile().toPath());
                     final InputStream input = apkZip.getInputStream(entry);
                     if (input == null) {//directory?
                         continue;
-                    }
-                    File file = new File(outDir, entry);
-                    if (!file.getParentFile().exists()) {
-                        file.getParentFile().mkdirs();
                     }
                     try (InputStream in = input;
                          FileOutputStream output = new FileOutputStream(file)) {
@@ -82,5 +87,21 @@ public final class ApkUtils {
             }
             return result;
         }
+    }
+
+    private static File extractionTarget(Path root, String entry) throws IOException {
+        if (entry.isEmpty() || entry.startsWith("/") || entry.indexOf('\\') >= 0 || entry.indexOf(':') >= 0) {
+            throw new IOException("Unsafe archive entry: " + entry);
+        }
+        for (String part : entry.split("/")) {
+            if (part.isEmpty() || part.equals(".") || part.equals("..")) {
+                throw new IOException("Unsafe archive entry: " + entry);
+            }
+        }
+        File target = root.resolve(entry).toFile().getCanonicalFile();
+        if (!target.toPath().startsWith(root) || target.toPath().equals(root)) {
+            throw new IOException("Archive entry escapes output directory: " + entry);
+        }
+        return target;
     }
 }

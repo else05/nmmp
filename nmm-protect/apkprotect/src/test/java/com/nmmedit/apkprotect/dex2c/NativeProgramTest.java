@@ -206,11 +206,33 @@ public class NativeProgramTest {
         StringWriter header = new StringWriter(); a.writeHeader(header);
         assertTrue(header.toString().contains("#include \"NativeVm.h\""));
         assertTrue(header.toString().contains("static const NmmpNativeProgram NMMP_ROOT_PROGRAM"));
-        assertTrue(header.toString().contains("NMMP_ROOT_CODE, 224,"));
+        assertTrue(header.toString().contains("NMMP_ROOT_CODE, " + a.code.length + ","));
         for (long data : new long[]{0, 1, Long.MIN_VALUE, -1}) for (long binding : new long[]{0, 1, Long.MAX_VALUE, -1}) {
             NativeProgram.Result result = NativeProgram.run(a, new long[]{1, data, binding, 77});
             assertTrue(result.success); assertEquals(data ^ binding, result.value);
         }
+    }
+
+    @Test public void rootPlainStructureVariesAcrossTwentySeeds() {
+        Set<String> structures = new HashSet<>();
+        for (int seed = 0; seed < 20; ++seed) {
+            NativeProgram.Program program = NativeProgram.root(77, new Random(seed));
+            byte[] plain = new MethodCodec(program.key).transform(program.code, 0, DOMAIN);
+            for (int offset = 0; offset < plain.length; offset += INSTRUCTION_BYTES) {
+                int semantic = -1;
+                for (int op = 0; op < program.opcodes.length; ++op) {
+                    if (program.opcodes[op] == plain[offset]) { semantic = op; break; }
+                }
+                assertTrue(semantic >= 0);
+                plain[offset] = (byte) semantic;
+            }
+            structures.add(Arrays.toString(plain));
+            NativeProgram.Result result = NativeProgram.run(
+                    program, new long[]{1, 0x123456789abcdef0L, 0xfedcba9876543210L, 77});
+            assertTrue(result.success);
+            assertEquals(0x123456789abcdef0L ^ 0xfedcba9876543210L, result.value);
+        }
+        assertTrue(structures.size() >= 12);
     }
 
     private static String hex(byte[] bytes) {

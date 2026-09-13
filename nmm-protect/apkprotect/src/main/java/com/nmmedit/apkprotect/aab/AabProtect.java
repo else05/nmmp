@@ -51,7 +51,6 @@ public class AabProtect {
     public void run() throws IOException {
         final File inAab = aabFolders.getInAab();
         final File zipExtractDir = aabFolders.getZipExtractTempDir();
-        final ProtectionContext protectionContext = ProtectionContext.create();
 
 
         try {
@@ -63,6 +62,7 @@ public class AabProtect {
 
 
             final String packageName = ProtoUtils.AndroidManifest.getPackageName(manifestBytes);
+            final ProtectionContext protectionContext = ProtectionContext.create(packageName);
 
 
             //生成一些需要改变的c代码(随机opcode后的头文件及apk验证代码等)
@@ -89,6 +89,8 @@ public class AabProtect {
                     classAnalyzer,
                     aabFolders.getCodeGeneratedDir(),
                     protectionContext);
+            CmakeUtils.writeProtectionManifestConfig(
+                    aabFolders.getDex2cSrcDir(), protectionContext.buildManifest());
 
 
             //需要放在主dex里的类

@@ -12,6 +12,7 @@ if (NOT ANDROID_ABI STREQUAL "arm64-v8a")
     message(FATAL_ERROR "NMMP requires arm64-v8a")
 endif ()
 message(STATUS "NMMP: on-demand-v1, private linker and stage0 VM")
+option(NMMP_DIAGNOSTICS "Include detailed NMMP loader diagnostics" OFF)
 
 # 仅在外部明确传入插件路径时启用 O-MVLL，保持原构建流程不变。
 set(NMMP_OMVLL_PLUGIN "" CACHE FILEPATH "O-MVLL plugin path")

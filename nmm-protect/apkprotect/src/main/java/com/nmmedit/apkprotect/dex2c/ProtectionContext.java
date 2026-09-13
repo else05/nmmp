@@ -2,12 +2,13 @@ package com.nmmedit.apkprotect.dex2c;
 
 import com.nmmedit.apkprotect.sign.SignatureBinding;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public final class ProtectionContext {
 
     public static final int CODEC_VERSION = 3;
-    public static final int TEMPLATE_VERSION = 5;
+    public static final int TEMPLATE_VERSION = 7;
 
     public static void validateDecodeMode() {
         String mode = System.getProperty("vmDecodeMode", System.getenv("NMMP_VM_DECODE_MODE"));
@@ -24,11 +25,18 @@ public final class ProtectionContext {
     private final boolean signatureBound;
     private final byte[] expectedSignerSha256;
     private final MethodCodec methodCodec;
+    private final ProtectionManifest protectionManifest;
     private long methodId;
     private long dexId;
 
     public static ProtectionContext create() {
-        return new ProtectionContext(GeneratorRandom.create("context").nextLong(), 0, "", null);
+        final Random random = GeneratorRandom.create("context");
+        return new ProtectionContext(random.nextLong(), random.nextLong(), "", null);
+    }
+
+    public static ProtectionContext create(String packageName) {
+        final Random random = GeneratorRandom.create("context");
+        return new ProtectionContext(random.nextLong(), random.nextLong(), packageName, null);
     }
 
     public static ProtectionContext createBound(String packageName, byte[] signerCertificate) {
@@ -60,6 +68,18 @@ public final class ProtectionContext {
                 ? buildSeed ^ SignatureBinding.deriveMask(packageName, signerCertificate, buildId)
                 : buildSeed;
         this.methodCodec = new MethodCodec(buildSeed);
+        final byte[] manifestKey = new byte[ProtectionManifest.DIGEST_SIZE];
+        GeneratorRandom.create("manifest-key", buildId).nextBytes(manifestKey);
+        protectionManifest = new ProtectionManifest(
+                buildId,
+                CODEC_VERSION,
+                TEMPLATE_VERSION,
+                packageName,
+                signatureBound,
+                expectedSignerSha256,
+                manifestKey,
+                protectionPolicyFlags());
+        Arrays.fill(manifestKey, (byte) 0);
     }
 
     public long getBuildSeed() {
@@ -90,6 +110,14 @@ public final class ProtectionContext {
         return methodCodec;
     }
 
+    public void addManifestEntry(ProtectionManifest.Entry entry) {
+        protectionManifest.add(entry);
+    }
+
+    public ProtectionManifest.Built buildManifest() {
+        return protectionManifest.build();
+    }
+
     public long nextMethodId() {
         return takeNextId(methodId++, "methodId");
     }
@@ -103,5 +131,20 @@ public final class ProtectionContext {
             throw new IllegalStateException(name + " 已耗尽");
         }
         return value;
+    }
+
+    private static int protectionPolicyFlags() {
+        String profile = System.getProperty("nmmp.protectionProfile");
+        if (profile == null) profile = System.getenv("NMMP_PROTECTION_PROFILE");
+        if (profile == null || profile.equals("observe")) {
+            return ProtectionManifest.POLICY_CHECK_DEBUG | ProtectionManifest.POLICY_CHECK_MAPS;
+        }
+        if (profile.equals("enforce")) {
+            return ProtectionManifest.POLICY_ENFORCE
+                    | ProtectionManifest.POLICY_CHECK_DEBUG
+                    | ProtectionManifest.POLICY_CHECK_MAPS;
+        }
+        throw new IllegalArgumentException(
+                "nmmp.protectionProfile/NMMP_PROTECTION_PROFILE must be observe or enforce");
     }
 }

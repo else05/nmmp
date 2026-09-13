@@ -72,6 +72,8 @@ public class AarProtect {
                     instructionRewriter,
                     aarFolders.apkFolders.getCodeGeneratedDir(),
                     protectionContext);
+            CmakeUtils.writeProtectionManifestConfig(
+                    aarFolders.apkFolders.getDex2cSrcDir(), protectionContext.buildManifest());
 
             //根据处理过的dex信息修改转换前的class文件
             final File newClassesJar = modifyClassFiles(dexConfig);

@@ -38,6 +38,9 @@ target_include_directories(${LIBNAME_PLACEHOLDER} PRIVATE loader "${PRIVATE_DIR}
 target_sources(${LIBNAME_PLACEHOLDER} PRIVATE loader/Stage0.c vm/NativeVm.c)
 target_include_directories(${LIBNAME_PLACEHOLDER} PRIVATE vm/include)
 target_compile_options(${LIBNAME_PLACEHOLDER} PRIVATE -ffunction-sections -fdata-sections)
+if (NMMP_DIAGNOSTICS)
+    target_compile_definitions(${LIBNAME_PLACEHOLDER} PRIVATE NMMP_DIAGNOSTICS=1)
+endif ()
 target_link_libraries(${LIBNAME_PLACEHOLDER} log dl z)
 set_target_properties(${LIBNAME_PLACEHOLDER} PROPERTIES C_VISIBILITY_PRESET hidden
         LINK_FLAGS "-Wl,--gc-sections,--exclude-libs,ALL,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/loader/outer.exports")

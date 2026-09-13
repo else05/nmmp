@@ -11,6 +11,7 @@ import com.google.common.collect.HashMultimap;
 import com.nmmedit.apkprotect.dex2c.DexConfig;
 import com.nmmedit.apkprotect.dex2c.DemandCodec;
 import com.nmmedit.apkprotect.dex2c.DemandModule;
+import com.nmmedit.apkprotect.dex2c.ProtectionManifest;
 import com.nmmedit.apkprotect.dex2c.ProtectionContext;
 import com.nmmedit.apkprotect.dex2c.converter.instructionrewriter.InstructionRewriter;
 import com.nmmedit.apkprotect.dex2c.converter.structs.RegisterNativesUtilClassDef;
@@ -18,6 +19,7 @@ import com.nmmedit.apkprotect.dex2c.converter.structs.RegisterNativesUtilClassDe
 import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 
@@ -181,8 +183,7 @@ public class JniCodeGenerator {
             writer.append(", ").append(params.toString());
         }
         writer.append(") {\n");
-        if (protectionContext.isSignatureBound())
-            writer.write("    if (!nmmp_require_ready(env)) return" + (returnType.equals("V") ? ";\n" : " 0;\n"));
+        writer.write("    if (!nmmp_require_ready(env)) return" + (returnType.equals("V") ? ";\n" : " 0;\n"));
 
         writer.append(regsAssign);
         writer.append("\n");
@@ -245,6 +246,9 @@ public class JniCodeGenerator {
                         "#include <jni.h>\n" +
                         "#include <stdbool.h>\n" +
                         "#include \"vm.h\"\n" +
+                        "#include \"ProtectionManifest.h\"\n" +
+                        "#include \"ProtectionPolicy.h\"\n" +
+                        "#include \"Sha256.h\"\n" +
                         "#include \"%s\"\n" +
                         "\n" +
                         "#ifdef __cplusplus\n" +
@@ -262,13 +266,15 @@ public class JniCodeGenerator {
                         "\n"
                 , config.getResolverFile().getName()));
 
-        if (protectionContext.isSignatureBound()) codeWriter.write(
+        codeWriter.write(
                 "extern bool nmmp_vm_require_ready(void);\n"
+                        + "extern void nmmp_vm_fail(void);\n"
                         + "static bool nmmp_require_ready(JNIEnv *env) {\n"
-                        + "    if (nmmp_vm_require_ready()) return true;\n"
+                        + "    if (nmmp_vm_require_ready() && nmmpProtectionAllowCall(env)) return true;\n"
+                        + "    nmmp_vm_fail();\n"
                         + "    if (!(*env)->ExceptionCheck(env)) {\n"
                         + "        jclass error = (*env)->FindClass(env, \"java/lang/InternalError\");\n"
-                        + "        if (error) { (*env)->ThrowNew(env, error, \"NMMP initialization is not ready\"); (*env)->DeleteLocalRef(env, error); }\n"
+                        + "        if (error) { (*env)->ThrowNew(env, error, \"Protected execution unavailable\"); (*env)->DeleteLocalRef(env, error); }\n"
                         + "    }\n    return false;\n}\n");
         codeWriter.write("static vmDemandModule nmmpModule;\n\n");
         for (DexBackedClassDef classDef : dexFile.getClasses()) {
@@ -285,12 +291,23 @@ public class JniCodeGenerator {
                 module.blob.length, module.hash, module.moduleId, module.buildId));
         codeWriter.write("static bool nmmp_prepare_demand(JNIEnv *env) {\n");
         codeWriter.write("    return vmPrepareDemandModule(env, &nmmpModule);\n}\n");
-        generateNativeMethodCode(config, codeWriter);
+        generateNativeMethodCode(config, codeWriter, module);
+        protectionContext.addManifestEntry(new ProtectionManifest.Entry(
+                module.moduleId,
+                module.blob.length,
+                handledNativeMethods.size(),
+                resolverCodeGenerator.getManifestItemCount(),
+                manifestRegisterCount,
+                ProtectionManifest.sha256(module.blob),
+                resolverCodeGenerator.getManifestDigest(),
+                manifestRegisterDigest));
 
         codeWriter.write(String.format("void %s(JNIEnv *env) {\n", config.getHeaderFileAndSetupFunc().setupFunctionName));
+        codeWriter.write("    if ((*env)->ExceptionCheck(env)) { nmmp_vm_fail(); return; }\n");
 
         codeWriter.write("\n    //符号解析器初始化\n");
         if (!protectionContext.isSignatureBound()) {
+            codeWriter.write("    if (!nmmp_verify_protected_data()) { nmmpProtectionMarkIntegrityFailure(); return; }\n");
             codeWriter.write("    if (!resolver_init(env)) return;\n\n");
             codeWriter.write("    if (!nmmp_prepare_demand(env)) return;\n");
         }
@@ -302,14 +319,16 @@ public class JniCodeGenerator {
                     config.getRegisterNativesMethodName(), Collections.singletonList("I"), "V");
             codeWriter.write(String.format(
                     "    jclass clazz = (*env)->FindClass(env, \"%s\");\n" +
+                            "    if (clazz == NULL) { nmmp_vm_fail(); nmmp_require_ready(env); return; }\n" +
                             "    static const JNINativeMethod nativeMethod = {\n" +
                             "        .name=\"%s\",\n" +
                             "        .signature=\"(I)V\",\n" +
                             "        .fnPtr=%s\n" +
                             "    };\n" +
-                            "   (*env)->RegisterNatives(env, clazz, &nativeMethod, 1);\n" +
+                            "   const jint result = (*env)->RegisterNatives(env, clazz, &nativeMethod, 1);\n" +
                             "\n" +
                             "   (*env)->DeleteLocalRef(env, clazz);\n" +
+                            "   if (result != JNI_OK || (*env)->ExceptionCheck(env)) { nmmp_vm_fail(); nmmp_require_ready(env); }\n" +
                             "\n"
                     , config.getRegisterNativesClassName(),
                     config.getRegisterNativesMethodName(), funName));
@@ -323,7 +342,12 @@ public class JniCodeGenerator {
     }
 
     //生成本地方法注册代码,同时返回类名和方法数组索引等
-    private void generateNativeMethodCode(DexConfig config, Writer writer) throws IOException {
+    private byte[] manifestRegisterDigest;
+    private int manifestRegisterCount;
+
+    private void generateNativeMethodCode(DexConfig config,
+                                          Writer writer,
+                                          DemandModule.Built module) throws IOException {
         if (!isRegisterNative) {
             return;
         }
@@ -334,24 +358,33 @@ public class JniCodeGenerator {
                 "typedef struct{\n" +
                 "    u4 nameIdx;\n" +
                 "    u4 sigIdx;\n" +
+                "    u4 entryId;\n" +
                 "    void *fnPtr;\n" +
                 "} MyNativeMethod;\n");
 
         int methodIdx = 0;
+        final ProtectionManifest.CanonicalDigest registerDigest =
+                new ProtectionManifest.CanonicalDigest("NMMP-REG1");
+        registerDigest.putU32(module.moduleId).putU32(handledNativeMethods.size());
         writer.write("static const MyNativeMethod gNativeMethods[] = {\n");
         final References references = resolverCodeGenerator.getReferences();
-        for (String clazz : handledNativeMethods.keySet()) {
+        final List<String> classes = new ArrayList<>(handledNativeMethods.keySet());
+        Collections.sort(classes);
+        for (String clazz : classes) {
 
             int startIdx = methodIdx;
-            Set<MyMethod> methods = handledNativeMethods.get(clazz);
+            List<MyMethod> methods = new ArrayList<>(handledNativeMethods.get(clazz));
+            methods.sort(Comparator.comparing(JniCodeGenerator::methodIdentity));
             for (MyMethod method : methods) {
                 int nameIdx = references.getStringItemIndex(method.name);
                 int sigIdx = references.getStringItemIndex(MyMethodUtil.getMethodSignature(method.parameterTypes, method.returnType));
+                int entryId = methodEntryId(method);
                 writer.write(String.format(
-                        "    {%d, %d, (void *) %s},\n",
-                        nameIdx, sigIdx,
+                        "    {%d, %d, UINT32_C(0x%08x), (void *) %s},\n",
+                        nameIdx, sigIdx, entryId,
                         MyMethodUtil.getJniFunctionName(method.className, method.name, method.parameterTypes, method.returnType)
                 ));
+                registerDigest.putU32(nameIdx).putU32(sigIdx).putU32(Integer.toUnsignedLong(entryId));
                 methodIdx++;
             }
             methodRanger.put(clazz, new Ranger(startIdx, methodIdx - startIdx));
@@ -371,16 +404,54 @@ public class JniCodeGenerator {
 
         writer.write("static const NativeMethodData gNativeRegisterData[] = {\n");
         int dataOff = 0;
-        for (Map.Entry<String, Ranger> entry : methodRanger.entrySet()) {
-            Ranger ranger = entry.getValue();
-            final String className = entry.getKey();
+        registerDigest.putU32(classes.size());
+        for (String className : classes) {
+            Ranger ranger = methodRanger.get(className);
             int classIdx = references.getClassNameItemIndex(className);
             writer.write(String.format("    {.classIdx = %d, .offset = %d, .count = %d},\n", classIdx, ranger.start, ranger.count));
+            registerDigest.putU32(classIdx).putU32(ranger.start).putU32(ranger.count);
             nativeMethodOffsets.put(
                     className,
                     dataOff++ + (protectionContext.isSignatureBound() ? 1 : 0));
         }
         writer.write("};\n\n");
+        manifestRegisterCount = dataOff;
+        manifestRegisterDigest = registerDigest.finish();
+        writer.write(String.format(Locale.ROOT,
+                "#define NMMP_PROTECTED_METHOD_COUNT %du\n#define NMMP_REGISTER_DATA_COUNT %du\n",
+                methodIdx, dataOff));
+        writer.write(String.format(Locale.ROOT,
+                "static bool nmmp_verify_registration_manifest(const uint8_t expected[32]) {\n"
+                        + "    NmmpSha256Context hash; uint8_t digest[32];\n"
+                        + "    nmmpSha256Init(&hash); nmmpSha256Update(&hash, (const uint8_t *)\"NMMP-REG1\", 9);\n"
+                        + "    nmmpSha256UpdateU32(&hash, UINT32_C(0x%08x));\n"
+                        + "    nmmpSha256UpdateU32(&hash, NMMP_PROTECTED_METHOD_COUNT);\n"
+                        + "    for (u4 i=0; i<NMMP_PROTECTED_METHOD_COUNT; ++i) {\n"
+                        + "        MyNativeMethod v=gNativeMethods[i];\n"
+                        + "        if (!v.fnPtr || !nmmpProtectionPointerInImage(v.fnPtr)) return false;\n"
+                        + "        nmmpSha256UpdateU32(&hash,v.nameIdx); nmmpSha256UpdateU32(&hash,v.sigIdx); nmmpSha256UpdateU32(&hash,v.entryId);\n"
+                        + "    }\n"
+                        + "    nmmpSha256UpdateU32(&hash, NMMP_REGISTER_DATA_COUNT);\n"
+                        + "    for (u4 i=0; i<NMMP_REGISTER_DATA_COUNT; ++i) { NativeMethodData v=gNativeRegisterData[i];\n"
+                        + "        if (v.offset>NMMP_PROTECTED_METHOD_COUNT || v.count>NMMP_PROTECTED_METHOD_COUNT-v.offset) return false;\n"
+                        + "        nmmpSha256UpdateU32(&hash,v.classIdx); nmmpSha256UpdateU32(&hash,v.offset); nmmpSha256UpdateU32(&hash,v.count);\n"
+                        + "    }\n"
+                        + "    nmmpSha256Final(&hash,digest); return nmmpProtectionDigestEqual(digest,expected);\n"
+                        + "}\n"
+                        + "static bool nmmp_verify_protected_data(void) {\n"
+                        + "    NmmpManifestEntry entry; uint8_t digest[32];\n"
+                        + "    if (!nmmpProtectionGetEntry(UINT32_C(0x%08x), &entry)"
+                        + " || entry.moduleSize != sizeof(nmmpModuleBlob)"
+                        + " || entry.methodCount != NMMP_PROTECTED_METHOD_COUNT"
+                        + " || entry.resolverItemCount != %du"
+                        + " || entry.registerCount != NMMP_REGISTER_DATA_COUNT) return false;\n"
+                        + "    nmmpSha256(nmmpModuleBlob, sizeof(nmmpModuleBlob), digest);\n"
+                        + "    if (!nmmpProtectionDigestEqual(digest,entry.moduleDigest)"
+                        + " || !nmmp_verify_resolver_manifest(entry.resolverDigest)"
+                        + " || !nmmp_verify_registration_manifest(entry.registerDigest)) return false;\n"
+                        + "    return true;\n"
+                        + "}\n\n",
+                module.moduleId, module.moduleId, resolverCodeGenerator.getManifestItemCount()));
 
         //当前dex下所有处理过的class对应的本地方法注册
         final String funName = MyMethodUtil.getJniFunctionName(config.getRegisterNativesClassName(),
@@ -391,6 +462,8 @@ public class JniCodeGenerator {
         }
         writer.write(String.format(
                 "static void %s(JNIEnv *env, jclass jcls, jint dataIdx){\n" +
+                        "    if ((*env)->ExceptionCheck(env)) { nmmp_vm_fail(); return; }\n" +
+                        "    if ((u4) dataIdx >= NMMP_REGISTER_DATA_COUNT) { nmmp_vm_fail(); nmmp_require_ready(env); return; }\n" +
                         "#define MAX_METHOD 8\n" +
                         "    JNINativeMethod methodBuf[MAX_METHOD];\n" +
                         "\n" +
@@ -398,6 +471,7 @@ public class JniCodeGenerator {
                         "    const NativeMethodData data = gNativeRegisterData[(u4) dataIdx];\n" +
                         "    if (data.count > MAX_METHOD) {\n" +
                         "        methods = (JNINativeMethod *) malloc(sizeof(JNINativeMethod) * data.count);\n" +
+                        "        if (methods == NULL) { nmmp_vm_fail(); nmmp_require_ready(env); return; }\n" +
                         "    } else {\n" +
                         "        //方法数比较小直接使用栈内存,减少内存分配和释放\n" +
                         "        methods = methodBuf;\n" +
@@ -405,6 +479,8 @@ public class JniCodeGenerator {
                         "\n" +
                         "    jclass clazz = (*env)->FindClass(env, STRING_BY_CLASS_ID(data.classIdx));\n" +
                         "    if (clazz == NULL) {\n" +
+                        "        if (methods != methodBuf) free(methods);\n" +
+                        "        nmmp_vm_fail(); nmmp_require_ready(env);\n" +
                         "        return;\n" +
                         "    }\n" +
                         "    for (int midx = 0; midx < data.count; ++midx) {\n" +
@@ -416,12 +492,13 @@ public class JniCodeGenerator {
                         "        method->fnPtr = myNativeMethod.fnPtr;\n" +
                         "    }\n" +
                         "\n" +
-                        "    (*env)->RegisterNatives(env, clazz, methods, data.count);\n" +
+                        "    const jint result = (*env)->RegisterNatives(env, clazz, methods, data.count);\n" +
                         "\n" +
                         "    (*env)->DeleteLocalRef(env, clazz);\n" +
                         "\n" +
                         "    //不相等表示使用malloc申请的内存需要释放\n" +
                         "    if (methods != methodBuf)free(methods);\n" +
+                        "    if (result != JNI_OK || (*env)->ExceptionCheck(env)) { nmmp_vm_fail(); nmmp_require_ready(env); }\n" +
                         "}\n\n"
                 , funName)
         );
@@ -509,11 +586,23 @@ public class JniCodeGenerator {
                 + "    }\n    return true;\n}\n\n");
         writer.write(String.format(
                 "bool %s(JNIEnv *env) {\n"
+                        + "    if (!nmmp_verify_protected_data()) { nmmpProtectionMarkIntegrityFailure(); return false; }\n"
                         + "    if (!resolver_init(env)) return false;\n"
                         + "    if (!nmmp_prepare_demand(env)) return false;\n"
                         + "    return true;\n"
                         + "}\n\n",
                 activateFunction));
+    }
+
+    private static String methodIdentity(MyMethod method) {
+        return method.className + "->" + method.name
+                + MyMethodUtil.getMethodSignature(method.parameterTypes, method.returnType);
+    }
+
+    private static int methodEntryId(MyMethod method) {
+        byte[] digest = ProtectionManifest.sha256(methodIdentity(method).getBytes(StandardCharsets.UTF_8));
+        return (digest[0] & 0xff) | (digest[1] & 0xff) << 8
+                | (digest[2] & 0xff) << 16 | (digest[3] & 0xff) << 24;
     }
 
     public static String getJNIType(String type) {

@@ -528,4 +528,5 @@ int nmmp_run_constructors(NmmpModule *m) {
 }
 void *nmmp_bootstrap_address(const NmmpModule *m) { return m ? m->bootstrap : NULL; }
 uintptr_t nmmp_image_bias(const NmmpModule *m) { return m ? m->bias : 0; }
+const void *nmmp_image_start(const NmmpModule *m) { return m ? m->mapping : NULL; }
 size_t nmmp_image_size(const NmmpModule *m) { return m ? m->size : 0; }

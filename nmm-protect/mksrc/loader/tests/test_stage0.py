@@ -5,6 +5,7 @@ from pathlib import Path
 import struct
 import sys
 import unittest
+import random
 from unittest import mock
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -59,7 +60,7 @@ def reference(program, inputs):
                 return False, 0
         if op == fmt.LOAD_INPUT and a >= len(inputs):
             return False, 0
-        if op == fmt.JULT and target >= len(code) // fmt.INSTRUCTION_BYTES:
+        if op in (fmt.JULT, fmt.JMP) and target >= len(code) // fmt.INSTRUCTION_BYTES:
             return False, 0
         instructions.append((op, dst, a, b, imm, target))
     registers = [0] * fmt.REGISTERS
@@ -75,9 +76,28 @@ def reference(program, inputs):
             registers[dst] = imm
         elif op == fmt.XOR:
             registers[dst] = registers[a] ^ registers[b]
+        elif op == fmt.AND:
+            registers[dst] = registers[a] & registers[b]
+        elif op == fmt.OR:
+            registers[dst] = registers[a] | registers[b]
+        elif op == fmt.ADD:
+            registers[dst] = (registers[a] + registers[b]) & MASK
+        elif op == fmt.SUB:
+            registers[dst] = (registers[a] - registers[b]) & MASK
+        elif op == fmt.MUL:
+            registers[dst] = (registers[a] * registers[b]) & MASK
+        elif op == fmt.MOV:
+            registers[dst] = registers[a]
+        elif op in (fmt.SHL, fmt.SHR):
+            if registers[b] > 63:
+                return False, 0
+            registers[dst] = ((registers[a] << registers[b]) & MASK
+                              if op == fmt.SHL else registers[a] >> registers[b])
         elif op == fmt.JULT:
             if registers[a] < registers[b]:
                 pc = target
+        elif op == fmt.JMP:
+            pc = target
         elif op == fmt.RETURN:
             success = registers[fmt.STATUS_REGISTER] == fmt.SUCCESS_STATUS
             return success, registers[fmt.VALUE_REGISTER] if success else fmt.FAILURE_VALUE
@@ -113,12 +133,31 @@ class Stage0Test(unittest.TestCase):
         for program in first:
             self.assertEqual(len(program['opcodes']), fmt.OP_COUNT)
             self.assertEqual(len(set(program['opcodes'])), fmt.OP_COUNT)
-            self.assertEqual(len(program['code']), 14 * fmt.INSTRUCTION_BYTES)
+            self.assertIn(len(program['code']) // fmt.INSTRUCTION_BYTES, (17, 19, 21))
             self.assertEqual(stage0.transform(stage0.transform(program['code'], program['key']),
                                              program['key']), program['code'])
         # Exercise the production RNG path too, with no global PRNG seed.
         self.assertNotEqual(stage0.generate(FIXTURE_KEY, FIXTURE_BUILD_ID),
                             stage0.generate(FIXTURE_KEY, FIXTURE_BUILD_ID))
+
+    def test_plain_program_structure_varies_across_seeds(self):
+        structures = set()
+        for seed in range(20):
+            source = random.Random(seed)
+            random_bytes = lambda size, source=source: bytes(source.randrange(256) for _ in range(size))
+            program = stage0.generate(FIXTURE_KEY, FIXTURE_BUILD_ID, random_bytes)[0]
+            plain = stage0.transform(program['code'], program['key'])
+            instructions = []
+            for start in range(0, len(plain), fmt.INSTRUCTION_BYTES):
+                data = plain[start:start + fmt.INSTRUCTION_BYTES]
+                instructions.append((program['opcodes'].index(data[fmt.OFFSET_OP]),
+                                     data[fmt.OFFSET_DST], data[fmt.OFFSET_A], data[fmt.OFFSET_B],
+                                     struct.unpack_from('<Q', data, fmt.OFFSET_IMM)[0],
+                                     struct.unpack_from('<H', data, fmt.OFFSET_TARGET)[0]))
+            structures.add(tuple(instructions))
+            self.assertEqual(reference(program, struct.unpack('<2Q', FIXTURE_BUILD_ID)),
+                             (True, struct.unpack('<Q', FIXTURE_KEY[:8])[0]))
+        self.assertGreaterEqual(len(structures), 12)
 
     def test_stored_zero_and_corruption(self):
         class ByteSequence:

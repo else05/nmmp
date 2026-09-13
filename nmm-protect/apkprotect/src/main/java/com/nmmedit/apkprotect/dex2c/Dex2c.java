@@ -54,7 +54,7 @@ public class Dex2c {
                                                @Nonnull ProtectionContext protectionContext) throws IOException {
         if (!outDir.exists()) outDir.mkdirs();
         final GlobalDexConfig globalConfig =
-                new GlobalDexConfig(outDir, protectionContext.isSignatureBound());
+                new GlobalDexConfig(outDir, protectionContext);
         int matchedClassCount = 0;
         int matchedMethodCount = 0;
         int skippedEmptyMethodCount = 0;
@@ -131,7 +131,7 @@ public class Dex2c {
                                             @Nonnull File outDir,
                                             @Nonnull ProtectionContext protectionContext) throws IOException {
         final GlobalDexConfig globalDexConfig =
-                new GlobalDexConfig(outDir, protectionContext.isSignatureBound());
+                new GlobalDexConfig(outDir, protectionContext);
         final DexConfig dexConfig = handleDex(
                 dexFile,
                 filter,

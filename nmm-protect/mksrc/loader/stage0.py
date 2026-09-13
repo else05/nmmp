@@ -46,34 +46,76 @@ def generate(key, build_id, random_bytes=None):
     low, high = struct.unpack('<2Q', build_id)
     programs = []
     for word in struct.unpack('<4Q', key):
-        program_key = int.from_bytes(random_bytes(8), 'little')
+        program_key = int.from_bytes(random_bytes(8)[:8], 'little')
+        random_byte = lambda: random_bytes(1)[0]
         opcodes = []
         while len(opcodes) < fmt.OP_COUNT:
-            stored = random_bytes(1)[0]
+            stored = random_byte()
             if stored not in opcodes:
                 opcodes.append(stored)
         opcodes = bytes(opcodes)
-        share = int.from_bytes(random_bytes(8), 'little')
-        insns = []
-        # Both unsigned comparisons enforce equality, including the high bit.
-        for index, expected in enumerate((low, high)):
-            insns.extend([
-                (fmt.LOAD_INPUT, dict(dst=2, a=index)),
-                (fmt.CONST, dict(dst=3, imm=expected)),
-                (fmt.JULT, dict(a=2, b=3)),
-                (fmt.JULT, dict(a=3, b=2)),
-            ])
-        insns.extend([
-            (fmt.CONST, dict(dst=2, imm=share)),
-            (fmt.CONST, dict(dst=3, imm=share ^ word)),
-            (fmt.XOR, dict(dst=fmt.VALUE_REGISTER, a=2, b=3)),
-            (fmt.CONST, dict(dst=fmt.STATUS_REGISTER, imm=fmt.SUCCESS_STATUS)),
-            (fmt.RETURN, {}),
-            (fmt.RETURN, {}),
-        ])
-        for op, fields in insns:
-            if op == fmt.JULT:
-                fields['target'] = len(insns) - 1
+        share = int.from_bytes(random_bytes(8)[:8], 'little')
+        registers = list(range(2, fmt.REGISTERS))
+        for index in range(len(registers) - 1, 0, -1):
+            other = random_byte() % (index + 1)
+            registers[index], registers[other] = registers[other], registers[index]
+        template = random_byte() % 3
+        first_check = random_byte() & 1
+        second_check = 1 - first_check
+        order = [0, 1, 2, 3]
+        for index in range(len(order) - 1, 0, -1):
+            other = random_byte() % (index + 1)
+            order[index], order[other] = order[other], order[index]
+        success_size = (5, 7, 9)[template]
+        sizes = (5, 5, success_size, 1)
+        offsets, position = {}, 1
+        for block in order:
+            offsets[block] = position
+            position += sizes[block]
+        insns = [(fmt.JMP, dict(target=offsets[first_check]))]
+        for block in order:
+            if block in (0, 1):
+                value_reg, expected_reg = registers[block * 2:block * 2 + 2]
+                pair = [
+                    (fmt.LOAD_INPUT, dict(dst=value_reg, a=block)),
+                    (fmt.CONST, dict(dst=expected_reg, imm=(low, high)[block])),
+                ]
+                if random_byte() & 1:
+                    pair.reverse()
+                next_block = second_check if block == first_check else 2
+                insns.extend(pair + [
+                    (fmt.JULT, dict(a=value_reg, b=expected_reg, target=offsets[3])),
+                    (fmt.JULT, dict(a=expected_reg, b=value_reg, target=offsets[3])),
+                    (fmt.JMP, dict(target=offsets[next_block])),
+                ])
+            elif block == 2:
+                left, right, temporary, carry = registers[4:8]
+                insns.extend([
+                    (fmt.CONST, dict(dst=left, imm=share)),
+                    (fmt.CONST, dict(dst=right, imm=share ^ word)),
+                ])
+                if template == 0:
+                    insns.append((fmt.XOR, dict(dst=fmt.VALUE_REGISTER, a=left, b=right)))
+                elif template == 1:
+                    insns.extend([
+                        (fmt.OR, dict(dst=temporary, a=left, b=right)),
+                        (fmt.AND, dict(dst=carry, a=left, b=right)),
+                        (fmt.SUB, dict(dst=fmt.VALUE_REGISTER, a=temporary, b=carry)),
+                    ])
+                else:
+                    insns.extend([
+                        (fmt.ADD, dict(dst=temporary, a=left, b=right)),
+                        (fmt.AND, dict(dst=carry, a=left, b=right)),
+                        (fmt.CONST, dict(dst=left, imm=1)),
+                        (fmt.SHL, dict(dst=carry, a=carry, b=left)),
+                        (fmt.SUB, dict(dst=fmt.VALUE_REGISTER, a=temporary, b=carry)),
+                    ])
+                insns.extend([
+                    (fmt.CONST, dict(dst=fmt.STATUS_REGISTER, imm=fmt.SUCCESS_STATUS)),
+                    (fmt.RETURN, {}),
+                ])
+            else:
+                insns.append((fmt.RETURN, {}))
         plain = b''.join(instruction(opcodes, op, **fields) for op, fields in insns)
         code = transform(plain, program_key)
         programs.append(dict(code=code, key=program_key, opcodes=opcodes, hash=checksum(code)))

@@ -260,6 +260,26 @@ static bool verifyApkAndActivate(const char *packageNameValue,
 
 }  // namespace
 
+extern "C"
+bool vmBindingMatchesExpectedIdentity(const char *packageNameValue,
+                                      const uint8_t signerDigest[32],
+                                      bool signatureBound) {
+    if (!packageNameValue || !signerDigest
+            || signatureBound != (NMMP_VM_SIGNATURE_BINDING != 0)
+            || std::strcmp(packageNameValue, NMMP_VM_PACKAGE_NAME) != 0) return false;
+    if (!signatureBound) {
+        uint8_t zero[kSignerDigestSize] = {};
+        const bool matched = constantTimeEqual(zero, signerDigest, sizeof(zero));
+        secureZero(zero, sizeof(zero));
+        return matched;
+    }
+    uint8_t expected[kSignerDigestSize];
+    decodeExpectedSignerDigest(expected);
+    const bool matched = constantTimeEqual(expected, signerDigest, sizeof(expected));
+    secureZero(expected, sizeof(expected));
+    return matched;
+}
+
 struct BindingArguments { JNIEnv *env; jobject context; };
 static bool initializeBinding(void *argument) {
     auto *args = static_cast<BindingArguments *>(argument);

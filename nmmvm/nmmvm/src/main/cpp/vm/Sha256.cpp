@@ -4,13 +4,6 @@
 
 namespace {
 
-struct Sha256Context {
-    uint32_t state[8];
-    uint64_t totalSize;
-    uint8_t buffer[64];
-    size_t bufferSize;
-};
-
 const uint32_t kRoundConstants[64] = {
         UINT32_C(0x428a2f98), UINT32_C(0x71374491), UINT32_C(0xb5c0fbcf),
         UINT32_C(0xe9b5dba5), UINT32_C(0x3956c25b), UINT32_C(0x59f111f1),
@@ -47,7 +40,7 @@ static uint32_t loadBigEndian(const uint8_t *data) {
            | static_cast<uint32_t>(data[3]);
 }
 
-static void transform(Sha256Context *context, const uint8_t block[64]) {
+static void transform(NmmpSha256Context *context, const uint8_t block[64]) {
     uint32_t words[64];
     for (size_t i = 0; i < 16; ++i) {
         words[i] = loadBigEndian(block + i * 4U);
@@ -98,23 +91,7 @@ static void transform(Sha256Context *context, const uint8_t block[64]) {
     context->state[7] += h;
 }
 
-static void update(Sha256Context *context, const uint8_t *data, size_t size) {
-    context->totalSize += size;
-    while (size > 0) {
-        const size_t available = sizeof(context->buffer) - context->bufferSize;
-        const size_t count = size < available ? size : available;
-        std::memcpy(context->buffer + context->bufferSize, data, count);
-        context->bufferSize += count;
-        data += count;
-        size -= count;
-        if (context->bufferSize == sizeof(context->buffer)) {
-            transform(context, context->buffer);
-            context->bufferSize = 0;
-        }
-    }
-}
-
-static void finish(Sha256Context *context, uint8_t digest[32]) {
+static void finish(NmmpSha256Context *context, uint8_t digest[32]) {
     const uint64_t bitLength = context->totalSize * 8U;
     context->buffer[context->bufferSize++] = 0x80;
     if (context->bufferSize > 56) {
@@ -140,8 +117,8 @@ static void finish(Sha256Context *context, uint8_t digest[32]) {
 
 }  // namespace
 
-void nmmpSha256(const uint8_t *data, size_t size, uint8_t digest[32]) {
-    Sha256Context context = {
+void nmmpSha256Init(NmmpSha256Context *context) {
+    const NmmpSha256Context initial = {
             {
                     UINT32_C(0x6a09e667), UINT32_C(0xbb67ae85),
                     UINT32_C(0x3c6ef372), UINT32_C(0xa54ff53a),
@@ -152,8 +129,42 @@ void nmmpSha256(const uint8_t *data, size_t size, uint8_t digest[32]) {
             {0},
             0
     };
-    if (size != 0) {
-        update(&context, data, size);
+    *context = initial;
+}
+
+void nmmpSha256Update(NmmpSha256Context *context, const uint8_t *data, size_t size) {
+    if (size == 0) return;
+    context->totalSize += size;
+    while (size > 0) {
+        const size_t available = sizeof(context->buffer) - context->bufferSize;
+        const size_t count = size < available ? size : available;
+        std::memcpy(context->buffer + context->bufferSize, data, count);
+        context->bufferSize += count;
+        data += count;
+        size -= count;
+        if (context->bufferSize == sizeof(context->buffer)) {
+            transform(context, context->buffer);
+            context->bufferSize = 0;
+        }
     }
-    finish(&context, digest);
+}
+
+void nmmpSha256UpdateU32(NmmpSha256Context *context, uint32_t value) {
+    uint8_t bytes[4] = {
+            static_cast<uint8_t>(value), static_cast<uint8_t>(value >> 8U),
+            static_cast<uint8_t>(value >> 16U), static_cast<uint8_t>(value >> 24U)
+    };
+    nmmpSha256Update(context, bytes, sizeof(bytes));
+    std::memset(bytes, 0, sizeof(bytes));
+}
+
+void nmmpSha256Final(NmmpSha256Context *context, uint8_t digest[32]) {
+    finish(context, digest);
+}
+
+void nmmpSha256(const uint8_t *data, size_t size, uint8_t digest[32]) {
+    NmmpSha256Context context;
+    nmmpSha256Init(&context);
+    nmmpSha256Update(&context, data, size);
+    nmmpSha256Final(&context, digest);
 }

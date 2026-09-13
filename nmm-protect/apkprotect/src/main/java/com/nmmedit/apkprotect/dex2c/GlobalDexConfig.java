@@ -15,14 +15,26 @@ public class GlobalDexConfig {
 
     private final File outputDir;
     private final boolean signatureBound;
+    private final ProtectionContext protectionContext;
 
     public GlobalDexConfig(File outputDir) {
-        this(outputDir, false);
+        this(outputDir, false, null);
     }
 
     public GlobalDexConfig(File outputDir, boolean signatureBound) {
+        this(outputDir, signatureBound, null);
+    }
+
+    public GlobalDexConfig(File outputDir, ProtectionContext protectionContext) {
+        this(outputDir, protectionContext.isSignatureBound(), protectionContext);
+    }
+
+    private GlobalDexConfig(File outputDir,
+                            boolean signatureBound,
+                            ProtectionContext protectionContext) {
         this.outputDir = outputDir;
         this.signatureBound = signatureBound;
+        this.protectionContext = protectionContext;
     }
 
     public File getInitCodeFile() {
@@ -47,6 +59,10 @@ public class GlobalDexConfig {
     }
 
     private void generateJniInitCode(Writer writer) throws IOException {
+        if (protectionContext != null && !signatureBound) {
+            generateProtectedUnboundJniInitCode(writer);
+            return;
+        }
         if (signatureBound) {
             generateBoundJniInitCode(writer);
             return;
@@ -109,7 +125,9 @@ public class GlobalDexConfig {
         }
 
         writer.write("#include <jni.h>\n#include <stdbool.h>\n#include <pthread.h>\n");
-        writer.write("#include \"GlobalCache.h\"\n#include \"VmBinding.h\"\n#include \"VmInit.h\"\n\n");
+        writer.write("#include \"GlobalCache.h\"\n#include \"VmBinding.h\"\n#include \"VmInit.h\"\n");
+        writer.write("#include \"ProtectionManifest.h\"\n#include \"ProtectionPolicy.h\"\n\n");
+        writeManifestData(writer, protectionContext.buildManifest());
         writer.write(declarations.toString());
         writer.write(
                 "\nstatic VmInit gNmmpInit = NMMP_VM_INIT;\n"
@@ -122,7 +140,10 @@ public class GlobalDexConfig {
                         + "static bool nmmp_initialize(void *argument) {\n"
                         + "    InitArguments *args = (InitArguments *) argument;\n"
                         + "    JNIEnv *env = args->env;\n"
-                        + "    if (!vmBindingActivate(env, args->context)) goto failed;\n");
+                        + "    if (!vmBindingActivate(env, args->context)) goto failed;\n"
+                        + "    if (!nmmpProtectionActivate(gNmmpProtectionManifest, sizeof(gNmmpProtectionManifest),\n"
+                        + "            gNmmpProtectionTag, gNmmpProtectionKeyXor, gNmmpProtectionId)) goto failed;\n"
+                        + "    if (!nmmpProtectionPolicyInitialize(env, args->context)) goto failed;\n");
         writer.write(activateCalls.toString());
         writer.write(
                 "    return true;\n"
@@ -150,5 +171,60 @@ public class GlobalDexConfig {
                         + "    if ((*env)->ExceptionCheck(env)) return JNI_ERR;\n");
         writer.write(setupCalls.toString());
         writer.write("    return JNI_VERSION_1_6;\n}\n");
+    }
+
+    private void generateProtectedUnboundJniInitCode(Writer writer) throws IOException {
+        final StringBuilder declarations = new StringBuilder();
+        final StringBuilder setupCalls = new StringBuilder();
+        for (DexConfig config : configs) {
+            final String setup = config.getHeaderFileAndSetupFunc().setupFunctionName;
+            declarations.append(String.format("extern void %s(JNIEnv *env);\n", setup));
+            setupCalls.append(String.format(
+                    "    %s(env);\n"
+                            + "    if ((*env)->ExceptionCheck(env) || !nmmpProtectionAllowCall(env)) goto failed;\n",
+                    setup));
+        }
+        writer.write("#include <jni.h>\n#include <stdbool.h>\n#include \"GlobalCache.h\"\n");
+        writer.write("#include \"VmBinding.h\"\n#include \"VmInit.h\"\n");
+        writer.write("#include \"ProtectionManifest.h\"\n#include \"ProtectionPolicy.h\"\n\n");
+        writeManifestData(writer, protectionContext.buildManifest());
+        writer.write(declarations.toString());
+        writer.write("\nstatic VmInit gNmmpInit = NMMP_VM_INIT;\n"
+                + "void nmmp_vm_fail(void) { vmInitFail(&gNmmpInit); }\n"
+                + "bool nmmp_vm_failed(void) { return __atomic_load_n(&gNmmpInit.state, __ATOMIC_ACQUIRE) == 3; }\n"
+                + "bool nmmp_vm_is_ready(void) { return __atomic_load_n(&gNmmpInit.state, __ATOMIC_ACQUIRE) == 2; }\n"
+                + "bool nmmp_vm_require_ready(void) { return vmInitRequireReady(&gNmmpInit); }\n"
+                + "static bool nmmp_initialize(void *argument) {\n"
+                + "    JNIEnv *env = (JNIEnv *) argument;\n"
+                + "    if (!vmBindingActivate(env, NULL)) goto failed;\n"
+                + "    if (!nmmpProtectionActivate(gNmmpProtectionManifest, sizeof(gNmmpProtectionManifest),\n"
+                + "            gNmmpProtectionTag, gNmmpProtectionKeyXor, gNmmpProtectionId)) goto failed;\n"
+                + "    if (!nmmpProtectionPolicyInitialize(env, NULL)) goto failed;\n");
+        writer.write(setupCalls.toString());
+        writer.write("    return true;\nfailed:\n    return false;\n}\n\n"
+                + "JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved) {\n"
+                + "    (void) reserved; JNIEnv *env;\n"
+                + "    if ((*vm)->GetEnv(vm, (void **) &env, JNI_VERSION_1_6) != JNI_OK) return JNI_ERR;\n"
+                + "    cacheInitial(env);\n"
+                + "    if ((*env)->ExceptionCheck(env) || !vmInitRun(&gNmmpInit, nmmp_initialize, env)) return JNI_ERR;\n"
+                + "    return JNI_VERSION_1_6;\n}\n");
+    }
+
+    private static void writeManifestData(Writer writer,
+                                          ProtectionManifest.Built manifest) throws IOException {
+        writeArray(writer, "gNmmpProtectionManifest", manifest.getBytes());
+        writeArray(writer, "gNmmpProtectionTag", manifest.getTag());
+        writeArray(writer, "gNmmpProtectionKeyXor", manifest.getKeyXor());
+        writeArray(writer, "gNmmpProtectionId", manifest.getId());
+        writer.write("\n");
+    }
+
+    private static void writeArray(Writer writer, String name, byte[] bytes) throws IOException {
+        writer.write("static const uint8_t " + name + "[] = {");
+        for (int i = 0; i < bytes.length; ++i) {
+            if (i % 12 == 0) writer.write("\n    ");
+            writer.write(String.format("0x%02x,", bytes[i] & 0xff));
+        }
+        writer.write("\n};\n");
     }
 }

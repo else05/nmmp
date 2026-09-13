@@ -100,7 +100,7 @@ public class Dex2cTest {
         assertTrue(nativeSource.contains("gNmmpPending[registerIdx] = 1"));
         assertTrue(nativeSource.contains("bool classes_setup_activate(JNIEnv *env)"));
 
-        final GlobalDexConfig global = new GlobalDexConfig(outDir, true);
+        final GlobalDexConfig global = new GlobalDexConfig(outDir, context);
         global.addDexConfig(config);
         global.generateJniInitCode();
         final String initSource = new String(

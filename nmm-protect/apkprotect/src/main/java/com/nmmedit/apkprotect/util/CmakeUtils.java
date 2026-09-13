@@ -4,6 +4,7 @@ import com.nmmedit.apkprotect.BuildNativeLib;
 import com.nmmedit.apkprotect.dex2c.MethodCodec;
 import com.nmmedit.apkprotect.dex2c.GeneratorRandom;
 import com.nmmedit.apkprotect.dex2c.NativeProgram;
+import com.nmmedit.apkprotect.dex2c.ProtectionManifest;
 import com.nmmedit.apkprotect.dex2c.ProtectionContext;
 import com.nmmedit.apkprotect.dex2c.converter.instructionrewriter.InstructionRewriter;
 import com.nmmedit.apkprotect.sign.ApkVerifyCodeGenerator;
@@ -133,6 +134,19 @@ public class CmakeUtils {
 
     private static void validateVmTemplate(File vmsrcFile) throws IOException {
         try (ZipFile zipFile = new ZipFile(vmsrcFile)) {
+            for (String required : new String[]{
+                    "CMakeLists.txt", "vm/CMakeLists.txt", "ConstantPool.c", "ConstantPool.h",
+                    "loader/Outer.c", "loader/InnerBootstrap.c", "loader/Bootstrap.h",
+                    "loader/Envelope.c", "loader/Envelope.h", "loader/Loader.c", "loader/Loader.h",
+                    "loader/Once.c", "loader/Once.h", "loader/Stage0.h", "loader/Seal.java",
+                    "loader/inner.exports", "loader/outer.exports",
+                    "vm/ProtectionManifest.cpp", "vm/ProtectionPolicy.cpp",
+                    "vm/include/ProtectionManifest.h", "vm/include/ProtectionPolicy.h",
+                    "vm/include/ProtectionPolicyTypes.h", "vm/include/ProtectionPolicyInternal.h",
+                    "vm/include/ProtectionManifestConfig.h",
+                    "loader/vendor/monocypher/monocypher.c", "loader/vendor/monocypher/monocypher.h"}) {
+                requireZipEntry(zipFile, required, vmsrcFile);
+            }
             requireZipEntry(zipFile, "loader/PrivateLinker.cmake", vmsrcFile);
             requireZipEntry(zipFile, "loader/pack.py", vmsrcFile);
             requireZipEntry(zipFile, "loader/Stage0.c", vmsrcFile);
@@ -165,6 +179,12 @@ public class CmakeUtils {
             requireZipEntry(zipFile, "vm/include/Arm64Syscall.h", vmsrcFile);
             requireZipEntry(zipFile, "vm/include/ApkV2Signer.h", vmsrcFile);
             requireZipEntry(zipFile, "vm/include/Sha256.h", vmsrcFile);
+            final ZipEntry vmCmakeEntry = requireZipEntry(zipFile, "vm/CMakeLists.txt", vmsrcFile);
+            final String vmCmake = readZipEntry(zipFile, vmCmakeEntry);
+            if (!vmCmake.contains("ProtectionManifest.cpp")
+                    || !vmCmake.contains("ProtectionPolicy.cpp")) {
+                throw new IOException("VM 模板未链接 phase2 运行模块: " + vmsrcFile.getAbsolutePath());
+            }
             final ZipEntry configEntry = requireZipEntry(
                     zipFile,
                     "vm/include/VmCodecConfig.h",
@@ -193,15 +213,23 @@ public class CmakeUtils {
                                             String entryName,
                                             File vmsrcFile) throws IOException {
         final ZipEntry entry = zipFile.getEntry(entryName);
-        if (entry == null) {
+        if (entry == null || entry.isDirectory() || entry.getSize() <= 0) {
             throw new IOException(String.format(
                     Locale.ROOT,
-                    "VM 模板缺少 %s: %s，期望版本 %d",
+                    "VM 模板文件缺少或无效 %s: %s，期望版本 %d",
                     entryName,
                     vmsrcFile.getAbsolutePath(),
                     ProtectionContext.TEMPLATE_VERSION));
         }
         return entry;
+    }
+
+    private static String readZipEntry(ZipFile zipFile, ZipEntry entry) throws IOException {
+        try (InputStream inputStream = zipFile.getInputStream(entry);
+             ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            FileUtils.copyStream(inputStream, outputStream);
+            return new String(outputStream.toByteArray(), StandardCharsets.UTF_8);
+        }
     }
 
     static void writeCodecConfig(File configFile,
@@ -242,6 +270,25 @@ public class CmakeUtils {
         try (Writer writer = new OutputStreamWriter(
                 new FileOutputStream(configFile),
                 StandardCharsets.UTF_8)) {
+            writer.write(content);
+        }
+    }
+
+    public static void writeProtectionManifestConfig(File srcDir,
+                                                     ProtectionManifest.Built manifest) throws IOException {
+        final File configFile = new File(srcDir, "vm/include/ProtectionManifestConfig.h");
+        final File parent = configFile.getParentFile();
+        if (!parent.exists() && !parent.mkdirs()) {
+            throw new IOException("无法创建保护清单配置目录: " + parent.getAbsolutePath());
+        }
+        final String content = "#ifndef NMMP_PROTECTION_MANIFEST_CONFIG_H\n"
+                + "#define NMMP_PROTECTION_MANIFEST_CONFIG_H\n\n"
+                + "#include <stdint.h>\n\n"
+                + "#define NMMP_PROTECTION_MANIFEST_VERSION " + ProtectionManifest.VERSION + "\n"
+                + "static const uint8_t NMMP_PROTECTION_MANIFEST_ID[16] = {"
+                + formatByteArray(manifest.getId()) + "};\n\n#endif\n";
+        try (Writer writer = new OutputStreamWriter(
+                new FileOutputStream(configFile), StandardCharsets.UTF_8)) {
             writer.write(content);
         }
     }

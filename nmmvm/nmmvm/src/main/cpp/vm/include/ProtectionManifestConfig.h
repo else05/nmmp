@@ -1,0 +1,9 @@
+#ifndef NMMP_PROTECTION_MANIFEST_CONFIG_H
+#define NMMP_PROTECTION_MANIFEST_CONFIG_H
+
+#include <stdint.h>
+
+#define NMMP_PROTECTION_MANIFEST_VERSION 1
+static const uint8_t NMMP_PROTECTION_MANIFEST_ID[16] = {0};
+
+#endif

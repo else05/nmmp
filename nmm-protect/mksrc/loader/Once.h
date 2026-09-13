@@ -9,5 +9,6 @@ typedef struct {
     int failed;
 } NmmpOnce;
 #define NMMP_ONCE_INIT {PTHREAD_MUTEX_INITIALIZER, PTHREAD_COND_INITIALIZER, (pthread_t)0, 0, 0}
+/* Reentry permanently fails and wakes waiters before the owner callback returns. */
 int nmmp_once(NmmpOnce *once, int (*initialize)(void *), void *context);
 #endif

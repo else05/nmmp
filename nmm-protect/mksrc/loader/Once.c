@@ -2,9 +2,17 @@
 
 int nmmp_once(NmmpOnce *o, int (*initialize)(void *), void *context) {
     pthread_mutex_lock(&o->mutex);
+    if (__atomic_load_n(&o->failed, __ATOMIC_ACQUIRE)) {
+        o->state = 3;
+        pthread_cond_broadcast(&o->changed);
+        pthread_mutex_unlock(&o->mutex);
+        return -1;
+    }
     while (o->state == 1) {
         if (pthread_equal(o->owner, pthread_self())) {
             __atomic_store_n(&o->failed, 1, __ATOMIC_RELEASE);
+            o->state = 3;
+            pthread_cond_broadcast(&o->changed);
             pthread_mutex_unlock(&o->mutex);
             return -1;
         }

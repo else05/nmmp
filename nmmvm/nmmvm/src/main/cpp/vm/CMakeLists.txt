@@ -20,6 +20,8 @@ set(VM_SRC_FILES
         Arm64Syscall.cpp
         ApkV2Signer.cpp
         Sha256.cpp
+        ProtectionManifest.cpp
+        ProtectionPolicy.cpp
         JNIWrapper.c
 
         )

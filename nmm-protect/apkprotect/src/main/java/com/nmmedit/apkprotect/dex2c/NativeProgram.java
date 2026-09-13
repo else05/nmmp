@@ -55,27 +55,100 @@ public final class NativeProgram {
 
     static Program root(long buildId, Random random) {
         byte[] opcodes = randomOpcodes(random);
-        Program program = assemble(Arrays.asList(
-                new Instruction(LOAD_INPUT, 2, 0, 0, 0, 0),
-                new Instruction(CONST, 3, 0, 0, 1, 0),
-                new Instruction(JULT, 0, 2, 3, 0, 13),
-                new Instruction(JULT, 0, 3, 2, 0, 13),
-                new Instruction(LOAD_INPUT, 2, 3, 0, 0, 0),
-                new Instruction(CONST, 3, 0, 0, buildId, 0),
-                new Instruction(JULT, 0, 2, 3, 0, 13),
-                new Instruction(JULT, 0, 3, 2, 0, 13),
-                new Instruction(LOAD_INPUT, 2, 1, 0, 0, 0),
-                new Instruction(LOAD_INPUT, 3, 2, 0, 0, 0),
-                new Instruction(XOR, 0, 2, 3, 0, 0),
-                new Instruction(CONST, 1, 0, 0, 1, 0),
-                new Instruction(RETURN, 0, 0, 0, 0, 0),
-                new Instruction(RETURN, 0, 0, 0, 0, 0)), random.nextLong(), opcodes);
+        int[] registers = randomRegisters(random, 8);
+        int valueTemplate = random.nextInt(3);
+        int firstCheck = random.nextBoolean() ? 0 : 1;
+        int secondCheck = 1 - firstCheck;
+        int[] order = {0, 1, 2, 3};
+        shuffle(order, random);
+        int[] size = {5, 5, successSize(valueTemplate), 1};
+        int[] offset = new int[4];
+        int position = 1;
+        for (int block : order) {
+            offset[block] = position;
+            position += size[block];
+        }
+        List<Instruction> instructions = new java.util.ArrayList<>();
+        instructions.add(new Instruction(JMP, 0, 0, 0, 0, offset[firstCheck]));
+        for (int block : order) {
+            if (block == 0) {
+                emitEqualityCheck(instructions, registers[0], registers[1], 0, 1,
+                        offset[3], offset[block == firstCheck ? secondCheck : 2], random.nextBoolean());
+            } else if (block == 1) {
+                emitEqualityCheck(instructions, registers[2], registers[3], 3, buildId,
+                        offset[3], offset[block == firstCheck ? secondCheck : 2], random.nextBoolean());
+            } else if (block == 2) {
+                emitSuccess(instructions, registers, valueTemplate);
+            } else {
+                instructions.add(new Instruction(RETURN, 0, 0, 0, 0, 0));
+            }
+        }
+        Program program = assemble(instructions, random.nextLong(), opcodes);
         Result check = run(program, new long[]{1, 0x0123456789abcdefL, 0xfedcba9876543210L, buildId});
         if (!check.success || check.value != -1L
                 || run(program, new long[]{0, 0, 0, buildId}).success
                 || run(program, new long[]{1, 0, 0, buildId ^ 1}).success)
             throw new IllegalStateException("Native root program failed reference verification");
         return program;
+    }
+
+    private static int[] randomRegisters(Random random, int count) {
+        int[] available = new int[REGISTERS - 2];
+        for (int i = 0; i < available.length; ++i) available[i] = i + 2;
+        for (int i = available.length - 1; i > 0; --i) {
+            int j = random.nextInt(i + 1);
+            int value = available[i]; available[i] = available[j]; available[j] = value;
+        }
+        return Arrays.copyOf(available, count);
+    }
+
+    private static void shuffle(int[] values, Random random) {
+        for (int i = values.length - 1; i > 0; --i) {
+            int j = random.nextInt(i + 1);
+            int value = values[i]; values[i] = values[j]; values[j] = value;
+        }
+    }
+
+    private static void emitEqualityCheck(List<Instruction> output,
+                                          int valueRegister,
+                                          int expectedRegister,
+                                          int input,
+                                          long expected,
+                                          int failure,
+                                          int next,
+                                          boolean reverseLoads) {
+        Instruction load = new Instruction(LOAD_INPUT, valueRegister, input, 0, 0, 0);
+        Instruction constant = new Instruction(CONST, expectedRegister, 0, 0, expected, 0);
+        if (reverseLoads) { output.add(constant); output.add(load); }
+        else { output.add(load); output.add(constant); }
+        output.add(new Instruction(JULT, 0, valueRegister, expectedRegister, 0, failure));
+        output.add(new Instruction(JULT, 0, expectedRegister, valueRegister, 0, failure));
+        output.add(new Instruction(JMP, 0, 0, 0, 0, next));
+    }
+
+    private static int successSize(int template) {
+        return template == 0 ? 5 : template == 1 ? 7 : 9;
+    }
+
+    private static void emitSuccess(List<Instruction> output, int[] registers, int template) {
+        final int left = registers[4], right = registers[5];
+        output.add(new Instruction(LOAD_INPUT, left, 1, 0, 0, 0));
+        output.add(new Instruction(LOAD_INPUT, right, 2, 0, 0, 0));
+        if (template == 0) {
+            output.add(new Instruction(XOR, VALUE_REGISTER, left, right, 0, 0));
+        } else if (template == 1) {
+            output.add(new Instruction(OR, registers[6], left, right, 0, 0));
+            output.add(new Instruction(AND, registers[7], left, right, 0, 0));
+            output.add(new Instruction(SUB, VALUE_REGISTER, registers[6], registers[7], 0, 0));
+        } else {
+            output.add(new Instruction(ADD, registers[6], left, right, 0, 0));
+            output.add(new Instruction(AND, registers[7], left, right, 0, 0));
+            output.add(new Instruction(CONST, left, 0, 0, 1, 0));
+            output.add(new Instruction(SHL, registers[7], registers[7], left, 0, 0));
+            output.add(new Instruction(SUB, VALUE_REGISTER, registers[6], registers[7], 0, 0));
+        }
+        output.add(new Instruction(CONST, STATUS_REGISTER, 0, 0, SUCCESS_STATUS, 0));
+        output.add(new Instruction(RETURN, 0, 0, 0, 0, 0));
     }
 
     static byte[] randomOpcodes(Random random) {

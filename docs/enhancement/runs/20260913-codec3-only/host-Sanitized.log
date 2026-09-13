@@ -1,0 +1,49 @@
+-- The C compiler identification is GNU 15.3.0
+-- The CXX compiler identification is GNU 15.3.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/codec3-only-20260913/host-Sanitized
+[1/18] Building CXX object CMakeFiles/vm_codec_vector_test.dir/VmCodecVectorTest.cpp.o
+[2/18] Building C object CMakeFiles/vm_codec_vector_test.dir/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/VmInit.c.o
+[3/18] Building CXX object CMakeFiles/vm_codec_vector_test.dir/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/VmCodec.cpp.o
+[4/18] Building C object CMakeFiles/vm_codec_vector_test.dir/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/NativeVm.c.o
+[5/18] Building CXX object CMakeFiles/vm_reader_test.dir/VmReaderTest.cpp.o
+[6/18] Building C object CMakeFiles/native_vm_test.dir/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/NativeVm.c.o
+[7/18] Linking CXX executable vm_reader_test
+[8/18] Building CXX object CMakeFiles/native_root_test.dir/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/VmCodec.cpp.o
+[9/18] Linking CXX executable vm_codec_vector_test
+[10/18] Building CXX object CMakeFiles/native_root_test.dir/NativeRootTest.cpp.o
+[11/18] Building CXX object CMakeFiles/native_vm_test.dir/NativeVmTest.cpp.o
+[12/18] Building C object CMakeFiles/native_root_test.dir/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/NativeVm.c.o
+[13/18] Building C object CMakeFiles/native_root_test.dir/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/VmInit.c.o
+[14/18] Building C object CMakeFiles/vm_module_test.dir/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/VmInit.c.o
+[15/18] Linking CXX executable native_vm_test
+[16/18] Linking CXX executable native_root_test
+[17/18] Building CXX object CMakeFiles/vm_module_test.dir/VmModuleTest.cpp.o
+[18/18] Linking CXX executable vm_module_test
+Internal ctest changing into directory: /mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/codec3-only-20260913/host-Sanitized
+Test project /mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/codec3-only-20260913/host-Sanitized
+    Start 1: vm_codec_vector_test
+1/5 Test #1: vm_codec_vector_test .............   Passed    0.08 sec
+    Start 2: vm_reader_test
+2/5 Test #2: vm_reader_test ...................   Passed    0.04 sec
+    Start 3: native_vm_test
+3/5 Test #3: native_vm_test ...................   Passed    0.05 sec
+    Start 4: native_root_test
+4/5 Test #4: native_root_test .................   Passed    0.05 sec
+    Start 5: vm_module_test
+5/5 Test #5: vm_module_test ...................   Passed    0.07 sec
+
+100% tests passed, 0 tests failed out of 5
+
+Total Test time (real) =   0.34 sec

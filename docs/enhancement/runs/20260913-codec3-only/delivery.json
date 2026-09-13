@@ -1,0 +1,9 @@
+{
+  "jar": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\libs\\vm-protect-2026-09-13-1049.jar",
+  "jarSha256": "9f902ab85ec9eda9fb698076cf952d9d3f6195a4cff91b3470b8144704006784",
+  "templateVersion": 5,
+  "codecVersion": 3,
+  "privateLinker": true,
+  "stage0Vm": true,
+  "templateExact": true
+}

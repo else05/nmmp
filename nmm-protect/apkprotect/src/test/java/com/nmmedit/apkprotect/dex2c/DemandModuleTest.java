@@ -263,7 +263,7 @@ public class DemandModuleTest {
         System.out.println(directory.resolve("module-vector.json").toAbsolutePath());
     }
 
-    @Test public void generatorUsesTokenModuleAndLegacyStillUsesEncodedCode() throws Exception {
+    @Test public void generatorOnlyUsesTokenModule() throws Exception {
         DexPool pool = new DexPool(Opcodes.forApi(26));
         ImmutableMethod method = new ImmutableMethod("LTest;", "run", Collections.emptyList(), "V", 9,
                 Collections.emptySet(), Collections.emptySet(), new ImmutableMethodImplementation(0,
@@ -275,40 +275,36 @@ public class DemandModuleTest {
         pool.writeTo(store);
         DexBackedDexFile dex = new DexBackedDexFile(Opcodes.forApi(26), store.getData());
         ClassAnalyzer analyzer = new ClassAnalyzer(); analyzer.loadDexFile(dex);
-        for (boolean demand : new boolean[]{false, true}) {
-            StringWriter source = new StringWriter();
-            JniCodeGenerator generator = new JniCodeGenerator(dex, analyzer, new NoneInstructionRewriter(),
-                    new ProtectionContext(ROOT, demand), MODULE);
-            generator.generate(new DexConfig(new File("."), "classes.dex"), new StringWriter(), source);
-            String code = source.toString();
-            if (!demand) {
-                assertTrue(code.contains("vmExecute(env,")); assertFalse(code.contains("nmmpModule"));
-                continue;
-            }
-            assertTrue(code.indexOf("static vmDemandModule nmmpModule;") < code.indexOf("vmExecuteToken("));
-            assertTrue(code.contains("vmPrepareDemandModule(env, &nmmpModule)"));
-            assertTrue(code.contains("NMMP_DEMAND_MODULE_INIT(nmmpModuleBlob,"));
-            assertTrue(code.contains("UINT32_C(0x80000001)"));
-            assertFalse(code.contains("vmExecuteDemand(")); assertFalse(code.contains("static vmDemandCode"));
-            assertFalse(code.contains("encodedInsns")); assertFalse(code.contains("nmmpDemand_"));
-            Matcher token = Pattern.compile("vmExecuteToken\\(env, &nmmpModule, UINT32_C\\(0x([0-9a-f]{8})\\)").matcher(code);
-            assertTrue(token.find());
-            long wrapperToken = Long.parseLong(token.group(1), 16);
-            String array = code.substring(code.indexOf("static const u1 nmmpModuleBlob[] = {"));
-            array = array.substring(0, array.indexOf("};"));
-            Matcher bytes = Pattern.compile("0x([0-9a-f]{2}),").matcher(array);
-            java.io.ByteArrayOutputStream blob = new java.io.ByteArrayOutputStream();
-            while (bytes.find()) blob.write(Integer.parseInt(bytes.group(1), 16));
-            byte[] moduleBlob = blob.toByteArray();
-            ByteBuffer header = le(moduleBlob);
-            assertEquals(wrapperToken, Integer.toUnsignedLong(header.getInt(64)));
-            int recordOffset = header.getInt(68);
-            ByteBuffer record = le(decode(Arrays.copyOfRange(moduleBlob, recordOffset, recordOffset + 56), ROOT, wrapperToken, 6));
-            assertEquals(header.getInt(40), record.getInt(20));
-            assertEquals(0, record.getInt(32));
-            assertEquals(moduleBlob.length, record.getInt(28));
-            assertEquals(record.getInt(20) + record.getInt(24), record.getInt(28));
-            assertTrue(code.contains(String.format("UINT32_C(0x%08x)", fnv(moduleBlob, moduleBlob.length))));
-        }
+        StringWriter source = new StringWriter();
+        JniCodeGenerator generator = new JniCodeGenerator(dex, analyzer, new NoneInstructionRewriter(),
+                new ProtectionContext(ROOT), MODULE);
+        generator.generate(new DexConfig(new File("."), "classes.dex"), new StringWriter(), source);
+        String code = source.toString();
+        assertFalse(code.contains("vmExecute(env,"));
+        assertFalse(code.contains("vmEncodedCode"));
+        assertTrue(code.indexOf("static vmDemandModule nmmpModule;") < code.indexOf("vmExecuteToken("));
+        assertTrue(code.contains("vmPrepareDemandModule(env, &nmmpModule)"));
+        assertTrue(code.contains("NMMP_DEMAND_MODULE_INIT(nmmpModuleBlob,"));
+        assertTrue(code.contains("UINT32_C(0x80000001)"));
+        assertFalse(code.contains("vmExecuteDemand(")); assertFalse(code.contains("static vmDemandCode"));
+        assertFalse(code.contains("encodedInsns")); assertFalse(code.contains("nmmpDemand_"));
+        Matcher token = Pattern.compile("vmExecuteToken\\(env, &nmmpModule, UINT32_C\\(0x([0-9a-f]{8})\\)").matcher(code);
+        assertTrue(token.find());
+        long wrapperToken = Long.parseLong(token.group(1), 16);
+        String array = code.substring(code.indexOf("static const u1 nmmpModuleBlob[] = {"));
+        array = array.substring(0, array.indexOf("};"));
+        Matcher bytes = Pattern.compile("0x([0-9a-f]{2}),").matcher(array);
+        java.io.ByteArrayOutputStream blob = new java.io.ByteArrayOutputStream();
+        while (bytes.find()) blob.write(Integer.parseInt(bytes.group(1), 16));
+        byte[] moduleBlob = blob.toByteArray();
+        ByteBuffer header = le(moduleBlob);
+        assertEquals(wrapperToken, Integer.toUnsignedLong(header.getInt(64)));
+        int recordOffset = header.getInt(68);
+        ByteBuffer record = le(decode(Arrays.copyOfRange(moduleBlob, recordOffset, recordOffset + 56), ROOT, wrapperToken, 6));
+        assertEquals(header.getInt(40), record.getInt(20));
+        assertEquals(0, record.getInt(32));
+        assertEquals(moduleBlob.length, record.getInt(28));
+        assertEquals(record.getInt(20) + record.getInt(24), record.getInt(28));
+        assertTrue(code.contains(String.format("UINT32_C(0x%08x)", fnv(moduleBlob, moduleBlob.length))));
     }
 }

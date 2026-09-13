@@ -94,6 +94,7 @@ public class CmakeUtils {
     public static void generateCSources(File srcDir,
                                         InstructionRewriter instructionRewriter,
                                         ProtectionContext protectionContext) throws IOException {
+        BuildNativeLib.validateProtectionOptions();
         final File vmsrcFile = new File(FileUtils.getHomePath(), "tools/vmsrc.zip");
         if (!vmsrcFile.exists()) {
             //警告：如果外部源码存在不会复制内部vmsrc.zip出去，需要删除外部源码文件才能保证vmsrc.zip正确更新
@@ -109,11 +110,9 @@ public class CmakeUtils {
         validateVmTemplate(vmsrcFile);
         final List<File> cSources = ApkUtils.extractFiles(vmsrcFile, ".*", srcDir);
         writeCodecConfig(new File(srcDir, "vm/include/VmCodecConfig.h"), protectionContext);
-        if (protectionContext.isOnDemand()) {
-            try (Writer writer = new OutputStreamWriter(new FileOutputStream(
-                    new File(srcDir, "vm/include/NativeProgramConfig.h")), StandardCharsets.UTF_8)) {
-                NativeProgram.root(protectionContext.getBuildId()).writeHeader(writer);
-            }
+        try (Writer writer = new OutputStreamWriter(new FileOutputStream(
+                new File(srcDir, "vm/include/NativeProgramConfig.h")), StandardCharsets.UTF_8)) {
+            NativeProgram.root(protectionContext.getBuildId()).writeHeader(writer);
         }
 
         //处理指令及apk验证,生成新的c文件
@@ -134,26 +133,23 @@ public class CmakeUtils {
 
     private static void validateVmTemplate(File vmsrcFile) throws IOException {
         try (ZipFile zipFile = new ZipFile(vmsrcFile)) {
-            if (BuildNativeLib.isPrivateLinkerEnabled()) {
-                requireZipEntry(zipFile, "loader/PrivateLinker.cmake", vmsrcFile);
-                requireZipEntry(zipFile, "loader/pack.py", vmsrcFile);
-                requireZipEntry(zipFile, "loader/Stage0.c", vmsrcFile);
-                requireZipEntry(zipFile, "loader/stage0.py", vmsrcFile);
-                requireZipEntry(zipFile, "loader/native_formats.py", vmsrcFile);
-                final ZipEntry loaderVersion = requireZipEntry(zipFile, "loader/LoaderVersion.h", vmsrcFile);
-                requireZipEntry(zipFile, "vm/include/PrivateLoaderState.h", vmsrcFile);
-                try (InputStream inputStream = zipFile.getInputStream(loaderVersion);
-                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-                    FileUtils.copyStream(inputStream, outputStream);
-                    final Matcher loaderMatcher = Pattern.compile(
-                            "#define\\s+NMMP_PRIVATE_LOADER_FORMAT_VERSION\\s+(\\d+)")
-                            .matcher(new String(outputStream.toByteArray(), StandardCharsets.UTF_8));
-                    if (!loaderMatcher.find() || Integer.parseInt(loaderMatcher.group(1)) != 1) {
-                        throw new IOException("Private loader template format version mismatch: " + vmsrcFile);
-                    }
+            requireZipEntry(zipFile, "loader/PrivateLinker.cmake", vmsrcFile);
+            requireZipEntry(zipFile, "loader/pack.py", vmsrcFile);
+            requireZipEntry(zipFile, "loader/Stage0.c", vmsrcFile);
+            requireZipEntry(zipFile, "loader/stage0.py", vmsrcFile);
+            requireZipEntry(zipFile, "loader/native_formats.py", vmsrcFile);
+            final ZipEntry loaderVersion = requireZipEntry(zipFile, "loader/LoaderVersion.h", vmsrcFile);
+            requireZipEntry(zipFile, "vm/include/PrivateLoaderState.h", vmsrcFile);
+            try (InputStream inputStream = zipFile.getInputStream(loaderVersion);
+                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+                FileUtils.copyStream(inputStream, outputStream);
+                final Matcher loaderMatcher = Pattern.compile(
+                        "#define\\s+NMMP_PRIVATE_LOADER_FORMAT_VERSION\\s+(\\d+)")
+                        .matcher(new String(outputStream.toByteArray(), StandardCharsets.UTF_8));
+                if (!loaderMatcher.find() || Integer.parseInt(loaderMatcher.group(1)) != 1) {
+                    throw new IOException("Private loader template format version mismatch: " + vmsrcFile);
                 }
             }
-            requireZipEntry(zipFile, "vm/Codec.cpp", vmsrcFile);
             requireZipEntry(zipFile, "vm/VmCodec.cpp", vmsrcFile);
             requireZipEntry(zipFile, "vm/Module.cpp", vmsrcFile);
             requireZipEntry(zipFile, "vm/VmInit.c", vmsrcFile);

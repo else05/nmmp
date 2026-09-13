@@ -1,7 +1,6 @@
-#include "vm.h"
+#include "DemandFixture.h"
 #include "VmCodec.h"
 #include "VmReader.h"
-#include "PrivateLoaderState.h"
 #include "Exception.h"
 #if defined(__ANDROID__)
 #include <android/api-level.h>
@@ -72,9 +71,6 @@ bool vmPrepareDemandCode(JNIEnv *env, vmDemandCode *c) {
 
 jvalue vmExecuteDemand(JNIEnv *env, const vmDemandCode *c, regptr_t *regs,
                        u1 *regFlags, u4 registerCapacity, const vmResolver *resolver) {
-#if defined(NMMP_PRIVATE_LINKER)
-    if (nmmpPrivateLoaderFailed()) { demandError(env); return {}; }
-#endif
     uint64_t root = 0;
     if (!c || !resolver || __atomic_load_n(&c->state, __ATOMIC_ACQUIRE) != 2
             || !vmCodecGetSeed(&root)) { demandError(env); return {}; }

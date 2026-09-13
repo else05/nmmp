@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.nmmedit.dex2c.Dex2cEmptyMethodTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-09-13T02:49:30" hostname="DESKTOP-MHK8Q30" time="0.026">
+  <properties/>
+  <testcase name="testEmptyMethodRemainsInDex" classname="com.nmmedit.dex2c.Dex2cEmptyMethodTest" time="0.026"/>
+  <testcase name="testRegisterNativeNames" classname="com.nmmedit.dex2c.Dex2cEmptyMethodTest" time="0.0"/>
+  <system-out><![CDATA[[nmmp] 跳过空方法（保留 DEX）: Ltests/EmptyMethods;->empty()V
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

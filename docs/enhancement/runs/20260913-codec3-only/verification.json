@@ -1,0 +1,36 @@
+{
+  "baseline": "e7e1e15",
+  "java": {
+    "apkprotect": {
+      "tests": 50,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "arsc": {
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "artifact": {
+    "jar": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\libs\\vm-protect-2026-09-13-1049.jar",
+    "jarSha256": "9f902ab85ec9eda9fb698076cf952d9d3f6195a4cff91b3470b8144704006784",
+    "templateVersion": 5,
+    "codecVersion": 3,
+    "privateLinker": true,
+    "stage0Vm": true,
+    "templateExact": true,
+    "apkSha256": "9bfb65a6b0cb5b082d47c948c78acb0bb1dc36fd9612fec40591103e845680e0",
+    "apkBytes": 9220037,
+    "selectedMethods": 526,
+    "oldExecutionAbsent": true,
+    "oldKeySharesAbsent": true,
+    "probeSymbolsAbsent": true,
+    "loaderBuildId": "07e249efa4ed3d87600aef18df81c215",
+    "innerSha256": "31bd1a8954ac34215fdd87811247a0350d50440320d6d108da7c72f0b7f88711"
+  },
+  "performanceAccepted": false,
+  "scope": "API27 ARM64, unactivated app; single startup and one minute idle observation"
+}

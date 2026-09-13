@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.nmmedit.apkprotect.dex2c.filters.SimpleRulesTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-09-13T02:49:30" hostname="DESKTOP-MHK8Q30" time="0.035">
+  <properties/>
+  <testcase name="testParse" classname="com.nmmedit.apkprotect.dex2c.filters.SimpleRulesTest" time="0.035"/>
+  <testcase name="testParseComments" classname="com.nmmedit.apkprotect.dex2c.filters.SimpleRulesTest" time="0.0"/>
+  <system-out><![CDATA[Landroidx/test/core/R;
+Landroidx/test/core/R;   Landroidx/test/core/R;-><init>()V
+Landroidx/test/espresso/core/R;
+Landroidx/test/espresso/core/R;   Landroidx/test/espresso/core/R;-><init>()V
+Landroidx/test/espresso/idling/concurrent/R;
+Landroidx/test/espresso/idling/concurrent/R;   Landroidx/test/espresso/idling/concurrent/R;-><init>()V
+Landroidx/test/ext/junit/R;
+Landroidx/test/ext/junit/R;   Landroidx/test/ext/junit/R;-><init>()V
+Landroidx/test/monitor/R;
+Landroidx/test/monitor/R;   Landroidx/test/monitor/R;-><init>()V
+Landroidx/test/runner/R;
+Landroidx/test/runner/R;   Landroidx/test/runner/R;-><init>()V
+Lcom/nmmedit/vm/BuildConfig;
+Lcom/nmmedit/vm/BuildConfig;   Lcom/nmmedit/vm/BuildConfig;-><clinit>()V
+Lcom/nmmedit/vm/BuildConfig;   Lcom/nmmedit/vm/BuildConfig;-><init>()V
+Lcom/nmmedit/vm/R;
+Lcom/nmmedit/vm/R;   Lcom/nmmedit/vm/R;-><init>()V
+Lcom/nmmedit/vm/TestException;
+Lcom/nmmedit/vm/TestException;   Lcom/nmmedit/vm/TestException;-><init>(Ljava/lang/String;Ljava/lang/String;III)V
+Lcom/nmmedit/vm/Vm;
+Lcom/nmmedit/vm/Vm;   Lcom/nmmedit/vm/Vm;-><clinit>()V
+Lcom/nmmedit/vm/Vm;   Lcom/nmmedit/vm/Vm;-><init>()V
+Lcom/nmmedit/vm/Vm;   Lcom/nmmedit/vm/Vm;->callIntMethod0([BLjava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)I
+Lcom/nmmedit/vm/Vm;   Lcom/nmmedit/vm/Vm;->parseDex([B)V
+Lcom/nmmedit/vm/VmTest;
+Lcom/nmmedit/vm/VmTest;   Lcom/nmmedit/vm/VmTest;-><clinit>()V
+Lcom/nmmedit/vm/VmTest;   Lcom/nmmedit/vm/VmTest;-><init>()V
+Lcom/nmmedit/vm/VmTest;   Lcom/nmmedit/vm/VmTest;->aget([II)I
+Lcom/nmmedit/vm/VmTest;   Lcom/nmmedit/vm/VmTest;->aget0([II)I
+Lcom/nmmedit/vm/VmTest;   Lcom/nmmedit/vm/VmTest;->aput([Ljava/lang/String;ILjava/lang/String;)Ljava/lang/String;
+Lcom/nmmedit/vm/VmTest;   Lcom/nmmedit/vm/VmTest;->aput0([Ljava/lang/String;ILjava/lang/String;)Ljava/lang/String;
+Lcom/nmmedit/vm/VmTest;   Lcom/nmmedit/vm/VmTest;->callMethodA()V
+Lcom/nmmedit/vm/VmTest;   Lcom/nmmedit/vm/VmTest;->filledArray(I)I
+Lcom/nmmedit/vm/VmTest;   Lcom/nmmedit/vm/VmTest;->filledNewArray(I)Ljava/lang/String;
+Lcom/nmmedit/vm/VmTest;   Lcom/nmmedit/vm/VmTest;->filledNewArray0(I)Ljava/lang/String;
+Lcom/nmmedit/vm/VmTest;   Lcom/nmmedit/vm/VmTest;->iadd(II)I
+Lcom/nmmedit/vm/VmTest;   Lcom/nmmedit/vm/VmTest;->iadd0(II)I
+Lcom/nmmedit/vm/VmTest;   Lcom/nmmedit/vm/VmTest;->invokeVirtual(Ljava/lang/StringBuilder;)Ljava/lang/String;
+Lcom/nmmedit/vm/VmTest;   Lcom/nmmedit/vm/VmTest;->invokeVirtual0(Ljava/lang/StringBuilder;)Ljava/lang/String;
+Lcom/nmmedit/vm/VmTest;   Lcom/nmmedit/vm/VmTest;->ladd(JJ)J
+Lcom/nmmedit/vm/VmTest;   Lcom/nmmedit/vm/VmTest;->ladd0(JJ)J
+Lcom/nmmedit/vm/VmTest;   Lcom/nmmedit/vm/VmTest;->loadDex0([B)V
+Lcom/nmmedit/vm/VmTest;   Lcom/nmmedit/vm/VmTest;->loop(I)I
+Lcom/nmmedit/vm/VmTest;   Lcom/nmmedit/vm/VmTest;->loop0(I)I
+Lcom/nmmedit/vm/VmTest;   Lcom/nmmedit/vm/VmTest;->newExcept(Ljava/lang/String;)Ljava/io/IOException;
+Lcom/nmmedit/vm/VmTest;   Lcom/nmmedit/vm/VmTest;->packedSwitch(I)I
+Lcom/nmmedit/vm/VmTest;   Lcom/nmmedit/vm/VmTest;->packedSwitch0(I)I
+Lcom/nmmedit/vm/VmTest;   Lcom/nmmedit/vm/VmTest;->setsfield(I)V
+Lcom/nmmedit/vm/VmTest;   Lcom/nmmedit/vm/VmTest;->setsfield0(I)V
+Lcom/nmmedit/vm/VmTest;   Lcom/nmmedit/vm/VmTest;->sfieldGet()I
+Lcom/nmmedit/vm/VmTest;   Lcom/nmmedit/vm/VmTest;->sfieldGet0()I
+Lcom/nmmedit/vm/VmTest;   Lcom/nmmedit/vm/VmTest;->sfieldGetDouble()D
+Lcom/nmmedit/vm/VmTest;   Lcom/nmmedit/vm/VmTest;->add(Ljava/lang/Object;)Z
+Lcom/nmmedit/vm/VmTest;   Lcom/nmmedit/vm/VmTest;->ifieldGet()I
+Lcom/nmmedit/vm/VmTest;   Lcom/nmmedit/vm/VmTest;->ifieldGet0()I
+Lcom/nmmedit/vm/VmTest;   Lcom/nmmedit/vm/VmTest;->ifieldPut(Z)V
+Lcom/nmmedit/vm/VmTest;   Lcom/nmmedit/vm/VmTest;->ifieldPut0(Z)V
+Lcom/nmmedit/vm/VmTest;   Lcom/nmmedit/vm/VmTest;->invokeSuper0(Ljava/lang/String;)Z
+Lcom/nmmedit/vm/VmTest;   Lcom/nmmedit/vm/VmTest;->tryCatch()V
+Lcom/nmmedit/vm/VmTest;   Lcom/nmmedit/vm/VmTest;->tryCatch0()V
+Lcom/nmmedit/vm/VmUnitTest;
+Lcom/nmmedit/vm/VmUnitTest;   Lcom/nmmedit/vm/VmUnitTest;-><init>()V
+Lcom/nmmedit/vm/VmUnitTest;   Lcom/nmmedit/vm/VmUnitTest;->copyStream(Ljava/io/InputStream;Ljava/io/OutputStream;)V
+Lcom/nmmedit/vm/VmUnitTest;   Lcom/nmmedit/vm/VmUnitTest;->before()V
+Lcom/nmmedit/vm/VmUnitTest;   Lcom/nmmedit/vm/VmUnitTest;->testAget()V
+Lcom/nmmedit/vm/VmUnitTest;   Lcom/nmmedit/vm/VmUnitTest;->testCallMethodA()V
+Lcom/nmmedit/vm/VmUnitTest;   Lcom/nmmedit/vm/VmUnitTest;->testFilledNewArray()V
+Lcom/nmmedit/vm/VmUnitTest;   Lcom/nmmedit/vm/VmUnitTest;->testGetField()V
+Lcom/nmmedit/vm/VmUnitTest;   Lcom/nmmedit/vm/VmUnitTest;->testIadd()V
+Lcom/nmmedit/vm/VmUnitTest;   Lcom/nmmedit/vm/VmUnitTest;->testInstanceOf()V
+Lcom/nmmedit/vm/VmUnitTest;   Lcom/nmmedit/vm/VmUnitTest;->testInvokeSuper()V
+Lcom/nmmedit/vm/VmUnitTest;   Lcom/nmmedit/vm/VmUnitTest;->testInvokeVirtual()V
+Lcom/nmmedit/vm/VmUnitTest;   Lcom/nmmedit/vm/VmUnitTest;->testLadd()V
+Lcom/nmmedit/vm/VmUnitTest;   Lcom/nmmedit/vm/VmUnitTest;->testLoop()V
+Lcom/nmmedit/vm/VmUnitTest;   Lcom/nmmedit/vm/VmUnitTest;->testMisc()V
+Lcom/nmmedit/vm/VmUnitTest;   Lcom/nmmedit/vm/VmUnitTest;->testOmnibus()V
+Lcom/nmmedit/vm/VmUnitTest;   Lcom/nmmedit/vm/VmUnitTest;->testParseDex()V
+Lcom/nmmedit/vm/VmUnitTest;   Lcom/nmmedit/vm/VmUnitTest;->testSetField()V
+Lcom/nmmedit/vm/VmUnitTest;   Lcom/nmmedit/vm/VmUnitTest;->testSwitch()V
+Lcom/nmmedit/vm/VmUnitTest;   Lcom/nmmedit/vm/VmUnitTest;->testTry()V
+Lcom/nmmedit/vm/VmUnitTest;   Lcom/nmmedit/vm/VmUnitTest;->testaput()V
+Lcom/nmmedit/vm/VmUnitTest;   Lcom/nmmedit/vm/VmUnitTest;->testiFieldGet()V
+Lcom/nmmedit/vm/VmUnitTest;   Lcom/nmmedit/vm/VmUnitTest;->testiFieldPut()V
+Lcom/nmmedit/vm/VmUnitTest;   Lcom/nmmedit/vm/VmUnitTest;->useAppContext()V
+Lcom/nmmedit/vm/test/BuildConfig;
+Lcom/nmmedit/vm/test/BuildConfig;   Lcom/nmmedit/vm/test/BuildConfig;-><clinit>()V
+Lcom/nmmedit/vm/test/BuildConfig;   Lcom/nmmedit/vm/test/BuildConfig;-><init>()V
+Lcom/nmmedit/vm/test/R;
+Lcom/nmmedit/vm/test/R;   Lcom/nmmedit/vm/test/R;-><init>()V
+Ltests/arraycopy/Iface1;
+Ltests/arraycopy/Iface1;   Ltests/arraycopy/Iface1;-><clinit>()V
+Ltests/arraycopy/Iface1;   Ltests/arraycopy/Iface1;->iFunc1(I)I
+Ltests/arraycopy/Iface2;
+Ltests/arraycopy/Iface2;   Ltests/arraycopy/Iface2;->iFunc2(I)I
+Ltests/arraycopy/Main;
+Ltests/arraycopy/Main;   Ltests/arraycopy/Main;-><init>()V
+Ltests/arraycopy/Main;   Ltests/arraycopy/Main;->initByteArray([B)V
+Ltests/arraycopy/Main;   Ltests/arraycopy/Main;->initIntArray([I)V
+Ltests/arraycopy/Main;   Ltests/arraycopy/Main;->initLongArray([J)V
+Ltests/arraycopy/Main;   Ltests/arraycopy/Main;->initShortArray([S)V
+Ltests/arraycopy/Main;   Ltests/arraycopy/Main;->main([Ljava/lang/String;)V
+Ltests/arraycopy/Main;   Ltests/arraycopy/Main;->makeCopies(III)V
+Ltests/arraycopy/Main;   Ltests/arraycopy/Main;->testObjectCopy()V
+Ltests/arraycopy/Main;   Ltests/arraycopy/Main;->testOverlappingMoves()V
+Ltests/common/MyAssert;
+Ltests/common/MyAssert;   Ltests/common/MyAssert;-><init>()V
+Ltests/common/MyAssert;   Ltests/common/MyAssert;->myassert(Z)V
+Ltests/exceptions/Main;
+Ltests/exceptions/Main;   Ltests/exceptions/Main;-><init>()V
+Ltests/exceptions/Main;   Ltests/exceptions/Main;->catchAndRethrow()V
+Ltests/exceptions/Main;   Ltests/exceptions/Main;->main([Ljava/lang/String;)V
+Ltests/exceptions/Main;   Ltests/exceptions/Main;->throwNullPointerException()V
+Ltests/floatconversion/Main;
+Ltests/floatconversion/Main;   Ltests/floatconversion/Main;-><clinit>()V
+Ltests/floatconversion/Main;   Ltests/floatconversion/Main;-><init>()V
+Ltests/floatconversion/Main;   Ltests/floatconversion/Main;->main([Ljava/lang/String;)V
+Ltests/myinstanceof/Iface1;
+Ltests/myinstanceof/Iface1;   Ltests/myinstanceof/Iface1;-><clinit>()V
+Ltests/myinstanceof/Iface1;   Ltests/myinstanceof/Iface1;->iFunc1(I)I
+Ltests/myinstanceof/Iface2;
+Ltests/myinstanceof/Iface2;   Ltests/myinstanceof/Iface2;->iFunc2(I)I
+Ltests/myinstanceof/Main;
+Ltests/myinstanceof/Main;   Ltests/myinstanceof/Main;-><init>()V
+Ltests/myinstanceof/Main;   Ltests/myinstanceof/Main;->main([Ljava/lang/String;)V
+Ltests/omnibus/Array;
+Ltests/omnibus/Array;   Ltests/omnibus/Array;-><init>()V
+Ltests/omnibus/Array;   Ltests/omnibus/Array;->checkBooleans([Z)V
+Ltests/omnibus/Array;   Ltests/omnibus/Array;->checkBytes([B)V
+Ltests/omnibus/Array;   Ltests/omnibus/Array;->checkChars([C)V
+Ltests/omnibus/Array;   Ltests/omnibus/Array;->checkFloats([F)V
+Ltests/omnibus/Array;   Ltests/omnibus/Array;->checkInts([I)V
+Ltests/omnibus/Array;   Ltests/omnibus/Array;->checkLongs([J)V
+Ltests/omnibus/Array;   Ltests/omnibus/Array;->checkNegAlloc(I)V
+Ltests/omnibus/Array;   Ltests/omnibus/Array;->checkRange32([I[III)V
+Ltests/omnibus/Array;   Ltests/omnibus/Array;->checkRange64([JII)V
+Ltests/omnibus/Array;   Ltests/omnibus/Array;->checkShorts([S)V
+Ltests/omnibus/Array;   Ltests/omnibus/Array;->checkStrings([Ljava/lang/String;)V
+Ltests/omnibus/Array;   Ltests/omnibus/Array;->run()V
+Ltests/omnibus/Classes;
+Ltests/omnibus/Classes;   Ltests/omnibus/Classes;-><init>()V
+Ltests/omnibus/Classes;   Ltests/omnibus/Classes;->arrayInstance()V
+Ltests/omnibus/Classes;   Ltests/omnibus/Classes;->arrayInstancen()V
+Ltests/omnibus/Classes;   Ltests/omnibus/Classes;->iarTests(Ljava/lang/Object;)V
+Ltests/omnibus/Classes;   Ltests/omnibus/Classes;->iararTests(Ljava/lang/Object;)V
+Ltests/omnibus/Classes;   Ltests/omnibus/Classes;->run()V
+Ltests/omnibus/Classes;   Ltests/omnibus/Classes;->run2()V
+Ltests/omnibus/Classes;   Ltests/omnibus/Classes;->runn()V
+Ltests/omnibus/Classes;   Ltests/omnibus/Classes;->xTests(Ljava/lang/Object;)V
+Ltests/omnibus/Classes;   Ltests/omnibus/Classes;->xarTests(Ljava/lang/Object;)V
+Ltests/omnibus/Classes;   Ltests/omnibus/Classes;->xarararTests(Ljava/lang/Object;)V
+Ltests/omnibus/Classes;   Ltests/omnibus/Classes;->yTests(Ljava/lang/Object;)V
+Ltests/omnibus/Classes;   Ltests/omnibus/Classes;->yarTests(Ljava/lang/Object;)V
+Ltests/omnibus/Classes;   Ltests/omnibus/Classes;->yarararTests(Ljava/lang/Object;)V
+Ltests/omnibus/Classes;   Ltests/omnibus/Classes;->checkCast(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)V
+Ltests/omnibus/Classes;   Ltests/omnibus/Classes;->checkCastn(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)V
+Ltests/omnibus/Classes;   Ltests/omnibus/Classes;->subFunc(Z)V
+Ltests/omnibus/Classes;   Ltests/omnibus/Classes;->subFuncn(Z)V
+Ltests/omnibus/Compare;
+Ltests/omnibus/Compare;   Ltests/omnibus/Compare;-><init>()V
+Ltests/omnibus/Compare;   Ltests/omnibus/Compare;->run()V
+Ltests/omnibus/Compare;   Ltests/omnibus/Compare;->testDoubleCompare(DDDD)V
+Ltests/omnibus/Compare;   Ltests/omnibus/Compare;->testFloatCompare(FFFF)V
+Ltests/omnibus/Compare;   Ltests/omnibus/Compare;->testIntCompare(IIII)V
+Ltests/omnibus/Compare;   Ltests/omnibus/Compare;->testLongCompare(JJJJ)V
+Ltests/omnibus/FloatMath;
+Ltests/omnibus/FloatMath;   Ltests/omnibus/FloatMath;-><init>()V
+Ltests/omnibus/FloatMath;   Ltests/omnibus/FloatMath;->approxEqual(FFF)Z
+Ltests/omnibus/FloatMath;   Ltests/omnibus/FloatMath;->approxEqual2(DDD)Z
+Ltests/omnibus/FloatMath;   Ltests/omnibus/FloatMath;->checkConsts()V
+Ltests/omnibus/FloatMath;   Ltests/omnibus/FloatMath;->checkConvD([D)V
+Ltests/omnibus/FloatMath;   Ltests/omnibus/FloatMath;->checkConvF([F)V
+Ltests/omnibus/FloatMath;   Ltests/omnibus/FloatMath;->checkConvI([I)V
+Ltests/omnibus/FloatMath;   Ltests/omnibus/FloatMath;->checkConvL([J)V
+Ltests/omnibus/FloatMath;   Ltests/omnibus/FloatMath;->convD(IJF)[D
+Ltests/omnibus/FloatMath;   Ltests/omnibus/FloatMath;->convF(IJD)[F
+Ltests/omnibus/FloatMath;   Ltests/omnibus/FloatMath;->convI(JFDF)[I
+Ltests/omnibus/FloatMath;   Ltests/omnibus/FloatMath;->convL(IFDD)[J
+Ltests/omnibus/FloatMath;   Ltests/omnibus/FloatMath;->convTest()V
+Ltests/omnibus/FloatMath;   Ltests/omnibus/FloatMath;->convTestn()V
+Ltests/omnibus/FloatMath;   Ltests/omnibus/FloatMath;->doubleOperCheck([D)V
+Ltests/omnibus/FloatMath;   Ltests/omnibus/FloatMath;->doubleOperTest(DD)[D
+Ltests/omnibus/FloatMath;   Ltests/omnibus/FloatMath;->floatOperCheck([F)V
+Ltests/omnibus/FloatMath;   Ltests/omnibus/FloatMath;->floatOperTest(FF)[F
+Ltests/omnibus/FloatMath;   Ltests/omnibus/FloatMath;->floatOperTestn(FF)[F
+Ltests/omnibus/FloatMath;   Ltests/omnibus/FloatMath;->jlmTests(FD)V
+Ltests/omnibus/FloatMath;   Ltests/omnibus/FloatMath;->run()V
+Ltests/omnibus/FloatMath;   Ltests/omnibus/FloatMath;->unopTest(F)F
+Ltests/omnibus/Goto;
+Ltests/omnibus/Goto;   Ltests/omnibus/Goto;-><init>()V
+Ltests/omnibus/Goto;   Ltests/omnibus/Goto;->bigGoto(Z)I
+Ltests/omnibus/Goto;   Ltests/omnibus/Goto;->filler(I)I
+Ltests/omnibus/Goto;   Ltests/omnibus/Goto;->mediumGoto(Z)I
+Ltests/omnibus/Goto;   Ltests/omnibus/Goto;->run()V
+Ltests/omnibus/Goto;   Ltests/omnibus/Goto;->smallGoto(Z)I
+Ltests/omnibus/InstField;
+Ltests/omnibus/InstField;   Ltests/omnibus/InstField;-><init>()V
+Ltests/omnibus/InstField;   Ltests/omnibus/InstField;->nullCheck(Ltests/omnibus/InstField;)V
+Ltests/omnibus/InstField;   Ltests/omnibus/InstField;->assignFields()V
+Ltests/omnibus/InstField;   Ltests/omnibus/InstField;->checkFields()V
+Ltests/omnibus/InstField;   Ltests/omnibus/InstField;->run()V
+Ltests/omnibus/IntMath$Shorty;
+Ltests/omnibus/IntMath$Shorty;   Ltests/omnibus/IntMath$Shorty;-><init>()V
+Ltests/omnibus/IntMath;
+Ltests/omnibus/IntMath;   Ltests/omnibus/IntMath;-><init>()V
+Ltests/omnibus/IntMath;   Ltests/omnibus/IntMath;->bigDivideOverflow(IJ)V
+Ltests/omnibus/IntMath;   Ltests/omnibus/IntMath;->charSubTest()V
+Ltests/omnibus/IntMath;   Ltests/omnibus/IntMath;->checkConsts(BSIJ)V
+Ltests/omnibus/IntMath;   Ltests/omnibus/IntMath;->convTest()V
+Ltests/omnibus/IntMath;   Ltests/omnibus/IntMath;->divideByZero(I)V
+Ltests/omnibus/IntMath;   Ltests/omnibus/IntMath;->intOperCheck([I)V
+Ltests/omnibus/IntMath;   Ltests/omnibus/IntMath;->intOperTest(II)[I
+Ltests/omnibus/IntMath;   Ltests/omnibus/IntMath;->intShiftCheck([I)V
+Ltests/omnibus/IntMath;   Ltests/omnibus/IntMath;->intShiftTest(II)[I
+Ltests/omnibus/IntMath;   Ltests/omnibus/IntMath;->jlmTests(IJ)V
+Ltests/omnibus/IntMath;   Ltests/omnibus/IntMath;->lit16Check([I)V
+Ltests/omnibus/IntMath;   Ltests/omnibus/IntMath;->lit16Test(I)[I
+Ltests/omnibus/IntMath;   Ltests/omnibus/IntMath;->lit8Check([I)V
+Ltests/omnibus/IntMath;   Ltests/omnibus/IntMath;->lit8Test(I)[I
+Ltests/omnibus/IntMath;   Ltests/omnibus/IntMath;->longOperCheck([J)V
+Ltests/omnibus/IntMath;   Ltests/omnibus/IntMath;->longOperTest(JJ)[J
+Ltests/omnibus/IntMath;   Ltests/omnibus/IntMath;->longShiftCheck([J)J
+Ltests/omnibus/IntMath;   Ltests/omnibus/IntMath;->longShiftTest(JI)[J
+Ltests/omnibus/IntMath;   Ltests/omnibus/IntMath;->run()V
+Ltests/omnibus/IntMath;   Ltests/omnibus/IntMath;->shiftTest1()V
+Ltests/omnibus/IntMath;   Ltests/omnibus/IntMath;->shiftTest2()V
+Ltests/omnibus/IntMath;   Ltests/omnibus/IntMath;->truncateCheck(Ltests/omnibus/IntMath$Shorty;)V
+Ltests/omnibus/IntMath;   Ltests/omnibus/IntMath;->truncateTest(I)Ltests/omnibus/IntMath$Shorty;
+Ltests/omnibus/IntMath;   Ltests/omnibus/IntMath;->unopCheck(I)V
+Ltests/omnibus/IntMath;   Ltests/omnibus/IntMath;->unopTest(I)I
+Ltests/omnibus/IntMath;   Ltests/omnibus/IntMath;->unsignedShiftTest()V
+Ltests/omnibus/InternedString;
+Ltests/omnibus/InternedString;   Ltests/omnibus/InternedString;-><init>()V
+Ltests/omnibus/InternedString;   Ltests/omnibus/InternedString;->run()V
+Ltests/omnibus/InternedString;   Ltests/omnibus/InternedString;->testDeadInternedString()V
+Ltests/omnibus/InternedString;   Ltests/omnibus/InternedString;->testImmortalInternedString()V
+Ltests/omnibus/InternedString;   Ltests/omnibus/InternedString;->testImmortalInternedStringn()V
+Ltests/omnibus/Main;
+Ltests/omnibus/Main;   Ltests/omnibus/Main;-><init>()V
+Ltests/omnibus/Main;   Ltests/omnibus/Main;->main([Ljava/lang/String;)V
+Ltests/omnibus/Main;   Ltests/omnibus/Main;->run()V
+Ltests/omnibus/MethodCallBase;
+Ltests/omnibus/MethodCallBase;   Ltests/omnibus/MethodCallBase;-><init>()V
+Ltests/omnibus/MethodCallBase;   Ltests/omnibus/MethodCallBase;->tryThing()I
+Ltests/omnibus/Monitor;
+Ltests/omnibus/Monitor;   Ltests/omnibus/Monitor;-><clinit>()V
+Ltests/omnibus/Monitor;   Ltests/omnibus/Monitor;-><init>()V
+Ltests/omnibus/Monitor;   Ltests/omnibus/Monitor;->run()V
+Ltests/omnibus/Monitor;   Ltests/omnibus/Monitor;->runn()V
+Ltests/omnibus/Monitor;   Ltests/omnibus/Monitor;->subTest()V
+Ltests/omnibus/StaticField;
+Ltests/omnibus/StaticField;   Ltests/omnibus/StaticField;-><init>()V
+Ltests/omnibus/StaticField;   Ltests/omnibus/StaticField;->assignFields()V
+Ltests/omnibus/StaticField;   Ltests/omnibus/StaticField;->checkFields()V
+Ltests/omnibus/StaticField;   Ltests/omnibus/StaticField;->run()V
+Ltests/omnibus/Switch;
+Ltests/omnibus/Switch;   Ltests/omnibus/Switch;-><init>()V
+Ltests/omnibus/Switch;   Ltests/omnibus/Switch;->run()V
+Ltests/omnibus/Switch;   Ltests/omnibus/Switch;->testSwitch()V
+Ltests/omnibus/Throw;
+Ltests/omnibus/Throw;   Ltests/omnibus/Throw;-><init>()V
+Ltests/omnibus/Throw;   Ltests/omnibus/Throw;->run()V
+Ltests/omnibus/Throw;   Ltests/omnibus/Throw;->one()V
+Ltests/omnibus/Throw;   Ltests/omnibus/Throw;->rethrow()V
+Ltests/omnibus/Throw;   Ltests/omnibus/Throw;->throwArithmeticException()V
+Ltests/omnibus/Throw;   Ltests/omnibus/Throw;->throwNullPointerException()V
+Ltests/omnibus/Throw;   Ltests/omnibus/Throw;->twoA()V
+Ltests/omnibus/Throw;   Ltests/omnibus/Throw;->twoN()V
+Ltests/omnibus/UnresClass;
+Ltests/omnibus/UnresClass;   Ltests/omnibus/UnresClass;-><init>()V
+Ltests/omnibus/UnresStuff;
+Ltests/omnibus/UnresStuff;   Ltests/omnibus/UnresStuff;-><init>()V
+Ltests/omnibus/UnresStuff;   Ltests/omnibus/UnresStuff;->staticMethod()V
+Ltests/omnibus/UnresStuff;   Ltests/omnibus/UnresStuff;->virtualMethod()V
+Ltests/omnibus/UnresTest1;
+Ltests/omnibus/UnresTest1;   Ltests/omnibus/UnresTest1;-><init>()V
+Ltests/omnibus/UnresTest1;   Ltests/omnibus/UnresTest1;->run()V
+Ltests/omnibus/UnresTest2;
+Ltests/omnibus/UnresTest2;   Ltests/omnibus/UnresTest2;-><init>()V
+Ltests/omnibus/UnresTest2;   Ltests/omnibus/UnresTest2;->checkCasts(Ljava/lang/Object;)Z
+Ltests/omnibus/UnresTest2;   Ltests/omnibus/UnresTest2;->run()V
+Ltests/arraycopy/ImplA;
+Ltests/arraycopy/ImplA;   Ltests/arraycopy/ImplA;-><init>()V
+Ltests/arraycopy/ImplA;   Ltests/arraycopy/ImplA;->iFunc1(I)I
+Ltests/arraycopy/ImplA;   Ltests/arraycopy/ImplA;->iFunc2(I)I
+Ltests/myinstanceof/Iface2Sub1;
+Ltests/myinstanceof/ImplA;
+Ltests/myinstanceof/ImplA;   Ltests/myinstanceof/ImplA;-><init>()V
+Ltests/myinstanceof/ImplA;   Ltests/myinstanceof/ImplA;->iFunc1(I)I
+Ltests/myinstanceof/ImplA;   Ltests/myinstanceof/ImplA;->iFunc2(I)I
+Ltests/myinstanceof/ImplB;
+Ltests/myinstanceof/ImplB;   Ltests/myinstanceof/ImplB;-><clinit>()V
+Ltests/myinstanceof/ImplB;   Ltests/myinstanceof/ImplB;-><init>()V
+Ltests/myinstanceof/ImplB;   Ltests/myinstanceof/ImplB;->iFunc1(I)I
+Ltests/myinstanceof/ImplB;   Ltests/myinstanceof/ImplB;->iFunc2(I)I
+Ltests/omnibus/MethodCall;
+Ltests/omnibus/MethodCall;   Ltests/omnibus/MethodCall;-><init>()V
+Ltests/omnibus/MethodCall;   Ltests/omnibus/MethodCall;->directly()V
+Ltests/omnibus/MethodCall;   Ltests/omnibus/MethodCall;->manyArgs(IJIJIJIIDFDSICIIBZIIJJIIIII[[Ljava/lang/String;[Ljava/lang/String;Ljava/lang/String;)V
+Ltests/omnibus/MethodCall;   Ltests/omnibus/MethodCall;->run()V
+Ltests/omnibus/MethodCall;   Ltests/omnibus/MethodCall;->tryThing()I
+Ltests/omnibus/MoreClasses;
+Ltests/omnibus/MoreClasses;   Ltests/omnibus/MoreClasses;-><init>()V
+Ltests/omnibus/MoreClasses;   Ltests/omnibus/MoreClasses;->subFunc(Z)V
+Ltests/omnibus/MoreClasses;   Ltests/omnibus/MoreClasses;->subFuncn(Z)V
+Ltests/omnibus/MoreClasses;   Ltests/omnibus/MoreClasses;->superFunc(Z)V
+Ltests/myinstanceof/ImplBSub;
+Ltests/myinstanceof/ImplBSub;   Ltests/myinstanceof/ImplBSub;-><init>()V
+Ltests/myinstanceof/ImplBSub;   Ltests/myinstanceof/ImplBSub;->iFunc1(I)I
+Ltests/myinstanceof/ImplBSub;   Ltests/myinstanceof/ImplBSub;->iFunc2(I)I
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

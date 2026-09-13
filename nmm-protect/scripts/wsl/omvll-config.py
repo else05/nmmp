@@ -58,8 +58,7 @@ class NmmpConfig(omvll.ObfuscationConfig):
     @classmethod
     def is_vm_execute(cls, module: omvll.Module, function: omvll.Function) -> bool:
         return (
-            (cls.is_real_vm_module(module, "Codec.cpp") and cls.is_function(function, "vmExecute"))
-            or (cls.is_real_vm_module(module, "Module.cpp") and cls.is_function(function, "vmExecuteToken"))
+            cls.is_real_vm_module(module, "Module.cpp") and cls.is_function(function, "vmExecuteToken")
         )
 
     @classmethod

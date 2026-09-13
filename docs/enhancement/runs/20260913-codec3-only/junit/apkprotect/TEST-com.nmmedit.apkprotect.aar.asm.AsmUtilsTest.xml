@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.nmmedit.apkprotect.aar.asm.AsmUtilsTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-09-13T02:49:28" hostname="DESKTOP-MHK8Q30" time="0.022">
+  <properties/>
+  <testcase name="testGenCf" classname="com.nmmedit.apkprotect.aar.asm.AsmUtilsTest" time="0.0"/>
+  <testcase name="testInjectStaticBlock" classname="com.nmmedit.apkprotect.aar.asm.AsmUtilsTest" time="0.022"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

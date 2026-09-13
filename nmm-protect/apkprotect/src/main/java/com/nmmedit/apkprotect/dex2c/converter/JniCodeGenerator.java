@@ -9,7 +9,6 @@ import com.android.tools.smali.dexlib2.iface.MethodImplementation;
 import com.android.tools.smali.dexlib2.util.MethodUtil;
 import com.google.common.collect.HashMultimap;
 import com.nmmedit.apkprotect.dex2c.DexConfig;
-import com.nmmedit.apkprotect.dex2c.MethodCodec;
 import com.nmmedit.apkprotect.dex2c.DemandCodec;
 import com.nmmedit.apkprotect.dex2c.DemandModule;
 import com.nmmedit.apkprotect.dex2c.ProtectionContext;
@@ -48,8 +47,7 @@ public class JniCodeGenerator {
                             long dexId) {
         this.dexFile = dexFile;
         this.protectionContext = protectionContext;
-        this.demandModule = protectionContext.isOnDemand()
-                ? new DemandModule(protectionContext.getBuildSeed(), dexId, protectionContext.getBuildId()) : null;
+        this.demandModule = new DemandModule(protectionContext.getBuildSeed(), dexId, protectionContext.getBuildId());
 
 //      根据dex里字符串常量,类型常量等生成符号解析代码,给vm提供符号信息
         resolverCodeGenerator = new ResolverCodeGenerator(
@@ -86,14 +84,11 @@ public class JniCodeGenerator {
 
         handledNativeMethods.put(clazzName, new MyMethod(clazzName, methodName, parameterTypes, returnType));
 
-        long demandToken = 0;
-        if (protectionContext.isOnDemand()) {
-            final byte[] plain = instructionRewriter.rewriteInstructions(method);
-            final byte[] tries = instructionRewriter.handleTries(implementation);
-            final DemandCodec.Encoded encoded = DemandCodec.encode(method, plain, tries,
-                    protectionContext.getBuildSeed(), methodId, parameterRegisterCount);
-            demandToken = demandModule.add(methodId, registerCount, parameterRegisterCount, encoded);
-        }
+        final byte[] plain = instructionRewriter.rewriteInstructions(method);
+        final byte[] tries = instructionRewriter.handleTries(implementation);
+        final DemandCodec.Encoded encoded = DemandCodec.encode(method, plain, tries,
+                protectionContext.getBuildSeed(), methodId, parameterRegisterCount);
+        final long demandToken = demandModule.add(methodId, registerCount, parameterRegisterCount, encoded);
 
 
         writer.write(String.format("%s %s %s(JNIEnv *env, %s ",
@@ -196,71 +191,11 @@ public class JniCodeGenerator {
         writer.append("\n");
 //        -----------结束----------------
 
-        if (!protectionContext.isOnDemand()) {
-        final byte[] instructionData = instructionRewriter.rewriteInstructions(method);
-        final byte[] encodedInstructions = protectionContext.getMethodCodec().transform(
-                instructionData,
-                methodId,
-                MethodCodec.DOMAIN_CODE);
-        writeByteArray(writer, "encodedInsns", encodedInstructions);
-
-        final byte[] tries = instructionRewriter.handleTries(implementation);
-        final byte[] encodedTries = protectionContext.getMethodCodec().transform(
-                tries,
-                methodId,
-                MethodCodec.DOMAIN_TRIES);
-        if (tries.length == 0) {
-            writer.write("    const u1 *encodedTries = NULL;\n");
-        } else {
-            writeByteArray(writer, "encodedTries", encodedTries);
-        }
-
-        //调用解释器
-        writer.write(String.format("\n" +
-                        "    const vmEncodedCode code = {\n" +
-                        "            .encodedInsns=encodedInsns,\n" +
-                        "            .encodedInsnsByteSize=%d,\n" +
-                        "            .regs=regs,\n" +
-                        "            .reg_flags=reg_flags,\n" +
-                        "            .encodedTries=encodedTries,\n" +
-                        "            .encodedTriesByteSize=%d,\n" +
-                        "            .methodId=0x%08x,\n" +
-                        "            .plainCodeHash=0x%08x,\n" +
-                        "            .plainTriesHash=0x%08x,\n" +
-                        "            .codecVersion=%d\n" +
-                        "    };\n" +
-                        "\n"
-                ,
-                instructionData.length,
-                tries.length,
-                methodId,
-                MethodCodec.hash(instructionData),
-                MethodCodec.hash(tries),
-                ProtectionContext.CODEC_VERSION));
-
-        }
-
         final boolean hasReturnValue = !returnType.equals("V");
-        if (protectionContext.isOnDemand()) {
-            writer.write((hasReturnValue ? "    volatile jvalue value = " : "    ")
-                    + String.format(Locale.ROOT,
-                            "vmExecuteToken(env, &nmmpModule, UINT32_C(0x%08x), regs, reg_flags, %d, &dvmResolver);\n",
-                            demandToken, registerCount));
-        } else if (hasReturnValue) {
-            writer.write("\n" +
-                    "    volatile jvalue value = vmExecute(env,\n" +
-                    "                                &code,\n" +
-                    "                                &dvmResolver);\n"
-            );
-
-        } else {
-
-            writer.write("\n" +
-                    "    vmExecute(env,\n" +
-                    "              &code,\n" +
-                    "              &dvmResolver);\n"
-            );
-        }
+        writer.write((hasReturnValue ? "    volatile jvalue value = " : "    ")
+                + String.format(Locale.ROOT,
+                        "vmExecuteToken(env, &nmmpModule, UINT32_C(0x%08x), regs, reg_flags, %d, &dvmResolver);\n",
+                        demandToken, registerCount));
 
 
         //不使用栈需要释放内存
@@ -335,23 +270,21 @@ public class JniCodeGenerator {
                         + "        jclass error = (*env)->FindClass(env, \"java/lang/InternalError\");\n"
                         + "        if (error) { (*env)->ThrowNew(env, error, \"NMMP initialization is not ready\"); (*env)->DeleteLocalRef(env, error); }\n"
                         + "    }\n    return false;\n}\n");
-        if (protectionContext.isOnDemand()) codeWriter.write("static vmDemandModule nmmpModule;\n\n");
+        codeWriter.write("static vmDemandModule nmmpModule;\n\n");
         for (DexBackedClassDef classDef : dexFile.getClasses()) {
             for (DexBackedMethod method : classDef.getMethods()) {
                 addMethod(method, codeWriter);
             }
         }
 
-        if (protectionContext.isOnDemand()) {
-            DemandModule.Built module = demandModule.build();
-            writeByteArray(codeWriter, "nmmpModuleBlob", module.blob);
-            codeWriter.write(String.format(Locale.ROOT,
-                    "static vmDemandModule nmmpModule = NMMP_DEMAND_MODULE_INIT(nmmpModuleBlob, %d, "
-                            + "UINT32_C(0x%08x), UINT32_C(0x%08x), UINT64_C(0x%016x));\n",
-                    module.blob.length, module.hash, module.moduleId, module.buildId));
-            codeWriter.write("static bool nmmp_prepare_demand(JNIEnv *env) {\n");
-            codeWriter.write("    return vmPrepareDemandModule(env, &nmmpModule);\n}\n");
-        }
+        DemandModule.Built module = demandModule.build();
+        writeByteArray(codeWriter, "nmmpModuleBlob", module.blob);
+        codeWriter.write(String.format(Locale.ROOT,
+                "static vmDemandModule nmmpModule = NMMP_DEMAND_MODULE_INIT(nmmpModuleBlob, %d, "
+                        + "UINT32_C(0x%08x), UINT32_C(0x%08x), UINT64_C(0x%016x));\n",
+                module.blob.length, module.hash, module.moduleId, module.buildId));
+        codeWriter.write("static bool nmmp_prepare_demand(JNIEnv *env) {\n");
+        codeWriter.write("    return vmPrepareDemandModule(env, &nmmpModule);\n}\n");
         generateNativeMethodCode(config, codeWriter);
 
         codeWriter.write(String.format("void %s(JNIEnv *env) {\n", config.getHeaderFileAndSetupFunc().setupFunctionName));
@@ -359,7 +292,7 @@ public class JniCodeGenerator {
         codeWriter.write("\n    //符号解析器初始化\n");
         if (!protectionContext.isSignatureBound()) {
             codeWriter.write("    if (!resolver_init(env)) return;\n\n");
-            if (protectionContext.isOnDemand()) codeWriter.write("    if (!nmmp_prepare_demand(env)) return;\n");
+            codeWriter.write("    if (!nmmp_prepare_demand(env)) return;\n");
         }
 
         if (isRegisterNative) {
@@ -577,7 +510,7 @@ public class JniCodeGenerator {
         writer.write(String.format(
                 "bool %s(JNIEnv *env) {\n"
                         + "    if (!resolver_init(env)) return false;\n"
-                        + (protectionContext.isOnDemand() ? "    if (!nmmp_prepare_demand(env)) return false;\n" : "")
+                        + "    if (!nmmp_prepare_demand(env)) return false;\n"
                         + "    return true;\n"
                         + "}\n\n",
                 activateFunction));

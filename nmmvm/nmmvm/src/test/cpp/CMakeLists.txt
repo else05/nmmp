@@ -6,7 +6,8 @@ enable_testing()
 add_executable(vm_codec_vector_test
         VmCodecVectorTest.cpp
         ../../main/cpp/vm/VmCodec.cpp
-        ../../main/cpp/vm/VmInit.c)
+        ../../main/cpp/vm/VmInit.c
+        ../../main/cpp/vm/NativeVm.c)
 target_link_libraries(vm_codec_vector_test pthread)
 target_compile_features(vm_codec_vector_test PRIVATE cxx_std_11)
 target_include_directories(vm_codec_vector_test PRIVATE

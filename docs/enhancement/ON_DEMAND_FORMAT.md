@@ -1,6 +1,6 @@
 # on-demand-v1 格式合同
 
-codec 3 / template 4。所有持久化整数使用显式 little-endian，偏移/长度为 u32；Java 数组限制使单模块最大不超过 Integer.MAX_VALUE。生成物只有一种 codec，默认仍 legacy。
+codec 3 / template 5。所有持久化整数使用显式 little-endian，偏移/长度为 u32；Java 数组限制使单模块最大不超过 Integer.MAX_VALUE。仅生成 codec3；template5 删除 codec2 和旧加载构建路径，codec3 字节格式未变化。
 
 ## 模块与记录（S3）
 

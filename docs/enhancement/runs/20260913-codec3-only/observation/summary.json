@@ -1,0 +1,25 @@
+{
+  "apkSha256": "9bfb65a6b0cb5b082d47c948c78acb0bb1dc36fd9612fec40591103e845680e0",
+  "samples": [
+    {
+      "elapsedSeconds": 0.1278798000421375,
+      "pid": "29527"
+    },
+    {
+      "elapsedSeconds": 20.209602200018708,
+      "pid": "29527"
+    },
+    {
+      "elapsedSeconds": 40.12527010001941,
+      "pid": "29527"
+    },
+    {
+      "elapsedSeconds": 60.52770310000051,
+      "pid": "29527"
+    }
+  ],
+  "mainWindowVisible": true,
+  "crashMarkers": [],
+  "totalPssKb": 57872,
+  "scope": "One minute of idle unactivated application observation, not full business or performance acceptance"
+}

@@ -3,9 +3,7 @@
 #include "Envelope.h"
 #include "Loader.h"
 #include "Once.h"
-#if NMMP_STAGE0_VM
 #include "Stage0.h"
-#endif
 #include "vendor/monocypher/monocypher.h"
 #include <android/log.h>
 #include <android/api-level.h>
@@ -14,11 +12,7 @@
 
 extern const unsigned char nmmp_payload[];
 extern const size_t nmmp_payload_size;
-#if NMMP_STAGE0_VM
 extern const NmmpNativeProgram nmmp_stage0_programs[4];
-#else
-extern const volatile unsigned char nmmp_key_share_a[32], nmmp_key_share_b[32];
-#endif
 static NmmpOnce load_once = NMMP_ONCE_INIT;
 static NmmpModule *module;
 static NmmpHostV1 host;
@@ -40,11 +34,7 @@ static int initialize(void *opaque) {
     size_t decoded_size = 0;
     uint64_t start = nanos();
     int error = -6;
-#if NMMP_STAGE0_VM
     if (!nmmpRecoverStage0(nmmp_stage0_programs, nmmp_build_id, key)) goto failed;
-#else
-    for (unsigned i = 0; i < 32; ++i) key[i] = nmmp_key_share_a[i] ^ nmmp_key_share_b[i];
-#endif
     uint64_t recovered = nanos();
     error = nmmp_open_payload(nmmp_payload, nmmp_payload_size, key, nmmp_build_id, &decoded, &decoded_size);
     crypto_wipe(key, sizeof(key));

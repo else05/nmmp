@@ -1,0 +1,47 @@
+> Task :apkprotect:checkNativeFormats
+> Task :apkprotect:checkReaderFormats
+> Task :arsc:compileJava
+> Task :arsc:processResources NO-SOURCE
+> Task :apkprotect:extractIncludeProto
+> Task :apkprotect:extractProto
+> Task :apkprotect:generateProto
+
+> Task :apkprotect:compileJava
+ע: ĳЩ�����ļ�ʹ�û򸲸����ѹ�ʱ�� API��
+ע: �й���ϸ��Ϣ, ��ʹ�� -Xlint:deprecation ���±��롣
+
+> Task :apkprotect:processResources
+> Task :apkprotect:classes
+> Task :apkprotect:extractIncludeTestProto
+> Task :apkprotect:extractTestProto
+> Task :apkprotect:generateTestProto NO-SOURCE
+> Task :apkprotect:compileTestJava
+> Task :apkprotect:processTestResources
+> Task :apkprotect:testClasses
+> Task :arsc:classes
+> Task :arsc:jar
+> Task :apkprotect:test
+> Task :arsc:compileTestJava
+> Task :arsc:processTestResources
+> Task :arsc:testClasses
+> Task :arsc:test
+> Task :apkprotect:jar
+> Task :compileJava
+> Task :processResources NO-SOURCE
+> Task :classes
+
+> Task :jar
+Execution optimizations have been disabled for task ':jar' to ensure correctness due to the following reasons:
+  - Gradle detected a problem with the following location: 'E:\OtherProject\safe-toolchain\nmmp\nmm-protect\arsc\build\libs\arsc.jar'. Reason: Task ':jar' uses this output of task ':arsc:jar' without declaring an explicit or implicit dependency. This can lead to incorrect results being produced, depending on what order the tasks are executed. Please refer to https://docs.gradle.org/7.3/userguide/validation_problems.html#implicit_dependency for more details about this problem.
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 8.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+See https://docs.gradle.org/7.3/userguide/command_line_interface.html#sec:command_line_warnings
+
+Execution optimizations have been disabled for 1 invalid unit(s) of work during this build to ensure correctness.
+Please consult deprecation warnings for more details.
+
+BUILD SUCCESSFUL in 24s
+20 actionable tasks: 20 executed

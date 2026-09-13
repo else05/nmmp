@@ -2,18 +2,11 @@
 
 #include "VmInit.h"
 #include <sys/mman.h>
-#if NMMP_VM_CODEC_VERSION == 3
 #include "NativeProgramConfig.h"
-#endif
 
 struct SeedContext { uint64_t seed, maskTag; };
 static VmInit gCodecInit = NMMP_VM_INIT;
-#if !NMMP_VM_SIGNATURE_BINDING && NMMP_VM_CODEC_VERSION == 2
-static const SeedContext gUnbound = {NMMP_VM_SEED_DATA, 0};
-static const SeedContext *gSeed = &gUnbound;
-#else
 static const SeedContext *gSeed = nullptr;
-#endif
 static void wipe(void *data, size_t size) {
     volatile uint8_t *p = static_cast<volatile uint8_t *>(data);
     while (size--) *p++ = 0;
@@ -25,15 +18,11 @@ static uint64_t maskTag(uint64_t x) {
 }
 static bool initializeSeed(void *argument) {
     uint64_t mask = *static_cast<uint64_t *>(argument), seed = 0;
-#if NMMP_VM_CODEC_VERSION == 3
     // This host entry is reached only after binding verification, or explicit unbound setup.
     uint64_t inputs[4] = {1, NMMP_VM_SEED_DATA, mask, NMMP_VM_BUILD_ID};
     bool valid = nmmpNativeRun(&NMMP_ROOT_PROGRAM, inputs, 4, &seed);
     wipe(inputs, sizeof(inputs));
     if (!valid) { wipe(&mask, sizeof(mask)); return false; }
-#else
-    seed = NMMP_VM_SEED_DATA ^ mask;
-#endif
     void *memory = mmap(nullptr, sizeof(SeedContext), PROT_READ | PROT_WRITE,
                         MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
     if (memory == MAP_FAILED) { wipe(&seed, sizeof(seed)); wipe(&mask, sizeof(mask)); return false; }
@@ -64,14 +53,10 @@ static uint8_t vmCodecKeyByte(uint64_t seed, uint32_t id,
 
 extern "C"
 bool vmCodecActivate(uint64_t bindingMask) {
-#if !NMMP_VM_SIGNATURE_BINDING && NMMP_VM_CODEC_VERSION == 2
-    return gSeed->seed == (NMMP_VM_SEED_DATA ^ bindingMask);
-#else
     bool ready = vmInitRun(&gCodecInit, initializeSeed, &bindingMask);
     bool matched = ready && gSeed->maskTag == maskTag(bindingMask);
     wipe(&bindingMask, sizeof(bindingMask));
     return matched;
-#endif
 }
 
 extern "C"
@@ -83,11 +68,7 @@ bool vmCodecGetSeed(uint64_t *seed) {
 
 extern "C"
 bool vmCodecIsActivated(void) {
-#if !NMMP_VM_SIGNATURE_BINDING && NMMP_VM_CODEC_VERSION == 2
-    return true;
-#else
     return __atomic_load_n(&gCodecInit.state, __ATOMIC_ACQUIRE) == 2;
-#endif
 }
 
 extern "C"

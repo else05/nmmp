@@ -1,0 +1,447 @@
+-- The C compiler identification is Clang 17.0.2
+-- The CXX compiler identification is Clang 17.0.2
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /mnt/d/Android/SDK_WSL/ndk/26.3.11579264/toolchains/llvm/prebuilt/linux-x86_64/bin/clang - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /mnt/d/Android/SDK_WSL/ndk/26.3.11579264/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/build/codec3-only-20260913/semantic-Debug
+[1/27] Building C object CMakeFiles/nmmp_native_vm_test.dir/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/NativeVm.c.o
+[2/27] Building CXX object CMakeFiles/nmmp_native_root_test.dir/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/VmCodec.cpp.o
+[3/27] Building C object CMakeFiles/nmmp_native_root_test.dir/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/NativeVm.c.o
+[4/27] Building C object CMakeFiles/nmmp_native_root_test.dir/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/VmInit.c.o
+[5/27] Building CXX object vm/CMakeFiles/nmmvm.dir/DexCatch.cpp.o
+[6/27] Building CXX object vm/CMakeFiles/nmmvm.dir/Exception.cpp.o
+[7/27] Building CXX object vm/CMakeFiles/nmmvm.dir/Interp.cpp.o
+[8/27] Building CXX object CMakeFiles/nmmp_native_vm_test.dir/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/test/cpp/NativeVmTest.cpp.o
+[9/27] Building CXX object CMakeFiles/nmmp_native_root_test.dir/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/test/cpp/NativeRootTest.cpp.o
+[10/27] Building CXX object vm/CMakeFiles/nmmvm.dir/GlobalCache.cpp.o
+[11/27] Building CXX object CMakeFiles/nmmp_semantic.dir/SemanticBridge.cpp.o
+[12/27] Building CXX object vm/CMakeFiles/nmmvm.dir/VmBinding.cpp.o
+[13/27] Linking CXX executable nmmp_native_vm_test
+[14/27] Linking CXX executable nmmp_native_root_test
+[15/27] Building C object vm/CMakeFiles/nmmvm.dir/NativeVm.c.o
+[16/27] Building CXX object vm/CMakeFiles/nmmvm.dir/Module.cpp.o
+[17/27] Building C object vm/CMakeFiles/nmmvm.dir/VmInit.c.o
+[18/27] Building CXX object vm/CMakeFiles/nmmvm.dir/InterpC-portable.cpp.o
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:1199:31: warning: format specifies type 'unsigned long long' but the argument has type 's8' (aka 'long') [-Wformat]
+          kSpacing + 5, vdst, GET_REGISTER_WIDE(vsrc1));
+          ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:102:44: note: expanded from macro 'GET_REGISTER_WIDE'
+#define GET_REGISTER_WIDE(_idx)            ((s8)fp[RINDEX(_idx, 2)])
+                                           ^
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:31:39: note: expanded from macro 'ILOGV'
+# define ILOGV(...) ILOG(LOG_VERBOSE, __VA_ARGS__)
+                    ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:34:52: note: expanded from macro 'ILOG'
+        snprintf(debugStrBuf, sizeof(debugStrBuf), __VA_ARGS__);            \
+                                                   ^~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:1209:17: warning: format specifies type 'unsigned long long' but the argument has type 's8' (aka 'long') [-Wformat]
+          vdst, GET_REGISTER_WIDE(vsrc1));
+          ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:102:44: note: expanded from macro 'GET_REGISTER_WIDE'
+#define GET_REGISTER_WIDE(_idx)            ((s8)fp[RINDEX(_idx, 2)])
+                                           ^
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:31:39: note: expanded from macro 'ILOGV'
+# define ILOGV(...) ILOG(LOG_VERBOSE, __VA_ARGS__)
+                    ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:34:52: note: expanded from macro 'ILOG'
+        snprintf(debugStrBuf, sizeof(debugStrBuf), __VA_ARGS__);            \
+                                                   ^~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:1219:31: warning: format specifies type 'unsigned long long' but the argument has type 's8' (aka 'long') [-Wformat]
+          kSpacing + 8, vdst, GET_REGISTER_WIDE(vsrc1));
+          ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:102:44: note: expanded from macro 'GET_REGISTER_WIDE'
+#define GET_REGISTER_WIDE(_idx)            ((s8)fp[RINDEX(_idx, 2)])
+                                           ^
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:31:39: note: expanded from macro 'ILOGV'
+# define ILOGV(...) ILOG(LOG_VERBOSE, __VA_ARGS__)
+                    ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:34:52: note: expanded from macro 'ILOG'
+        snprintf(debugStrBuf, sizeof(debugStrBuf), __VA_ARGS__);            \
+                                                   ^~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:1285:65: warning: format specifies type 'unsigned long long' but the argument has type 'jlong' (aka 'long') [-Wformat]
+    ILOGV("|move-result-wide v%d %s(0x%08llx)", vdst, kSpacing, retval.j);
+                                      ~~~~~~                    ^~~~~~~~
+                                      %08lx
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:31:39: note: expanded from macro 'ILOGV'
+# define ILOGV(...) ILOG(LOG_VERBOSE, __VA_ARGS__)
+                                      ^~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:34:52: note: expanded from macro 'ILOG'
+        snprintf(debugStrBuf, sizeof(debugStrBuf), __VA_ARGS__);            \
+                                                   ^~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:1422:50: warning: format specifies type 'unsigned long long' but the argument has type 'u8' (aka 'unsigned long') [-Wformat]
+        ILOGV("|const-wide v%d,#0x%08llx", vdst, tmp);
+                                  ~~~~~~         ^~~
+                                  %08lx
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:31:39: note: expanded from macro 'ILOGV'
+# define ILOGV(...) ILOG(LOG_VERBOSE, __VA_ARGS__)
+                                      ^~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:34:52: note: expanded from macro 'ILOG'
+        snprintf(debugStrBuf, sizeof(debugStrBuf), __VA_ARGS__);            \
+                                                   ^~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:2101:57: warning: format specifies type 'unsigned int' but the argument has type 'jobject' (aka '_jobject *') [-Wformat]
+        ILOGV("+ APUT[%d]=0x%08x", GET_REGISTER(vsrc2), GET_REGISTER_AS_OBJECT(vdst));
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:56:38: note: expanded from macro 'GET_REGISTER_AS_OBJECT'
+#define GET_REGISTER_AS_OBJECT(_idx) ({ uint32_t reg_src = RINDEX(_idx, 1); \
+                                     ^
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:31:39: note: expanded from macro 'ILOGV'
+# define ILOGV(...) ILOG(LOG_VERBOSE, __VA_ARGS__)
+                    ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:34:52: note: expanded from macro 'ILOG'
+        snprintf(debugStrBuf, sizeof(debugStrBuf), __VA_ARGS__);            \
+                                                   ^~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:2140:1: warning: format specifies type 'unsigned long long' but the argument has type 'u8' (aka 'unsigned long') [-Wformat]
+HANDLE_IGET_X(OP_IGET, "", {
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:762:15: note: expanded from macro 'HANDLE_IGET_X'
+              (u8) GET_REGISTER##_regsize(vdst));                           \
+              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:31:39: note: expanded from macro 'ILOGV'
+# define ILOGV(...) ILOG(LOG_VERBOSE, __VA_ARGS__)
+                    ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:34:52: note: expanded from macro 'ILOG'
+        snprintf(debugStrBuf, sizeof(debugStrBuf), __VA_ARGS__);            \
+                                                   ^~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:2152:1: warning: format specifies type 'unsigned long long' but the argument has type 'u8' (aka 'unsigned long') [-Wformat]
+HANDLE_IGET_X(OP_IGET_WIDE, "-wide", {
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:762:15: note: expanded from macro 'HANDLE_IGET_X'
+              (u8) GET_REGISTER##_regsize(vdst));                           \
+              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:31:39: note: expanded from macro 'ILOGV'
+# define ILOGV(...) ILOG(LOG_VERBOSE, __VA_ARGS__)
+                    ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:34:52: note: expanded from macro 'ILOG'
+        snprintf(debugStrBuf, sizeof(debugStrBuf), __VA_ARGS__);            \
+                                                   ^~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:2164:1: warning: format specifies type 'unsigned long long' but the argument has type 'u8' (aka 'unsigned long') [-Wformat]
+HANDLE_IGET_X(OP_IGET_OBJECT, "-object", {
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:762:15: note: expanded from macro 'HANDLE_IGET_X'
+              (u8) GET_REGISTER##_regsize(vdst));                           \
+              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:31:39: note: expanded from macro 'ILOGV'
+# define ILOGV(...) ILOG(LOG_VERBOSE, __VA_ARGS__)
+                    ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:34:52: note: expanded from macro 'ILOG'
+        snprintf(debugStrBuf, sizeof(debugStrBuf), __VA_ARGS__);            \
+                                                   ^~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:2172:1: warning: format specifies type 'unsigned long long' but the argument has type 'u8' (aka 'unsigned long') [-Wformat]
+HANDLE_IGET_X(OP_IGET_BOOLEAN, "", {
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:762:15: note: expanded from macro 'HANDLE_IGET_X'
+              (u8) GET_REGISTER##_regsize(vdst));                           \
+              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:31:39: note: expanded from macro 'ILOGV'
+# define ILOGV(...) ILOG(LOG_VERBOSE, __VA_ARGS__)
+                    ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:34:52: note: expanded from macro 'ILOG'
+        snprintf(debugStrBuf, sizeof(debugStrBuf), __VA_ARGS__);            \
+                                                   ^~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:2179:1: warning: format specifies type 'unsigned long long' but the argument has type 'u8' (aka 'unsigned long') [-Wformat]
+HANDLE_IGET_X(OP_IGET_BYTE, "", {
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:762:15: note: expanded from macro 'HANDLE_IGET_X'
+              (u8) GET_REGISTER##_regsize(vdst));                           \
+              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:31:39: note: expanded from macro 'ILOGV'
+# define ILOGV(...) ILOG(LOG_VERBOSE, __VA_ARGS__)
+                    ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:34:52: note: expanded from macro 'ILOG'
+        snprintf(debugStrBuf, sizeof(debugStrBuf), __VA_ARGS__);            \
+                                                   ^~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:2186:1: warning: format specifies type 'unsigned long long' but the argument has type 'u8' (aka 'unsigned long') [-Wformat]
+HANDLE_IGET_X(OP_IGET_CHAR, "", {
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:762:15: note: expanded from macro 'HANDLE_IGET_X'
+              (u8) GET_REGISTER##_regsize(vdst));                           \
+              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:31:39: note: expanded from macro 'ILOGV'
+# define ILOGV(...) ILOG(LOG_VERBOSE, __VA_ARGS__)
+                    ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:34:52: note: expanded from macro 'ILOG'
+        snprintf(debugStrBuf, sizeof(debugStrBuf), __VA_ARGS__);            \
+                                                   ^~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:2193:1: warning: format specifies type 'unsigned long long' but the argument has type 'u8' (aka 'unsigned long') [-Wformat]
+HANDLE_IGET_X(OP_IGET_SHORT, "", {
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:762:15: note: expanded from macro 'HANDLE_IGET_X'
+              (u8) GET_REGISTER##_regsize(vdst));                           \
+              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:31:39: note: expanded from macro 'ILOGV'
+# define ILOGV(...) ILOG(LOG_VERBOSE, __VA_ARGS__)
+                    ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:34:52: note: expanded from macro 'ILOG'
+        snprintf(debugStrBuf, sizeof(debugStrBuf), __VA_ARGS__);            \
+                                                   ^~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:2200:1: warning: format specifies type 'unsigned long long' but the argument has type 'u8' (aka 'unsigned long') [-Wformat]
+HANDLE_IPUT_X(OP_IPUT, "", {
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:787:15: note: expanded from macro 'HANDLE_IPUT_X'
+              (u8) GET_REGISTER##_regsize(vdst));                           \
+              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:31:39: note: expanded from macro 'ILOGV'
+# define ILOGV(...) ILOG(LOG_VERBOSE, __VA_ARGS__)
+                    ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:34:52: note: expanded from macro 'ILOG'
+        snprintf(debugStrBuf, sizeof(debugStrBuf), __VA_ARGS__);            \
+                                                   ^~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:2213:1: warning: format specifies type 'unsigned long long' but the argument has type 'u8' (aka 'unsigned long') [-Wformat]
+HANDLE_IPUT_X(OP_IPUT_WIDE, "-wide", {
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:787:15: note: expanded from macro 'HANDLE_IPUT_X'
+              (u8) GET_REGISTER##_regsize(vdst));                           \
+              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:31:39: note: expanded from macro 'ILOGV'
+# define ILOGV(...) ILOG(LOG_VERBOSE, __VA_ARGS__)
+                    ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:34:52: note: expanded from macro 'ILOG'
+        snprintf(debugStrBuf, sizeof(debugStrBuf), __VA_ARGS__);            \
+                                                   ^~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:2226:1: warning: format specifies type 'unsigned long long' but the argument has type 'u8' (aka 'unsigned long') [-Wformat]
+HANDLE_IPUT_X(OP_IPUT_OBJECT, "-object", {
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:787:15: note: expanded from macro 'HANDLE_IPUT_X'
+              (u8) GET_REGISTER##_regsize(vdst));                           \
+              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:31:39: note: expanded from macro 'ILOGV'
+# define ILOGV(...) ILOG(LOG_VERBOSE, __VA_ARGS__)
+                    ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:34:52: note: expanded from macro 'ILOG'
+        snprintf(debugStrBuf, sizeof(debugStrBuf), __VA_ARGS__);            \
+                                                   ^~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:2232:1: warning: format specifies type 'unsigned long long' but the argument has type 'u8' (aka 'unsigned long') [-Wformat]
+HANDLE_IPUT_X(OP_IPUT_BOOLEAN, "", {
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:787:15: note: expanded from macro 'HANDLE_IPUT_X'
+              (u8) GET_REGISTER##_regsize(vdst));                           \
+              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:31:39: note: expanded from macro 'ILOGV'
+# define ILOGV(...) ILOG(LOG_VERBOSE, __VA_ARGS__)
+                    ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:34:52: note: expanded from macro 'ILOG'
+        snprintf(debugStrBuf, sizeof(debugStrBuf), __VA_ARGS__);            \
+                                                   ^~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:2238:1: warning: format specifies type 'unsigned long long' but the argument has type 'u8' (aka 'unsigned long') [-Wformat]
+HANDLE_IPUT_X(OP_IPUT_BYTE, "", {
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:787:15: note: expanded from macro 'HANDLE_IPUT_X'
+              (u8) GET_REGISTER##_regsize(vdst));                           \
+              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:31:39: note: expanded from macro 'ILOGV'
+# define ILOGV(...) ILOG(LOG_VERBOSE, __VA_ARGS__)
+                    ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:34:52: note: expanded from macro 'ILOG'
+        snprintf(debugStrBuf, sizeof(debugStrBuf), __VA_ARGS__);            \
+                                                   ^~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:2244:1: warning: format specifies type 'unsigned long long' but the argument has type 'u8' (aka 'unsigned long') [-Wformat]
+HANDLE_IPUT_X(OP_IPUT_CHAR, "", {
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:787:15: note: expanded from macro 'HANDLE_IPUT_X'
+              (u8) GET_REGISTER##_regsize(vdst));                           \
+              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:31:39: note: expanded from macro 'ILOGV'
+# define ILOGV(...) ILOG(LOG_VERBOSE, __VA_ARGS__)
+                    ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:34:52: note: expanded from macro 'ILOG'
+        snprintf(debugStrBuf, sizeof(debugStrBuf), __VA_ARGS__);            \
+                                                   ^~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:2250:1: warning: format specifies type 'unsigned long long' but the argument has type 'u8' (aka 'unsigned long') [-Wformat]
+HANDLE_IPUT_X(OP_IPUT_SHORT, "", {
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:787:15: note: expanded from macro 'HANDLE_IPUT_X'
+              (u8) GET_REGISTER##_regsize(vdst));                           \
+              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:31:39: note: expanded from macro 'ILOGV'
+# define ILOGV(...) ILOG(LOG_VERBOSE, __VA_ARGS__)
+                    ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:34:52: note: expanded from macro 'ILOG'
+        snprintf(debugStrBuf, sizeof(debugStrBuf), __VA_ARGS__);            \
+                                                   ^~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:2256:1: warning: format specifies type 'unsigned long long' but the argument has type 'u8' (aka 'unsigned long') [-Wformat]
+HANDLE_SGET_X(OP_SGET, "", {
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:810:33: note: expanded from macro 'HANDLE_SGET_X'
+              sfield->classIdx, (u8) GET_REGISTER##_regsize(vdst));         \
+              ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:31:39: note: expanded from macro 'ILOGV'
+# define ILOGV(...) ILOG(LOG_VERBOSE, __VA_ARGS__)
+                    ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:34:52: note: expanded from macro 'ILOG'
+        snprintf(debugStrBuf, sizeof(debugStrBuf), __VA_ARGS__);            \
+                                                   ^~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:2266:1: warning: format specifies type 'unsigned long long' but the argument has type 'u8' (aka 'unsigned long') [-Wformat]
+HANDLE_SGET_X(OP_SGET_WIDE, "-wide", {
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:810:33: note: expanded from macro 'HANDLE_SGET_X'
+              sfield->classIdx, (u8) GET_REGISTER##_regsize(vdst));         \
+              ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:31:39: note: expanded from macro 'ILOGV'
+# define ILOGV(...) ILOG(LOG_VERBOSE, __VA_ARGS__)
+                    ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:34:52: note: expanded from macro 'ILOG'
+        snprintf(debugStrBuf, sizeof(debugStrBuf), __VA_ARGS__);            \
+                                                   ^~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:2276:1: warning: format specifies type 'unsigned long long' but the argument has type 'u8' (aka 'unsigned long') [-Wformat]
+HANDLE_SGET_X(OP_SGET_OBJECT, "-object", {
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:810:33: note: expanded from macro 'HANDLE_SGET_X'
+              sfield->classIdx, (u8) GET_REGISTER##_regsize(vdst));         \
+              ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:31:39: note: expanded from macro 'ILOGV'
+# define ILOGV(...) ILOG(LOG_VERBOSE, __VA_ARGS__)
+                    ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:34:52: note: expanded from macro 'ILOG'
+        snprintf(debugStrBuf, sizeof(debugStrBuf), __VA_ARGS__);            \
+                                                   ^~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:2282:1: warning: format specifies type 'unsigned long long' but the argument has type 'u8' (aka 'unsigned long') [-Wformat]
+HANDLE_SGET_X(OP_SGET_BOOLEAN, "", {
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:810:33: note: expanded from macro 'HANDLE_SGET_X'
+              sfield->classIdx, (u8) GET_REGISTER##_regsize(vdst));         \
+              ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:31:39: note: expanded from macro 'ILOGV'
+# define ILOGV(...) ILOG(LOG_VERBOSE, __VA_ARGS__)
+                    ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:34:52: note: expanded from macro 'ILOG'
+        snprintf(debugStrBuf, sizeof(debugStrBuf), __VA_ARGS__);            \
+                                                   ^~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:2288:1: warning: format specifies type 'unsigned long long' but the argument has type 'u8' (aka 'unsigned long') [-Wformat]
+HANDLE_SGET_X(OP_SGET_BYTE, "", {
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:810:33: note: expanded from macro 'HANDLE_SGET_X'
+              sfield->classIdx, (u8) GET_REGISTER##_regsize(vdst));         \
+              ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:31:39: note: expanded from macro 'ILOGV'
+# define ILOGV(...) ILOG(LOG_VERBOSE, __VA_ARGS__)
+                    ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:34:52: note: expanded from macro 'ILOG'
+        snprintf(debugStrBuf, sizeof(debugStrBuf), __VA_ARGS__);            \
+                                                   ^~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:2294:1: warning: format specifies type 'unsigned long long' but the argument has type 'u8' (aka 'unsigned long') [-Wformat]
+HANDLE_SGET_X(OP_SGET_CHAR, "", {
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:810:33: note: expanded from macro 'HANDLE_SGET_X'
+              sfield->classIdx, (u8) GET_REGISTER##_regsize(vdst));         \
+              ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:31:39: note: expanded from macro 'ILOGV'
+# define ILOGV(...) ILOG(LOG_VERBOSE, __VA_ARGS__)
+                    ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:34:52: note: expanded from macro 'ILOG'
+        snprintf(debugStrBuf, sizeof(debugStrBuf), __VA_ARGS__);            \
+                                                   ^~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:2300:1: warning: format specifies type 'unsigned long long' but the argument has type 'u8' (aka 'unsigned long') [-Wformat]
+HANDLE_SGET_X(OP_SGET_SHORT, "", {
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:810:33: note: expanded from macro 'HANDLE_SGET_X'
+              sfield->classIdx, (u8) GET_REGISTER##_regsize(vdst));         \
+              ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:31:39: note: expanded from macro 'ILOGV'
+# define ILOGV(...) ILOG(LOG_VERBOSE, __VA_ARGS__)
+                    ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:34:52: note: expanded from macro 'ILOG'
+        snprintf(debugStrBuf, sizeof(debugStrBuf), __VA_ARGS__);            \
+                                                   ^~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:2306:1: warning: format specifies type 'unsigned long long' but the argument has type 'u8' (aka 'unsigned long') [-Wformat]
+HANDLE_SPUT_X(OP_SPUT, "", {
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:833:33: note: expanded from macro 'HANDLE_SPUT_X'
+              sfield->classIdx, (u8) GET_REGISTER##_regsize(vdst));         \
+              ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:31:39: note: expanded from macro 'ILOGV'
+# define ILOGV(...) ILOG(LOG_VERBOSE, __VA_ARGS__)
+                    ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:34:52: note: expanded from macro 'ILOG'
+        snprintf(debugStrBuf, sizeof(debugStrBuf), __VA_ARGS__);            \
+                                                   ^~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:2321:1: warning: format specifies type 'unsigned long long' but the argument has type 'u8' (aka 'unsigned long') [-Wformat]
+HANDLE_SPUT_X(OP_SPUT_WIDE, "-wide", {
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:833:33: note: expanded from macro 'HANDLE_SPUT_X'
+              sfield->classIdx, (u8) GET_REGISTER##_regsize(vdst));         \
+              ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:31:39: note: expanded from macro 'ILOGV'
+# define ILOGV(...) ILOG(LOG_VERBOSE, __VA_ARGS__)
+                    ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:34:52: note: expanded from macro 'ILOG'
+        snprintf(debugStrBuf, sizeof(debugStrBuf), __VA_ARGS__);            \
+                                                   ^~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:2335:1: warning: format specifies type 'unsigned long long' but the argument has type 'u8' (aka 'unsigned long') [-Wformat]
+HANDLE_SPUT_X(OP_SPUT_OBJECT, "-object", {
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:833:33: note: expanded from macro 'HANDLE_SPUT_X'
+              sfield->classIdx, (u8) GET_REGISTER##_regsize(vdst));         \
+              ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:31:39: note: expanded from macro 'ILOGV'
+# define ILOGV(...) ILOG(LOG_VERBOSE, __VA_ARGS__)
+                    ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:34:52: note: expanded from macro 'ILOG'
+        snprintf(debugStrBuf, sizeof(debugStrBuf), __VA_ARGS__);            \
+                                                   ^~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:2341:1: warning: format specifies type 'unsigned long long' but the argument has type 'u8' (aka 'unsigned long') [-Wformat]
+HANDLE_SPUT_X(OP_SPUT_BOOLEAN, "", {
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:833:33: note: expanded from macro 'HANDLE_SPUT_X'
+              sfield->classIdx, (u8) GET_REGISTER##_regsize(vdst));         \
+              ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:31:39: note: expanded from macro 'ILOGV'
+# define ILOGV(...) ILOG(LOG_VERBOSE, __VA_ARGS__)
+                    ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:34:52: note: expanded from macro 'ILOG'
+        snprintf(debugStrBuf, sizeof(debugStrBuf), __VA_ARGS__);            \
+                                                   ^~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:2347:1: warning: format specifies type 'unsigned long long' but the argument has type 'u8' (aka 'unsigned long') [-Wformat]
+HANDLE_SPUT_X(OP_SPUT_BYTE, "", {
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:833:33: note: expanded from macro 'HANDLE_SPUT_X'
+              sfield->classIdx, (u8) GET_REGISTER##_regsize(vdst));         \
+              ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:31:39: note: expanded from macro 'ILOGV'
+# define ILOGV(...) ILOG(LOG_VERBOSE, __VA_ARGS__)
+                    ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:34:52: note: expanded from macro 'ILOG'
+        snprintf(debugStrBuf, sizeof(debugStrBuf), __VA_ARGS__);            \
+                                                   ^~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:2353:1: warning: format specifies type 'unsigned long long' but the argument has type 'u8' (aka 'unsigned long') [-Wformat]
+HANDLE_SPUT_X(OP_SPUT_CHAR, "", {
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:833:33: note: expanded from macro 'HANDLE_SPUT_X'
+              sfield->classIdx, (u8) GET_REGISTER##_regsize(vdst));         \
+              ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:31:39: note: expanded from macro 'ILOGV'
+# define ILOGV(...) ILOG(LOG_VERBOSE, __VA_ARGS__)
+                    ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:34:52: note: expanded from macro 'ILOG'
+        snprintf(debugStrBuf, sizeof(debugStrBuf), __VA_ARGS__);            \
+                                                   ^~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:2359:1: warning: format specifies type 'unsigned long long' but the argument has type 'u8' (aka 'unsigned long') [-Wformat]
+HANDLE_SPUT_X(OP_SPUT_SHORT, "", {
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:833:33: note: expanded from macro 'HANDLE_SPUT_X'
+              sfield->classIdx, (u8) GET_REGISTER##_regsize(vdst));         \
+              ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:31:39: note: expanded from macro 'ILOGV'
+# define ILOGV(...) ILOG(LOG_VERBOSE, __VA_ARGS__)
+                    ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/main/cpp/vm/InterpC-portable.cpp:34:52: note: expanded from macro 'ILOG'
+        snprintf(debugStrBuf, sizeof(debugStrBuf), __VA_ARGS__);            \
+                                                   ^~~~~~~~~~~
+34 warnings generated.
+[19/27] Building CXX object vm/CMakeFiles/nmmvm.dir/VmCodec.cpp.o
+[20/27] Building C object vm/CMakeFiles/nmmvm.dir/JNIWrapper.c.o
+[21/27] Building CXX object vm/CMakeFiles/nmmvm.dir/Arm64Syscall.cpp.o
+[22/27] Building CXX object vm/CMakeFiles/nmmvm.dir/Sha256.cpp.o
+[23/27] Building CXX object vm/CMakeFiles/nmmvm.dir/ApkV2Signer.cpp.o
+[24/27] Building CXX object vm/CMakeFiles/nmmvm.dir/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/test/semantic/DemandFixture.cpp.o
+[25/27] Building CXX object vm/CMakeFiles/nmmvm.dir/mnt/e/OtherProject/safe-toolchain/nmmp/nmmvm/nmmvm/src/test/semantic/DecodedWipeBridge.cpp.o
+[26/27] Linking CXX shared library vm/libnmmvm.so
+[27/27] Linking CXX shared library libnmmp_semantic.so

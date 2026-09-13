@@ -109,7 +109,7 @@ public class ResolverCodeGenerator {
                 references.getClassNamePool().size(), references.getSignaturePool().size(),
                 references.getFieldPool().size(), references.getMethodPool().size(), references.getConstantStringPool().size()};
         for (int i = 0; i < names.length; ++i) writer.write("#define " + names[i] + "_COUNT " + counts[i] + "u\n");
-        writer.write("#if NMMP_VM_CODEC_VERSION == 3\nstatic bool nmmp_validate_resolver(void) {\n"
+        writer.write("static bool nmmp_validate_resolver(void) {\n"
                 + "    for (u4 i=0; i<gStringIds_COUNT; ++i) { u4 off=gStringIds[i].off; if (off>=gStringPoolByteSize || !memchr(gBaseStrPtr+off, 0, gStringPoolByteSize-off)) return false; }\n");
         for (String name : new String[]{"gTypeIds", "gClassIds", "gSignatureIds", "gStringConstantIds"})
             writer.write("    for (u4 i=0; i<" + name + "_COUNT; ++i) if (" + name + "[i].idx>=gStringIds_COUNT) return false;\n");
@@ -118,7 +118,7 @@ public class ResolverCodeGenerator {
                 + "    for (u4 i=0; i<gMethodIds_COUNT; ++i) { MethodId m=gMethodIds[i]; if(m.classIdx>=gClassIds_COUNT || m.sigIdx>=gSignatureIds_COUNT || m.nameIdx>=gStringIds_COUNT || m.shortyIdx>=gStringIds_COUNT) return false;\n"
                 + "        const char *s=(const char *)gBaseStrPtr+gStringIds[m.shortyIdx].off; if(!*s || !strchr(\"VZBCSIJFDL\", *s)) return false;\n"
                 + "        for (++s; *s; ++s) if(!strchr(\"ZBCSIJFDL\", *s)) return false;\n"
-                + "    }\n    return true;\n}\n#endif\n");
+                + "    }\n    return true;\n}\n");
     }
 
     private void generateResolver(Writer writer) throws IOException {
@@ -131,9 +131,7 @@ public class ResolverCodeGenerator {
                 "                     gStringPoolDexId,\n" +
                 "                     NMMP_VM_DOMAIN_STRING);\n" +
                 "    if (vmCodecHash(gBaseStrPtr, gStringPoolByteSize) != gStringPoolHash) return;\n" +
-                "#if NMMP_VM_CODEC_VERSION == 3\n" +
                 "    if (!nmmp_validate_resolver()) return;\n" +
-                "#endif\n" +
                 "    gStringPoolReady = true;\n" +
                 "}\n" +
                 "\n" +
@@ -146,9 +144,7 @@ public class ResolverCodeGenerator {
                 "    return true;\n" +
                 "}\n" +
                 "\n" +
-                "#if NMMP_VM_CODEC_VERSION == 3\n" +
                 "#define NMMP_INDEX(_idx, _array) do { if ((u4)(_idx) >= _array##_COUNT) { if (!(*env)->ExceptionCheck(env)) (*env)->ThrowNew(env, gVm.exInternalError, \"Invalid VM reference index\"); return NULL; } } while (0)\n" +
-                "#else\n#define NMMP_INDEX(_idx, _array) ((void)0)\n#endif\n" +
                 "#define STRING_BY_ID(_idx) ((const char *) (gBaseStrPtr + gStringIds[_idx].off))\n" +
                 "\n" +
                 "#define STRING_BY_TYPE_ID(_idx) (STRING_BY_ID(gTypeIds[_idx].idx))\n" +

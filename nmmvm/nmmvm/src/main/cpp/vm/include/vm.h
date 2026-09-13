@@ -40,38 +40,6 @@ typedef struct {
 } vmCode;
 
 typedef struct {
-    const u1 *encodedInsns;
-    u4 encodedInsnsByteSize;
-    regptr_t *regs;
-    u1 *reg_flags;
-    const u1 *encodedTries;
-    u4 encodedTriesByteSize;
-    u4 methodId;
-    u4 plainCodeHash;
-    u4 plainTriesHash;
-    u2 codecVersion;
-} vmEncodedCode;
-
-// S2 transition record. S3 replaces wrapper references with a token directory.
-typedef struct {
-    const u1 *code;
-    u4 codeBytes;
-    const u1 *tries;
-    u4 triesBytes;
-    const u1 *boundaries;
-    u4 boundariesBytes;
-    u4 methodId;
-    u8 descriptorTag;
-    u4 registersSize;
-    u4 insSize;
-    u4 codeHash;
-    u4 triesHash;
-    u4 boundariesHash;
-    u4 contextHash;
-    int state;
-} vmDemandCode;
-
-typedef struct {
     const u1 *blob;
     u4 size;
     u4 hash;
@@ -110,19 +78,10 @@ jvalue vmInterpret(
         const vmResolver *dvmResolver
 );
 
-jvalue vmExecute(
-        JNIEnv *env,
-        const vmEncodedCode *code,
-        const vmResolver *dvmResolver
-);
-
-bool vmPrepareDemandCode(JNIEnv *env, vmDemandCode *code);
 bool vmPrepareDemandModule(JNIEnv *env, vmDemandModule *module);
 jvalue vmExecuteToken(JNIEnv *env, const vmDemandModule *module, u4 token,
                       regptr_t *regs, u1 *regFlags, u4 registerCapacity, const vmResolver *resolver);
 jvalue vmInterpretReader(JNIEnv *env, const vmCode *code, const vmResolver *resolver, VmReader *reader);
-jvalue vmExecuteDemand(JNIEnv *env, const vmDemandCode *code, regptr_t *regs,
-                       u1 *regFlags, u4 registerCapacity, const vmResolver *resolver);
 
 #ifdef __cplusplus
 }

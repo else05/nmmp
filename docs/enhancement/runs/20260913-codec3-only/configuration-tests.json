@@ -1,0 +1,32 @@
+[
+  {
+    "case": "defaults",
+    "exitCode": 0,
+    "output": "CONFIG_PASS codec3 template5 private stage0\n"
+  },
+  {
+    "case": "explicit-new",
+    "exitCode": 0,
+    "output": "CONFIG_PASS codec3 template5 private stage0\n"
+  },
+  {
+    "case": "NMMP_VM_DECODE_MODE",
+    "exitCode": 1,
+    "output": "Exception in thread \"main\" java.lang.IllegalArgumentException: Only on-demand-v1 is supported; legacy has been removed\n\tat com.nmmedit.apkprotect.dex2c.ProtectionContext.validateDecodeMode(ProtectionContext.java:15)\n\tat com.nmmedit.apkprotect.BuildNativeLib.validateProtectionOptions(BuildNativeLib.java:21)\n\tat CheckOptions.main(CheckOptions.java:8)\n"
+  },
+  {
+    "case": "NMMP_PRIVATE_LINKER",
+    "exitCode": 1,
+    "output": "Exception in thread \"main\" java.lang.IllegalArgumentException: NMMP_PRIVATE_LINKER is mandatory; only ON is supported\n\tat com.nmmedit.apkprotect.BuildNativeLib.validateProtectionOptions(BuildNativeLib.java:25)\n\tat CheckOptions.main(CheckOptions.java:8)\n"
+  },
+  {
+    "case": "NMMP_PRIVATE_STAGE0_VM",
+    "exitCode": 1,
+    "output": "Exception in thread \"main\" java.lang.IllegalArgumentException: NMMP_PRIVATE_STAGE0_VM is mandatory; only ON is supported\n\tat com.nmmedit.apkprotect.BuildNativeLib.validateProtectionOptions(BuildNativeLib.java:25)\n\tat CheckOptions.main(CheckOptions.java:8)\n"
+  },
+  {
+    "case": "reject-template4",
+    "exitCode": 1,
+    "output": "Exception in thread \"main\" java.lang.reflect.InvocationTargetException\n\tat java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n\tat java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)\n\tat java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.base/java.lang.reflect.Method.invoke(Method.java:569)\n\tat CheckOptions.main(CheckOptions.java:15)\nCaused by: java.io.IOException: VM \u6a21\u677f\u7248\u672c\u4e0d\u5339\u914d: E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\codec3-only-20260913\\rejected-template4.zip\uff0c\u671f\u671b\u7248\u672c 5\n\tat com.nmmedit.apkprotect.util.CmakeUtils.validateVmTemplate(CmakeUtils.java:183)\n\tat java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n\tat java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)\n\tat java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.base/java.lang.reflect.Method.invoke(Method.java:569)\n\tat CheckOptions.main(CheckOptions.java:15)\n\tat java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n\tat java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)\n\tat java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.base/java.lang.reflect.Method.invoke(Method.java:569)\n\tat jdk.compiler/com.sun.tools.javac.launcher.Main.execute(Main.java:419)\n\tat jdk.compiler/com.sun.tools.javac.launcher.Main.run(Main.java:192)\n\tat jdk.compiler/com.sun.tools.javac.launcher.Main.main(Main.java:132)\n"
+  }
+]

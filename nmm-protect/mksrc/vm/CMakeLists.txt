@@ -12,8 +12,6 @@ set(VM_SRC_FILES
         Interp.cpp
         InterpC-portable.cpp
         GlobalCache.cpp
-        Codec.cpp
-        Demand.cpp
         Module.cpp
         VmInit.c
         NativeVm.c
@@ -35,10 +33,8 @@ set(LIBNMMVM_NAME "nmmvm" CACHE INTERNAL "lib nmmvm name")
 
 
 add_library(${LIBNMMVM_NAME} STATIC ${VM_SRC_FILES})
-if (NMMP_PRIVATE_LINKER)
-    target_compile_definitions(${LIBNMMVM_NAME} PRIVATE NMMP_PRIVATE_LINKER=1)
-    target_compile_options(${LIBNMMVM_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:-fno-exceptions;-fno-rtti>")
-endif ()
+target_compile_definitions(${LIBNMMVM_NAME} PRIVATE NMMP_PRIVATE_LINKER=1)
+target_compile_options(${LIBNMMVM_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:-fno-exceptions;-fno-rtti>")
 
 if (NMMP_OMVLL_ENABLED)
     target_compile_options(${LIBNMMVM_NAME}

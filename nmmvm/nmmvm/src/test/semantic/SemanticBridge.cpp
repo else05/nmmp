@@ -4,6 +4,7 @@
 #include <vector>
 #include <cstring>
 #if defined(NMMP_TEST_DEMAND)
+#include "DemandFixture.h"
 #include "VmCodec.h"
 #include "VmReader.h"
 static uint64_t testMix(uint64_t x) {

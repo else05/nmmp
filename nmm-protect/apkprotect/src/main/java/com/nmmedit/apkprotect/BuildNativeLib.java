@@ -17,18 +17,13 @@ public class BuildNativeLib {
     //库名称
     public static final String NMMP_NAME = "c++_en";
 
-    public static boolean isPrivateLinkerEnabled() {
-        final String value = System.getenv("NMMP_PRIVATE_LINKER");
-        if (isEmpty(value) || "OFF".equalsIgnoreCase(value)) return false;
-        if ("ON".equalsIgnoreCase(value)) return true;
-        throw new IllegalArgumentException("NMMP_PRIVATE_LINKER must be ON or OFF");
-    }
-
-    private static boolean isStage0VmEnabled() {
-        final String value = System.getenv("NMMP_PRIVATE_STAGE0_VM");
-        if (isEmpty(value) || "ON".equalsIgnoreCase(value)) return true;
-        if ("OFF".equalsIgnoreCase(value)) return false;
-        throw new IllegalArgumentException("NMMP_PRIVATE_STAGE0_VM must be ON or OFF");
+    public static void validateProtectionOptions() {
+        ProtectionContext.validateDecodeMode();
+        for (String name : new String[]{"NMMP_PRIVATE_LINKER", "NMMP_PRIVATE_STAGE0_VM"}) {
+            final String value = System.getenv(name);
+            if (value != null && !"ON".equalsIgnoreCase(value))
+                throw new IllegalArgumentException(name + " is mandatory; only ON is supported");
+        }
     }
 
     public static Map<String, Map<File, File>> generateNativeLibs(@Nonnull File outDir,
@@ -67,11 +62,11 @@ public class BuildNativeLib {
         final Map<String, Map<File, File>> allLibs = new HashMap<>();
 
         for (String abi : abis) {
-            if (ProtectionContext.configuredOnDemand() && !"arm64-v8a".equals(abi))
+            if (!"arm64-v8a".equals(abi))
                 throw new IOException("on-demand-v1 requires arm64-v8a: " + abi);
             final BuildNativeLib.CMakeOptions cmakeOptions = new BuildNativeLib.CMakeOptions(cmakePath,
                     sdkHome,
-                    ndkHome, isPrivateLinkerEnabled() || ProtectionContext.configuredOnDemand() ? 26 : 21,
+                    ndkHome, 26,
                     outDir.getAbsolutePath(),
                     BuildNativeLib.CMakeOptions.BuildType.RELEASE,
                     abi,
@@ -267,11 +262,7 @@ public class BuildNativeLib {
             if (!isEmpty(getOmvllPlugin())) {
                 arguments.add(String.format("-DNMMP_OMVLL_PLUGIN=%s", getOmvllPlugin()));
             }
-            if (isPrivateLinkerEnabled()) {
-                arguments.add("-DNMMP_PRIVATE_LINKER=ON");
-                arguments.add("-DNMMP_STAGE0_VM=" + (isStage0VmEnabled() ? "ON" : "OFF"));
-            }
-            arguments.add("-DNMMP_VM_DECODE_MODE=" + (ProtectionContext.configuredOnDemand() ? "on-demand-v1" : "legacy"));
+            validateProtectionOptions();
             return arguments;
         }
 

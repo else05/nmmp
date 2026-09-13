@@ -1,0 +1,17 @@
+{
+  "adb": "D:\\Android\\SDK\\platform-tools\\adb.exe",
+  "serial": "192.168.6.118:5555",
+  "package": "org.savior.sync",
+  "activity": "org.savior.sync/.MainActivity",
+  "warmups": 0,
+  "rounds": 1,
+  "purpose": "Default codec3-only functional identity check, not performance acceptance",
+  "variants": [
+    {
+      "name": "D",
+      "apk": "E:\\OtherProject\\safe-toolchain\\nmmp\\nmm-protect\\build\\codec3-only-20260913\\delivery\\protected-signed.apk",
+      "loader": true,
+      "loaderId": "07e249ef"
+    }
+  ]
+}

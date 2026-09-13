@@ -6,6 +6,10 @@
 
 #include "VmCodecConfig.h"
 
+#if NMMP_VM_CODEC_VERSION != 3
+#error Only codec3 is supported
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif

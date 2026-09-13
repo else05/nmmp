@@ -148,8 +148,8 @@ class Stage0Test(unittest.TestCase):
             with self.assertRaises(ValueError):
                 stage0.generate(key, build_id)
 
-    def test_pack_default_on_and_explicit_off(self):
-        for option in (None, 'ON', 'OFF'):
+    def test_pack_always_uses_stage0(self):
+        for option in (None, 'ON'):
             with self.subTest(option=option):
                 written = {}
                 argv = ['pack.py', 'pack', 'inner.so', 'output', '--sysroot', 'unused', '--readelf', 'unused']
@@ -167,13 +167,21 @@ class Stage0Test(unittest.TestCase):
                     pack.main()
                 source = written['Payload.c']
                 report = json.loads(written['audit.json'])
-                enabled = option != 'OFF'
-                self.assertEqual(report['stage0_vm'], enabled)
-                self.assertEqual(len(report['stage0_program_hashes']), 4 if enabled else 0)
-                self.assertEqual('nmmp_stage0_programs[4]' in source, enabled)
-                self.assertEqual('nmmp_key_share_a' in source, not enabled)
-                self.assertEqual('nmmp_key_share_b' in source, not enabled)
+                self.assertTrue(report['stage0_vm'])
+                self.assertEqual(len(report['stage0_program_hashes']), 4)
+                self.assertIn('nmmp_stage0_programs[4]', source)
+                self.assertNotIn('nmmp_key_share_a', source)
+                self.assertNotIn('nmmp_key_share_b', source)
                 self.assertNotIn(FIXTURE_KEY.hex(), json.dumps(report))
+
+    def test_pack_rejects_removed_key_shares(self):
+        with mock.patch.object(sys, 'argv', ['pack.py', 'pack', 'inner.so', 'output',
+                '--sysroot', 'unused', '--readelf', 'unused', '--stage0-vm', 'OFF']), \
+                mock.patch.object(Path, 'mkdir') as mkdir:
+            with self.assertRaises(SystemExit) as failure:
+                pack.main()
+            self.assertEqual(failure.exception.code, 2)
+            mkdir.assert_not_called()
 
     def test_configure_preserves_identity_and_header(self):
         files = {}

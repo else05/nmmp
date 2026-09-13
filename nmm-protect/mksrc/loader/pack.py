@@ -349,7 +349,8 @@ def main():
     pack.add_argument('--sysroot', required=True)
     pack.add_argument('--java', default='java')
     pack.add_argument('--readelf', required=True)
-    pack.add_argument('--stage0-vm', choices=('ON', 'OFF'), default='ON')
+    pack.add_argument('--stage0-vm', choices=('ON',), default='ON',
+                      help='Stage0 VM is mandatory; OFF is no longer supported')
     args = parser.parse_args()
     args.directory.mkdir(parents=True, exist_ok=True)
     if args.command == 'configure':
@@ -373,18 +374,12 @@ def main():
     payload, key = seal(content, build_id, args.java)
     source = '#include <stddef.h>\n' + c_array('nmmp_payload', payload)
     source += 'const size_t nmmp_payload_size = sizeof(nmmp_payload);\n'
-    programs = []
-    if args.stage0_vm == 'ON':
-        import stage0
-        programs = stage0.generate(key, build_id)
-        source += stage0.c_source(programs)
-    else:
-        share = os.urandom(32)
-        source += c_array('nmmp_key_share_a', share, 'const volatile')
-        source += c_array('nmmp_key_share_b', bytes(a ^ b for a, b in zip(key, share)), 'const volatile')
+    import stage0
+    programs = stage0.generate(key, build_id)
+    source += stage0.c_source(programs)
     (args.directory / 'Payload.c').write_text(source)
     report = {'format_version': 1, 'build_id': build_id.hex(), 'elf_sha256': hashlib.sha256(elf.data).hexdigest(),
-              'stage0_vm': args.stage0_vm == 'ON',
+              'stage0_vm': True,
               'stage0_program_hashes': ['%08x' % program['hash'] for program in programs],
               'decoded_sha256': hashlib.sha256(content).hexdigest(), 'payload_sha256': hashlib.sha256(payload).hexdigest(),
               'elf_bytes': len(elf.data), 'decoded_bytes': len(content), 'payload_bytes': len(payload),

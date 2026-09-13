@@ -12,8 +12,6 @@ set(VM_SRC_FILES
         Interp.cpp
         InterpC-portable.cpp
         GlobalCache.cpp
-        Codec.cpp
-        Demand.cpp
         Module.cpp
         VmInit.c
         NativeVm.c

@@ -1,6 +1,6 @@
 # NMMP 按需解码升级实施状态
 
-更新：2026-09-13。**S1–S4 及私有 linker P5 已实现并完成主机/ARM64 API27 功能验证；S5 三组对照已采集并重算，但性能验收未通过；最终擦除修复的API27功能复查已通过。默认仍为 legacy，私有 linker 默认 OFF。**
+更新：2026-09-13。**按用户要求，当前仅保留 codec3 按需解码、token 模块、root native VM、私有 linker 和 stage0 VM；codec2 与旧加载构建路径已删除，模板版本为5。功能回归见 [兼容路径清理](CODEC3_ONLY.md)。此前 S5 性能验收未通过，清理兼容代码不代表该缺口已解决。**
 
 当前实现、526 方法回验和组合 APK 证据见 [ON_DEMAND_WORK.md](ON_DEMAND_WORK.md)，使用见 [USAGE.md](USAGE.md)，格式见 [ON_DEMAND_FORMAT.md](ON_DEMAND_FORMAT.md)。性能规程见 [S5_PLAN.md](S5_PLAN.md)，实测及未通过项见 [S5_RESULTS.md](S5_RESULTS.md)，最终源码修复、产物及定向复查见 [POST_REVIEW.md](POST_REVIEW.md)。以下 S0 内容为历史基线，不代表当前源码尚未实施。
 

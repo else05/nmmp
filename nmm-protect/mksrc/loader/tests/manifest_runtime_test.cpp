@@ -35,6 +35,19 @@ int main(int argc, char **argv) {
     std::vector<uint8_t> id = readFile(root + "/manifest.id");
     check(manifest.size() >= 96 && tag.size() == 32 && key.size() == 32 && id.size() == 16);
     size_t manifest_size = manifest.size();
+    const std::string scenario = argv[2];
+    if (scenario.find("repeat-") == 0) {
+        check(nmmpProtectionActivate(manifest.data(), manifest_size, tag.data(), key.data(), id.data()));
+        const bool result = nmmpProtectionActivate(
+                scenario == "repeat-null-body" ? nullptr : manifest.data(),
+                scenario == "repeat-short" ? 0 : manifest_size,
+                scenario == "repeat-null-tag" ? nullptr : tag.data(),
+                scenario == "repeat-null-key" ? nullptr : key.data(),
+                scenario == "repeat-null-id" ? nullptr : id.data());
+        check(!result);
+        check(nmmpProtectionActivate(manifest.data(), manifest_size, tag.data(), key.data(), id.data()));
+        return 0;
+    }
     const bool expected = std::strcmp(argv[2], "ok") == 0;
     if (std::strcmp(argv[2], "body") == 0) manifest[80] ^= 1;
     else if (std::strcmp(argv[2], "tag") == 0) tag[0] ^= 1;

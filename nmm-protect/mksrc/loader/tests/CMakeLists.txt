@@ -6,9 +6,13 @@ if (NMMP_JNI_REGISTRATION_FIXTURE)
     find_package(JNI REQUIRED)
     add_executable(jni_registration_test jni_registration_test.c)
     target_include_directories(jni_registration_test PRIVATE ${JNI_INCLUDE_DIRS} "${NMMP_JNI_REGISTRATION_FIXTURE}")
+    if (NOT ANDROID)
+        target_link_libraries(jni_registration_test PRIVATE pthread)
+    endif ()
     foreach (CASE negative past-end huge oom missing-class register-error register-exception pending small-ok large-ok
             bound-setup-missing unbound-setup-missing bound-setup-error unbound-setup-error
-            bound-setup-pending unbound-setup-pending)
+            bound-setup-pending unbound-setup-pending activation-missing-field activation-context-exception
+            activation-failure activation-pending activation-no-context)
         add_test(NAME jni_registration_${CASE} COMMAND jni_registration_test ${CASE})
     endforeach ()
 endif ()
@@ -51,7 +55,7 @@ if (NMMP_MANIFEST_FIXTURE)
     if (NOT ANDROID)
         target_link_libraries(manifest_runtime_test PRIVATE pthread)
     endif ()
-    foreach (CASE ok body tag key id truncate)
+    foreach (CASE ok body tag key id truncate repeat-null-body repeat-null-tag repeat-null-key repeat-null-id repeat-short)
         add_test(NAME protection_manifest_${CASE}
                 COMMAND manifest_runtime_test "${NMMP_MANIFEST_FIXTURE}" ${CASE})
     endforeach ()

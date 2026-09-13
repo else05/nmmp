@@ -9,6 +9,18 @@ import java.util.Arrays;
 import static org.junit.Assert.*;
 
 public class ProtectionManifestTest {
+    @Test public void invalidIdentityFailsAtGeneration() {
+        for (String name : new String[]{"bad\u0000package", ""}) {
+            try {
+                new ProtectionManifest(1, 3, 7, name, true, bytes(1), bytes(2), 0);
+                fail("invalid bound package accepted");
+            } catch (IllegalArgumentException expected) { }
+        }
+        try {
+            new ProtectionManifest(1, 3, 7, "", false, bytes(1), bytes(2), 0);
+            fail("unbound manifest with signer accepted");
+        } catch (IllegalArgumentException expected) { }
+    }
     private static byte[] bytes(int seed) {
         byte[] value = new byte[32];
         for (int i = 0; i < value.length; ++i) value[i] = (byte) (seed + i * 17);

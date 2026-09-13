@@ -180,13 +180,15 @@ extern "C" bool nmmpProtectionActivate(const uint8_t *manifest,
                                          const uint8_t tag[32],
                                          const uint8_t keyXor[32],
                                          const uint8_t expectedId[16]) {
+    if (!manifest || !tag || !keyXor || !expectedId
+            || manifestSize < kHeaderSize || manifestSize > kMaximumManifestSize) return false;
     ActivationArguments arguments = {manifest, manifestSize, tag, keyXor, expectedId};
     const bool ready = vmInitRun(&gManifestInit, initializeManifest, &arguments);
     return ready && gManifest && equal(gManifest->id, expectedId, 16);
 }
 
 extern "C" bool nmmpProtectionGetEntry(uint32_t moduleId, NmmpManifestEntry *entry) {
-    if (!entry || !gManifest || __atomic_load_n(&gManifestInit.state, __ATOMIC_ACQUIRE) != 2) return false;
+    if (!entry || __atomic_load_n(&gManifestInit.state, __ATOMIC_ACQUIRE) != 2 || !gManifest) return false;
     uint32_t low = 0, high = gManifest->count;
     while (low < high) {
         const uint32_t middle = low + (high - low) / 2;
@@ -213,9 +215,9 @@ extern "C" bool nmmpProtectionPointerInImage(const void *pointer) {
 }
 
 extern "C" uint32_t nmmpProtectionPolicyFlags(void) {
-    return gManifest ? gManifest->policyFlags : 0;
+    return __atomic_load_n(&gManifestInit.state, __ATOMIC_ACQUIRE) == 2 && gManifest ? gManifest->policyFlags : 0;
 }
 
 extern "C" uint32_t nmmpProtectionRecheckMillis(void) {
-    return gManifest ? gManifest->recheckMillis : 0;
+    return __atomic_load_n(&gManifestInit.state, __ATOMIC_ACQUIRE) == 2 && gManifest ? gManifest->recheckMillis : 0;
 }

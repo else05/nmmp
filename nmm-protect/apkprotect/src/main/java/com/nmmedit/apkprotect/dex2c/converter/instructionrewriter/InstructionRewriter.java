@@ -19,6 +19,7 @@ import com.google.common.collect.Ordering;
 import com.google.common.primitives.Ints;
 import com.nmmedit.apkprotect.dex2c.converter.ClassAnalyzer;
 import com.nmmedit.apkprotect.dex2c.converter.References;
+import com.nmmedit.apkprotect.dex2c.ReaderFormats;
 
 import javax.annotation.Nonnull;
 import java.io.ByteArrayOutputStream;
@@ -95,6 +96,9 @@ public abstract class InstructionRewriter {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         final DexDataWriter writer = new DexDataWriter(out, 0);
         for (Instruction instruction : methodImp.getInstructions()) {
+            if (ReaderFormats.unsupported(instruction.getOpcode().name())) {
+                throw unsupportedInstruction(method, instruction);
+            }
             switch (instruction.getOpcode().format) {
                 case Format10t:
                     write(writer, (Instruction10t) instruction);
@@ -112,8 +116,7 @@ public abstract class InstructionRewriter {
                     write(writer, (Instruction12x) instruction);
                     break;
                 case Format20bc:
-                    write(writer, (Instruction20bc) instruction);
-                    break;
+                    throw unsupportedInstruction(method, instruction);
                 case Format20t:
                     write(writer, (Instruction20t) instruction);
                     break;
@@ -139,8 +142,7 @@ public abstract class InstructionRewriter {
                     write(writer, (Instruction22c) instruction);
                     break;
                 case Format22cs:
-                    write(writer, (Instruction22cs) instruction);
-                    break;
+                    throw unsupportedInstruction(method, instruction);
                 case Format22s:
                     write(writer, (Instruction22s) instruction);
                     break;
@@ -172,20 +174,16 @@ public abstract class InstructionRewriter {
                     write(writer, (Instruction35c) instruction);
                     break;
                 case Format35mi:
-                    break;
                 case Format35ms:
-                    break;
+                    throw unsupportedInstruction(method, instruction);
                 case Format3rc:
                     write(writer, (Instruction3rc) instruction);
                     break;
                 case Format3rmi:
-                    break;
                 case Format3rms:
-                    break;
                 case Format45cc:
-                    break;
                 case Format4rcc:
-                    break;
+                    throw unsupportedInstruction(method, instruction);
                 case Format51l:
                     write(writer, (Instruction51l) instruction);
                     break;
@@ -199,7 +197,8 @@ public abstract class InstructionRewriter {
                     write(writer, (SparseSwitchPayload) instruction);
                     break;
                 case UnresolvedOdexInstruction:
-                    throw new RuntimeException("Don't support odex");
+                default:
+                    throw unsupportedInstruction(method, instruction);
             }
         }
         try {
@@ -209,6 +208,11 @@ public abstract class InstructionRewriter {
         }
 
         return out.toByteArray();
+    }
+
+    private static IllegalArgumentException unsupportedInstruction(Method method, Instruction instruction) {
+        return new IllegalArgumentException(method + ": Unsupported instruction "
+                + instruction.getOpcode().name + " (" + instruction.getOpcode().format + ")");
     }
 
     /**
@@ -230,6 +234,25 @@ public abstract class InstructionRewriter {
     public final byte[] handleTries(MethodImplementation methodImp) throws IOException {
         if (methodImp == null) {
             throw new RuntimeException("No methodImp");
+        }
+
+        long codeUnits = 0;
+        for (Instruction instruction : methodImp.getInstructions()) codeUnits += instruction.getCodeUnits();
+        for (TryBlock<? extends ExceptionHandler> block : methodImp.getTryBlocks()) {
+            long start = block.getStartCodeAddress();
+            int count = block.getCodeUnitCount();
+            if (start < 0 || count <= 0 || count > 65535 || start > codeUnits || count > codeUnits - start) {
+                throw new IllegalArgumentException("Invalid exception try range");
+            }
+            List<? extends ExceptionHandler> handlers = block.getExceptionHandlers();
+            if (handlers.isEmpty()) throw new IllegalArgumentException("Empty exception handler list");
+            for (int i = 0; i < handlers.size(); ++i) {
+                ExceptionHandler handler = handlers.get(i);
+                if (handler.getHandlerCodeAddress() < 0 || handler.getHandlerCodeAddress() >= codeUnits
+                        || (handler.getExceptionType() == null && i != handlers.size() - 1)) {
+                    throw new IllegalArgumentException("Invalid exception handler target or catch-all order");
+                }
+            }
         }
 
         final ByteArrayOutputStream out = new ByteArrayOutputStream();

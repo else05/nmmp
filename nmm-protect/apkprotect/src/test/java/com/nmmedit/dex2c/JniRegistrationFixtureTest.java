@@ -46,6 +46,10 @@ public class JniRegistrationFixtureTest {
                 Files.write(new File(root, "register.inc").toPath(),
                         function(source, matcher.start()).replace(callback, "fixture_register")
                                 .getBytes(StandardCharsets.UTF_8));
+            } else {
+                Files.write(new File(root, "bound_register.inc").toPath(),
+                        function(source, matcher.start()).replace(callback, "fixture_bound_register")
+                                .getBytes(StandardCharsets.UTF_8));
             }
             int setup = source.indexOf("void classes_setup(JNIEnv *env)");
             assertTrue(setup >= 0);

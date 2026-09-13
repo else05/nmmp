@@ -550,15 +550,20 @@ public class JniCodeGenerator {
                         + "}\n\n");
         writer.write(String.format(
                 "static void %s(JNIEnv *env, jclass jcls, jint dataIdx) {\n"
+                        + "    if ((*env)->ExceptionCheck(env)) { nmmp_vm_fail(); return; }\n"
                         + "    if (dataIdx == 0) {\n"
                         + "        jfieldID field = (*env)->GetStaticFieldID(env, jcls, \"%s\", \"%s\");\n"
                         + "        if (field == NULL) {\n"
-                        + "            if ((*env)->ExceptionCheck(env)) (*env)->ExceptionClear(env);\n"
+                        + "            nmmp_vm_fail(); nmmp_require_ready(env);\n"
                         + "            return;\n"
                         + "        }\n"
                         + "        jobject context = (*env)->GetStaticObjectField(env, jcls, field);\n"
+                        + "        if ((*env)->ExceptionCheck(env)) {\n"
+                        + "            if (context != NULL) (*env)->DeleteLocalRef(env, context);\n"
+                        + "            nmmp_vm_fail(); return;\n"
+                        + "        }\n"
                         + "        if (context == NULL) return;\n"
-                        + "        if (!nmmp_vm_activate(env, context)) nmmp_require_ready(env);\n"
+                        + "        if (!nmmp_vm_activate(env, context)) { nmmp_vm_fail(); nmmp_require_ready(env); }\n"
                         + "        (*env)->DeleteLocalRef(env, context);\n"
                         + "        return;\n"
                         + "    }\n",

@@ -145,11 +145,18 @@ public final class ProtectionManifest {
                               byte[] signerDigest,
                               byte[] key,
                               int policyFlags) {
-        if (packageName == null || packageName.getBytes(StandardCharsets.UTF_8).length > 1024
+        if (packageName == null || packageName.indexOf('\0') >= 0
+                || (signatureBound && packageName.isEmpty())
+                || packageName.getBytes(StandardCharsets.UTF_8).length > 1024
                 || signerDigest == null || signerDigest.length != DIGEST_SIZE
                 || key == null || key.length != DIGEST_SIZE
                 || (policyFlags & ~(POLICY_ENFORCE | POLICY_CHECK_DEBUG | POLICY_CHECK_MAPS)) != 0) {
             throw new IllegalArgumentException("Invalid protection manifest identity or policy");
+        }
+        if (!signatureBound) {
+            for (byte value : signerDigest) {
+                if (value != 0) throw new IllegalArgumentException("Unbound manifest must have a zero signer digest");
+            }
         }
         this.buildId = buildId;
         this.codecVersion = codecVersion;

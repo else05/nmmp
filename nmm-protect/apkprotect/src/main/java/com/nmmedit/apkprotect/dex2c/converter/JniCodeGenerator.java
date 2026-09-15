@@ -184,6 +184,15 @@ public class JniCodeGenerator {
             writer.append(", ").append(params.toString());
         }
         writer.append(") {\n");
+        writer.write("    bool nmmp_entry_allowed;\n"
+                + "    NMMP_CHECK_PROTECTION_ENTRIES(nmmp_entry_allowed);\n"
+                + "    if (!nmmp_entry_allowed) {\n"
+                + "        if (!(*env)->ExceptionCheck(env)) {\n"
+                + "            jclass error = (*env)->FindClass(env, \"java/lang/InternalError\");\n"
+                + "            if (error) { (*env)->ThrowNew(env, error, \"Protected execution unavailable\"); (*env)->DeleteLocalRef(env, error); }\n"
+                + "        }\n"
+                + (returnType.equals("V") ? "        return;\n" : "        return 0;\n")
+                + "    }\n");
         writer.write("    if (!nmmp_require_ready(env)) return" + (returnType.equals("V") ? ";\n" : " 0;\n"));
         if (sensitive) {
             writer.write("    if (!nmmpProtectionVerifySensitiveCall(env)) {\n"
@@ -259,6 +268,7 @@ public class JniCodeGenerator {
                         "#include \"ProtectionManifest.h\"\n" +
                         "#include \"ProtectionPolicy.h\"\n" +
                         "#include \"ArtMethodChecks.h\"\n" +
+                        "#include \"ProtectionEntryGuard.h\"\n" +
                         "#include \"Sha256.h\"\n" +
                         "#include \"%s\"\n" +
                         "\n" +

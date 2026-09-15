@@ -68,6 +68,7 @@ static uint32_t policyFlags = NMMP_POLICY_CHECK_MAPS;
 static NmmpNativeIntegrityResult nativeResult = NMMP_NATIVE_MATCH;
 static unsigned nativeChecks;
 NmmpNativeIntegrityResult nmmpVerifyPrivateImage() { ++nativeChecks; return nativeResult; }
+NmmpNativeIntegrityResult nmmpVerifyOuterImage() { return NMMP_NATIVE_NOT_APPLICABLE; }
 static NmmpNativeIntegrityResult artResult = NMMP_NATIVE_NOT_APPLICABLE;
 static ArtIntegrityResult artRuntimeResult = ArtIntegrityResult::NORMAL;
 ArtRuntimeReport nmmpCheckArtRuntimeIntegrity() { return {artRuntimeResult, 3, 0, 0}; }

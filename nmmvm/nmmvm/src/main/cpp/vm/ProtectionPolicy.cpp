@@ -13,6 +13,8 @@
 #include "ArtRuntimeIntegrity.h"
 #include "VmCodecConfig.h"
 #include "CheckLog.h"
+#include "ProtectionEntryGuard.h"
+#include "PrivateLoaderState.h"
 
 #include <cerrno>
 #include <ctime>
@@ -20,6 +22,8 @@
 #include <cstring>
 #include <cstdlib>
 #include <pthread.h>
+
+NmmpProtectionEntryGuard nmmpProtectionEntryGuard = {};
 
 namespace {
 
@@ -489,6 +493,7 @@ static void sample(JNIEnv *env, jobject context, bool forceNative = false,
 }
 
 static bool decision() {
+    if (__atomic_load_n(&nmmpProtectionEntryGuard.failed, __ATOMIC_ACQUIRE)) return false;
     if (__atomic_load_n(&gClockUnavailable, __ATOMIC_ACQUIRE)) return false;
     if (__atomic_load_n(&gNativeIntegrity, __ATOMIC_ACQUIRE) == NMMP_NATIVE_UNAVAILABLE) return false;
     const uint32_t value = __atomic_load_n(&gDecision, __ATOMIC_ACQUIRE);
@@ -592,12 +597,45 @@ extern "C" bool nmmpProtectionPolicyInitialize(JNIEnv *env, jobject context) {
     if (env && env->ExceptionCheck()) return false;
     if (nmmpProtectionRecheckMillis() == 0) return false;
     if (env && env->GetJavaVM(&gJavaVm) != JNI_OK) return false;
+    // Capture before trusted image verification; publish only after it passes.
+    const uintptr_t entries[NMMP_ENTRY_GUARD_COUNT] = {
+        reinterpret_cast<uintptr_t>(nmmpProtectionAllowCall),
+        reinterpret_cast<uintptr_t>(nmmpProtectionVerifySensitiveCall),
+        reinterpret_cast<uintptr_t>(requestCheck), reinterpret_cast<uintptr_t>(runCheck),
+        reinterpret_cast<uintptr_t>(sample), reinterpret_cast<uintptr_t>(decision),
+        reinterpret_cast<uintptr_t>(nmmpProtectionMarkIntegrityFailure),
+        reinterpret_cast<uintptr_t>(nmmpVerifyPrivateImage),
+        reinterpret_cast<uintptr_t>(nmmpVerifyOuterImage)
+    };
+    for (size_t i = 0; i < NMMP_ENTRY_GUARD_COUNT; ++i) {
+        uintptr_t address = entries[i];
+#if defined(__arm__)
+        address &= ~uintptr_t(1);
+#endif
+#if defined(NMMP_PRIVATE_LINKER)
+        bool readable = false;
+        if (!nmmp_private_segments || nmmp_private_segment_count > NMMP_PRIVATE_MAX_SEGMENTS) return false;
+        for (size_t s = 0; s < nmmp_private_segment_count; ++s) {
+            const NmmpImageSegment &segment = nmmp_private_segments[s];
+            if ((segment.flags & (NMMP_IMAGE_READ | NMMP_IMAGE_EXEC)) == (NMMP_IMAGE_READ | NMMP_IMAGE_EXEC)
+                    && address >= segment.start && segment.file_size >= NMMP_ENTRY_GUARD_BYTES
+                    && address - segment.start <= segment.file_size - NMMP_ENTRY_GUARD_BYTES) readable = true;
+        }
+        if (!readable) return false;
+#endif
+        nmmpProtectionEntryGuard.addresses[i] = address;
+        memcpy(nmmpProtectionEntryGuard.expected[i], reinterpret_cast<const void *>(address), NMMP_ENTRY_GUARD_BYTES);
+    }
+#if defined(NMMP_PRIVATE_LINKER)
+    if (nmmpVerifyPrivateImage() != NMMP_NATIVE_MATCH) return false;
+#endif
     sample(env, context);
     const uint64_t completed = monotonicNanos();
     __atomic_store_n(&gStartedNanos, completed, __ATOMIC_RELEASE);
     __atomic_store_n(&gLastCheckNanos, completed, __ATOMIC_RELEASE);
     __atomic_store_n(&gClockUnavailable, completed == 0, __ATOMIC_RELEASE);
     __atomic_store_n(&gInitialized, 1, __ATOMIC_RELEASE);
+    __atomic_store_n(&nmmpProtectionEntryGuard.ready, 1, __ATOMIC_RELEASE);
     NMMP_CHECK_LOG("startup interval_ms=5000 allowed=%d", decision());
     return (!env || !env->ExceptionCheck()) && decision();
 }
@@ -625,6 +663,7 @@ extern "C" void nmmpProtectionMarkIntegrityFailure(void) {
 }
 
 extern "C" NmmpProtectionState nmmpProtectionLastState(void) {
+    if (__atomic_load_n(&nmmpProtectionEntryGuard.failed, __ATOMIC_ACQUIRE)) return NMMP_PROTECTION_INTEGRITY_FAILURE;
     const auto state = static_cast<NmmpProtectionState>(__atomic_load_n(&gDecision, __ATOMIC_ACQUIRE) & 3U);
     if (state != NMMP_PROTECTION_INTEGRITY_FAILURE
             && __atomic_load_n(&gClockUnavailable, __ATOMIC_ACQUIRE)) return NMMP_PROTECTION_UNKNOWN;
@@ -632,6 +671,7 @@ extern "C" NmmpProtectionState nmmpProtectionLastState(void) {
 }
 
 extern "C" uint32_t nmmpProtectionLastReasons(void) {
+    if (__atomic_load_n(&nmmpProtectionEntryGuard.failed, __ATOMIC_ACQUIRE)) return NMMP_REASON_INTEGRITY;
     const uint32_t value = __atomic_load_n(&gDecision, __ATOMIC_ACQUIRE);
     const uint32_t clockReason = (value & 3U) != NMMP_PROTECTION_INTEGRITY_FAILURE
             && __atomic_load_n(&gClockUnavailable, __ATOMIC_ACQUIRE) ? NMMP_REASON_CLOCK_UNAVAILABLE : 0;

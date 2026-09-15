@@ -2,15 +2,9 @@
 
 当前保护链固定为按需指令/异常读取、token 化记录、4 行映射、小型 native VM、私有 loader 和 stage0 VM。codec2、直接装载解释器 SO 的构建路径及 XOR 密钥份额恢复已删除。循环热点尚未达到原方案总回退 ≤10% 的门槛；本次清理不代表性能或完整发布验收通过。API26/27 是支持范围，当前实机证据仅有 ARM64/API27。
 
-## 模式
+## 固定执行路径
 
-| 原开关 | 不设置时 | 显式设置 |
-| --- | --- | --- |
-| `NMMP_VM_DECODE_MODE` | 固定 `on-demand-v1`，codec3/template5 | 只接受 `on-demand-v1`；`legacy` 报错 |
-| `NMMP_PRIVATE_LINKER` | 固定开启 | 只接受 `ON`；`OFF` 报错 |
-| `NMMP_PRIVATE_STAGE0_VM` | 固定开启 | 只接受 `ON`；`OFF` 报错 |
-
-上述参数仅保留输入校验，不能选择另一条执行路径。Java 属性 `-DvmDecodeMode` 优先于模式环境变量，同样仅接受 `on-demand-v1`。CMake 的旧 OFF/legacy 参数也会被拒绝。仅接受 ARM64，选择 API26 编译目标；运行时只接受 API26/27。全部规则方法保持不变，不支持时明确失败。
+按需解码、codec3、私有 linker 和 stage0 VM 已经直接固化在构建中，不再提供模式参数。`NMMP_VM_DECODE_MODE`、`-DvmDecodeMode`、`NMMP_PRIVATE_LINKER`、`NMMP_PRIVATE_STAGE0_VM` 及对应 CMake 参数均已删除；设置这些旧环境变量不会改变构建。O-MVLL 插件接入也已删除。仅接受 ARM64，选择 API26 编译目标；运行时只接受 API26/27。全部规则方法保持不变，不支持时明确失败。
 
 当前源码不再包含 legacy 执行模式。如需复查旧版本，应使用历史提交和对应产物；不要把旧模板或生成目录混入当前构建。template5 用于拒绝旧模板，codec3 数据布局保持不变。
 
@@ -22,8 +16,7 @@
 
 ```bash
 source /mnt/d/Android/SDK_WSL/nmmp-env.sh
-unset NMMP_TEST_SEED NMMP_VM_DECODE_MODE NMMP_PRIVATE_LINKER NMMP_PRIVATE_STAGE0_VM
-export OMVLL_CONFIG=/mnt/e/OtherProject/safe-toolchain/nmmp/nmm-protect/scripts/wsl/omvll-config.py
+unset NMMP_TEST_SEED
 export CMAKE_BUILD_PARALLEL_LEVEL=5
 java -jar /path/to/new-run/vm-protect.jar apk \
   /path/to/new-run/input.apk \
@@ -40,3 +33,28 @@ java -jar /path/to/new-run/vm-protect.jar apk \
 仅性能对照使用 `NMMP_TEST_SEED` 或优先级更高的 `-Dnmmp.testSeed=`，严格要求16位ASCII十六进制；空值也报错。它固定 Java 生成器的独立目的随机流，不控制 Python loader 或 O-MVLL，不能保证二进制可复现。两者均未设置时使用 `SecureRandom`；生产构建不要带固定测试参数。
 
 新格式不能与旧模板或记录混用。root、映射、边界描述会在初始化后驻留只读页；指令和异常数据执行时按需读取，每调用最多64字节密钥流缓存、array批次最多256字节，另有固定80字节解释器解码暂存。正常返回与错误出口可靠擦除该暂存，不建立跨调用明文指令/基本块缓存；不承诺返回值、CPU寄存器或编译器副本全部零残留。具体合同见 [格式说明](ON_DEMAND_FORMAT.md)，实现与阶段测试见 [实施记录](ON_DEMAND_WORK.md)。
+
+## 当前源码的签名产物清单构建要求
+
+APK 构建现在必须显式配置独立的 Ed25519 清单签名密钥，缺少配置会在构建开始时失败：
+
+```bash
+java -Dnmmp.artifact.privateKey=/absolute/path/artifact-private.pk8 \
+  -Dnmmp.artifact.publicKey=/absolute/path/artifact-public.spki \
+  -Dnmmp.protectionProfile=enforce \
+  -jar /path/to/current/vm-protect.jar apk input.apk convertRules.txt mapping.txt
+```
+
+私钥文件为 DER PKCS#8，公钥文件为 DER X.509 SubjectPublicKeyInfo，签名 JDK/provider 必须支持标准 Ed25519。公钥编译入内层；私钥只由构建端读取。此密钥与 APK 原有发布证书绑定是两个独立用途，不替代最终 APK 对齐、签名及系统签名验证。
+
+`assets/nmmp/artifact.sig` 为保留条目：构建会替换输入中同名旧条目，以 STORED 格式写入本次签名清单。初始化复用既有 APK 文件描述符，验签并核对最终 DEX/核心 SO 后才允许解释器激活。缺少清单、配置/身份不符或内容核对失败均不激活。非 APK 的独立 unbound VM fixture 仍使用未配置公钥的默认模板，不能当作可发布的 bound APK 模板。
+
+`GenerateArtifactTestKey.java` 仅用于显式本地验收，不是生产默认密钥生成流程。`build/detection-app-*` 中的 TEST-ONLY 密钥及 APK 均为本地验收材料。完整应用级功能/性能验收尚未因此完成。
+
+## 敏感入口诊断与无 SO 的 APK
+
+通过 `-Dnmmp.sensitiveMethodsFile=<UTF-8 清单>` 指定最多 20 个精确 DEX 方法，详见 [当前 Java 检测](JAVA_DETECTION_CURRENT.md)。`-Dnmmp.diagnostics=true` 将已有 CMake `NMMP_DIAGNOSTICS` 开关传入构建，启用 loader 和 ArtMethod 的诊断输出，默认关闭。新增 ArtMethod 日志只报告校准结果、登记数量和检查状态，不输出函数地址或密钥。
+
+不含 native SO 的 APK 现在默认生成 arm64-v8a，不再采用旧的 armeabi-v7a 偏好。APK 实际包含不支持的 ABI 时仍明确失败；不会删除它们后假装是纯 Java APK。
+
+当前示例 APK 的敏感入口全链路记录见 [敏感入口设备验证](SENSITIVE_BINDING_DEVICE.md)。示例不替代业务应用的明确清单和功能验收。

@@ -15,8 +15,8 @@ const size_t kHeaderSize = 96;
 const size_t kEntrySize = 120;
 const size_t kMaximumManifestSize = 64U * 1024U;
 const uint32_t kMaximumEntries = 256;
-const uint32_t kPolicyVersion = 1;
-const uint32_t kAllowedPolicyFlags = 7;
+const uint32_t kPolicyVersion = 5;
+const uint32_t kAllowedPolicyFlags = 15;
 const uint8_t kKeyXorMask[32] = {
         0x91, 0x37, 0xe4, 0x2b, 0x6d, 0xa8, 0x53, 0xc1,
         0x0f, 0x72, 0xb9, 0x44, 0xde, 0x18, 0x85, 0x6a,
@@ -208,7 +208,8 @@ extern "C" bool nmmpProtectionPointerInImage(const void *pointer) {
     if (!pointer || !nmmp_private_image_start || nmmp_private_image_size == 0) return false;
     const uintptr_t value = reinterpret_cast<uintptr_t>(pointer);
     const uintptr_t start = reinterpret_cast<uintptr_t>(nmmp_private_image_start);
-    return value >= start && value - start < nmmp_private_image_size;
+    return value >= start && value - start < nmmp_private_image_size
+           && nmmpImageExecutable(nmmp_private_segments, nmmp_private_segment_count, value);
 #else
     return pointer != nullptr;
 #endif

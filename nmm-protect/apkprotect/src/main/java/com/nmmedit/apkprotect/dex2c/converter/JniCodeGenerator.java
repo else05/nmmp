@@ -84,7 +84,8 @@ public class JniCodeGenerator {
 
         String clazzName = classType.substring(1, classType.length() - 1);
 
-        handledNativeMethods.put(clazzName, new MyMethod(clazzName, methodName, parameterTypes, returnType));
+        final boolean sensitive = protectionContext.bindSensitiveMethod(method);
+        handledNativeMethods.put(clazzName, new MyMethod(clazzName, methodName, parameterTypes, returnType, sensitive, isStatic));
 
         final byte[] plain = instructionRewriter.rewriteInstructions(method);
         final byte[] tries = instructionRewriter.handleTries(implementation);
@@ -184,6 +185,15 @@ public class JniCodeGenerator {
         }
         writer.append(") {\n");
         writer.write("    if (!nmmp_require_ready(env)) return" + (returnType.equals("V") ? ";\n" : " 0;\n"));
+        if (sensitive) {
+            writer.write("    if (!nmmpProtectionVerifySensitiveCall(env)) {\n"
+                    + "        if (!(*env)->ExceptionCheck(env)) {\n"
+                    + "            jclass error = (*env)->FindClass(env, \"java/lang/InternalError\");\n"
+                    + "            if (error) { (*env)->ThrowNew(env, error, \"Sensitive operation unavailable\"); (*env)->DeleteLocalRef(env, error); }\n"
+                    + "        }\n"
+                    + (returnType.equals("V") ? "        return;\n" : "        return 0;\n")
+                    + "    }\n");
+        }
 
         writer.append(regsAssign);
         writer.append("\n");
@@ -248,6 +258,7 @@ public class JniCodeGenerator {
                         "#include \"vm.h\"\n" +
                         "#include \"ProtectionManifest.h\"\n" +
                         "#include \"ProtectionPolicy.h\"\n" +
+                        "#include \"ArtMethodChecks.h\"\n" +
                         "#include \"Sha256.h\"\n" +
                         "#include \"%s\"\n" +
                         "\n" +
@@ -326,6 +337,8 @@ public class JniCodeGenerator {
                             "        .fnPtr=%s\n" +
                             "    };\n" +
                             "   const jint result = (*env)->RegisterNatives(env, clazz, &nativeMethod, 1);\n" +
+                            (handledNativeMethods.values().stream().anyMatch(value -> value.sensitive)
+                                    ? "   if (result == JNI_OK && !(*env)->ExceptionCheck(env)) nmmpArtCalibrate(env, clazz, &nativeMethod);\n" : "") +
                             "\n" +
                             "   (*env)->DeleteLocalRef(env, clazz);\n" +
                             "   if (result != JNI_OK || (*env)->ExceptionCheck(env)) { nmmp_vm_fail(); nmmp_require_ready(env); }\n" +
@@ -363,6 +376,7 @@ public class JniCodeGenerator {
                 "} MyNativeMethod;\n");
 
         int methodIdx = 0;
+        StringBuilder sensitiveCases = new StringBuilder();
         final ProtectionManifest.CanonicalDigest registerDigest =
                 new ProtectionManifest.CanonicalDigest("NMMP-REG1");
         registerDigest.putU32(module.moduleId).putU32(handledNativeMethods.size());
@@ -385,6 +399,11 @@ public class JniCodeGenerator {
                         MyMethodUtil.getJniFunctionName(method.className, method.name, method.parameterTypes, method.returnType)
                 ));
                 registerDigest.putU32(nameIdx).putU32(sigIdx).putU32(Integer.toUnsignedLong(entryId));
+                if (method.sensitive) {
+                    sensitiveCases.append("            case ").append(methodIdx)
+                            .append(": nmmpArtRegister(env, clazz, methods + i, ")
+                            .append(method.isStatic ? "true" : "false").append("); break;\n");
+                }
                 methodIdx++;
             }
             methodRanger.put(clazz, new Ranger(startIdx, methodIdx - startIdx));
@@ -392,6 +411,12 @@ public class JniCodeGenerator {
 
         writer.write("};\n");
         writer.write("//ends native method\n");
+        writer.write("static bool nmmp_register_sensitive(JNIEnv *env, jclass clazz, const JNINativeMethod *methods, u4 offset, u4 count) {\n"
+                + "    for (u4 i = 0; i < count; ++i) {\n"
+                + "        switch (offset + i) {\n" + sensitiveCases
+                + "            default: continue;\n        }\n"
+                + "        if ((*env)->ExceptionCheck(env)) return false;\n"
+                + "    }\n    return true;\n}\n");
 
         //根据索引生成注册需要的结构体
         writer.write(
@@ -493,12 +518,14 @@ public class JniCodeGenerator {
                         "    }\n" +
                         "\n" +
                         "    const jint result = (*env)->RegisterNatives(env, clazz, methods, data.count);\n" +
+                        "    const bool artValid = result == JNI_OK && !(*env)->ExceptionCheck(env)\n" +
+                        "            && nmmp_register_sensitive(env, clazz, methods, data.offset, data.count);\n" +
                         "\n" +
                         "    (*env)->DeleteLocalRef(env, clazz);\n" +
                         "\n" +
                         "    //不相等表示使用malloc申请的内存需要释放\n" +
                         "    if (methods != methodBuf)free(methods);\n" +
-                        "    if (result != JNI_OK || (*env)->ExceptionCheck(env)) { nmmp_vm_fail(); nmmp_require_ready(env); }\n" +
+                        "    if (!artValid || (*env)->ExceptionCheck(env)) { nmmp_vm_fail(); nmmp_require_ready(env); }\n" +
                         "}\n\n"
                 , funName)
         );
@@ -544,9 +571,11 @@ public class JniCodeGenerator {
                         + "    }\n");
         writer.write(
                 "    const jint result = (*env)->RegisterNatives(env, clazz, methods, data.count);\n"
+                        + "    const bool artValid = result == JNI_OK && !(*env)->ExceptionCheck(env)\n"
+                        + "            && nmmp_register_sensitive(env, clazz, methods, data.offset, data.count);\n"
                         + "    (*env)->DeleteLocalRef(env, clazz);\n"
                         + "    if (methods != methodBuf) free(methods);\n"
-                        + "    return result == 0 && !(*env)->ExceptionCheck(env);\n"
+                        + "    return artValid && !(*env)->ExceptionCheck(env);\n"
                         + "}\n\n");
         writer.write(String.format(
                 "static void %s(JNIEnv *env, jclass jcls, jint dataIdx) {\n"
@@ -643,12 +672,17 @@ public class JniCodeGenerator {
         final List<? extends CharSequence> parameterTypes;
 
         final String returnType;
+        final boolean sensitive;
+        final boolean isStatic;
 
-        MyMethod(String className, String name, List<? extends CharSequence> parameterTypes, String returnType) {
+        MyMethod(String className, String name, List<? extends CharSequence> parameterTypes, String returnType,
+                 boolean sensitive, boolean isStatic) {
             this.className = className;
             this.name = name;
             this.parameterTypes = parameterTypes;
             this.returnType = returnType;
+            this.sensitive = sensitive;
+            this.isStatic = isStatic;
         }
 
         @Override

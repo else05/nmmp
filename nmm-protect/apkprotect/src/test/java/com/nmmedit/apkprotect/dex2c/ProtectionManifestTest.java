@@ -49,6 +49,7 @@ public class ProtectionManifestTest {
         assertEquals("NMMPMF01", new String(Arrays.copyOfRange(built.getBytes(), 0, 8)));
         assertEquals(ProtectionManifest.VERSION, data.getInt(8));
         assertEquals(built.getBytes().length, data.getInt(12));
+        assertEquals(2, data.getInt(32));
         assertEquals(20_000, data.getInt(40));
         assertEquals(2, data.getInt(44));
         int entries = 96 + data.getInt(48);
@@ -95,7 +96,8 @@ public class ProtectionManifestTest {
             observe.addManifestEntry(entry(0, 1));
             int observeFlags = ByteBuffer.wrap(observe.buildManifest().getBytes())
                     .order(ByteOrder.LITTLE_ENDIAN).getInt(36);
-            assertEquals(ProtectionManifest.POLICY_CHECK_DEBUG | ProtectionManifest.POLICY_CHECK_MAPS,
+            assertEquals(ProtectionManifest.POLICY_CHECK_DEBUG | ProtectionManifest.POLICY_CHECK_MAPS
+                            | ProtectionManifest.POLICY_CHECK_ENVIRONMENT,
                     observeFlags);
 
             System.setProperty("nmmp.protectionProfile", "enforce");

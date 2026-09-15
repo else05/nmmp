@@ -15,9 +15,6 @@ add_library(nmmp_inner SHARED ConstantPool.c ${GEN_SOURCES} loader/InnerBootstra
 target_include_directories(nmmp_inner PRIVATE loader "${PRIVATE_DIR}")
 target_compile_definitions(nmmp_inner PRIVATE JNI_OnLoad=nmmp_inner_on_load NMMP_PRIVATE_LINKER=1)
 target_compile_options(nmmp_inner PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:-fno-exceptions;-fno-rtti>")
-if (NMMP_OMVLL_ENABLED)
-    target_compile_options(nmmp_inner PRIVATE "-fpass-plugin=${NMMP_OMVLL_PLUGIN}")
-endif ()
 target_link_libraries(nmmp_inner ${LIBNMMVM_NAME} log)
 set_target_properties(nmmp_inner PROPERTIES
         LIBRARY_OUTPUT_DIRECTORY "${PRIVATE_DIR}" LINKER_LANGUAGE CXX
@@ -36,6 +33,7 @@ add_library(${LIBNAME_PLACEHOLDER} SHARED loader/Outer.c loader/Envelope.c loade
         loader/Once.c loader/vendor/monocypher/monocypher.c "${PRIVATE_PAYLOAD}")
 target_include_directories(${LIBNAME_PLACEHOLDER} PRIVATE loader "${PRIVATE_DIR}")
 target_sources(${LIBNAME_PLACEHOLDER} PRIVATE loader/Stage0.c vm/NativeVm.c)
+target_sources(${LIBNAME_PLACEHOLDER} PRIVATE vm/Sha256.cpp)
 target_include_directories(${LIBNAME_PLACEHOLDER} PRIVATE vm/include)
 target_compile_options(${LIBNAME_PLACEHOLDER} PRIVATE -ffunction-sections -fdata-sections)
 if (NMMP_DIAGNOSTICS)

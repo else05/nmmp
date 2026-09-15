@@ -1,6 +1,7 @@
 #define _GNU_SOURCE
 #include "Loader.h"
 #include "Envelope.h"
+#include "Sha256.h"
 #include <dlfcn.h>
 #include <limits.h>
 #include <stdio.h>
@@ -10,7 +11,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-#define MAX_LOADS 16
+#define MAX_LOADS NMMP_PRIVATE_MAX_SEGMENTS
 #define MAX_BLOCKS 4
 #define MAX_SYMBOLS 65536
 #define MAX_RELOCS 1000000
@@ -50,6 +51,10 @@ struct NmmpModule {
     uintptr_t *init_array;
     size_t init_count;
     int constructing;
+    size_t segment_count;
+    NmmpImageSegment segments[NMMP_PRIVATE_MAX_SEGMENTS];
+    size_t import_slot_count;
+    NmmpImportSlot import_slots[NMMP_PRIVATE_MAX_IMPORT_SLOTS];
 };
 
 static int page_flags(const Content *c, uint64_t addr);
@@ -360,6 +365,12 @@ static int symbols(Content *c) {
            executable(c, nmmp_u64(entry + 8));
 }
 
+static uint32_t critical_import(const char *name) {
+    static const char *const names[] = {"open", "open64", "openat", "openat64"};
+    if (name) for (uint32_t i = 0; i < 4; ++i) if (!strcmp(name, names[i])) return i + 1;
+    return 0;
+}
+
 static int relocation_table(Content *c, uint64_t addr, uint64_t size, NmmpModule *m, const uintptr_t *resolved) {
     const uint8_t *p = size ? at(c, addr, size) : NULL;
     if (size && !p) return 0;
@@ -382,6 +393,15 @@ static int relocation_table(Content *c, uint64_t addr, uint64_t size, NmmpModule
                 value = base - magnitude;
             }
             memcpy((void *)(m->bias + target), &value, sizeof(value));
+            if (type == 1025 || type == 1026) {
+                const uint8_t *symbol = at(c, c->dynamic.symbols + (uint64_t)sym * 24, 24);
+                const uint32_t id = symbol && !symbol[6] && !symbol[7]
+                        ? critical_import(string_at(c, nmmp_u32(symbol))) : 0;
+                if (id) {
+                    if (m->import_slot_count == NMMP_PRIVATE_MAX_IMPORT_SLOTS) return 0;
+                    m->import_slots[m->import_slot_count++] = (NmmpImportSlot){m->bias + target, value, id, 0};
+                }
+            }
         }
     }
     return 1;
@@ -440,8 +460,15 @@ int nmmp_map_image(uint8_t *decoded, size_t size, NmmpModule **out) {
     for (uint32_t i = 0; i < c.nseg; ++i) {
         const Segment *s = &c.segments[i];
         memcpy((void *)(m->bias + s->addr), decoded + s->offset, (size_t)s->filesz);
+        m->segments[i] = (NmmpImageSegment){m->bias + s->addr, (size_t)s->filesz,
+                                          (size_t)s->memsz, (uint32_t)s->flags, 0};
+        /* The caller authenticated decoded before mapping. Executable ranges
+           cannot contain relocation targets (enforced by relocation_table). */
+        if (s->flags & NMMP_IMAGE_EXEC)
+            nmmpSha256(decoded + s->offset, (size_t)s->filesz, m->segments[i].executable_digest);
         /* Anonymous pages already zero BSS, including tails sharing LOAD pages. */
     }
+    m->segment_count = c.nseg;
     for (uint32_t i = 0; i < c.dynamic.needed_count; ++i) {
         char path[64];
         snprintf(path, sizeof(path), "/system/lib64/%s", string_at(&c, c.dynamic.needed[i]));
@@ -530,3 +557,13 @@ void *nmmp_bootstrap_address(const NmmpModule *m) { return m ? m->bootstrap : NU
 uintptr_t nmmp_image_bias(const NmmpModule *m) { return m ? m->bias : 0; }
 const void *nmmp_image_start(const NmmpModule *m) { return m ? m->mapping : NULL; }
 size_t nmmp_image_size(const NmmpModule *m) { return m ? m->size : 0; }
+const NmmpImageSegment *nmmp_image_segments(const NmmpModule *m, size_t *count) {
+    if (!count) return NULL;
+    *count = m ? m->segment_count : 0;
+    return m ? m->segments : NULL;
+}
+const NmmpImportSlot *nmmp_import_slots(const NmmpModule *m, size_t *count) {
+    if (!count) return NULL;
+    *count = m ? m->import_slot_count : 0;
+    return m ? m->import_slots : NULL;
+}

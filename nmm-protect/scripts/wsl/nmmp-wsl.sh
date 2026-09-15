@@ -97,10 +97,7 @@ source "$ENV_FILE"
 for variable in \
     ANDROID_HOME \
     ANDROID_NDK_HOME \
-    CMAKE_PATH \
-    OMVLL_PLUGIN \
-    OMVLL_CONFIG \
-    OMVLL_PYTHONPATH; do
+    CMAKE_PATH; do
     [[ -n "${!variable:-}" ]] || {
         echo "[nmmp-wsl] Missing environment: $variable"
         exit 3
@@ -119,21 +116,6 @@ command -v java >/dev/null || {
 
 [[ -x "$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/clang" ]] || {
     echo "[nmmp-wsl] Linux NDK Clang not found."
-    exit 3
-}
-
-[[ -f "$OMVLL_PLUGIN" ]] || {
-    echo "[nmmp-wsl] O-MVLL plugin not found: $OMVLL_PLUGIN"
-    exit 3
-}
-
-[[ -f "$OMVLL_CONFIG" ]] || {
-    echo "[nmmp-wsl] O-MVLL config not found: $OMVLL_CONFIG"
-    exit 3
-}
-
-[[ -d "$OMVLL_PYTHONPATH/encodings" ]] || {
-    echo "[nmmp-wsl] Python standard library not found: $OMVLL_PYTHONPATH"
     exit 3
 }
 
@@ -159,7 +141,6 @@ echo "[nmmp-wsl] APK:      $APK"
 [[ -n "$MAPPING" ]] && echo "[nmmp-wsl] Mapping:  $MAPPING"
 echo "[nmmp-wsl] JAR:      $JAR"
 echo "[nmmp-wsl] NDK:      $ANDROID_NDK_HOME"
-echo "[nmmp-wsl] O-MVLL:   $OMVLL_PLUGIN"
 echo
 
 cd "$CALL_DIR"

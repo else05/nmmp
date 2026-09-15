@@ -1,5 +1,8 @@
 #include "Loader.h"
 #include "Envelope.h"
+#include "NativeIntegrity.h"
+#include <sys/mman.h>
+#include <unistd.h>
 #include <dlfcn.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,6 +10,23 @@
 extern int nmmp_test_failure, nmmp_test_fail_at, nmmp_test_calls, nmmp_test_maps, nmmp_test_handles;
 extern const char *nmmp_test_missing_name;
 static void check(int ok, const char *message) { if (!ok) { fprintf(stderr, "%s\n", message); exit(1); } }
+static int mapping_protection(uintptr_t address) {
+    FILE *file = fopen("/proc/self/maps", "r");
+    check(file != NULL, "maps open");
+    char line[1024], flags[5];
+    unsigned long start, end;
+    int result = -1;
+    while (fgets(line, sizeof(line), file)) {
+        if (sscanf(line, "%lx-%lx %4s", &start, &end, flags) == 3 && address >= start && address < end) {
+            result = (flags[0] == 'r' ? PROT_READ : 0) | (flags[1] == 'w' ? PROT_WRITE : 0)
+                     | (flags[2] == 'x' ? PROT_EXEC : 0);
+            break;
+        }
+    }
+    fclose(file);
+    check(result >= 0, "mapping found");
+    return result;
+}
 static unsigned char *virtual_at(unsigned char *data, uint64_t address) {
     for (unsigned i = 0; i < nmmp_u32(data + 20); ++i) {
         unsigned char *s = data + 64 + i * 56;
@@ -78,6 +98,20 @@ int main(int argc, char **argv) {
     memcpy(data, original, size);
     NmmpModule *m = NULL;
     check(!nmmp_map_image(data, size, &m), "private map");
+    size_t slot_count = 0;
+    const NmmpImportSlot *slots = nmmp_import_slots(m, &slot_count);
+    check(slots && slot_count > 0 && slot_count <= NMMP_PRIVATE_MAX_IMPORT_SLOTS, "critical import recorded");
+    check(nmmpVerifyImportSlots(slots, slot_count) == NMMP_NATIVE_MATCH, "critical import baseline");
+    const size_t page = (size_t)sysconf(_SC_PAGESIZE);
+    void *slot_page = (void *)(slots[0].address & ~(uintptr_t)(page - 1));
+    const int original_protection = mapping_protection(slots[0].address);
+    check(!(original_protection & PROT_EXEC), "import slot in code");
+    check(!mprotect(slot_page, page, PROT_READ | PROT_WRITE), "test slot writable");
+    *(uintptr_t *)slots[0].address = slots[0].expected ^ (uintptr_t)1;
+    check(nmmpVerifyImportSlots(slots, slot_count) == NMMP_NATIVE_MISMATCH, "changed GOT entry missed");
+    *(uintptr_t *)slots[0].address = slots[0].expected;
+    check(!mprotect(slot_page, page, original_protection), "restore slot permissions");
+    check(nmmpVerifyImportSlots(slots, slot_count) == NMMP_NATIVE_MATCH, "restored GOT entry");
     check(!nmmp_run_constructors(m), "private constructors");
     check(nmmp_run_constructors(m) != 0, "constructors executed twice");
     int (*function)(void) = nmmp_bootstrap_address(m);

@@ -54,13 +54,16 @@ int main(int argc, char **argv) {
     check(argc == 2);
     mode = atoi(argv[1]);
     int failed = 0;
+    NmmpImageSegment segment = {(uintptr_t)&nmmp_inner_bootstrap_v1, 1, 1, NMMP_IMAGE_READ | NMMP_IMAGE_EXEC, 0};
     NmmpHostV1 host = {
             .abi_version = NMMP_PRIVATE_BOOTSTRAP_ABI,
             .struct_size = sizeof(host),
             .outer_anchor = &failed,
             .failure_state = &failed,
             .image_start = (const void *)&nmmp_inner_bootstrap_v1,
-            .image_size = 1
+            .image_size = 1,
+            .segments = &segment,
+            .segment_count = 1
     };
     NmmpInnerResultV1 result = {
             .abi_version = NMMP_PRIVATE_BOOTSTRAP_ABI,

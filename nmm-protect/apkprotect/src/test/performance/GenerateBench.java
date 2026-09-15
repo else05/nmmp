@@ -30,6 +30,6 @@ public final class GenerateBench {
         BuildNativeLib.build(new BuildNativeLib.CMakeOptions(System.getenv("CMAKE_PATH"),
                 System.getenv("ANDROID_HOME"), System.getenv("ANDROID_NDK_HOME"), 26,
                 out.getAbsolutePath(), BuildNativeLib.CMakeOptions.BuildType.RELEASE,
-                "arm64-v8a", System.getenv("OMVLL_PLUGIN")));
+                "arm64-v8a"));
     }
 }

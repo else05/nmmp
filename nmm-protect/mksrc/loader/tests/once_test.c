@@ -6,10 +6,14 @@
 static NmmpOnce concurrent = NMMP_ONCE_INIT, failed = NMMP_ONCE_INIT, reentry = NMMP_ONCE_INIT;
 static int count, failures;
 static void check(int ok) { if (!ok) abort(); }
-static int initialize(void *context) {
+static int unlocked(void *context) {
     NmmpOnce *o = context;
     check(!pthread_mutex_trylock(&o->mutex));
     pthread_mutex_unlock(&o->mutex);
+    return 0;
+}
+static int initialize(void *context) {
+    (void)context;
     __atomic_add_fetch(&count, 1, __ATOMIC_RELAXED);
     usleep(10000);
     return 0;
@@ -54,6 +58,12 @@ int main(int argc, char **argv) {
         puts("failure propagation passed");
         return 0;
     }
+    /* With waiters, trylock may legitimately fail because another thread
+       briefly owns the mutex. Test callback lock ownership in isolation. */
+    NmmpOnce probe = NMMP_ONCE_INIT;
+    check(!nmmp_once(&probe, unlocked, &probe));
+    pthread_cond_destroy(&probe.changed);
+    pthread_mutex_destroy(&probe.mutex);
     pthread_t threads[16];
     for (unsigned i = 0; i < 16; ++i) check(!pthread_create(&threads[i], NULL, worker, NULL));
     for (unsigned i = 0; i < 16; ++i) check(!pthread_join(threads[i], NULL));

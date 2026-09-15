@@ -2,8 +2,9 @@
 #define NMMP_PRIVATE_ENVELOPE_H
 #include <stddef.h>
 #include <stdint.h>
+#include "PrivateImageLayout.h"
 
-#define NMMP_LOADER_LIMIT (64U * 1024U * 1024U)
+#define NMMP_LOADER_LIMIT NMMP_PRIVATE_MAX_IMAGE_BYTES
 
 uint32_t nmmp_u32(const uint8_t *p);
 uint64_t nmmp_u64(const uint8_t *p);

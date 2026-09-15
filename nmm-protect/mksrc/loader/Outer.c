@@ -64,6 +64,8 @@ static int initialize(void *opaque) {
     host.failure_state = &load_once.failed;
     host.image_start = nmmp_image_start(module);
     host.image_size = nmmp_image_size(module);
+    host.segments = nmmp_image_segments(module, &host.segment_count);
+    host.import_slots = nmmp_import_slots(module, &host.import_slot_count);
     error = nmmp_run_constructors(module);
 #if defined(NMMP_DIAGNOSTICS) && NMMP_DIAGNOSTICS
     uint64_t constructed = nanos();

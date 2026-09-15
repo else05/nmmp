@@ -1,5 +1,8 @@
 #include "Loader.h"
 #include "Envelope.h"
+#include "NativeIntegrity.h"
+#include <sys/mman.h>
+#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -50,6 +53,22 @@ int main(int argc, char **argv) {
     check(!nmmp_map_image(data, length, &module), "map golden");
     uintptr_t bias = nmmp_image_bias(module), entry = (uintptr_t)nmmp_bootstrap_address(module);
     check(nmmp_image_size(module) == 0x4000 && entry == bias + 0x1000, "mapping bias/entry");
+    size_t segment_count;
+    const NmmpImageSegment *segments = nmmp_image_segments(module, &segment_count);
+    check(segments && segment_count > 0 && segment_count <= NMMP_PRIVATE_MAX_SEGMENTS, "segment registry");
+    check(nmmpImageExecutable(segments, segment_count, entry), "entry executable registration");
+    check(!nmmpImageExecutable(segments, segment_count, bias + 0x2000), "image hole accepted as code");
+    check(!nmmpImageExecutable(segments, segment_count, bias + 0x3000), "RELRO accepted as code");
+    check(!nmmpImageExecutable(segments, segment_count, bias + 0x3400), "BSS accepted as code");
+    check(nmmpVerifyExecutableSegments(segments, segment_count) == NMMP_NATIVE_MATCH, "authenticated code baseline");
+    const size_t page = (size_t)sysconf(_SC_PAGESIZE);
+    void *code_page = (void *)(entry & ~(uintptr_t)(page - 1));
+    check(!mprotect(code_page, page, PROT_READ | PROT_WRITE), "code test write permission");
+    *(unsigned char *)entry ^= 1;
+    check(nmmpVerifyExecutableSegments(segments, segment_count) == NMMP_NATIVE_MISMATCH, "code mutation missed");
+    *(unsigned char *)entry ^= 1;
+    check(!mprotect(code_page, page, PROT_READ | PROT_EXEC), "restore code permission");
+    check(nmmpVerifyExecutableSegments(segments, segment_count) == NMMP_NATIVE_MATCH, "restored code baseline");
     for (int i = 0; i < 4; ++i) check(*(uintptr_t *)(bias + 0x3000 + i * 8) == entry, "RELA result");
     for (size_t i = 0x3400; i < 0x4000; ++i) check(*(unsigned char *)(bias + i) == 0, "BSS zero");
     permissions(bias, "r-x");

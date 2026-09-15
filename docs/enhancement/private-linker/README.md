@@ -1,23 +1,20 @@
 # NMMP 私有 loader：实现与使用
 
-2026-09-12。已实现可选私有 loader，并完成指定 APK 在 **ARM64 / API27** 的构建、正常签名启动和交错启动对照。**尚未完成整套 ACCEPTANCE；默认 OFF。** API26 实机、完整业务语义/热点、首次激活等缺口见 [验证报告](VALIDATION.md)。上级按需解码/token/native VM 及 P5 stage0 已接入，支持 legacy 与显式 on-demand-v1；最新证据见 [实施记录](../ON_DEMAND_WORK.md)。
+私有 loader 已成为固定构建路径，并完成指定 APK 在 **ARM64 / API27** 的构建、正常签名启动和交错启动对照。API26 实机、完整业务语义/热点、首次激活等缺口见 [验证报告](VALIDATION.md)。按需解码、token、native VM 及 stage0 同样固定启用，不再保留 legacy、直接装载或功能开关；最新证据见 [实施记录](../ON_DEMAND_WORK.md)。
 
 ## 使用
 
-要求现有 Android SDK/NDK/CMake 环境，以及 Python 3.9+、JDK 17+；本次正式构建使用 WSL NDK r26d、CMake 3.22.1、O-MVLL 1.8.0。开发测试工程的 shared VM 不等同于正式模板的 inner/outer。
+要求现有 Android SDK/NDK/CMake 环境，以及 Python 3.9+、JDK 17+；当前构建使用 WSL NDK r26d、CMake 3.22.1。O-MVLL 接入已经删除。开发测试工程的 shared VM 不等同于正式模板的 inner/outer。
 
 ```bash
 source /mnt/d/Android/SDK_WSL/nmmp-env.sh
-export NMMP_PRIVATE_LINKER=ON
-export NMMP_PRIVATE_STAGE0_VM=ON
-export NMMP_VM_DECODE_MODE=on-demand-v1
 export CMAKE_BUILD_PARALLEL_LEVEL=5
 java -jar /path/to/current/vm-protect.jar apk /path/to/input.apk /path/to/convertRules.txt /path/to/mapping.txt
 ```
 
-关闭使用 `NMMP_PRIVATE_LINKER=OFF`，未设置也为 OFF；其他值报错。ON 仅接受 ARM64，使用 API26 编译目标，运行时只接纳 API26/27。原库名 `libc++_en.so` 和 APK 集成位置不变；不缩减规则。私有装载或认证失败会明确失败，不生成/加载明文兜底。
+构建仅接受 ARM64，使用 API26 编译目标，运行时只接纳 API26/27。原库名 `libc++_en.so` 和 APK 集成位置不变；不缩减规则。私有装载或认证失败会明确失败，不生成/加载其他兜底路径。
 
-将新 JAR 放在独立目录运行，可避免旧 `tools/vmsrc.zip` 缓存混用。ON 会校验 loader 模板存在及格式版本；不要将旧模板的缺失错误当作成功关闭保护。正式模板由 `nmm-protect/mksrc/build-src.sh` 同步，修改源码后需重新构建 JAR。
+将新 JAR 放在独立目录运行，可避免旧 `tools/vmsrc.zip` 缓存混用。构建会校验 loader 模板存在及格式版本。正式模板由 `nmm-protect/mksrc/build-src.sh` 同步，修改源码后需重新构建 JAR。
 
 ## 实际调用链
 

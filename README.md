@@ -126,8 +126,8 @@ vmCode提供执行所需要的指令、异常表及寄存器空间，vmResolver�
 # Licences
 nmm-protect 以gpl协议发布,[nmm-protect licence](https://github.com/maoabc/nmmp/blob/master/nmm-protect/LICENSE), dex-vm部分以Apache协议发布, [nmmvm licence](https://github.com/maoabc/nmmp/blob/master/nmmvm/LICENSE). vm 和开启时的私有 loader 会进入 APK；新增 loader 与第三方库许可见[依赖记录](docs/enhancement/private-linker/DEPENDENCIES.md)。
 
-# ARM64 私有 loader（可选）
+# ARM64 私有 loader
 
-设置 `NMMP_PRIVATE_LINKER=ON` 后，正式构建将解释器、wrapper、常量池和注册逻辑编为内层模块，审计后压缩并以 ChaCha20-Poly1305 加密，由原库名的外层 SO 私有装载。运行范围为 Android API26/27、ARM64，默认关闭；`OFF` 保留对照构建。失败不会回退到明文内层。
+正式构建固定将解释器、wrapper、常量池和注册逻辑编为内层模块，审计后压缩并以 ChaCha20-Poly1305 加密，由原库名的外层 SO 私有装载。运行范围为 Android API26/27、ARM64。私有 loader、stage0 VM 和按需解码均不再提供切换参数；失败不会回退到其他执行路径。O-MVLL 构建接入已经删除。
 
 构建要求与实机验证范围见[私有 loader 说明](docs/enhancement/private-linker/README.md)。这项扩展独立于尚未实施的按需解码/native VM 升级。

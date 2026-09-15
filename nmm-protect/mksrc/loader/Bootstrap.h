@@ -3,8 +3,9 @@
 #include <jni.h>
 #include <stddef.h>
 #include <stdint.h>
+#include "PrivateImageLayout.h"
 
-#define NMMP_PRIVATE_BOOTSTRAP_ABI 2u
+#define NMMP_PRIVATE_BOOTSTRAP_ABI 5u
 
 typedef struct {
     uint32_t abi_version;
@@ -15,6 +16,10 @@ typedef struct {
     const int *failure_state;
     const void *image_start;
     size_t image_size;
+    const NmmpImageSegment *segments;
+    size_t segment_count;
+    const NmmpImportSlot *import_slots;
+    size_t import_slot_count;
 } NmmpHostV1;
 
 typedef struct {

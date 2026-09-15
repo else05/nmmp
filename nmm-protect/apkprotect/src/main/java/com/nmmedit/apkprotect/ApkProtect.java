@@ -9,7 +9,6 @@ import com.android.tools.smali.dexlib2.writer.io.FileDataStore;
 import com.android.tools.smali.dexlib2.writer.pool.DexPool;
 import com.android.zipflinger.*;
 import com.nmmedit.apkprotect.andres.AxmlEdit;
-import com.nmmedit.apkprotect.data.Prefs;
 import com.nmmedit.apkprotect.dex2c.Dex2c;
 import com.nmmedit.apkprotect.dex2c.DexConfig;
 import com.nmmedit.apkprotect.dex2c.GlobalDexConfig;
@@ -20,6 +19,8 @@ import com.nmmedit.apkprotect.dex2c.converter.structs.RegisterNativesUtilClassDe
 import com.nmmedit.apkprotect.dex2c.converter.structs.ApplicationInitClassDef;
 import com.nmmedit.apkprotect.dex2c.filters.ClassAndMethodFilter;
 import com.nmmedit.apkprotect.sign.SignatureBinding;
+import com.nmmedit.apkprotect.sign.ArtifactInventory;
+import com.nmmedit.apkprotect.sign.ArtifactSigner;
 import com.nmmedit.apkprotect.util.ApkUtils;
 import com.nmmedit.apkprotect.util.CmakeUtils;
 import com.nmmedit.apkprotect.util.FileUtils;
@@ -59,6 +60,9 @@ public class ApkProtect {
     public void run() throws IOException {
         final File apkFile = apkFolders.getInApk();
         final File zipExtractDir = apkFolders.getZipExtractTempDir();
+        final File inventoryFile = new File(apkFolders.getOutputApk().getPath() + ".artifact-inventory.bin");
+        java.nio.file.Files.deleteIfExists(inventoryFile.toPath());
+        final ArtifactSigner artifactSigner = ArtifactSigner.loadConfigured();
         try {
             byte[] manifestBytes = ApkUtils.getFile(apkFile, ANDROID_MANIFEST_XML);
             if (manifestBytes == null) {
@@ -76,6 +80,8 @@ public class ApkProtect {
                     apkFolders.getDex2cSrcDir(),
                     instructionRewriter,
                     protectionContext);
+
+            CmakeUtils.writeArtifactKeyConfig(apkFolders.getDex2cSrcDir(), artifactSigner.getRawPublicKey());
 
             //解压得到所有classesN.dex
             List<File> files = getClassesFiles(apkFile, zipExtractDir);
@@ -156,6 +162,12 @@ public class ApkProtect {
             //替换为新的dex
             outDexFiles.set(0, newManDex);
 
+            final ArtifactInventory inventory = ArtifactInventory.capture(
+                    protectionContext.getBuildId(), packageName, outDexFiles, nativeLibs);
+            final byte[] signedInventory;
+            try { signedInventory = artifactSigner.sign(inventory); }
+            catch (java.security.GeneralSecurityException e) { throw new IOException("Artifact signing failed", e); }
+
             final File outputApk = apkFolders.getOutputApk();
             if (outputApk.exists()) {
                 outputApk.delete();
@@ -172,6 +184,11 @@ public class ApkProtect {
                 final Source androidManifestSource = Sources.from(new ByteArrayInputStream(manifestBytes), ANDROID_MANIFEST_XML, Deflater.DEFAULT_COMPRESSION);
                 androidManifestSource.align(4);
                 zipArchive.add(androidManifestSource);
+
+                final Source artifactSource = Sources.from(new ByteArrayInputStream(signedInventory),
+                        ArtifactSigner.APK_ENTRY, Deflater.NO_COMPRESSION);
+                artifactSource.align(4);
+                zipArchive.add(artifactSource);
 
                 //add classesX.dex
                 for (File file : outDexFiles) {
@@ -195,6 +212,8 @@ public class ApkProtect {
 
                 }
             }
+            inventory.verifyApk(outputApk);
+            java.nio.file.Files.write(inventoryFile.toPath(), inventory.encode());
         } finally {
             //删除解压缓存目录
             FileUtils.deleteFile(zipExtractDir);
@@ -213,26 +232,10 @@ public class ApkProtect {
                 }
             }
         }
-        //不支持armeabi，可能还要删除mips相关
-        abis.remove("armeabi");
         if (abis.isEmpty()) {
-            //默认只生成armeabi-v7a
-            ArrayList<String> abi = new ArrayList<>();
-            if (Prefs.isArm()) {
-                abi.add("armeabi-v7a");
-            }
-            if (Prefs.isArm64()) {
-                abi.add("arm64-v8a");
-            }
-
-            if (Prefs.isX86()) {
-                abi.add("x86");
-            }
-
-            if (Prefs.isX64()) {
-                abi.add("x86_64");
-            }
-            return abi;
+            // A Java-only APK has no native ABI constraint. Use the current
+            // single supported runtime, not obsolete multi-ABI preferences.
+            return Collections.singletonList("arm64-v8a");
         }
         return new ArrayList<>(abis);
     }
@@ -468,7 +471,7 @@ public class ApkProtect {
         //处理后的zip数据
         final ZipSource zipSource = new ZipSource(zipMap);
         for (String entryName : zipMap.getEntries().keySet()) {
-            if (regex.matcher(entryName).matches()) {
+            if (regex.matcher(entryName).matches() || ArtifactSigner.APK_ENTRY.equals(entryName)) {
                 continue;
             }
             //不改变压缩数据,4字节对齐

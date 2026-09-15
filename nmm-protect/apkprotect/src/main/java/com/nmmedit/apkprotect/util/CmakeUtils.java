@@ -95,7 +95,6 @@ public class CmakeUtils {
     public static void generateCSources(File srcDir,
                                         InstructionRewriter instructionRewriter,
                                         ProtectionContext protectionContext) throws IOException {
-        BuildNativeLib.validateProtectionOptions();
         final File vmsrcFile = new File(FileUtils.getHomePath(), "tools/vmsrc.zip");
         if (!vmsrcFile.exists()) {
             //警告：如果外部源码存在不会复制内部vmsrc.zip出去，需要删除外部源码文件才能保证vmsrc.zip正确更新
@@ -144,6 +143,15 @@ public class CmakeUtils {
                     "vm/include/ProtectionManifest.h", "vm/include/ProtectionPolicy.h",
                     "vm/include/ProtectionPolicyTypes.h", "vm/include/ProtectionPolicyInternal.h",
                     "vm/include/ProtectionManifestConfig.h",
+                    "vm/JavaEnvironmentChecks.cpp", "vm/include/JavaEnvironmentChecks.h",
+                    "vm/ModuleOrigins.cpp", "vm/include/ModuleOrigins.h",
+                    "vm/OuterIntegrity.cpp", "vm/include/OuterIntegrity.h",
+                    "vm/OuterImports.cpp",
+                    "vm/ArtMethodChecks.cpp", "vm/include/ArtMethodChecks.h",
+                    "vm/ArtifactInventory.cpp", "vm/ArtifactApk.cpp", "vm/ArtifactSignature.cpp",
+                    "vm/include/ArtifactInventory.h", "vm/include/ArtifactApk.h", "vm/include/ArtifactSignature.h",
+                    "vm/include/ArtifactKeyConfig.h",
+                    "loader/vendor/monocypher/monocypher-ed25519.c", "loader/vendor/monocypher/monocypher-ed25519.h",
                     "loader/vendor/monocypher/monocypher.c", "loader/vendor/monocypher/monocypher.h"}) {
                 requireZipEntry(zipFile, required, vmsrcFile);
             }
@@ -171,6 +179,9 @@ public class CmakeUtils {
             requireZipEntry(zipFile, "vm/include/NativeFormats.h", vmsrcFile);
             requireZipEntry(zipFile, "vm/include/NativeVm.h", vmsrcFile);
             requireZipEntry(zipFile, "vm/VmBinding.cpp", vmsrcFile);
+            if (!readZipEntry(zipFile, zipFile.getEntry("vm/VmBinding.cpp")).contains("nmmpVerifySignedArtifactApk")) {
+                throw new IOException("VM template lacks signed artifact activation: " + vmsrcFile);
+            }
             requireZipEntry(zipFile, "vm/Arm64Syscall.cpp", vmsrcFile);
             requireZipEntry(zipFile, "vm/ApkV2Signer.cpp", vmsrcFile);
             requireZipEntry(zipFile, "vm/Sha256.cpp", vmsrcFile);
@@ -182,7 +193,11 @@ public class CmakeUtils {
             final ZipEntry vmCmakeEntry = requireZipEntry(zipFile, "vm/CMakeLists.txt", vmsrcFile);
             final String vmCmake = readZipEntry(zipFile, vmCmakeEntry);
             if (!vmCmake.contains("ProtectionManifest.cpp")
-                    || !vmCmake.contains("ProtectionPolicy.cpp")) {
+                    || !vmCmake.contains("ProtectionPolicy.cpp") || !vmCmake.contains("ArtifactSignature.cpp")
+                    || !vmCmake.contains("JavaEnvironmentChecks.cpp") || !vmCmake.contains("ModuleOrigins.cpp")
+                    || !vmCmake.contains("OuterIntegrity.cpp")
+                    || !vmCmake.contains("OuterImports.cpp")
+                    || !vmCmake.contains("ArtMethodChecks.cpp")) {
                 throw new IOException("VM 模板未链接 phase2 运行模块: " + vmsrcFile.getAbsolutePath());
             }
             final ZipEntry configEntry = requireZipEntry(
@@ -291,6 +306,16 @@ public class CmakeUtils {
                 new FileOutputStream(configFile), StandardCharsets.UTF_8)) {
             writer.write(content);
         }
+    }
+
+    public static void writeArtifactKeyConfig(File srcDir, byte[] publicKey) throws IOException {
+        if (publicKey == null || publicKey.length != 32) throw new IOException("Expected 32-byte Ed25519 public key");
+        File file = new File(srcDir, "vm/include/ArtifactKeyConfig.h");
+        java.nio.file.Files.createDirectories(file.getParentFile().toPath());
+        String content = "#ifndef NMMP_ARTIFACT_KEY_CONFIG_H\n#define NMMP_ARTIFACT_KEY_CONFIG_H\n#include <stdint.h>\n"
+                + "#define NMMP_ARTIFACT_KEY_CONFIGURED 1\nstatic const uint8_t NMMP_ARTIFACT_PUBLIC_KEY[32] = {"
+                + formatByteArray(publicKey) + "};\n#endif\n";
+        java.nio.file.Files.write(file.toPath(), content.getBytes(StandardCharsets.UTF_8));
     }
 
     private static String formatByteArray(byte[] data) {

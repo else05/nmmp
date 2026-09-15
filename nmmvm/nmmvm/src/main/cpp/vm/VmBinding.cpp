@@ -11,6 +11,12 @@
 #include "Sha256.h"
 #include "VmCodec.h"
 #include "PrivateLoaderState.h"
+#include "ArtifactKeyConfig.h"
+#include "ArtifactSignature.h"
+
+#if NMMP_VM_SIGNATURE_BINDING && !NMMP_ARTIFACT_KEY_CONFIGURED
+#error Bound APK builds require an artifact signing public key
+#endif
 
 namespace {
 
@@ -226,7 +232,10 @@ static bool verifyApkAndActivate(const char *packageNameValue,
                         && nmmpReadApkV2SignerCertificate(
                                 static_cast<int>(descriptor),
                                 static_cast<uint64_t>(status.st_size),
-                                &apkCertificate);
+                                &apkCertificate)
+                        && nmmpVerifySignedArtifactApk(static_cast<int>(descriptor), NMMP_ARTIFACT_PUBLIC_KEY,
+                                sizeof(NMMP_ARTIFACT_PUBLIC_KEY), NMMP_VM_BUILD_ID,
+                                reinterpret_cast<const uint8_t *>(packageNameValue), std::strlen(packageNameValue));
     nmmpRawClose(static_cast<int>(descriptor));
     if (!parsed) {
         nmmpFreeSignerCertificate(&apkCertificate);

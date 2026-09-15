@@ -4,17 +4,19 @@ import com.nmmedit.apkprotect.sign.SignatureBinding;
 
 import java.util.Arrays;
 import java.util.Random;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.io.IOException;
+import com.android.tools.smali.dexlib2.iface.Method;
 
 public final class ProtectionContext {
 
     public static final int CODEC_VERSION = 3;
     public static final int TEMPLATE_VERSION = 7;
 
-    public static void validateDecodeMode() {
-        String mode = System.getProperty("vmDecodeMode", System.getenv("NMMP_VM_DECODE_MODE"));
-        if (mode != null && !mode.equals("on-demand-v1"))
-            throw new IllegalArgumentException("Only on-demand-v1 is supported; legacy has been removed");
-    }
     public int getCodecVersion() { return CODEC_VERSION; }
     public String getDecodeMode() { return "on-demand-v1"; }
 
@@ -26,6 +28,8 @@ public final class ProtectionContext {
     private final byte[] expectedSignerSha256;
     private final MethodCodec methodCodec;
     private final ProtectionManifest protectionManifest;
+    private final Set<String> sensitiveMethods = readSensitiveMethods();
+    private final Set<String> matchedSensitiveMethods = new LinkedHashSet<>();
     private long methodId;
     private long dexId;
 
@@ -56,7 +60,6 @@ public final class ProtectionContext {
                       long buildId,
                       String packageName,
                       byte[] signerCertificate) {
-        validateDecodeMode();
         this.buildSeed = buildSeed;
         this.buildId = buildId;
         this.packageName = packageName;
@@ -115,7 +118,48 @@ public final class ProtectionContext {
     }
 
     public ProtectionManifest.Built buildManifest() {
+        Set<String> missing = new LinkedHashSet<>(sensitiveMethods);
+        missing.removeAll(matchedSensitiveMethods);
+        if (!missing.isEmpty()) {
+            throw new IllegalArgumentException("Sensitive methods were not converted: " + missing);
+        }
         return protectionManifest.build();
+    }
+
+    private static Set<String> readSensitiveMethods() {
+        Set<String> methods = new LinkedHashSet<>();
+        String path = System.getProperty("nmmp.sensitiveMethodsFile");
+        if (path == null) return methods;
+        try {
+            if (Files.size(Paths.get(path)) > 32 * 1024) {
+                throw new IllegalArgumentException("Sensitive methods file exceeds 32 KiB");
+            }
+            for (String line : Files.readAllLines(Paths.get(path), StandardCharsets.UTF_8)) {
+                String method = line.trim();
+                if (method.isEmpty() || method.startsWith("#")) continue;
+                if (method.length() > 1024 || !method.startsWith("L") || !method.contains(";->")
+                        || !method.contains("(") || !method.contains(")") || !methods.add(method)) {
+                    throw new IllegalArgumentException("Invalid or duplicate sensitive method: " + method);
+                }
+                if (methods.size() > 20) throw new IllegalArgumentException("At most 20 sensitive methods are supported");
+            }
+        } catch (IOException e) {
+            throw new IllegalArgumentException("Cannot read sensitive methods file: " + path, e);
+        }
+        if (methods.isEmpty()) throw new IllegalArgumentException("Sensitive methods file is empty");
+        return methods;
+    }
+
+    public synchronized boolean bindSensitiveMethod(Method method) {
+        StringBuilder identity = new StringBuilder(method.getDefiningClass())
+                .append("->").append(method.getName()).append('(');
+        for (CharSequence parameter : method.getParameterTypes()) identity.append(parameter);
+        String descriptor = identity.append(')').append(method.getReturnType()).toString();
+        if (!sensitiveMethods.contains(descriptor)) return false;
+        if (!matchedSensitiveMethods.add(descriptor)) {
+            throw new IllegalArgumentException("Sensitive method converted more than once: " + descriptor);
+        }
+        return true;
     }
 
     public long nextMethodId() {
@@ -137,12 +181,14 @@ public final class ProtectionContext {
         String profile = System.getProperty("nmmp.protectionProfile");
         if (profile == null) profile = System.getenv("NMMP_PROTECTION_PROFILE");
         if (profile == null || profile.equals("observe")) {
-            return ProtectionManifest.POLICY_CHECK_DEBUG | ProtectionManifest.POLICY_CHECK_MAPS;
+            return ProtectionManifest.POLICY_CHECK_DEBUG | ProtectionManifest.POLICY_CHECK_MAPS
+                    | ProtectionManifest.POLICY_CHECK_ENVIRONMENT;
         }
         if (profile.equals("enforce")) {
             return ProtectionManifest.POLICY_ENFORCE
                     | ProtectionManifest.POLICY_CHECK_DEBUG
-                    | ProtectionManifest.POLICY_CHECK_MAPS;
+                    | ProtectionManifest.POLICY_CHECK_MAPS
+                    | ProtectionManifest.POLICY_CHECK_ENVIRONMENT;
         }
         throw new IllegalArgumentException(
                 "nmmp.protectionProfile/NMMP_PROTECTION_PROFILE must be observe or enforce");

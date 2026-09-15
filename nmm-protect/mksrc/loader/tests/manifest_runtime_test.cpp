@@ -28,14 +28,15 @@ extern "C" bool vmBindingMatchesExpectedIdentity(const char *package_name,
 
 int main(int argc, char **argv) {
     check(argc == 3);
-    const std::string root = argv[1];
+    const std::string scenario = argv[2];
+    const std::string root = std::string(argv[1])
+            + ((scenario == "old-policy" || scenario == "unknown-flags") ? "/" + scenario : "");
     std::vector<uint8_t> manifest = readFile(root + "/manifest.bin");
     std::vector<uint8_t> tag = readFile(root + "/manifest.tag");
     std::vector<uint8_t> key = readFile(root + "/manifest.keyxor");
     std::vector<uint8_t> id = readFile(root + "/manifest.id");
     check(manifest.size() >= 96 && tag.size() == 32 && key.size() == 32 && id.size() == 16);
     size_t manifest_size = manifest.size();
-    const std::string scenario = argv[2];
     if (scenario.find("repeat-") == 0) {
         check(nmmpProtectionActivate(manifest.data(), manifest_size, tag.data(), key.data(), id.data()));
         const bool result = nmmpProtectionActivate(
@@ -54,7 +55,7 @@ int main(int argc, char **argv) {
     else if (std::strcmp(argv[2], "key") == 0) key[31] ^= 1;
     else if (std::strcmp(argv[2], "id") == 0) id[15] ^= 1;
     else if (std::strcmp(argv[2], "truncate") == 0) --manifest_size;
-    else check(expected);
+    else check(expected || scenario == "old-policy" || scenario == "unknown-flags");
 
     const bool activated = nmmpProtectionActivate(
             manifest.data(), manifest_size, tag.data(), key.data(), id.data());
@@ -65,7 +66,7 @@ int main(int argc, char **argv) {
         check(entry.moduleId == 0 && entry.moduleSize == 16 && entry.methodCount == 1);
         check(nmmpProtectionGetEntry(1, &entry));
         check(!nmmpProtectionGetEntry(2, &entry));
-        check(nmmpProtectionPolicyFlags() == (NMMP_POLICY_CHECK_DEBUG | NMMP_POLICY_CHECK_MAPS));
+        check(nmmpProtectionPolicyFlags() == (NMMP_POLICY_CHECK_DEBUG | NMMP_POLICY_CHECK_MAPS | NMMP_POLICY_CHECK_ENVIRONMENT));
         check(nmmpProtectionRecheckMillis() == 20000);
     }
     return 0;

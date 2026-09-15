@@ -28,17 +28,14 @@ import static org.junit.Assert.*;
 public class GeneratorRandomTest {
     private static final String[] SEEDS = {
             "0123456789abcdef", "fedcba9876543210", "6a09e667f3bcc909"};
-    private String previousSeed, previousMode;
+    private String previousSeed;
 
     @Before public void saveSettings() {
         previousSeed = System.getProperty("nmmp.testSeed");
-        previousMode = System.getProperty("vmDecodeMode");
-        System.setProperty("vmDecodeMode", "on-demand-v1");
     }
 
     @After public void restoreSettings() {
         restore("nmmp.testSeed", previousSeed);
-        restore("vmDecodeMode", previousMode);
     }
 
     private static void restore(String name, String value) {

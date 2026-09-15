@@ -44,13 +44,5 @@ public class DemandCodecTest {
     @Test public void onlyCodec3IsGenerated() {
         assertEquals(3, new ProtectionContext(1).getCodecVersion());
         assertEquals("on-demand-v1", new ProtectionContext(1).getDecodeMode());
-        String previous = System.getProperty("vmDecodeMode");
-        try {
-            System.setProperty("vmDecodeMode", "legacy");
-            assertThrows(IllegalArgumentException.class, () -> new ProtectionContext(1));
-        } finally {
-            if (previous == null) System.clearProperty("vmDecodeMode");
-            else System.setProperty("vmDecodeMode", previous);
-        }
     }
 }

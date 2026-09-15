@@ -1,7 +1,6 @@
 package com.nmmedit.apkprotect;
 
 import com.nmmedit.apkprotect.data.Prefs;
-import com.nmmedit.apkprotect.dex2c.ProtectionContext;
 import com.nmmedit.apkprotect.util.FileUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,15 +15,6 @@ import java.util.Map;
 public class BuildNativeLib {
     //库名称
     public static final String NMMP_NAME = "c++_en";
-
-    public static void validateProtectionOptions() {
-        ProtectionContext.validateDecodeMode();
-        for (String name : new String[]{"NMMP_PRIVATE_LINKER", "NMMP_PRIVATE_STAGE0_VM"}) {
-            final String value = System.getenv(name);
-            if (value != null && !"ON".equalsIgnoreCase(value))
-                throw new IllegalArgumentException(name + " is mandatory; only ON is supported");
-        }
-    }
 
     public static Map<String, Map<File, File>> generateNativeLibs(@Nonnull File outDir,
                                                                   @Nonnull final List<String> abis) throws IOException {
@@ -46,19 +36,6 @@ public class BuildNativeLib {
             ndkHome = Prefs.ndkPath();
             System.err.println("No ANDROID_NDK_HOME. Default is " + ndkHome);
         }
-        String omvllPlugin = System.getenv("OMVLL_PLUGIN");
-        if (!isEmpty(omvllPlugin)) {
-            final File pluginFile = new File(omvllPlugin);
-            if (!pluginFile.isFile()) {
-                throw new IOException("O-MVLL plugin not found: " + pluginFile.getAbsolutePath());
-            }
-            omvllPlugin = pluginFile.getAbsolutePath();
-            System.out.println("[nmmp] O-MVLL: enabled, plugin=" + omvllPlugin);
-        } else {
-            System.out.println("[nmmp] O-MVLL: disabled");
-        }
-
-
         final Map<String, Map<File, File>> allLibs = new HashMap<>();
 
         for (String abi : abis) {
@@ -69,8 +46,7 @@ public class BuildNativeLib {
                     ndkHome, 26,
                     outDir.getAbsolutePath(),
                     BuildNativeLib.CMakeOptions.BuildType.RELEASE,
-                    abi,
-                    omvllPlugin);
+                    abi);
 
             //删除上次创建的目录
             FileUtils.deleteFile(new File(cmakeOptions.getBuildPath()));
@@ -160,16 +136,13 @@ public class BuildNativeLib {
 
         private final String abi;
 
-        private final String omvllPlugin;
-
         public CMakeOptions(String cmakePath,
                             String sdkHome,
                             String ndkHome,
                             int apiLevel,
                             String projectHome,
                             BuildType buildType,
-                            String abi,
-                            String omvllPlugin) {
+                            String abi) {
             this.cmakePath = cmakePath;
             this.sdkHome = sdkHome;
             this.ndkHome = ndkHome;
@@ -177,7 +150,6 @@ public class BuildNativeLib {
             this.projectHome = projectHome;
             this.buildType = buildType;
             this.abi = abi;
-            this.omvllPlugin = omvllPlugin;
         }
 
         public String getCmakePath() {
@@ -206,10 +178,6 @@ public class BuildNativeLib {
 
         public String getAbi() {
             return abi;
-        }
-
-        public String getOmvllPlugin() {
-            return omvllPlugin;
         }
 
         @Nonnull
@@ -259,10 +227,9 @@ public class BuildNativeLib {
                     String.format("-DCMAKE_SYSTEM_VERSION=%d", getApiLevel()),
                     String.format("-B%s", getBuildPath()),
                     "-GNinja"));
-            if (!isEmpty(getOmvllPlugin())) {
-                arguments.add(String.format("-DNMMP_OMVLL_PLUGIN=%s", getOmvllPlugin()));
+            if (Boolean.getBoolean("nmmp.diagnostics")) {
+                arguments.add("-DNMMP_DIAGNOSTICS=ON");
             }
-            validateProtectionOptions();
             return arguments;
         }
 

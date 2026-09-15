@@ -63,7 +63,7 @@ static inline bool nmmpProtectionAllowState(uint32_t policyFlags,
     if (state == NMMP_PROTECTION_INTEGRITY_FAILURE) return false;
     return !(policyFlags & NMMP_POLICY_ENFORCE)
            || state != NMMP_PROTECTION_SUSPICIOUS
-           || !(reasons & NMMP_REASON_DEBUG);
+           || !(reasons & (NMMP_REASON_DEBUG | NMMP_REASON_ART_RUNTIME_MODIFIED));
 }
 
 #endif

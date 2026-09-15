@@ -28,6 +28,7 @@ set(VM_SRC_FILES
         OuterIntegrity.cpp
         OuterImports.cpp
         ArtMethodChecks.cpp
+        ArtRuntimeIntegrity.cpp
         EnvironmentChecks.cpp
         JavaEnvironmentChecks.cpp
         ArtifactInventory.cpp
@@ -38,7 +39,7 @@ set(VM_SRC_FILES
         )
 
 
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DLOG_INSTR ")
+
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -fvisibility=hidden -DNDEBUG")
 
 #设置vm库名称

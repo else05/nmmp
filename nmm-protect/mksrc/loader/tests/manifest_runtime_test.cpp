@@ -67,7 +67,7 @@ int main(int argc, char **argv) {
         check(nmmpProtectionGetEntry(1, &entry));
         check(!nmmpProtectionGetEntry(2, &entry));
         check(nmmpProtectionPolicyFlags() == (NMMP_POLICY_CHECK_DEBUG | NMMP_POLICY_CHECK_MAPS | NMMP_POLICY_CHECK_ENVIRONMENT));
-        check(nmmpProtectionRecheckMillis() == 20000);
+        check(nmmpProtectionRecheckMillis() == 5000);
     }
     return 0;
 }

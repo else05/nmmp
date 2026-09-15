@@ -15,7 +15,7 @@ const size_t kHeaderSize = 96;
 const size_t kEntrySize = 120;
 const size_t kMaximumManifestSize = 64U * 1024U;
 const uint32_t kMaximumEntries = 256;
-const uint32_t kPolicyVersion = 5;
+const uint32_t kPolicyVersion = 7;
 const uint32_t kAllowedPolicyFlags = 15;
 const uint8_t kKeyXorMask[32] = {
         0x91, 0x37, 0xe4, 0x2b, 0x6d, 0xa8, 0x53, 0xc1,
@@ -103,7 +103,7 @@ static bool initializeManifest(void *argument) {
     const uint32_t count = u32(args->manifest + 44);
     const uint32_t packageSize = u32(args->manifest + 48);
     const bool signatureBound = u32(args->manifest + 52) != 0;
-    if ((policyFlags & ~kAllowedPolicyFlags) != 0 || recheckMillis < 1000 || recheckMillis > 60000
+    if ((policyFlags & ~kAllowedPolicyFlags) != 0 || recheckMillis != 5000
             || count == 0 || count > kMaximumEntries || packageSize > 1024
             || u32(args->manifest + 56) != 0 || u32(args->manifest + 60) != 0
             || kHeaderSize + packageSize > args->manifestSize

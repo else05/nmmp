@@ -465,6 +465,51 @@ typedef enum {
 #define android_logToFile(tag, file) (0)
 #define android_logToFd(tag, fd) (0)
 
+// Every NMMP log backend uses the explicit build-time diagnostics switch.
+#include "../vm/include/CheckLog.h"
+#include <stdlib.h>
+#undef android_printLog
+#undef android_vprintLog
+#undef android_writeLog
+#undef android_bWriteLog
+#undef android_btWriteLog
+#undef android_printAssert
+#if defined(NMMP_DIAGNOSTICS) && NMMP_DIAGNOSTICS
+#define android_printLog(prio, tag, ...) NMMP_LOG(prio, tag, __VA_ARGS__)
+#define android_vprintLog(prio, cond, tag, fmt, args) nmmpDiagnosticVLog(prio, tag, fmt, args)
+#define android_writeLog(prio, tag, text) NMMP_LOG(prio, tag, "%s", text)
+#define android_printAssert(cond, tag, ...) (NMMP_LOG(ANDROID_LOG_FATAL, tag, "%s", cond), abort())
+#else
+#define android_printLog(...) ((void)0)
+#define android_vprintLog(...) ((void)0)
+#define android_writeLog(...) ((void)0)
+#define android_printAssert(...) abort()
+#undef android_testLog
+#define android_testLog(...) (0)
+#endif
+#define android_bWriteLog(...) ((void)0)
+#define android_btWriteLog(...) ((void)0)
+#undef SLOGV
+#undef SLOGD
+#undef SLOGI
+#undef SLOGW
+#undef SLOGE
+#undef SLOGV_IF
+#undef SLOGD_IF
+#undef SLOGI_IF
+#undef SLOGW_IF
+#undef SLOGE_IF
+#define SLOGV(...) ALOGV(__VA_ARGS__)
+#define SLOGD(...) ALOGD(__VA_ARGS__)
+#define SLOGI(...) ALOGI(__VA_ARGS__)
+#define SLOGW(...) ALOGW(__VA_ARGS__)
+#define SLOGE(...) ALOGE(__VA_ARGS__)
+#define SLOGV_IF(...) ALOGV_IF(__VA_ARGS__)
+#define SLOGD_IF(...) ALOGD_IF(__VA_ARGS__)
+#define SLOGI_IF(...) ALOGI_IF(__VA_ARGS__)
+#define SLOGW_IF(...) ALOGW_IF(__VA_ARGS__)
+#define SLOGE_IF(...) ALOGE_IF(__VA_ARGS__)
+
 
 #ifdef __cplusplus
 }

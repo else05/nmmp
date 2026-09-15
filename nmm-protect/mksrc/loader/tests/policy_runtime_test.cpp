@@ -8,6 +8,19 @@
 #include <cstdio>
 #include <type_traits>
 #include <atomic>
+#include <pthread.h>
+
+static bool realWorker;
+static bool createFails;
+static unsigned workerCreations;
+static int createWorker(pthread_t *thread, const pthread_attr_t *attributes,
+                        void *(*entry)(void *), void *argument) {
+    ++workerCreations;
+    if (createFails) return EAGAIN;
+    if (realWorker) return pthread_create(thread, attributes, entry, argument);
+    entry(argument);
+    return 0;
+}
 
 static uint64_t testNow = UINT64_C(1000000000);
 static bool clockFails;
@@ -20,8 +33,10 @@ static int testClock(clockid_t, struct timespec *value) {
     return 0;
 }
 #define clock_gettime testClock
+#define pthread_create createWorker
 #include "ProtectionPolicy.cpp"
 #undef clock_gettime
+#undef pthread_create
 
 static std::string contents = "1000-2000 r-xp 00000000 00:00 0 /system/lib64/libc.so\n";
 static size_t position;
@@ -54,6 +69,8 @@ static NmmpNativeIntegrityResult nativeResult = NMMP_NATIVE_MATCH;
 static unsigned nativeChecks;
 NmmpNativeIntegrityResult nmmpVerifyPrivateImage() { ++nativeChecks; return nativeResult; }
 static NmmpNativeIntegrityResult artResult = NMMP_NATIVE_NOT_APPLICABLE;
+static ArtIntegrityResult artRuntimeResult = ArtIntegrityResult::NORMAL;
+ArtRuntimeReport nmmpCheckArtRuntimeIntegrity() { return {artRuntimeResult, 3, 0, 0}; }
 NmmpNativeIntegrityResult nmmpVerifyArtMethods(NmmpCheckStatus *owners) {
     *owners = artResult == NMMP_NATIVE_NOT_APPLICABLE ? NMMP_CHECK_NOT_APPLICABLE : NMMP_CHECK_UNKNOWN;
     return artResult;
@@ -70,7 +87,7 @@ NmmpCheckStatus nmmpProbeLoopbackPort(uint16_t port) {
     return NMMP_CHECK_NOT_APPLICABLE;
 }
 extern "C" uint32_t nmmpProtectionPolicyFlags(void) { return policyFlags; }
-extern "C" uint32_t nmmpProtectionRecheckMillis(void) { return 20000; }
+extern "C" uint32_t nmmpProtectionRecheckMillis(void) { return 5000; }
 static void check(bool value) { if (!value) std::abort(); }
 static bool pendingException, failMethod, failCall;
 static unsigned methodCalls, booleanCalls, deletedRefs, appReads;
@@ -92,6 +109,7 @@ static jmethodID JNICALL method(JNIEnv *, jclass, const char *, const char *) { 
 static jobject JNICALL objectMethod(JNIEnv *, jobject, jmethodID, va_list) { return reinterpret_cast<jobject>(1); }
 static jfieldID JNICALL field(JNIEnv *, jclass, const char *, const char *) { return reinterpret_cast<jfieldID>(1); }
 static jint JNICALL intField(JNIEnv *, jobject, jfieldID) { ++appReads; return 2; }
+static jint JNICALL javaVm(JNIEnv *, JavaVM **vm) { *vm = nullptr; return JNI_OK; }
 
 int main(int argc, char **argv) {
     check(argc == 2);
@@ -107,6 +125,7 @@ int main(int argc, char **argv) {
     functions.CallObjectMethodV = objectMethod;
     functions.GetFieldID = field;
     functions.GetIntField = intField;
+    functions.GetJavaVM = javaVm;
     environment.functions = &functions;
     if (!std::strcmp(argv[1], "truncation")) {
         contents.assign(128, 'a');
@@ -137,7 +156,7 @@ int main(int argc, char **argv) {
     } else if (!std::strcmp(argv[1], "interval")) {
         check(nmmpProtectionPolicyInitialize(nullptr, nullptr));
         unsigned previous = opens;
-        testNow += UINT64_C(19999999999);
+        testNow += UINT64_C(4999999999);
         check(nmmpProtectionAllowCall(nullptr) && opens == previous);
         ++testNow;
         check(nmmpProtectionAllowCall(nullptr) && opens == previous + 1);
@@ -153,10 +172,10 @@ int main(int argc, char **argv) {
         if (!startup) {
             testNow += UINT64_C(20000000000);
             const unsigned offset = !std::strcmp(argv[1], "clock-periodic") ? 1
-                    : !std::strcmp(argv[1], "clock-acquired") ? 2 : 3;
+                    : !std::strcmp(argv[1], "clock-acquired") ? 2 : 4;
             failClockAt = clockCalls + offset;
             check(!nmmpProtectionAllowCall(nullptr));
-            check(opens == previous + (offset == 3 ? 1 : 0));
+            check(opens == previous + (offset == 4 ? 1 : 0));
         }
         check(nmmpProtectionLastState() == NMMP_PROTECTION_UNKNOWN);
         check(nmmpProtectionLastReasons() & NMMP_REASON_CLOCK_UNAVAILABLE);
@@ -197,11 +216,87 @@ int main(int argc, char **argv) {
         changed.notify_all();
         sampler.join();
         pauseRead = false;
-        testNow += UINT64_C(19999999999);
+        testNow += UINT64_C(4999999999);
         check(nmmpProtectionAllowCall(nullptr) && opens == previous + 1);
         ++testNow;
         check(nmmpProtectionAllowCall(nullptr) && opens == previous + 2);
         check(nmmpProtectionAllowCall(nullptr) && opens == previous + 2);
+    } else if (!std::strcmp(argv[1], "stages")) {
+        check(nmmpProtectionPolicyInitialize(nullptr, nullptr));
+        const uint64_t start = testNow;
+        check(intervalNanos(start + UINT64_C(179999999999)) == UINT64_C(5000000000));
+        check(intervalNanos(start + UINT64_C(180000000000)) == UINT64_C(10000000000));
+        check(intervalNanos(start + UINT64_C(299999999999)) == UINT64_C(10000000000));
+        check(intervalNanos(start + UINT64_C(300000000000)) == UINT64_C(30000000000));
+        testNow = start + UINT64_C(175000000000);
+        check(nmmpProtectionAllowCall(nullptr));
+        unsigned previous = opens;
+        testNow = start + UINT64_C(180000000000);
+        check(nmmpProtectionAllowCall(nullptr) && opens == previous);
+        testNow = start + UINT64_C(185000000000);
+        check(nmmpProtectionAllowCall(nullptr) && opens == ++previous);
+        testNow = start + UINT64_C(295000000000);
+        check(nmmpProtectionAllowCall(nullptr) && opens == ++previous);
+        testNow = start + UINT64_C(300000000000);
+        check(nmmpProtectionAllowCall(nullptr) && opens == previous);
+        testNow = start + UINT64_C(324999999999);
+        check(nmmpProtectionAllowCall(nullptr) && opens == previous);
+        ++testNow;
+        check(nmmpProtectionAllowCall(nullptr) && opens == previous + 1);
+    } else if (!std::strcmp(argv[1], "art-runtime-policy")) {
+        policyFlags |= NMMP_POLICY_ENFORCE;
+        artRuntimeResult = ArtIntegrityResult::MODIFIED;
+        check(!nmmpProtectionPolicyInitialize(nullptr, nullptr));
+        check(nmmpProtectionLastReasons() & NMMP_REASON_ART_RUNTIME_MODIFIED);
+        policyFlags &= ~NMMP_POLICY_ENFORCE;
+        check(nmmpProtectionAllowCall(nullptr));
+        artRuntimeResult = ArtIntegrityResult::UNSUPPORTED;
+        policyFlags |= NMMP_POLICY_ENFORCE;
+        testNow += UINT64_C(5000000000);
+        check(nmmpProtectionAllowCall(nullptr));
+        check(nmmpProtectionLastReasons() & NMMP_REASON_ART_RUNTIME_UNAVAILABLE);
+    } else if (!std::strcmp(argv[1], "worker-create-failure")) {
+        check(nmmpProtectionPolicyInitialize(nullptr, nullptr));
+        const unsigned previous = opens;
+        testNow += UINT64_C(5000000000);
+        createFails = true;
+        check(nmmpProtectionAllowCall(nullptr));
+        check(workerCreations == 1 && opens == previous);
+        for (unsigned i = 0; i < 100; ++i) check(nmmpProtectionVerifySensitiveCall(nullptr));
+        check(workerCreations == 1 && opens == previous);
+        createFails = false;
+        testNow += UINT64_C(5000000000);
+        check(nmmpProtectionAllowCall(nullptr));
+        check(workerCreations == 2 && opens == previous + 1);
+    } else if (!std::strcmp(argv[1], "async-single-worker")) {
+        check(nmmpProtectionPolicyInitialize(nullptr, nullptr));
+        const unsigned previous = opens;
+        testNow += UINT64_C(5000000000);
+        pauseRead = true;
+        realWorker = true;
+        // This returns before the worker is permitted to finish its first read.
+        check(nmmpProtectionAllowCall(nullptr));
+        {
+            std::unique_lock<std::mutex> lock(mutex);
+            changed.wait(lock, [] { return reading; });
+        }
+        for (unsigned i = 0; i < 100; ++i) {
+            check(nmmpProtectionAllowCall(nullptr));
+            check(nmmpProtectionVerifySensitiveCall(nullptr));
+        }
+        check(opens == previous + 1);
+        contents = "1000-2000 r-xp 0 00:00 0 /fixture/frida.so\n";
+        nativeResult = NMMP_NATIVE_MISMATCH;
+        {
+            std::lock_guard<std::mutex> lock(mutex);
+            resumeRead = true;
+        }
+        changed.notify_all();
+        while (__atomic_load_n(&gSampling, __ATOMIC_ACQUIRE)) std::this_thread::yield();
+        check(opens == previous + 1 && nativeChecks == 2);
+        check(!nmmpProtectionAllowCall(nullptr));
+        check(!nmmpProtectionVerifySensitiveCall(nullptr));
+        check(nmmpProtectionLastState() == NMMP_PROTECTION_INTEGRITY_FAILURE);
     } else if (!std::strcmp(argv[1], "maps-tail")) {
         contents.clear();
         for (unsigned i = 1; i < 2000; ++i) {
@@ -248,7 +343,7 @@ int main(int argc, char **argv) {
         check(nativeChecks == 1);
         testNow += UINT64_C(20000000000);
         check(nmmpProtectionAllowCall(nullptr));
-        check(environmentChecks == 3 && nativeChecks == 2);
+        check(environmentChecks == 6 && nativeChecks == 2);
     } else if (!std::strcmp(argv[1], "art-diagnostic")) {
         artResult = NMMP_NATIVE_MISMATCH;
         policyFlags |= NMMP_POLICY_ENFORCE;

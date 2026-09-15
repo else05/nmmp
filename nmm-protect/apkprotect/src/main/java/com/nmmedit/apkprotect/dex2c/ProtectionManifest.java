@@ -16,12 +16,12 @@ import java.util.List;
 /** Deterministic, authenticated contract shared by generated VM components. */
 public final class ProtectionManifest {
     public static final int VERSION = 1;
-    public static final int POLICY_VERSION = 5;
+    public static final int POLICY_VERSION = 7;
     public static final int POLICY_ENFORCE = 1;
     public static final int POLICY_CHECK_DEBUG = 1 << 1;
     public static final int POLICY_CHECK_MAPS = 1 << 2;
     public static final int POLICY_CHECK_ENVIRONMENT = 1 << 3;
-    public static final int RECHECK_MILLIS = 20_000;
+    public static final int RECHECK_MILLIS = 5_000;
     public static final int DIGEST_SIZE = 32;
     private static final int HEADER_SIZE = 96;
     private static final int ENTRY_SIZE = 120;

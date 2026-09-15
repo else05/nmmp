@@ -10,9 +10,9 @@
 #include <cstring>
 #include <cstdlib>
 #include <cerrno>
-#if defined(NMMP_DIAGNOSTICS)
-#include <android/log.h>
-#define NMMP_ART_LOG(...) __android_log_print(ANDROID_LOG_INFO, "NMMP_ART", __VA_ARGS__)
+#if defined(NMMP_DIAGNOSTICS) && NMMP_DIAGNOSTICS
+#include "CheckLog.h"
+#define NMMP_ART_LOG(...) nmmpCheckLog("NMMP_ART", __VA_ARGS__)
 #else
 #define NMMP_ART_LOG(...) ((void)0)
 #endif
@@ -168,7 +168,13 @@ NmmpNativeIntegrityResult nmmpVerifyArtMethods(NmmpCheckStatus *entryOwners) {
             ? NMMP_NATIVE_UNAVAILABLE : NMMP_NATIVE_MATCH;
     for (size_t i = 0; i < count; ++i) {
         MethodState state;
-        if (!stableState(snapshot[i]->method, state)) { result = NMMP_NATIVE_UNAVAILABLE; continue; }
+        if (!stableState(snapshot[i]->method, state)) {
+            NMMP_ART_LOG("method_index=%zu status=UNAVAILABLE", i);
+            result = NMMP_NATIVE_UNAVAILABLE; continue;
+        }
+        NMMP_ART_LOG("method_index=%zu flags_status=%s jni_status=%s", i,
+                     (state.flags & 0x108u) == snapshot[i]->flags ? "PASS" : "MISMATCH",
+                     state.native == snapshot[i]->expected ? "PASS" : "MISMATCH");
         if ((state.flags & 0x108u) != snapshot[i]->flags || state.native != snapshot[i]->expected)
             return NMMP_NATIVE_MISMATCH;
         quick[i] = state.quick;
@@ -182,6 +188,7 @@ NmmpNativeIntegrityResult nmmpVerifyArtMethods(NmmpCheckStatus *entryOwners) {
             *entryOwners = NMMP_CHECK_PASS;
             for (size_t i = 0; i < count; ++i) {
                 const auto owner = nmmpInspectAddress(maps, modules, nullptr, 0, quick[i]);
+                NMMP_ART_LOG("method_index=%zu quick_owner=%d permissions=0x%x", i, (int)owner.owner, owner.permissions);
                 if (!(owner.permissions & NMMP_MAP_EXEC) || owner.owner == NMMP_OWNER_UNKNOWN) {
                     if (*entryOwners != NMMP_CHECK_SIGNAL) *entryOwners = NMMP_CHECK_UNKNOWN;
                 } else if (owner.owner != NMMP_OWNER_ART && owner.owner != NMMP_OWNER_OAT

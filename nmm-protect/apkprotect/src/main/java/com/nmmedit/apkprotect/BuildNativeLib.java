@@ -227,9 +227,8 @@ public class BuildNativeLib {
                     String.format("-DCMAKE_SYSTEM_VERSION=%d", getApiLevel()),
                     String.format("-B%s", getBuildPath()),
                     "-GNinja"));
-            if (Boolean.getBoolean("nmmp.diagnostics")) {
-                arguments.add("-DNMMP_DIAGNOSTICS=ON");
-            }
+            arguments.add("-DNMMP_DIAGNOSTICS="
+                    + (Boolean.getBoolean("nmmp.diagnostics") ? "ON" : "OFF"));
             return arguments;
         }
 

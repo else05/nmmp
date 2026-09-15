@@ -6,6 +6,7 @@
 #include "ProtectionManifestConfig.h"
 #include "Stage0.h"
 #include "vendor/monocypher/monocypher.h"
+#include "CheckLog.h"
 #include <android/log.h>
 #include <android/api-level.h>
 #include <string.h>
@@ -81,7 +82,7 @@ static int initialize(void *opaque) {
         goto failed;
     }
 #if defined(NMMP_DIAGNOSTICS) && NMMP_DIAGNOSTICS
-    __android_log_print(ANDROID_LOG_INFO, "NMMP-Loader",
+    NMMP_LOG(ANDROID_LOG_INFO, "NMMP-Loader",
                         "ready id=%02x%02x%02x%02x bias=%p size=%zu unpack_us=%llu map_us=%llu constructors_us=%llu bootstrap_us=%llu key_us=%llu",
                         nmmp_build_id[0], nmmp_build_id[1], nmmp_build_id[2], nmmp_build_id[3],
                         (void *)nmmp_image_bias(module), nmmp_image_size(module),
@@ -98,9 +99,8 @@ failed:
     nmmp_free_secret(decoded, decoded_size);
     nmmp_discard_image(module); /* Does nothing after constructors have started. */
 #if defined(NMMP_DIAGNOSTICS) && NMMP_DIAGNOSTICS
-    __android_log_print(ANDROID_LOG_ERROR, "NMMP-Loader", "initialization failed (%d)", error);
-#else
-    __android_log_print(ANDROID_LOG_ERROR, "NMMP-Loader", "initialization failed");
+    NMMP_LOG(ANDROID_LOG_ERROR, "NMMP-Loader", "initialization failed (%d)", error);
+
 #endif
     return -1;
 }

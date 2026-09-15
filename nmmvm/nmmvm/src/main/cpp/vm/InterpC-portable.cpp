@@ -21,7 +21,7 @@
 /*
  * If enabled, log instructions as we execute them.
  */
-#ifdef LOG_INSTR
+#if defined(NMMP_DIAGNOSTICS) && NMMP_DIAGNOSTICS && defined(LOG_INSTR)
 
 void dvmDumpRegs(const jmethodID method, const u4 *framePtr, bool inOnly) {
 

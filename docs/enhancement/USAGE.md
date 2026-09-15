@@ -53,7 +53,11 @@ java -Dnmmp.artifact.privateKey=/absolute/path/artifact-private.pk8 \
 
 ## 敏感入口诊断与无 SO 的 APK
 
-通过 `-Dnmmp.sensitiveMethodsFile=<UTF-8 清单>` 指定最多 20 个精确 DEX 方法，详见 [当前 Java 检测](JAVA_DETECTION_CURRENT.md)。`-Dnmmp.diagnostics=true` 将已有 CMake `NMMP_DIAGNOSTICS` 开关传入构建，启用 loader 和 ArtMethod 的诊断输出，默认关闭。新增 ArtMethod 日志只报告校准结果、登记数量和检查状态，不输出函数地址或密钥。
+通过 `-Dnmmp.sensitiveMethodsFile=<UTF-8 清单>` 指定最多 20 个精确 DEX 方法，详见 [当前 Java 检测](JAVA_DETECTION_CURRENT.md)。只有 `-Dnmmp.diagnostics=true` 才启用日志；构建显式传入 CMake ON/OFF，防止复用缓存时误开启。关闭时 NMMP 日志调用及正文在预处理阶段剔除，loader 失败也不输出日志。开启时 loader、检测、ArtMethod 与旧 ALOG 统一输出到 logcat 和应用私有目录 `/data/data/<package>/check.log`，记录时间、PID、级别、轮次、18 个检查组、环境项执行/缓存/关闭统计、逐项结果及最终判定，并展开已登记方法、SO 可执行段和 GOT 槽位。18 为检查组数量，不代表动态子项总数。默认不启用逐条指令跟踪；手工 LOG_INSTR 也须同时启用诊断才生效。日志文件由应用 UID 拥有，不需要 `WRITE_EXTERNAL_STORAGE`；无法写文件在 logcat 报告 errno，不改变保护判定。检测符号、匹配字符串及 Java 异常信息属于功能数据，不随日志开关删除。
+
+周期环境检测从保护初始化完成开始计时：不足 3 分钟每 5 秒，3～5 分钟每 10 秒，5 分钟起每 30 秒。每轮完成时间开始计算下次间隔，由受保护方法调用提交单个后台任务；无调用时不扫描。线程及 27042/27043 端口每轮重新采样，依赖 Context 的框架类和包 CREATOR 检查保留启动结果。Native 映像完整性每轮后台检查。普通与敏感入口共用周期及采样锁，调用直接使用最近完成的判定，锁忙不拒绝调用。敏感入口仅在抢到本轮任务时在调用线程提取有界调用栈，其余检测与文件日志在附着 JVM 的后台线程执行。启动验证仍同步完成；后台结果约束后续调用，不撤销已开始的调用。线程创建或 JVM 附着失败保留原判定，按周期重试，不在业务线程同步补扫。
+
+API27 ARM64 新增 [ART Runtime Hook 规则](ART_RUNTIME_CURRENT.md)：启动及后台周期比较三个底层 trampoline 的磁盘原码与运行时代码，结合跳板目标归属报告修改信号。enforce 模式下确认修改拒绝后续调用，观察模式只报告；无法检查记录独立不可用状态。系统 libart 文件须可信，不能以这些变化唯一断言 Frida。Policy version 为 7。
 
 不含 native SO 的 APK 现在默认生成 arm64-v8a，不再采用旧的 armeabi-v7a 偏好。APK 实际包含不支持的 ABI 时仍明确失败；不会删除它们后假装是纯 Java APK。
 

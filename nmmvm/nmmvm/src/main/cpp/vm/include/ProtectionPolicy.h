@@ -11,9 +11,9 @@ extern "C" {
 #endif
 bool nmmpProtectionPolicyInitialize(JNIEnv *env, jobject context);
 bool nmmpProtectionAllowCall(JNIEnv *env);
-// Explicit sensitive-operation gate: performs fresh applicable image checks and
-// bounded Java stack diagnostic. Busy/unavailable returns false; caller must
-// not execute the operation. This does not change the periodic sampling clock.
+// Returns the latest decision and requests a single background round when due.
+// Busy does not reject a call. The winning sensitive requester captures bounded
+// caller-stack evidence; heavy checks run on the worker, at the periodic cadence.
 bool nmmpProtectionVerifySensitiveCall(JNIEnv *env);
 void nmmpProtectionMarkIntegrityFailure(void);
 NmmpProtectionState nmmpProtectionLastState(void);

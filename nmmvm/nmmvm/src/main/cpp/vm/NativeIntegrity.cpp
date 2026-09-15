@@ -4,6 +4,7 @@
 #include "NativeIntegrity.h"
 #include "PrivateLoaderState.h"
 #include "Sha256.h"
+#include "CheckLog.h"
 #include <sys/uio.h>
 #include <unistd.h>
 #include <cerrno>
@@ -37,6 +38,7 @@ NmmpNativeIntegrityResult nmmpVerifyExecutableSegments(const NmmpImageSegment *s
         uint8_t digest[32], difference = 0;
         nmmpSha256Final(&hash, digest);
         for (size_t b = 0; b < sizeof(digest); ++b) difference |= digest[b] ^ segment.executable_digest[b];
+        NMMP_CHECK_LOG("native_segment_index=%zu executable_bytes=%zu status=%s", i, (size_t)segment.file_size, difference ? "MISMATCH" : "PASS");
         if (difference) return NMMP_NATIVE_MISMATCH;
         ++checked;
     }
@@ -58,6 +60,7 @@ NmmpNativeIntegrityResult nmmpVerifyImportSlots(const NmmpImportSlot *slots, siz
         do { result = process_vm_readv(getpid(), &local, 1, &remote, 1, 0); }
         while (result < 0 && errno == EINTR && ++interruptions <= 64);
         if (result != sizeof(actual)) return NMMP_NATIVE_UNAVAILABLE;
+        NMMP_CHECK_LOG("native_import_index=%zu symbol_id=%u status=%s", i, slot.symbol_id, actual == slot.expected ? "PASS" : "MISMATCH");
         if (actual != slot.expected) return NMMP_NATIVE_MISMATCH;
     }
     return NMMP_NATIVE_MATCH;

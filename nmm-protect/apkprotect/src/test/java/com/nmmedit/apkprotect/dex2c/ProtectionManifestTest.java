@@ -49,8 +49,8 @@ public class ProtectionManifestTest {
         assertEquals("NMMPMF01", new String(Arrays.copyOfRange(built.getBytes(), 0, 8)));
         assertEquals(ProtectionManifest.VERSION, data.getInt(8));
         assertEquals(built.getBytes().length, data.getInt(12));
-        assertEquals(2, data.getInt(32));
-        assertEquals(20_000, data.getInt(40));
+        assertEquals(ProtectionManifest.POLICY_VERSION, data.getInt(32));
+        assertEquals(5_000, data.getInt(40));
         assertEquals(2, data.getInt(44));
         int entries = 96 + data.getInt(48);
         assertEquals(2, Integer.toUnsignedLong(data.getInt(entries)));

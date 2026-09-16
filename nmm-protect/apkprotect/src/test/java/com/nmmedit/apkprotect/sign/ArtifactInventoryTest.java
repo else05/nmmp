@@ -138,7 +138,7 @@ public class ArtifactInventoryTest {
         try (DataInputStream input = new DataInputStream(new ByteArrayInputStream(first))) {
             byte[] magic = new byte[8];
             input.readFully(magic);
-            assertEquals("NMMPAINV", new String(magic, StandardCharsets.US_ASCII));
+            assertEquals("ARTINV01", new String(magic, StandardCharsets.US_ASCII));
             assertEquals(1, input.readInt());
             assertEquals(17, input.readLong());
             byte[] identity = new byte[input.readInt()];

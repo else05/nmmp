@@ -104,7 +104,7 @@ public:
         const bool valid = started_ != 0 && finished >= started_;
         const long long elapsed = valid
                 ? static_cast<long long>((finished - started_) / UINT64_C(1000)) : -1;
-        NMMP_CHECK_LOG("[NMMP_TIMING] round=%llu point=%s elapsed_us=%lld valid=%d",
+        NMMP_CHECK_LOG("[RUNTIME_TIMING] round=%llu point=%s elapsed_us=%lld valid=%d",
                        (unsigned long long)gDiagnosticRound, point_, elapsed, valid ? 1 : 0);
     }
 

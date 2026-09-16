@@ -36,7 +36,7 @@ static inline int nmmpDiagnosticLogPath(char *path, size_t capacity) {
 
 static inline void nmmpDiagnosticVLog(int priority, const char *tag, const char *format, va_list args) {
     const int savedErrno = errno;
-    if (!tag) tag = "NMMP";
+    if (!tag) tag = "Runtime";
     char message[1536];
     vsnprintf(message, sizeof(message), format, args);
     __android_log_write(priority, tag, message);
@@ -72,7 +72,7 @@ static inline void nmmpDiagnosticLog(int priority, const char *tag, const char *
 }
 #define nmmpCheckLog(tag, ...) nmmpDiagnosticLog(ANDROID_LOG_INFO, tag, __VA_ARGS__)
 #define NMMP_LOG(priority, tag, ...) nmmpDiagnosticLog(priority, tag, __VA_ARGS__)
-#define NMMP_CHECK_LOG(...) nmmpCheckLog("NMMP_CHECK", __VA_ARGS__)
+#define NMMP_CHECK_LOG(...) nmmpCheckLog("RuntimeCheck", __VA_ARGS__)
 #else
 #define NMMP_LOG(...) ((void)0)
 #define NMMP_CHECK_LOG(...) ((void)0)

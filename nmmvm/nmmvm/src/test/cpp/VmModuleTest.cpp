@@ -72,7 +72,7 @@ static void transform(std::vector<uint8_t> &b, uint64_t seed, uint32_t id, uint3
 }
 static std::vector<uint8_t> fixture() {
     std::vector<uint8_t> blob(1181), rows(1024), bounds = {0x21}, r(56);
-    memcpy(blob.data(), "NMMPOD03", 8);
+    memcpy(blob.data(), "VMOD0003", 8);
     put32(blob, 8, 3); put32(blob, 12, 4); put32(blob, 16, 9); put32(blob, 20, 1);
     put32(blob, 24, 64); put32(blob, 28, 128); put32(blob, 32, 1152);
     put32(blob, 36, 1); put32(blob, 40, 1153); put32(blob, 44, 1157);

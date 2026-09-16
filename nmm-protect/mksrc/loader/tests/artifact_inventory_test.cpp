@@ -29,7 +29,7 @@ static void replaceInteger(std::vector<uint8_t> &body, size_t offset, uint64_t v
 }
 static std::vector<uint8_t> make(const std::vector<std::string> &names, uint64_t size = 1) {
     std::vector<uint8_t> body;
-    const char magic[] = "NMMPAINV";
+    const char magic[] = "ARTINV01";
     body.insert(body.end(), magic, magic + 8);
     integer(body, 1, 4);
     integer(body, 17, 8);

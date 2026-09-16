@@ -275,7 +275,7 @@ def imports_for(elf, sysroot, readelf):
     return imports
 
 
-def split(elf, imports, entry_name='nmmp_inner_bootstrap_v1'):
+def split(elf, imports, entry_name='runtime_inner_bootstrap_v1'):
     matches = [i for i, s in enumerate(elf.symbols) if s[3] and elf.string(s[0]) == entry_name]
     require(len(matches) == 1, 'bootstrap export')
     entry = matches[0]
@@ -311,7 +311,7 @@ def split(elf, imports, entry_name='nmmp_inner_bootstrap_v1'):
         seg_table += struct.pack('<7Q', p[3], p[5], p[6], p[7], p[1], cursor, len(data))
         content += data
         cursor += len(data)
-    header = struct.pack('<8sIHH6I3Q', b'NMMPIM01', 1, 183, 3, 0, len(elf.loads), len(blocks),
+    header = struct.pack('<8sIHH6I3Q', b'PRVIMG01', 1, 183, 3, 0, len(elf.loads), len(blocks),
                          len(imports), elf.nsym, entry, seg_off, block_off, import_off)
     result = header + seg_table + block_table + b''.join(struct.pack('<5I', *i) for i in imports) + content
     require(len(result) == cursor and len(result) <= LIMIT, 'decoded limit')
@@ -330,7 +330,7 @@ def seal(content, build_id, java='java', key=None, nonce=None):
     require(64 <= len(content) <= LIMIT, 'decoded size limit')
     compressed = zlib.compress(content, 9)
     require(len(compressed) <= LIMIT, 'compressed size limit')
-    header = struct.pack('<8s6I16sQQ12sI', b'NMMPPL01', 1, 1, 183, 1, 1, 80,
+    header = struct.pack('<8s6I16sQQ12sI', b'PRVPKG01', 1, 1, 183, 1, 1, 80,
                          build_id, len(compressed), len(content), nonce, 0)
     encrypted = subprocess.run([java, str(Path(__file__).with_name('Seal.java'))],
                                input=key + header + compressed, capture_output=True, check=True).stdout

@@ -46,7 +46,7 @@ bool nmmpAuthenticateArtifactInventory(const uint8_t *envelope, size_t envelope_
     if (!count) return false;
     *count = 0;
     if (!envelope || !public_key || public_key_size != 32 || envelope_size < 80
-            || envelope_size > NMMP_ARTIFACT_MAX_BODY + 80u || std::memcmp(envelope, "NMMPASIG", 8)
+            || envelope_size > NMMP_ARTIFACT_MAX_BODY + 80u || std::memcmp(envelope, "ARTSIG01", 8)
             || big32(envelope + 8) != 1) return false;
     const uint32_t size = big32(envelope + 12);
     if (!size || size > NMMP_ARTIFACT_MAX_BODY || envelope_size - 80 != size) return false;

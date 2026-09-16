@@ -92,7 +92,7 @@ public class DemandModuleTest {
         DemandModule.Built built = module.build();
         byte[] blob = built.blob;
         ByteBuffer h = le(blob);
-        assertEquals("NMMPOD03", new String(blob, 0, 8, StandardCharsets.US_ASCII));
+        assertEquals("VMOD0003", new String(blob, 0, 8, StandardCharsets.US_ASCII));
         assertEquals(3, h.getInt(8)); assertEquals(4, h.getInt(12));
         assertEquals(MODULE, Integer.toUnsignedLong(h.getInt(16)));
         assertEquals(32, h.getInt(20)); assertEquals(64, h.getInt(24));
@@ -237,7 +237,7 @@ public class DemandModuleTest {
         long tag = DemandCodec.tag("LModuleVector;->run()V");
         long seed = DemandCodec.seed(0x0123456789abcdefL, 1, tag, 2, 0);
         JsonObject json = new JsonObject();
-        json.addProperty("format", "NMMPOD03");
+        json.addProperty("format", "VMOD0003");
         json.addProperty("blob", "module-vector.bin");
         json.addProperty("rootHex", "0123456789abcdef");
         json.addProperty("moduleId", 9);

@@ -1,7 +1,7 @@
 #ifndef NMMP_ARTIFACT_APK_H
 #define NMMP_ARTIFACT_APK_H
 #include "ArtifactInventory.h"
-#define NMMP_ARTIFACT_APK_ENTRY "assets/nmmp/artifact.sig"
+#define NMMP_ARTIFACT_APK_ENTRY "assets/runtime/artifact.sig"
 #ifdef __cplusplus
 extern "C" {
 #endif

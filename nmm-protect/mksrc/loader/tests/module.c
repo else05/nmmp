@@ -17,7 +17,7 @@ __attribute__((constructor(102))) static void second(void) {
     zero_data[511] = 19;
 }
 __attribute__((visibility("default")))
-int nmmp_inner_bootstrap_v1(void) {
+int runtime_inner_bootstrap_v1(void) {
     int descriptor = open("/dev/null", O_RDONLY, 0);
     if (descriptor < 0 || close(descriptor)) return -2;
     char text[32];

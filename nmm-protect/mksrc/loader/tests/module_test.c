@@ -46,7 +46,7 @@ int main(int argc, char **argv) {
     check(argc == 3, "module and content arguments");
     void *normal = dlopen(argv[1], RTLD_NOW | RTLD_LOCAL);
     check(normal != NULL, "system load");
-    int (*reference)(void) = dlsym(normal, "nmmp_inner_bootstrap_v1");
+    int (*reference)(void) = dlsym(normal, "runtime_inner_bootstrap_v1");
     check(reference && reference() == 12345, "system constructors and function");
     check(!dlclose(normal), "system close");
     FILE *f = fopen(argv[2], "rb");

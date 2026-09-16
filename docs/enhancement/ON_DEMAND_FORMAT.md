@@ -6,7 +6,7 @@ codec 3 / template 5。所有持久化整数使用显式 little-endian，偏移/
 
 每 DEX 一个模块；moduleId 复用该 DEX 的构建 ID，methodId 在整次构建唯一。JNI wrapper 只传模块、随机 u32 token、调用寄存器/标志及实际帧容量。容量是方案伪接口的显式补充，用来拒绝错误记录导致的帧越界。
 
-64 字节 header：magic `NMMPOD03` @0；codec @8；template @12；moduleId @16；count @20；directory offset=64 @24；map offset @28；boundary offset @32；boundary bytes @36；data offset @40；total bytes @44；u64 buildId @48；保留零 @56、60。
+64 字节 header：magic `VMOD0003` @0；codec @8；template @12；moduleId @16；count @20；directory offset=64 @24；map offset @28；boundary offset @32；boundary bytes @36；data offset @40；total bytes @44；u64 buildId @48；保留零 @56、60。
 
 目录为 count 个 `(token, recordOffset)`，每项 8 字节，按无符号 token 严格递增。记录紧接目录，每条 56 字节，存储顺序随机。随后为 1024 字节映射、编码的边界块、各方法编码指令/异常区；不插入对齐间隙。
 

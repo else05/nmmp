@@ -25,7 +25,7 @@ public final class ProtectionManifest {
     public static final int DIGEST_SIZE = 32;
     private static final int HEADER_SIZE = 96;
     private static final int ENTRY_SIZE = 120;
-    private static final byte[] MAGIC = "NMMPMF01".getBytes(StandardCharsets.US_ASCII);
+    private static final byte[] MAGIC = "PRTMAN01".getBytes(StandardCharsets.US_ASCII);
     private static final byte[] KEY_XOR_MASK = {
             (byte) 0x91, 0x37, (byte) 0xe4, 0x2b, 0x6d, (byte) 0xa8, 0x53, (byte) 0xc1,
             0x0f, 0x72, (byte) 0xb9, 0x44, (byte) 0xde, 0x18, (byte) 0x85, 0x6a,

@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-/** Builds and verifies the NMMPOD03 module. All complete decoding is build-time only. */
+/** Builds and verifies the VMOD0003 module. All complete decoding is build-time only. */
 public final class DemandModule {
     public static final int HEADER_SIZE = 64;
     public static final int RECORD_SIZE = 56;
@@ -84,7 +84,7 @@ public final class DemandModule {
         int dataOff = size(boundaryOff + boundaryBytes);
         byte[] blob = new byte[size(dataOff + dataBytes)];
         ByteBuffer out = ByteBuffer.wrap(blob).order(ByteOrder.LITTLE_ENDIAN);
-        out.put("NMMPOD03".getBytes(StandardCharsets.US_ASCII));
+        out.put("VMOD0003".getBytes(StandardCharsets.US_ASCII));
         out.putInt(3).putInt(4).putInt((int)moduleId).putInt(entries.size());
         out.putInt(HEADER_SIZE).putInt(mapOff).putInt(boundaryOff).putInt(size(boundaryBytes));
         out.putInt(dataOff).putInt(blob.length).putLong(buildId).putInt(0).putInt(0);

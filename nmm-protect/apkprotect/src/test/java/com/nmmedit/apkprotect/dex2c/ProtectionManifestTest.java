@@ -46,7 +46,7 @@ public class ProtectionManifestTest {
         assertSame(built, first.build());
         assertTrue(ProtectionManifest.verify(built));
         ByteBuffer data = ByteBuffer.wrap(built.getBytes()).order(ByteOrder.LITTLE_ENDIAN);
-        assertEquals("NMMPMF01", new String(Arrays.copyOfRange(built.getBytes(), 0, 8)));
+        assertEquals("PRTMAN01", new String(Arrays.copyOfRange(built.getBytes(), 0, 8)));
         assertEquals(ProtectionManifest.VERSION, data.getInt(8));
         assertEquals(built.getBytes().length, data.getInt(12));
         assertEquals(ProtectionManifest.POLICY_VERSION, data.getInt(32));

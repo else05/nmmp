@@ -13,7 +13,7 @@
 #include <cerrno>
 #if defined(NMMP_DIAGNOSTICS) && NMMP_DIAGNOSTICS
 #include "CheckLog.h"
-#define NMMP_ART_LOG(...) nmmpCheckLog("NMMP_ART", __VA_ARGS__)
+#define NMMP_ART_LOG(...) nmmpCheckLog("RuntimeArt", __VA_ARGS__)
 #else
 #define NMMP_ART_LOG(...) ((void)0)
 #endif

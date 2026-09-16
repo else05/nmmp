@@ -471,7 +471,7 @@ public class ApkProtect {
         //处理后的zip数据
         final ZipSource zipSource = new ZipSource(zipMap);
         for (String entryName : zipMap.getEntries().keySet()) {
-            if (regex.matcher(entryName).matches() || ArtifactSigner.APK_ENTRY.equals(entryName)) {
+            if (regex.matcher(entryName).matches() || ArtifactSigner.isReservedApkEntry(entryName)) {
                 continue;
             }
             //不改变压缩数据,4字节对齐

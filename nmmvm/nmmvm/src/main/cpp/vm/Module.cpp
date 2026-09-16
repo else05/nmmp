@@ -107,7 +107,7 @@ static bool initialize(void *argument) {
     size_t allocation = 0;
     bool ok = false;
     do {
-        if (!b || m->size < HEADER || memcmp(b, "NMMPOD03", 8)
+        if (!b || m->size < HEADER || memcmp(b, "VMOD0003", 8)
                 || u32(b + 8) != 3 || u32(b + 12) != 4 || u32(b + 16) != m->moduleId
                 || u32(b + 24) != HEADER || u32(b + 44) != m->size || u64(b + 48) != m->buildId
                 || u32(b + 56) || u32(b + 60) || vmCodecHash(b, m->size) != m->hash) break;

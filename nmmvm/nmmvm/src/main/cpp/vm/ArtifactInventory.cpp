@@ -60,7 +60,7 @@ bool nmmpParseArtifactInventory(const uint8_t *body, size_t body_size,
     Reader reader = {body, body_size};
     const uint8_t *magic, *package;
     uint64_t version, build_id, name_size, entry_count;
-    if (!reader.bytes(8, &magic) || std::memcmp(magic, "NMMPAINV", 8)
+    if (!reader.bytes(8, &magic) || std::memcmp(magic, "ARTINV01", 8)
             || !reader.integer(4, &version) || version != 1
             || !reader.integer(8, &build_id) || build_id != expected_build_id
             || !reader.integer(4, &name_size) || name_size != package_size

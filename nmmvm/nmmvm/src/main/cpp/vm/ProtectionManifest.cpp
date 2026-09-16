@@ -91,7 +91,7 @@ static bool initializeManifest(void *argument) {
     auto *args = static_cast<ActivationArguments *>(argument);
     if (!args || !args->manifest || !args->tag || !args->keyXor || !args->expectedId
             || args->manifestSize < kHeaderSize || args->manifestSize > kMaximumManifestSize
-            || std::memcmp(args->manifest, "NMMPMF01", 8) != 0
+            || std::memcmp(args->manifest, "PRTMAN01", 8) != 0
             || u32(args->manifest + 8) != 1 || u32(args->manifest + 12) != args->manifestSize
             || u64(args->manifest + 16) != NMMP_VM_BUILD_ID
             || u32(args->manifest + 24) != NMMP_VM_CODEC_VERSION

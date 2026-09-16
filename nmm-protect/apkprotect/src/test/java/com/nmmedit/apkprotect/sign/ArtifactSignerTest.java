@@ -25,6 +25,11 @@ public class ArtifactSignerTest {
         ArtifactSigner signer = new ArtifactSigner(key.getPrivate(), key.getPublic());
         ArtifactInventory inventory = inventory();
         byte[] envelope = signer.sign(inventory);
+        assertEquals("assets/runtime/artifact.sig", ArtifactSigner.APK_ENTRY);
+        assertFalse(ArtifactSigner.APK_ENTRY.toLowerCase(java.util.Locale.ROOT).contains("nmmp"));
+        assertTrue(ArtifactSigner.isReservedApkEntry(ArtifactSigner.APK_ENTRY));
+        assertTrue(ArtifactSigner.isReservedApkEntry(String.join("", "assets/", "nm", "mp", "/artifact.sig")));
+        assertArrayEquals(new byte[]{'A','R','T','S','I','G','0','1'}, Arrays.copyOf(envelope, 8));
         assertArrayEquals(envelope, signer.sign(inventory));
         Signature verifier = Signature.getInstance("Ed25519");
         verifier.initVerify(key.getPublic());

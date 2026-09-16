@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-extern int nmmp_inner_bootstrap_v1(JavaVM *, void *, const NmmpHostV1 *, NmmpInnerResultV1 *);
+extern int runtime_inner_bootstrap_v1(JavaVM *, void *, const NmmpHostV1 *, NmmpInnerResultV1 *);
 static int stage, pending, binding_calls, mode;
 static void check(int ok) { if (!ok) abort(); }
 static jboolean exception_check(JNIEnv *env) { (void)env; return pending ? JNI_TRUE : JNI_FALSE; }
@@ -54,13 +54,13 @@ int main(int argc, char **argv) {
     check(argc == 2);
     mode = atoi(argv[1]);
     int failed = 0;
-    NmmpImageSegment segment = {(uintptr_t)&nmmp_inner_bootstrap_v1, 1, 1, NMMP_IMAGE_READ | NMMP_IMAGE_EXEC, 0};
+    NmmpImageSegment segment = {(uintptr_t)&runtime_inner_bootstrap_v1, 1, 1, NMMP_IMAGE_READ | NMMP_IMAGE_EXEC, 0};
     NmmpHostV1 host = {
             .abi_version = NMMP_PRIVATE_BOOTSTRAP_ABI,
             .struct_size = sizeof(host),
             .outer_anchor = &failed,
             .failure_state = &failed,
-            .image_start = (const void *)&nmmp_inner_bootstrap_v1,
+            .image_start = (const void *)&runtime_inner_bootstrap_v1,
             .image_size = 1,
             .segments = &segment,
             .segment_count = 1
@@ -75,7 +75,7 @@ int main(int argc, char **argv) {
     JavaVM vm = &vm_table;
     if (mode == 1) host.struct_size--;
     if (mode == 2) host.build_id[0] = 1;
-    int status = nmmp_inner_bootstrap_v1(&vm, NULL, &host, &result);
+    int status = runtime_inner_bootstrap_v1(&vm, NULL, &host, &result);
     if (mode >= 1 && mode <= 5) {
         check(status != 0 && !binding_calls);
         check(stage == (mode < 4 ? 0 : mode == 4 ? 1 : 2));

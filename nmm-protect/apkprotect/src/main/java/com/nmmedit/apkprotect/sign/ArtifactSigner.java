@@ -12,7 +12,8 @@ import java.util.Arrays;
 
 /** Offline Ed25519 signing. Only getRawPublicKey() is suitable for APK embedding. */
 public final class ArtifactSigner {
-    public static final String APK_ENTRY = "assets/nmmp/artifact.sig";
+    public static final String APK_ENTRY = "assets/runtime/artifact.sig";
+    private static final String LEGACY_APK_ENTRY = String.join("", "assets/", "nm", "mp", "/artifact.sig");
     private static final byte[] PUBLIC_PREFIX = {0x30,0x2a,0x30,0x05,0x06,0x03,0x2b,0x65,0x70,0x03,0x21,0x00};
     private final PrivateKey privateKey;
     private final PublicKey publicKey;
@@ -29,7 +30,7 @@ public final class ArtifactSigner {
         this.publicKey = publicKey;
         this.rawPublicKey = Arrays.copyOfRange(encoded, PUBLIC_PREFIX.length, encoded.length);
         // Fail before starting a build if the provider or key pair is unusable.
-        signMessage(new byte[]{'N','M','M','P','-','K','E','Y','-','C','H','E','C','K'});
+        signMessage(new byte[]{'A','R','T','-','K','E','Y','-','C','H','E','C','K'});
     }
 
     public static ArtifactSigner load(Path privatePkcs8, Path publicX509) throws IOException, GeneralSecurityException {
@@ -69,11 +70,15 @@ public final class ArtifactSigner {
 
     public byte[] getRawPublicKey() { return rawPublicKey.clone(); }
 
+    public static boolean isReservedApkEntry(String entryName) {
+        return APK_ENTRY.equals(entryName) || LEGACY_APK_ENTRY.equals(entryName);
+    }
+
     public byte[] sign(ArtifactInventory inventory) throws IOException, GeneralSecurityException {
         byte[] body = inventory.encode();
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         try (DataOutputStream output = new DataOutputStream(bytes)) {
-            output.write(new byte[]{'N','M','M','P','A','S','I','G'});
+            output.write(new byte[]{'A','R','T','S','I','G','0','1'});
             output.writeInt(1);
             output.writeInt(body.length);
             output.write(body);

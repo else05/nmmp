@@ -19,7 +19,7 @@ def fixture():
                (0x6474e552, 4, 0x2000, 0x3000, 0x3000, 0x400, 0x1000, 1)]
     for i, h in enumerate(headers):
         struct.pack_into('<IIQQQQQQ', data, 64 + i * 56, *h)
-    strings = b'\0nmmp_inner_bootstrap_v1\0'
+    strings = b'\0runtime_inner_bootstrap_v1\0'
     data[0x380:0x380 + len(strings)] = strings
     struct.pack_into('<IBBHQQ', data, 0x300 + 24, 1, 18, 0, 1, 0x1000, 8)
     struct.pack_into('<5I', data, 0x400, 1, 2, 1, 0, 0)
@@ -38,7 +38,7 @@ def fixture():
 
 def version_fixture():
     data = bytearray(fixture())
-    strings = b'\0nmmp_inner_bootstrap_v1\0libc.so\0LIBC\0external\0'
+    strings = b'\0runtime_inner_bootstrap_v1\0libc.so\0LIBC\0external\0'
     provider, version, external = strings.index(b'libc.so'), strings.index(b'LIBC'), strings.index(b'external')
     data[0x380:0x380 + len(strings)] = strings
     struct.pack_into('<IBBHQQ', data, 0x330, external, 18, 0, 0, 0, 0)
@@ -62,7 +62,7 @@ class PackTest(unittest.TestCase):
         elf = pack.Elf(original)
         content = pack.split(elf, [])
         header = pack.unpack('<8sIHH6I3Q', content)
-        self.assertEqual(header[:4], (b'NMMPIM01', 1, 183, 3))
+        self.assertEqual(header[:4], (b'PRVIMG01', 1, 183, 3))
         self.assertEqual(header[5:9], (2, 4, 0, 2))
         blocks = [pack.unpack('<IIQQQ', content, header[11] + i * 32) for i in range(4)]
         for i, p in enumerate(elf.loads):

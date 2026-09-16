@@ -52,7 +52,7 @@ ctest --test-dir <host-build> --output-on-failure
 
 Android 测试使用 NDK toolchain、arm64-v8a 和 android-26。`GenerateInitFixtures.java` 以当前 JAR 为 classpath 输出绑定/未绑定初始化源码；配置 `NMMP_GENERATED_INIT_TESTS` 后生成 bootstrap 测试程序。实际命令、输入/输出摘要及原始样本见验证目录。
 
-outer 以 `NMMP-Loader` tag 记录 build ID 前缀、load_bias、映射大小和低频装载阶段耗时，不打印 key。完整 build ID 和带符号 inner 留在对应 CMake `private/` 目录。符号化时将崩溃 PC 减去同进程记录的 load_bias，再执行：
+outer 以 `RuntimeLoader` tag 记录 build ID 前缀、load_bias、映射大小和低频装载阶段耗时，不打印 key。完整 build ID 和带符号 inner 留在对应 CMake `private/` 目录。符号化时将崩溃 PC 减去同进程记录的 load_bias，再执行：
 
 ```text
 llvm-symbolizer --obj=<private/libnmmp_inner.so> <relative-address>

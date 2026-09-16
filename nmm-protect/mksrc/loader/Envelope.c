@@ -23,7 +23,7 @@ int nmmp_open_payload(const uint8_t *p, size_t size, const uint8_t key[32],
                       const uint8_t build_id[16], uint8_t **out, size_t *out_size) {
     *out = NULL;
     *out_size = 0;
-    if (!p || size < 96 || memcmp(p, "NMMPPL01", 8) || nmmp_u32(p + 8) != 1 ||
+    if (!p || size < 96 || memcmp(p, "PRVPKG01", 8) || nmmp_u32(p + 8) != 1 ||
         nmmp_u32(p + 12) != 1 || nmmp_u32(p + 16) != 183 || nmmp_u32(p + 20) != 1 ||
         nmmp_u32(p + 24) != 1 || nmmp_u32(p + 28) != 80 || nmmp_u32(p + 76) ||
         crypto_verify16(p + 32, build_id)) return -1;

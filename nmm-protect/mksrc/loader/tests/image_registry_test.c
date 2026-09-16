@@ -2,7 +2,7 @@
 #include "PrivateLoaderState.h"
 #include <stdlib.h>
 #include <string.h>
-extern int nmmp_inner_bootstrap_v1(JavaVM *, void *, const NmmpHostV1 *, NmmpInnerResultV1 *);
+extern int runtime_inner_bootstrap_v1(JavaVM *, void *, const NmmpHostV1 *, NmmpInnerResultV1 *);
 static unsigned calls;
 jint nmmp_inner_on_load(JavaVM *vm, void *reserved) {
     (void)vm; (void)reserved;
@@ -12,7 +12,7 @@ jint nmmp_inner_on_load(JavaVM *vm, void *reserved) {
 static void check(int ok) { if (!ok) abort(); }
 int main(void) {
     int failed = 0;
-    const uintptr_t start = (uintptr_t)&nmmp_inner_bootstrap_v1;
+    const uintptr_t start = (uintptr_t)&runtime_inner_bootstrap_v1;
     NmmpImageSegment segment = {start, 128, 256, NMMP_IMAGE_READ | NMMP_IMAGE_EXEC, 0};
     NmmpHostV1 host = {0};
     host.abi_version = NMMP_PRIVATE_BOOTSTRAP_ABI;
@@ -43,13 +43,13 @@ int main(void) {
             case 9: altered.abi_version = 3; break;
             case 10: altered.abi_version = 4; break;
         }
-        check(nmmp_inner_bootstrap_v1(NULL, NULL, &altered, &result) != 0 && calls == 0);
+        check(runtime_inner_bootstrap_v1(NULL, NULL, &altered, &result) != 0 && calls == 0);
         check(nmmp_private_segments == NULL);
     }
     NmmpImageSegment overlapping[2] = {segment, segment};
     host.segments = overlapping;
     host.segment_count = 2;
-    check(nmmp_inner_bootstrap_v1(NULL, NULL, &host, &result) != 0 && calls == 0);
+    check(runtime_inner_bootstrap_v1(NULL, NULL, &host, &result) != 0 && calls == 0);
     host.segments = &segment;
     host.segment_count = 1;
     NmmpImageSegment registered[2] = {segment, {start + 256, 128, 128, NMMP_IMAGE_READ | NMMP_IMAGE_WRITE, 0, {0}}};
@@ -74,14 +74,14 @@ int main(void) {
             case 6: ++bad[0].address; break;
             case 7: altered.import_slot_count = 2; break;
         }
-        check(nmmp_inner_bootstrap_v1(NULL, NULL, &altered, &result) != 0 && calls == 0);
+        check(runtime_inner_bootstrap_v1(NULL, NULL, &altered, &result) != 0 && calls == 0);
         check(nmmp_private_segments == NULL && nmmp_private_import_slots == NULL);
     }
-    check(!nmmp_inner_bootstrap_v1(NULL, NULL, &host, &result) && calls == 1);
+    check(!runtime_inner_bootstrap_v1(NULL, NULL, &host, &result) && calls == 1);
     check(nmmp_private_segment_count == 2 && nmmp_private_segments[0].start == start);
     check(nmmp_private_import_slot_count == 1 && nmmp_private_import_slots[0].address == slots[0].address);
     check(nmmpImageExecutable(nmmp_private_segments, 1, start + 127));
     check(!nmmpImageExecutable(nmmp_private_segments, 1, start + 128));
-    check(nmmp_inner_bootstrap_v1(NULL, NULL, &host, &result) != 0 && calls == 1);
+    check(runtime_inner_bootstrap_v1(NULL, NULL, &host, &result) != 0 && calls == 1);
     return 0;
 }

@@ -131,7 +131,7 @@ public final class ArtifactInventory {
     public byte[] encode() throws IOException {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         try (DataOutputStream output = new DataOutputStream(bytes)) {
-            output.write(new byte[]{'N','M','M','P','A','I','N','V'});
+            output.write(new byte[]{'A','R','T','I','N','V','0','1'});
             output.writeInt(1);
             output.writeLong(buildId);
             output.writeInt(packageName.length);

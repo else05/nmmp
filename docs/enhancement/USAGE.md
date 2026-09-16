@@ -47,7 +47,7 @@ java -Dnmmp.artifact.privateKey=/absolute/path/artifact-private.pk8 \
 
 私钥文件为 DER PKCS#8，公钥文件为 DER X.509 SubjectPublicKeyInfo，签名 JDK/provider 必须支持标准 Ed25519。公钥编译入内层；私钥只由构建端读取。此密钥与 APK 原有发布证书绑定是两个独立用途，不替代最终 APK 对齐、签名及系统签名验证。
 
-`assets/nmmp/artifact.sig` 为保留条目：构建会替换输入中同名旧条目，以 STORED 格式写入本次签名清单。初始化复用既有 APK 文件描述符，验签并核对最终 DEX/核心 SO 后才允许解释器激活。缺少清单、配置/身份不符或内容核对失败均不激活。非 APK 的独立 unbound VM fixture 仍使用未配置公钥的默认模板，不能当作可发布的 bound APK 模板。
+`assets/runtime/artifact.sig` 为保留条目：构建会替换输入中的当前条目并移除旧路径条目，以 STORED 格式写入本次签名清单。初始化复用既有 APK 文件描述符，验签并核对最终 DEX/核心 SO 后才允许解释器激活。缺少清单、配置/身份不符或内容核对失败均不激活。非 APK 的独立 unbound VM fixture 仍使用未配置公钥的默认模板，不能当作可发布的 bound APK 模板。
 
 `GenerateArtifactTestKey.java` 仅用于显式本地验收，不是生产默认密钥生成流程。`build/detection-app-*` 中的 TEST-ONLY 密钥及 APK 均为本地验收材料。完整应用级功能/性能验收尚未因此完成。
 

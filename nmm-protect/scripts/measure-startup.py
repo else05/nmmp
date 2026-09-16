@@ -340,7 +340,7 @@ def main():
                 if sample['crashMarkers']:
                     (out / ('failed-process-' + variant['name'] + '-' + str(round_index) + '.log')).write_text(raw_logs, encoding='utf-8')
                     raise RuntimeError(str(sample['crashMarkers']))
-                loader = [line for line in logs.splitlines() if 'NMMP-Loader' in line]
+                loader = [line for line in logs.splitlines() if 'RuntimeLoader' in line]
                 sample['loader'] = loader
                 if variant.get('loader') and not any('ready id=' in line for line in loader):
                     raise RuntimeError('loader did not publish READY')

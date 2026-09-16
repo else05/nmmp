@@ -127,7 +127,7 @@ public class ResolverCodeGenerator {
         writer.write("static bool nmmp_verify_resolver_manifest(const uint8_t expected[32]) {\n"
                 + "    NmmpSha256Context hash; uint8_t digest[32];\n"
                 + "    nmmpSha256Init(&hash);\n"
-                + "    nmmpSha256Update(&hash, (const uint8_t *)\"NMMP-RSL1\", 9);\n"
+                + "    nmmpSha256Update(&hash, (const uint8_t *)\"VM-RSLV01\", 9);\n"
                 + "    nmmpSha256UpdateU32(&hash, gStringPoolDexId);\n"
                 + "    nmmpSha256UpdateU32(&hash, gStringPoolByteSize);\n"
                 + "    nmmpSha256Update(&hash, gBaseStrPtr, gStringPoolByteSize);\n"
@@ -569,7 +569,7 @@ public class ResolverCodeGenerator {
         if (manifestEncodedStringPool == null || manifestStringOffsets == null) {
             throw new IllegalStateException("Resolver manifest requested before generation");
         }
-        ProtectionManifest.CanonicalDigest digest = new ProtectionManifest.CanonicalDigest("NMMP-RSL1");
+        ProtectionManifest.CanonicalDigest digest = new ProtectionManifest.CanonicalDigest("VM-RSLV01");
         digest.putU32(dexId).putU32(manifestEncodedStringPool.length).putBytes(manifestEncodedStringPool);
         digest.putU32(manifestStringOffsets.length);
         for (long offset : manifestStringOffsets) digest.putU32(offset);

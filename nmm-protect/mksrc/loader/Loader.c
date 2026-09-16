@@ -95,7 +95,7 @@ static int executable(const Content *c, uint64_t addr) {
 }
 
 static int tables(Content *c) {
-    if (c->size < 64 || c->size > NMMP_LOADER_LIMIT || memcmp(c->data, "NMMPIM01", 8) ||
+    if (c->size < 64 || c->size > NMMP_LOADER_LIMIT || memcmp(c->data, "PRVIMG01", 8) ||
         nmmp_u32(c->data + 8) != 1 || nmmp_u32(c->data + 12) != (3U << 16 | 183U) ||
         nmmp_u32(c->data + 16)) return 0;
     c->nseg = nmmp_u32(c->data + 20);
@@ -361,7 +361,7 @@ static int symbols(Content *c) {
     }
     const uint8_t *entry = syms + c->entry * 24;
     return imports == c->nimport && entry[4] == 18 && entry[5] == 0 && (entry[6] || entry[7]) &&
-           !strcmp(string_at(c, nmmp_u32(entry)), "nmmp_inner_bootstrap_v1") &&
+           !strcmp(string_at(c, nmmp_u32(entry)), "runtime_inner_bootstrap_v1") &&
            executable(c, nmmp_u64(entry + 8));
 }
 

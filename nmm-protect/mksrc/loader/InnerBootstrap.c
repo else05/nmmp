@@ -16,7 +16,7 @@ const NmmpImportSlot *nmmp_private_import_slots;
 size_t nmmp_private_import_slot_count;
 
 __attribute__((visibility("default")))
-int nmmp_inner_bootstrap_v1(JavaVM *vm, void *reserved, const NmmpHostV1 *host, NmmpInnerResultV1 *out) {
+int runtime_inner_bootstrap_v1(JavaVM *vm, void *reserved, const NmmpHostV1 *host, NmmpInnerResultV1 *out) {
     if (nmmp_private_segments || !host || !out || host->abi_version != NMMP_PRIVATE_BOOTSTRAP_ABI || host->struct_size != sizeof(*host) ||
         out->abi_version != NMMP_PRIVATE_BOOTSTRAP_ABI || out->struct_size != sizeof(*out) || !host->outer_anchor ||
         !host->failure_state || !host->image_start || !host->image_size || host->image_size > NMMP_PRIVATE_MAX_IMAGE_BYTES ||
@@ -24,7 +24,7 @@ int nmmp_inner_bootstrap_v1(JavaVM *vm, void *reserved, const NmmpHostV1 *host, 
         host->import_slot_count > NMMP_PRIVATE_MAX_IMPORT_SLOTS || (host->import_slot_count && !host->import_slots) ||
         memcmp(host->build_id, nmmp_build_id, 16) ||
         memcmp(host->manifest_id, NMMP_PROTECTION_MANIFEST_ID, 16)) return -1;
-    const uintptr_t entry = (uintptr_t)&nmmp_inner_bootstrap_v1;
+    const uintptr_t entry = (uintptr_t)&runtime_inner_bootstrap_v1;
     const uintptr_t start = (uintptr_t)host->image_start;
     if (host->image_size > UINTPTR_MAX - start || entry < start || entry - start >= host->image_size) return -1;
     for (size_t i = 0; i < host->segment_count; ++i) {

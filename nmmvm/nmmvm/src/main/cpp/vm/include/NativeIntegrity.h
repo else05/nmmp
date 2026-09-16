@@ -13,8 +13,11 @@ extern "C" {
 #endif
 // Only loader-owned, authenticated segment descriptors may be supplied.
 NmmpNativeIntegrityResult nmmpVerifyExecutableSegments(const NmmpImageSegment *segments, size_t count);
+NmmpNativeIntegrityResult nmmpVerifyExecutableSegmentsShard(
+        const NmmpImageSegment *segments, size_t count, uint32_t shard);
 NmmpNativeIntegrityResult nmmpVerifyImportSlots(const NmmpImportSlot *slots, size_t count);
 NmmpNativeIntegrityResult nmmpVerifyPrivateImage();
+NmmpNativeIntegrityResult nmmpVerifyPrivateImageShard(uint32_t shard);
 #ifdef __cplusplus
 }
 #endif

@@ -49,6 +49,7 @@ static uint32_t gClockUnavailable;
 static bool gAppDebugValid;
 static bool gAppDebuggable;
 static int gNativeIntegrity = NMMP_NATIVE_NOT_APPLICABLE;
+static uint32_t gNativeShard;
 static NmmpProtectionEvidence gStartupEnvironment = {};
 #if defined(NMMP_DIAGNOSTICS) && NMMP_DIAGNOSTICS
 static uint64_t gDiagnosticRound;
@@ -363,12 +364,15 @@ static bool applicationDebuggable(JNIEnv *env, jobject context, bool *debuggable
     return valid;
 }
 
-static NmmpNativeIntegrityResult verifyImages() {
-    NMMP_CHECK_LOG("point=PrivateImage BEGIN child_checks=GOT,PF_X");
+static NmmpNativeIntegrityResult verifyImages(bool full) {
+    const uint32_t shard = full ? 0 : __atomic_fetch_add(&gNativeShard, 1, __ATOMIC_RELAXED)
+            % NMMP_EXECUTABLE_SHARD_COUNT;
+    NMMP_CHECK_LOG("point=PrivateImage BEGIN child_checks=GOT,PF_X mode=%s shard=%u",
+                   full ? "FULL" : "SHARD", shard);
     NmmpNativeIntegrityResult inner;
     {
         NMMP_CHECK_TIMER("PrivateImage");
-        inner = nmmpVerifyPrivateImage();
+        inner = full ? nmmpVerifyPrivateImage() : nmmpVerifyPrivateImageShard(shard);
     }
     NMMP_CHECK_LOG("point=PrivateImage status=%d (0=MATCH 1=MISMATCH -1=UNAVAILABLE 2=NOT_APPLICABLE)", (int)inner);
     if (inner == NMMP_NATIVE_UNAVAILABLE || inner == NMMP_NATIVE_MISMATCH) {
@@ -376,11 +380,12 @@ static NmmpNativeIntegrityResult verifyImages() {
         return inner;
     }
 #if defined(NMMP_PRIVATE_LINKER) && NMMP_VM_SIGNATURE_BINDING
-    NMMP_CHECK_LOG("point=OuterImage BEGIN child_checks=GOT,PF_X");
+    NMMP_CHECK_LOG("point=OuterImage BEGIN child_checks=GOT,PF_X mode=%s shard=%u",
+                   full ? "FULL" : "SHARD", shard);
     NmmpNativeIntegrityResult outer;
     {
         NMMP_CHECK_TIMER("OuterImage");
-        outer = nmmpVerifyOuterImage();
+        outer = full ? nmmpVerifyOuterImage() : nmmpVerifyOuterImageShard(shard);
     }
     NMMP_CHECK_LOG("point=OuterImage status=%d (0=MATCH 1=MISMATCH -1=UNAVAILABLE 2=NOT_APPLICABLE)", (int)outer);
     return outer;
@@ -497,13 +502,15 @@ static void sample(JNIEnv *env, jobject context, bool forceNative = false,
         result.reasons |= NMMP_REASON_CALLER_STACK;
     }
     applyArtEvidence(&result);
-    if (forceNative || !__atomic_load_n(&gInitialized, __ATOMIC_ACQUIRE) || evidence.signals
+    const bool initialized = __atomic_load_n(&gInitialized, __ATOMIC_ACQUIRE) != 0;
+    const bool fullNative = !initialized || evidence.signals || (result.reasons & NMMP_REASON_ART_ENTRY);
+    if (forceNative || !initialized || evidence.signals
             || (result.reasons & NMMP_REASON_ART_ENTRY)
             || __atomic_load_n(&gNativeIntegrity, __ATOMIC_ACQUIRE) == NMMP_NATIVE_UNAVAILABLE) {
         NmmpNativeIntegrityResult native;
         {
             NMMP_CHECK_TIMER("NativeImagesTotal");
-            native = verifyImages();
+            native = verifyImages(fullNative);
         }
         NMMP_CHECK_LOG("native=%d", static_cast<int>(native));
         __atomic_store_n(&gNativeIntegrity, native, __ATOMIC_RELEASE);

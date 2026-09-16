@@ -464,8 +464,12 @@ int nmmp_map_image(uint8_t *decoded, size_t size, NmmpModule **out) {
                                           (size_t)s->memsz, (uint32_t)s->flags, 0};
         /* The caller authenticated decoded before mapping. Executable ranges
            cannot contain relocation targets (enforced by relocation_table). */
-        if (s->flags & NMMP_IMAGE_EXEC)
-            nmmpSha256(decoded + s->offset, (size_t)s->filesz, m->segments[i].executable_digest);
+        if (s->flags & NMMP_IMAGE_EXEC) for (uint32_t shard = 0; shard < NMMP_EXECUTABLE_SHARD_COUNT; ++shard) {
+            size_t shard_offset, shard_length;
+            if (!nmmpExecutableShardRange((size_t)s->filesz, shard, &shard_offset, &shard_length)) goto failed;
+            nmmpSha256(decoded + s->offset + shard_offset, shard_length,
+                       m->segments[i].executable_digests[shard]);
+        }
         /* Anonymous pages already zero BSS, including tails sharing LOAD pages. */
     }
     m->segment_count = c.nseg;

@@ -3,6 +3,7 @@
 #endif
 #include "ArtRuntimeIntegrity.h"
 #include "ProcessMaps.h"
+#include "ProcessMemory.h"
 #include "CheckLog.h"
 #include <elf.h>
 #include <fcntl.h>
@@ -158,7 +159,7 @@ ArtRuntimeReport nmmpCheckArtRuntimeIntegrity() {
                 struct iovec local = {runtime, sizeof(runtime)}, remote = {reinterpret_cast<void *>(address), sizeof(runtime)};
                 ssize_t bytes;
                 unsigned interruptions = 0;
-                do { bytes = process_vm_readv(getpid(), &local, 1, &remote, 1, 0); }
+                do { bytes = nmmpReadSelfMemory(&local, &remote); }
                 while (bytes < 0 && errno == EINTR && ++interruptions <= 64);
                 if (bytes != sizeof(runtime)) break;
                 ++report.checked;

@@ -15,4 +15,5 @@ bool nmmpReadSystemLibc(const NmmpLoadedModule *module, uint8_t **image, size_t 
 bool nmmpPrepareOuterImageFromApk(int fd, const NmmpArtifactEntry *entries,
         size_t count, uintptr_t anchor);
 NmmpNativeIntegrityResult nmmpVerifyOuterImage();
+NmmpNativeIntegrityResult nmmpVerifyOuterImageShard(uint32_t shard);
 #endif

@@ -3,6 +3,7 @@
 #endif
 #include "ArtMethodChecks.h"
 #include "ModuleOrigins.h"
+#include "ProcessMemory.h"
 #include <sys/uio.h>
 #include <sys/mman.h>
 #include <unistd.h>
@@ -41,7 +42,7 @@ bool readState(uintptr_t address, MethodState &state) {
     iovec local = {bytes, sizeof(bytes)};
     iovec remote = {reinterpret_cast<void *>(address), sizeof(bytes)};
     ssize_t result; unsigned interruptions = 0;
-    do { result = process_vm_readv(getpid(), &local, 1, &remote, 1, 0); }
+    do { result = nmmpReadSelfMemory(&local, &remote); }
     while (result < 0 && errno == EINTR && ++interruptions <= 64);
     if (result != sizeof(bytes)) return false;
     std::memcpy(&state.flags, bytes + 4, sizeof(state.flags));

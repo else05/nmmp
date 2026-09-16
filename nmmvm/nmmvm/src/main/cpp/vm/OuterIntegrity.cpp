@@ -63,7 +63,11 @@ bool nmmpBuildOuterCodeBaseline(const uint8_t *image, size_t size,
         if ((ph.p_flags & PF_W) || !(ph.p_flags & PF_R) || !ph.p_filesz || executable == NMMP_PRIVATE_MAX_SEGMENTS) return false;
         NmmpImageSegment &segment = segments[executable++];
         segment = {start, static_cast<size_t>(ph.p_filesz), static_cast<size_t>(ph.p_memsz), ph.p_flags, 0, {0}};
-        nmmpSha256(image + ph.p_offset, segment.file_size, segment.executable_digest);
+        for (uint32_t shard = 0; shard < NMMP_EXECUTABLE_SHARD_COUNT; ++shard) {
+            size_t shardOffset, shardLength;
+            if (!nmmpExecutableShardRange(segment.file_size, shard, &shardOffset, &shardLength)) return false;
+            nmmpSha256(image + ph.p_offset + shardOffset, shardLength, segment.executable_digests[shard]);
+        }
     }
     if (loads != module->count || !executable) return false;
     *count = executable;
@@ -142,4 +146,12 @@ NmmpNativeIntegrityResult nmmpVerifyOuterImage() {
     const auto imports = nmmpVerifyImportSlots(current->imports, current->importCount);
     if (imports == NMMP_NATIVE_UNAVAILABLE || imports == NMMP_NATIVE_MISMATCH) return imports;
     return nmmpVerifyExecutableSegments(current->segments, current->count);
+}
+
+NmmpNativeIntegrityResult nmmpVerifyOuterImageShard(uint32_t shard) {
+    const Baseline *current = __atomic_load_n(&baseline, __ATOMIC_ACQUIRE);
+    if (!current) return NMMP_NATIVE_UNAVAILABLE;
+    const auto imports = nmmpVerifyImportSlots(current->imports, current->importCount);
+    if (imports == NMMP_NATIVE_UNAVAILABLE || imports == NMMP_NATIVE_MISMATCH) return imports;
+    return nmmpVerifyExecutableSegmentsShard(current->segments, current->count, shard);
 }

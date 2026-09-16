@@ -67,8 +67,17 @@ long nmmpRawClose(int) { return 0; }
 static uint32_t policyFlags = NMMP_POLICY_CHECK_MAPS;
 static NmmpNativeIntegrityResult nativeResult = NMMP_NATIVE_MATCH;
 static unsigned nativeChecks;
+static uint32_t nativeShards[NMMP_EXECUTABLE_SHARD_COUNT];
+static unsigned nativeShardChecks;
 NmmpNativeIntegrityResult nmmpVerifyPrivateImage() { ++nativeChecks; return nativeResult; }
+NmmpNativeIntegrityResult nmmpVerifyPrivateImageShard(uint32_t shard) {
+    ++nativeChecks;
+    if (nativeShardChecks < NMMP_EXECUTABLE_SHARD_COUNT) nativeShards[nativeShardChecks] = shard;
+    ++nativeShardChecks;
+    return nativeResult;
+}
 NmmpNativeIntegrityResult nmmpVerifyOuterImage() { return NMMP_NATIVE_NOT_APPLICABLE; }
+NmmpNativeIntegrityResult nmmpVerifyOuterImageShard(uint32_t) { return NMMP_NATIVE_NOT_APPLICABLE; }
 static NmmpNativeIntegrityResult artResult = NMMP_NATIVE_NOT_APPLICABLE;
 static ArtIntegrityResult artRuntimeResult = ArtIntegrityResult::NORMAL;
 ArtRuntimeReport nmmpCheckArtRuntimeIntegrity() { return {artRuntimeResult, 3, 0, 0}; }
@@ -179,6 +188,14 @@ int main(int argc, char **argv) {
         check(nmmpProtectionPolicyInitialize(nullptr, nullptr));
         __atomic_store_n(&gNativeIntegrity, NMMP_NATIVE_NOT_APPLICABLE, __ATOMIC_RELEASE);
         check(!nmmpProtectionAllowCall(nullptr));
+    } else if (!std::strcmp(argv[1], "native-shards")) {
+        check(nmmpProtectionPolicyInitialize(nullptr, nullptr));
+        check(nativeChecks == 1 && nativeShardChecks == 0);
+        for (uint32_t shard = 0; shard < NMMP_EXECUTABLE_SHARD_COUNT; ++shard) {
+            testNow += UINT64_C(5000000000);
+            check(nmmpProtectionAllowCall(nullptr));
+            check(nativeShardChecks == shard + 1 && nativeShards[shard] == shard);
+        }
     } else if (!std::strcmp(argv[1], "interval")) {
         check(nmmpProtectionPolicyInitialize(nullptr, nullptr));
         unsigned previous = opens;

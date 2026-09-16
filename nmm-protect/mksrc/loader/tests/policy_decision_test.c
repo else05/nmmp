@@ -2,6 +2,9 @@
 #include <stdlib.h>
 
 static void check(int condition) { if (!condition) abort(); }
+static bool allowed(uint32_t flags, NmmpProtectionDecision decision) {
+    return nmmpProtectionAllowState(flags, decision.state);
+}
 
 int main(void) {
     NmmpProtectionState decodedState;
@@ -20,46 +23,44 @@ int main(void) {
     const uint32_t observe = NMMP_POLICY_CHECK_DEBUG | NMMP_POLICY_CHECK_MAPS;
     const uint32_t enforce = observe | NMMP_POLICY_ENFORCE;
     NmmpProtectionEvidence evidence = {0, 0, 0};
-    NmmpProtectionDecision decision = nmmpProtectionClassify(enforce, false, evidence);
-    check(decision.state == NMMP_PROTECTION_UNKNOWN && decision.allowed);
+    NmmpProtectionDecision decision = nmmpProtectionClassify(enforce, evidence);
+    check(decision.state == NMMP_PROTECTION_UNKNOWN && allowed(enforce, decision));
 
     evidence.valid = NMMP_CHECK_TRACER;
-    decision = nmmpProtectionClassify(enforce, false, evidence);
-    check(decision.state == NMMP_PROTECTION_UNKNOWN && decision.allowed);
+    decision = nmmpProtectionClassify(enforce, evidence);
+    check(decision.state == NMMP_PROTECTION_UNKNOWN && allowed(enforce, decision));
     evidence.valid = NMMP_CHECK_DEBUG_ALL | NMMP_CHECK_MAPS | NMMP_CHECK_MODULE_ORIGINS;
-    decision = nmmpProtectionClassify(enforce, false, evidence);
-    check(decision.state == NMMP_PROTECTION_CLEAN && decision.allowed);
+    decision = nmmpProtectionClassify(enforce, evidence);
+    check(decision.state == NMMP_PROTECTION_CLEAN && allowed(enforce, decision));
 
     evidence.signals = NMMP_CHECK_TRACER;
-    decision = nmmpProtectionClassify(enforce, false, evidence);
+    decision = nmmpProtectionClassify(enforce, evidence);
     check(decision.state == NMMP_PROTECTION_SUSPICIOUS
-          && decision.reasons == NMMP_REASON_DEBUG && !decision.allowed);
+          && decision.reasons == NMMP_REASON_DEBUG && !allowed(enforce, decision));
 
     evidence.signals |= NMMP_CHECK_MAPS;
-    decision = nmmpProtectionClassify(observe, false, evidence);
-    check(decision.state == NMMP_PROTECTION_SUSPICIOUS && decision.allowed);
-    decision = nmmpProtectionClassify(enforce, false, evidence);
-    check(decision.state == NMMP_PROTECTION_SUSPICIOUS && !decision.allowed);
+    decision = nmmpProtectionClassify(observe, evidence);
+    check(decision.state == NMMP_PROTECTION_SUSPICIOUS && allowed(observe, decision));
+    decision = nmmpProtectionClassify(enforce, evidence);
+    check(decision.state == NMMP_PROTECTION_SUSPICIOUS && !allowed(enforce, decision));
 
     evidence.valid = NMMP_CHECK_MAPS;
-    decision = nmmpProtectionClassify(enforce, false, evidence);
-    check(decision.reasons == NMMP_REASON_INJECTION && !decision.allowed);
+    decision = nmmpProtectionClassify(enforce, evidence);
+    check(decision.reasons == NMMP_REASON_INJECTION && !allowed(enforce, decision));
 
     evidence.signals = NMMP_CHECK_TRACER; /* Invalid sources cannot assert a signal. */
-    decision = nmmpProtectionClassify(enforce, false, evidence);
+    decision = nmmpProtectionClassify(enforce, evidence);
     check(decision.state == NMMP_PROTECTION_UNKNOWN && decision.reasons == 0);
     evidence.notApplicable = NMMP_CHECK_DEBUG_ALL | NMMP_CHECK_MODULE_ORIGINS;
-    decision = nmmpProtectionClassify(enforce, false, evidence);
+    decision = nmmpProtectionClassify(enforce, evidence);
     check(decision.state == NMMP_PROTECTION_CLEAN);
 
-    decision = nmmpProtectionClassify(observe, true, evidence);
-    check(decision.state == NMMP_PROTECTION_INTEGRITY_FAILURE
-          && decision.reasons == NMMP_REASON_INTEGRITY && !decision.allowed);
+    check(!nmmpProtectionAllowState(observe, NMMP_PROTECTION_INTEGRITY_FAILURE));
     evidence = (NmmpProtectionEvidence){NMMP_CHECK_ENVIRONMENT_ALL, NMMP_CHECK_THREADS | NMMP_CHECK_PORT_PRIMARY, 0};
-    decision = nmmpProtectionClassify(NMMP_POLICY_ENFORCE | NMMP_POLICY_CHECK_ENVIRONMENT, false, evidence);
-    check(decision.state == NMMP_PROTECTION_SUSPICIOUS && !decision.allowed && decision.reasons == NMMP_REASON_ENVIRONMENT);
-    check(!nmmpProtectionAllowState(NMMP_POLICY_ENFORCE, decision.state, decision.reasons));
-    check(!nmmpProtectionAllowState(NMMP_POLICY_ENFORCE, NMMP_PROTECTION_SUSPICIOUS,
-                                    NMMP_REASON_ART_ENTRY));
+    decision = nmmpProtectionClassify(NMMP_POLICY_ENFORCE | NMMP_POLICY_CHECK_ENVIRONMENT, evidence);
+    check(decision.state == NMMP_PROTECTION_SUSPICIOUS && !allowed(NMMP_POLICY_ENFORCE, decision)
+          && decision.reasons == NMMP_REASON_ENVIRONMENT);
+    check(!nmmpProtectionAllowState(NMMP_POLICY_ENFORCE, decision.state));
+    check(!nmmpProtectionAllowState(NMMP_POLICY_ENFORCE, NMMP_PROTECTION_SUSPICIOUS));
     return 0;
 }

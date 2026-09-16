@@ -100,20 +100,8 @@ typedef uint64_t regptr_t;
 //typedef uint32_t regptr_t;
 //#endif
 
-static inline jlong getLongFromArray(const regptr_t *ptr, int idx) {
-    jlong val;
-    memcpy(&val, &ptr[idx], 8);
-    return val;
-}
-
 static inline void putLongToArray(regptr_t *ptr, int idx, jlong val) {
     memcpy(&ptr[idx], &val, 8);
-}
-
-static inline jdouble getDoubleFromArray(const regptr_t *ptr, int idx) {
-    jdouble dval;
-    memcpy(&dval, &ptr[idx], 8);
-    return dval;
 }
 
 static inline void putDoubleToArray(regptr_t *ptr, int idx, jdouble dval) {

@@ -41,7 +41,6 @@ static uint32_t gInitialized;
 static uint32_t gSampling;
 static uint64_t gRetryNanos;
 static JavaVM *gJavaVm;
-static NmmpCheckStatus gPendingStack = NMMP_CHECK_NOT_APPLICABLE;
 static int gCallerStackStatus = NMMP_CHECK_NOT_APPLICABLE;
 // A failed clock read invalidates freshness, not content integrity. Retry only
 // the clock until it recovers; one sampler then establishes a fresh result.
@@ -395,8 +394,7 @@ static NmmpNativeIntegrityResult verifyImages(bool full) {
 #endif
 }
 
-static void sample(JNIEnv *env, jobject context, bool forceNative = false,
-                   NmmpCheckStatus stack = NMMP_CHECK_NOT_APPLICABLE) {
+static void sample(JNIEnv *env, jobject context) {
     const uint32_t flags = nmmpProtectionPolicyFlags();
     NMMP_CHECK_LOG("round=%llu BEGIN groups=18 (environment=10 ART_entries=3 ArtMethod=1 entryOwners=1 callerStack=1 images=2) flags=0x%x native_codes=0:MATCH,1:MISMATCH,-1:UNAVAILABLE,2:NOT_APPLICABLE",
                    (unsigned long long)++gDiagnosticRound, flags);
@@ -480,8 +478,9 @@ static void sample(JNIEnv *env, jobject context, bool forceNative = false,
 #if defined(NMMP_DIAGNOSTICS) && NMMP_DIAGNOSTICS
     logEvidence(evidence, flags, !__atomic_load_n(&gInitialized, __ATOMIC_ACQUIRE));
 #endif
-    NMMP_CHECK_LOG("point=CallerStack status=%d (0=PASS 1=SIGNAL 2=UNKNOWN 3=NOT_APPLICABLE)", (int)stack);
-    NmmpProtectionDecision result = nmmpProtectionClassify(flags, false, evidence);
+    const int callerStack = __atomic_load_n(&gCallerStackStatus, __ATOMIC_ACQUIRE);
+    NMMP_CHECK_LOG("point=CallerStack status=%d (0=PASS 1=SIGNAL 2=UNKNOWN 3=NOT_APPLICABLE)", callerStack);
+    NmmpProtectionDecision result = nmmpProtectionClassify(flags, evidence);
     ArtRuntimeReport artRuntime;
     {
         NMMP_CHECK_TIMER("ArtRuntime");
@@ -497,32 +496,28 @@ static void sample(JNIEnv *env, jobject context, bool forceNative = false,
         result.reasons |= NMMP_REASON_ART_RUNTIME_UNAVAILABLE;
         if (result.state == NMMP_PROTECTION_CLEAN) result.state = NMMP_PROTECTION_UNKNOWN;
     }
-    if (__atomic_load_n(&gCallerStackStatus, __ATOMIC_ACQUIRE) == NMMP_CHECK_SIGNAL) {
+    if (callerStack == NMMP_CHECK_SIGNAL) {
         result.state = NMMP_PROTECTION_SUSPICIOUS;
         result.reasons |= NMMP_REASON_CALLER_STACK;
     }
     applyArtEvidence(&result);
     const bool initialized = __atomic_load_n(&gInitialized, __ATOMIC_ACQUIRE) != 0;
     const bool fullNative = !initialized || evidence.signals || (result.reasons & NMMP_REASON_ART_ENTRY);
-    if (forceNative || !initialized || evidence.signals
-            || (result.reasons & NMMP_REASON_ART_ENTRY)
-            || __atomic_load_n(&gNativeIntegrity, __ATOMIC_ACQUIRE) == NMMP_NATIVE_UNAVAILABLE) {
-        NmmpNativeIntegrityResult native;
-        {
-            NMMP_CHECK_TIMER("NativeImagesTotal");
-            native = verifyImages(fullNative);
-        }
-        NMMP_CHECK_LOG("native=%d", static_cast<int>(native));
-        __atomic_store_n(&gNativeIntegrity, native, __ATOMIC_RELEASE);
-        if (native == NMMP_NATIVE_MISMATCH) {
-            nmmpProtectionMarkIntegrityFailure();
-            NMMP_CHECK_LOG("round=%llu END state=INTEGRITY_FAILURE allowed=0", (unsigned long long)gDiagnosticRound);
-            return;
-        }
-        if (native == NMMP_NATIVE_UNAVAILABLE) {
-            result.state = NMMP_PROTECTION_UNKNOWN;
-            result.reasons |= NMMP_REASON_NATIVE_UNAVAILABLE;
-        }
+    NmmpNativeIntegrityResult native;
+    {
+        NMMP_CHECK_TIMER("NativeImagesTotal");
+        native = verifyImages(fullNative);
+    }
+    NMMP_CHECK_LOG("native=%d", static_cast<int>(native));
+    __atomic_store_n(&gNativeIntegrity, native, __ATOMIC_RELEASE);
+    if (native == NMMP_NATIVE_MISMATCH) {
+        nmmpProtectionMarkIntegrityFailure();
+        NMMP_CHECK_LOG("round=%llu END state=INTEGRITY_FAILURE allowed=0", (unsigned long long)gDiagnosticRound);
+        return;
+    }
+    if (native == NMMP_NATIVE_UNAVAILABLE) {
+        result.state = NMMP_PROTECTION_UNKNOWN;
+        result.reasons |= NMMP_REASON_NATIVE_UNAVAILABLE;
     }
     publish(result);
     NMMP_CHECK_LOG("round=%llu END state=%d reasons=0x%x (state 0=CLEAN 1=SUSPICIOUS 2=UNKNOWN 3=INTEGRITY_FAILURE)",
@@ -546,7 +541,7 @@ static bool decision() {
     NmmpProtectionState state;
     uint32_t reasons;
     if (!loadDecision(&state, &reasons)) return false;
-    return integrityLatchReady() && nmmpProtectionAllowState(flags, state, reasons);
+    return integrityLatchReady() && nmmpProtectionAllowState(flags, state);
 }
 
 static void *runCheck(void *) {
@@ -572,10 +567,10 @@ static void *runCheck(void *) {
             __atomic_store_n(&gStartedNanos, current, __ATOMIC_RELEASE);
         NMMP_CHECK_LOG("periodic interval_ms=%llu stack=%d",
                        static_cast<unsigned long long>(intervalNanos(current) / 1000000),
-                       static_cast<int>(gPendingStack));
+                       __atomic_load_n(&gCallerStackStatus, __ATOMIC_ACQUIRE));
         // Native integrity is now checked in every background round. The caller
         // never waits for scans, JNI checks or diagnostic file writes.
-        sample(env, nullptr, true, gPendingStack);
+        sample(env, nullptr);
         const uint64_t finished = monotonicNanos();
         if (finished) __atomic_store_n(&gLastCheckNanos, finished, __ATOMIC_RELEASE);
         __atomic_store_n(&gClockUnavailable, finished == 0, __ATOMIC_RELEASE);
@@ -614,12 +609,10 @@ static void requestCheck(JNIEnv *env, bool sensitive) {
     // the winning requester takes this bounded snapshot, once per interval.
     if (sensitive) {
         NMMP_CHECK_TIMER("CallerStack");
-        gPendingStack = nmmpCheckFrameworkStack(env);
-        if (gPendingStack == NMMP_CHECK_PASS || gPendingStack == NMMP_CHECK_SIGNAL) {
-            __atomic_store_n(&gCallerStackStatus, gPendingStack, __ATOMIC_RELEASE);
+        const NmmpCheckStatus stack = nmmpCheckFrameworkStack(env);
+        if (stack == NMMP_CHECK_PASS || stack == NMMP_CHECK_SIGNAL) {
+            __atomic_store_n(&gCallerStackStatus, stack, __ATOMIC_RELEASE);
         }
-    } else {
-        gPendingStack = NMMP_CHECK_NOT_APPLICABLE;
     }
     if (env && env->ExceptionCheck()) {
         __atomic_store_n(&gSampling, 0, __ATOMIC_RELEASE);

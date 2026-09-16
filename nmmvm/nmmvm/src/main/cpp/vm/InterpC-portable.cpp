@@ -118,29 +118,6 @@ if(GET_REGISTER_FLAGS(_idx)){                                   \
     *((double *)&fp[reg_dst]) = reg_value; \
     fp_flags[reg_dst] = 0; \
 } while (false)
-//#else
-
-//#define GET_REGISTER_WIDE(_idx)            getLongFromArray(fp,_idx)
-//
-//#define SET_REGISTER_WIDE(_idx, _val)      \
-//DELETE_LOCAL_REF(_idx);                    \
-//putLongToArray(fp,_idx,_val);              \
-//SET_REGISTER_FLAGS(_idx, 0)
-//
-//
-//#define GET_REGISTER_DOUBLE(_idx)          getDoubleFromArray(fp,_idx)
-//
-//#define SET_REGISTER_DOUBLE(_idx, _val)    \
-//DELETE_LOCAL_REF(_idx);                    \
-//putDoubleToArray(fp,_idx,_val);            \
-//SET_REGISTER_FLAGS(_idx, 0)
-//
-//#endif
-//
-
-
-
-
 /*
  * Get 16 bits from the specified offset of the program counter.  We always
  * want to load 16 bits at a time from the instruction stream -- it's more

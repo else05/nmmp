@@ -16,7 +16,7 @@ import java.util.List;
 /** Deterministic, authenticated contract shared by generated VM components. */
 public final class ProtectionManifest {
     public static final int VERSION = 1;
-    public static final int POLICY_VERSION = 7;
+    public static final int POLICY_VERSION = 8;
     public static final int POLICY_ENFORCE = 1;
     public static final int POLICY_CHECK_DEBUG = 1 << 1;
     public static final int POLICY_CHECK_MAPS = 1 << 2;

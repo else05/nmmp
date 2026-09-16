@@ -8,6 +8,9 @@
 typedef struct {
     uintptr_t addresses[NMMP_ENTRY_GUARD_COUNT];
     uint8_t expected[NMMP_ENTRY_GUARD_COUNT][NMMP_ENTRY_GUARD_BYTES];
+} NmmpProtectionEntryBaseline;
+typedef struct {
+    const NmmpProtectionEntryBaseline *baseline;
     uint64_t completed;
     uint32_t ready, busy, failed;
 } NmmpProtectionEntryGuard;
@@ -22,7 +25,10 @@ extern NmmpProtectionEntryGuard nmmpProtectionEntryGuard;
 // Concurrent losers proceed; confirmed failure is terminal.
 #define NMMP_CHECK_PROTECTION_ENTRIES(allowed) do { \
     NmmpProtectionEntryGuard *nmmpGuard = &nmmpProtectionEntryGuard; \
+    const NmmpProtectionEntryBaseline *nmmpBaseline = \
+            __atomic_load_n(&nmmpGuard->baseline, __ATOMIC_ACQUIRE); \
     (allowed) = __atomic_load_n(&nmmpGuard->ready, __ATOMIC_ACQUIRE) \
+            && nmmpBaseline \
             && !__atomic_load_n(&nmmpGuard->failed, __ATOMIC_ACQUIRE); \
     if (allowed) { \
         struct timespec nmmpTime = {0, 0}; \
@@ -36,10 +42,10 @@ extern NmmpProtectionEntryGuard nmmpProtectionEntryGuard;
                 if (!nmmpLast || nmmpNow < nmmpLast || nmmpNow - nmmpLast >= UINT64_C(5000000000)) { \
                     unsigned nmmpChanged = 0; \
                     for (unsigned nmmpI = 0; nmmpI < NMMP_ENTRY_GUARD_COUNT; ++nmmpI) { \
-                        const volatile uint8_t *nmmpCode = (const volatile uint8_t *)nmmpGuard->addresses[nmmpI]; \
+                        const volatile uint8_t *nmmpCode = (const volatile uint8_t *)nmmpBaseline->addresses[nmmpI]; \
                         unsigned nmmpDifference = 0; \
                         for (unsigned nmmpB = 0; nmmpB < NMMP_ENTRY_GUARD_BYTES; ++nmmpB) \
-                            nmmpDifference |= nmmpCode[nmmpB] ^ nmmpGuard->expected[nmmpI][nmmpB]; \
+                            nmmpDifference |= nmmpCode[nmmpB] ^ nmmpBaseline->expected[nmmpI][nmmpB]; \
                         nmmpChanged |= nmmpDifference; \
                         NMMP_CHECK_LOG("entry_guard point=%u status=%s", nmmpI, nmmpDifference ? "MODIFIED" : "PASS"); \
                     } \

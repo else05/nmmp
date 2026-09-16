@@ -22,14 +22,19 @@
 #include <cstring>
 #include <cstdlib>
 #include <pthread.h>
+#include <sys/mman.h>
 
 NmmpProtectionEntryGuard nmmpProtectionEntryGuard = {};
 
 namespace {
 
-// Low two bits hold state; the remaining bits hold reasons. Integrity failure
-// is terminal: a sampler may never replace it with an earlier observation.
-static uint32_t gDecision = NMMP_PROTECTION_UNKNOWN;
+// A legal decision is non-zero and carries an independently encoded inverse.
+// Integrity failure is terminal: a sampler may never replace it.
+static uint64_t gDecision __attribute__((aligned(8))) =
+        NMMP_ENCODED_DECISION(NMMP_PROTECTION_UNKNOWN, 0);
+static const uint32_t kIntegrityLatchReady = UINT32_C(0x4e4d5259);
+static const uint32_t kIntegrityLatchFailed = UINT32_C(0xb1b2ada6);
+static uint32_t gIntegrityLatch = kIntegrityLatchReady;
 static uint64_t gLastCheckNanos;
 static uint64_t gStartedNanos;
 static uint32_t gInitialized;
@@ -37,6 +42,7 @@ static uint32_t gSampling;
 static uint64_t gRetryNanos;
 static JavaVM *gJavaVm;
 static NmmpCheckStatus gPendingStack = NMMP_CHECK_NOT_APPLICABLE;
+static int gCallerStackStatus = NMMP_CHECK_NOT_APPLICABLE;
 // A failed clock read invalidates freshness, not content integrity. Retry only
 // the clock until it recovers; one sampler then establishes a fresh result.
 static uint32_t gClockUnavailable;
@@ -140,10 +146,39 @@ static void recordCheck(NmmpProtectionEvidence *evidence, uint32_t bit, NmmpChec
     if (status == NMMP_CHECK_NOT_APPLICABLE) evidence->notApplicable |= bit;
 }
 
+static bool integrityLatchReady() {
+    return __atomic_load_n(&gIntegrityLatch, __ATOMIC_ACQUIRE) == kIntegrityLatchReady;
+}
+
+static void markIntegrityFailureState() {
+    __atomic_store_n(&gIntegrityLatch, kIntegrityLatchFailed, __ATOMIC_RELEASE);
+    __atomic_store_n(&gDecision,
+                     nmmpProtectionEncodeDecision(NMMP_PROTECTION_INTEGRITY_FAILURE,
+                                                  NMMP_REASON_INTEGRITY),
+                     __ATOMIC_RELEASE);
+}
+
+static bool loadDecision(NmmpProtectionState *state, uint32_t *reasons) {
+    const uint64_t encoded = __atomic_load_n(&gDecision, __ATOMIC_ACQUIRE);
+    if (nmmpProtectionDecodeDecision(encoded, state, reasons) && integrityLatchReady()) return true;
+    markIntegrityFailureState();
+    *state = NMMP_PROTECTION_INTEGRITY_FAILURE;
+    *reasons = NMMP_REASON_INTEGRITY;
+    return false;
+}
+
 static void publish(const NmmpProtectionDecision &result) {
-    uint32_t previous = __atomic_load_n(&gDecision, __ATOMIC_ACQUIRE);
-    const uint32_t next = (result.reasons << 2U) | result.state;
-    while ((previous & 3U) != NMMP_PROTECTION_INTEGRITY_FAILURE) {
+    uint64_t previous = __atomic_load_n(&gDecision, __ATOMIC_ACQUIRE);
+    const uint64_t next = nmmpProtectionEncodeDecision(result.state, result.reasons);
+    for (;;) {
+        NmmpProtectionState state;
+        uint32_t reasons;
+        if (!integrityLatchReady()) return;
+        if (!nmmpProtectionDecodeDecision(previous, &state, &reasons)) {
+            markIntegrityFailureState();
+            return;
+        }
+        if (state == NMMP_PROTECTION_INTEGRITY_FAILURE) return;
         if (__atomic_compare_exchange_n(&gDecision, &previous, next, false,
                                         __ATOMIC_ACQ_REL, __ATOMIC_ACQUIRE)) return;
     }
@@ -159,10 +194,8 @@ static void applyArtEvidence(NmmpProtectionDecision *result) {
     NMMP_CHECK_LOG("point=RegisteredArtMethods status=%d (0=MATCH 1=MISMATCH -1=UNAVAILABLE 2=NOT_APPLICABLE)", (int)art);
     NMMP_CHECK_LOG("point=QuickEntryOwners status=%d (0=PASS 1=SIGNAL 2=UNKNOWN 3=NOT_APPLICABLE)", (int)owners);
     if (art == NMMP_NATIVE_MISMATCH) {
-        // Experimental ART observations never become a default integrity
-        // latch. Preserve independent debugger restrictions when present.
+        result->state = NMMP_PROTECTION_SUSPICIOUS;
         result->reasons |= NMMP_REASON_ART_ENTRY;
-        if (result->state == NMMP_PROTECTION_CLEAN) result->state = NMMP_PROTECTION_UNKNOWN;
         return;
     }
     if (art == NMMP_NATIVE_UNAVAILABLE || owners == NMMP_CHECK_UNKNOWN) {
@@ -459,9 +492,9 @@ static void sample(JNIEnv *env, jobject context, bool forceNative = false,
         result.reasons |= NMMP_REASON_ART_RUNTIME_UNAVAILABLE;
         if (result.state == NMMP_PROTECTION_CLEAN) result.state = NMMP_PROTECTION_UNKNOWN;
     }
-    if (stack == NMMP_CHECK_SIGNAL) {
+    if (__atomic_load_n(&gCallerStackStatus, __ATOMIC_ACQUIRE) == NMMP_CHECK_SIGNAL) {
         result.state = NMMP_PROTECTION_SUSPICIOUS;
-        result.reasons |= NMMP_REASON_ENVIRONMENT;
+        result.reasons |= NMMP_REASON_CALLER_STACK;
     }
     applyArtEvidence(&result);
     if (forceNative || !__atomic_load_n(&gInitialized, __ATOMIC_ACQUIRE) || evidence.signals
@@ -493,12 +526,20 @@ static void sample(JNIEnv *env, jobject context, bool forceNative = false,
 }
 
 static bool decision() {
-    if (__atomic_load_n(&nmmpProtectionEntryGuard.failed, __ATOMIC_ACQUIRE)) return false;
+    if (__atomic_load_n(&nmmpProtectionEntryGuard.failed, __ATOMIC_ACQUIRE)) {
+        markIntegrityFailureState();
+        return false;
+    }
+    if (!integrityLatchReady()) return false;
     if (__atomic_load_n(&gClockUnavailable, __ATOMIC_ACQUIRE)) return false;
-    if (__atomic_load_n(&gNativeIntegrity, __ATOMIC_ACQUIRE) == NMMP_NATIVE_UNAVAILABLE) return false;
-    const uint32_t value = __atomic_load_n(&gDecision, __ATOMIC_ACQUIRE);
-    return nmmpProtectionAllowState(nmmpProtectionPolicyFlags(),
-                                    static_cast<NmmpProtectionState>(value & 3U), value >> 2U);
+    if (__atomic_load_n(&gNativeIntegrity, __ATOMIC_ACQUIRE) != NMMP_NATIVE_MATCH) return false;
+    const uint32_t flags = nmmpProtectionPolicyFlags();
+    if ((flags & NMMP_POLICY_ENFORCE)
+            && __atomic_load_n(&gCallerStackStatus, __ATOMIC_ACQUIRE) == NMMP_CHECK_SIGNAL) return false;
+    NmmpProtectionState state;
+    uint32_t reasons;
+    if (!loadDecision(&state, &reasons)) return false;
+    return integrityLatchReady() && nmmpProtectionAllowState(flags, state, reasons);
 }
 
 static void *runCheck(void *) {
@@ -567,6 +608,9 @@ static void requestCheck(JNIEnv *env, bool sensitive) {
     if (sensitive) {
         NMMP_CHECK_TIMER("CallerStack");
         gPendingStack = nmmpCheckFrameworkStack(env);
+        if (gPendingStack == NMMP_CHECK_PASS || gPendingStack == NMMP_CHECK_SIGNAL) {
+            __atomic_store_n(&gCallerStackStatus, gPendingStack, __ATOMIC_RELEASE);
+        }
     } else {
         gPendingStack = NMMP_CHECK_NOT_APPLICABLE;
     }
@@ -607,6 +651,7 @@ extern "C" bool nmmpProtectionPolicyInitialize(JNIEnv *env, jobject context) {
         reinterpret_cast<uintptr_t>(nmmpVerifyPrivateImage),
         reinterpret_cast<uintptr_t>(nmmpVerifyOuterImage)
     };
+    uintptr_t protectedEntries[NMMP_ENTRY_GUARD_COUNT];
     for (size_t i = 0; i < NMMP_ENTRY_GUARD_COUNT; ++i) {
         uintptr_t address = entries[i];
 #if defined(__arm__)
@@ -623,17 +668,34 @@ extern "C" bool nmmpProtectionPolicyInitialize(JNIEnv *env, jobject context) {
         }
         if (!readable) return false;
 #endif
-        nmmpProtectionEntryGuard.addresses[i] = address;
-        memcpy(nmmpProtectionEntryGuard.expected[i], reinterpret_cast<const void *>(address), NMMP_ENTRY_GUARD_BYTES);
+        protectedEntries[i] = address;
+    }
+    void *baselineMapping = mmap(nullptr, sizeof(NmmpProtectionEntryBaseline),
+                                 PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+    if (baselineMapping == MAP_FAILED) return false;
+    NmmpProtectionEntryBaseline *baseline =
+            static_cast<NmmpProtectionEntryBaseline *>(baselineMapping);
+    for (size_t i = 0; i < NMMP_ENTRY_GUARD_COUNT; ++i) {
+        baseline->addresses[i] = protectedEntries[i];
+        memcpy(baseline->expected[i], reinterpret_cast<const void *>(protectedEntries[i]),
+               NMMP_ENTRY_GUARD_BYTES);
+    }
+    if (mprotect(baseline, sizeof(*baseline), PROT_READ) != 0) {
+        munmap(baseline, sizeof(*baseline));
+        return false;
     }
 #if defined(NMMP_PRIVATE_LINKER)
-    if (nmmpVerifyPrivateImage() != NMMP_NATIVE_MATCH) return false;
+    if (nmmpVerifyPrivateImage() != NMMP_NATIVE_MATCH) {
+        munmap(baseline, sizeof(*baseline));
+        return false;
+    }
 #endif
     sample(env, context);
     const uint64_t completed = monotonicNanos();
     __atomic_store_n(&gStartedNanos, completed, __ATOMIC_RELEASE);
     __atomic_store_n(&gLastCheckNanos, completed, __ATOMIC_RELEASE);
     __atomic_store_n(&gClockUnavailable, completed == 0, __ATOMIC_RELEASE);
+    __atomic_store_n(&nmmpProtectionEntryGuard.baseline, baseline, __ATOMIC_RELEASE);
     __atomic_store_n(&gInitialized, 1, __ATOMIC_RELEASE);
     __atomic_store_n(&nmmpProtectionEntryGuard.ready, 1, __ATOMIC_RELEASE);
     NMMP_CHECK_LOG("startup interval_ms=5000 allowed=%d", decision());
@@ -657,23 +719,32 @@ extern "C" bool nmmpProtectionVerifySensitiveCall(JNIEnv *env) {
 }
 
 extern "C" void nmmpProtectionMarkIntegrityFailure(void) {
-    __atomic_store_n(&gDecision, (NMMP_REASON_INTEGRITY << 2U)
-                                | NMMP_PROTECTION_INTEGRITY_FAILURE, __ATOMIC_RELEASE);
+    markIntegrityFailureState();
     NMMP_CHECK_LOG("integrity_failure allowed=0");
 }
 
 extern "C" NmmpProtectionState nmmpProtectionLastState(void) {
-    if (__atomic_load_n(&nmmpProtectionEntryGuard.failed, __ATOMIC_ACQUIRE)) return NMMP_PROTECTION_INTEGRITY_FAILURE;
-    const auto state = static_cast<NmmpProtectionState>(__atomic_load_n(&gDecision, __ATOMIC_ACQUIRE) & 3U);
+    if (__atomic_load_n(&nmmpProtectionEntryGuard.failed, __ATOMIC_ACQUIRE)) {
+        markIntegrityFailureState();
+        return NMMP_PROTECTION_INTEGRITY_FAILURE;
+    }
+    NmmpProtectionState state;
+    uint32_t reasons;
+    if (!loadDecision(&state, &reasons)) return NMMP_PROTECTION_INTEGRITY_FAILURE;
     if (state != NMMP_PROTECTION_INTEGRITY_FAILURE
             && __atomic_load_n(&gClockUnavailable, __ATOMIC_ACQUIRE)) return NMMP_PROTECTION_UNKNOWN;
     return state;
 }
 
 extern "C" uint32_t nmmpProtectionLastReasons(void) {
-    if (__atomic_load_n(&nmmpProtectionEntryGuard.failed, __ATOMIC_ACQUIRE)) return NMMP_REASON_INTEGRITY;
-    const uint32_t value = __atomic_load_n(&gDecision, __ATOMIC_ACQUIRE);
-    const uint32_t clockReason = (value & 3U) != NMMP_PROTECTION_INTEGRITY_FAILURE
+    if (__atomic_load_n(&nmmpProtectionEntryGuard.failed, __ATOMIC_ACQUIRE)) {
+        markIntegrityFailureState();
+        return NMMP_REASON_INTEGRITY;
+    }
+    NmmpProtectionState state;
+    uint32_t reasons;
+    if (!loadDecision(&state, &reasons)) return NMMP_REASON_INTEGRITY;
+    const uint32_t clockReason = state != NMMP_PROTECTION_INTEGRITY_FAILURE
             && __atomic_load_n(&gClockUnavailable, __ATOMIC_ACQUIRE) ? NMMP_REASON_CLOCK_UNAVAILABLE : 0;
-    return (value >> 2U) | clockReason;
+    return reasons | clockReason;
 }

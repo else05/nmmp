@@ -77,9 +77,10 @@ NmmpNativeIntegrityResult nmmpVerifyArtMethods(NmmpCheckStatus *owners) {
     return artResult;
 }
 static unsigned environmentChecks;
+static NmmpCheckStatus stackResult = NMMP_CHECK_NOT_APPLICABLE;
 NmmpCheckStatus nmmpCheckFrameworkClasses(JNIEnv *, jobject) { return NMMP_CHECK_NOT_APPLICABLE; }
 NmmpCheckStatus nmmpCheckPackageCreator(JNIEnv *) { return NMMP_CHECK_NOT_APPLICABLE; }
-NmmpCheckStatus nmmpCheckFrameworkStack(JNIEnv *) { return NMMP_CHECK_NOT_APPLICABLE; }
+NmmpCheckStatus nmmpCheckFrameworkStack(JNIEnv *) { return stackResult; }
 NmmpCheckStatus nmmpCheckModuleOrigins(const NmmpMapsSnapshot *) { return NMMP_CHECK_NOT_APPLICABLE; }
 NmmpCheckStatus nmmpCheckThreadNames() { ++environmentChecks; return NMMP_CHECK_SIGNAL; }
 NmmpCheckStatus nmmpProbeLoopbackPort(uint16_t port) {
@@ -153,6 +154,30 @@ int main(int argc, char **argv) {
         sampler.join();
         check(nmmpProtectionLastState() == NMMP_PROTECTION_INTEGRITY_FAILURE);
         check(nmmpProtectionLastReasons() == NMMP_REASON_INTEGRITY);
+        check(!nmmpProtectionAllowCall(nullptr));
+    } else if (!std::strcmp(argv[1], "decision-zero")) {
+        check(nmmpProtectionPolicyInitialize(nullptr, nullptr));
+        __atomic_store_n(&gDecision, UINT64_C(0), __ATOMIC_RELEASE);
+        check(!nmmpProtectionAllowCall(nullptr));
+        check(nmmpProtectionLastState() == NMMP_PROTECTION_INTEGRITY_FAILURE);
+        check(__atomic_load_n(&gIntegrityLatch, __ATOMIC_ACQUIRE) == kIntegrityLatchFailed);
+    } else if (!std::strcmp(argv[1], "decision-complement")) {
+        check(nmmpProtectionPolicyInitialize(nullptr, nullptr));
+        const uint64_t decisionWord = __atomic_load_n(&gDecision, __ATOMIC_ACQUIRE);
+        __atomic_store_n(&gDecision, decisionWord ^ (UINT64_C(1) << 32U), __ATOMIC_RELEASE);
+        check(!nmmpProtectionAllowCall(nullptr));
+        check(nmmpProtectionLastState() == NMMP_PROTECTION_INTEGRITY_FAILURE);
+    } else if (!std::strcmp(argv[1], "integrity-latch")) {
+        check(nmmpProtectionPolicyInitialize(nullptr, nullptr));
+        nmmpProtectionMarkIntegrityFailure();
+        __atomic_store_n(&gDecision,
+                         nmmpProtectionEncodeDecision(NMMP_PROTECTION_CLEAN, 0),
+                         __ATOMIC_RELEASE);
+        check(!nmmpProtectionAllowCall(nullptr));
+        check(nmmpProtectionLastState() == NMMP_PROTECTION_INTEGRITY_FAILURE);
+    } else if (!std::strcmp(argv[1], "native-required")) {
+        check(nmmpProtectionPolicyInitialize(nullptr, nullptr));
+        __atomic_store_n(&gNativeIntegrity, NMMP_NATIVE_NOT_APPLICABLE, __ATOMIC_RELEASE);
         check(!nmmpProtectionAllowCall(nullptr));
     } else if (!std::strcmp(argv[1], "interval")) {
         check(nmmpProtectionPolicyInitialize(nullptr, nullptr));
@@ -339,23 +364,44 @@ int main(int argc, char **argv) {
         check(nmmpProtectionLastReasons() == NMMP_REASON_DEBUG && appReads == 1);
     } else if (!std::strcmp(argv[1], "environment-startup")) {
         policyFlags = NMMP_POLICY_CHECK_ENVIRONMENT | NMMP_POLICY_ENFORCE;
-        check(nmmpProtectionPolicyInitialize(nullptr, nullptr));
+        check(!nmmpProtectionPolicyInitialize(nullptr, nullptr));
         check(nmmpProtectionLastReasons() == NMMP_REASON_ENVIRONMENT && environmentChecks == 3);
         check(nativeChecks == 1);
         testNow += UINT64_C(20000000000);
-        check(nmmpProtectionAllowCall(nullptr));
+        check(!nmmpProtectionAllowCall(nullptr));
         check(environmentChecks == 6 && nativeChecks == 2);
     } else if (!std::strcmp(argv[1], "art-diagnostic")) {
         artResult = NMMP_NATIVE_MISMATCH;
         policyFlags |= NMMP_POLICY_ENFORCE;
-        check(nmmpProtectionPolicyInitialize(nullptr, nullptr));
-        check(nmmpProtectionLastState() == NMMP_PROTECTION_UNKNOWN);
+        check(!nmmpProtectionPolicyInitialize(nullptr, nullptr));
+        check(nmmpProtectionLastState() == NMMP_PROTECTION_SUSPICIOUS);
         check(nmmpProtectionLastReasons() & NMMP_REASON_ART_ENTRY);
-        check(nmmpProtectionVerifySensitiveCall(nullptr));
+        check(!nmmpProtectionVerifySensitiveCall(nullptr));
         artResult = NMMP_NATIVE_UNAVAILABLE;
         testNow += UINT64_C(20000000000);
         check(nmmpProtectionAllowCall(nullptr));
         check(nmmpProtectionLastReasons() & NMMP_REASON_ART_UNAVAILABLE);
+    } else if (!std::strcmp(argv[1], "caller-stack")) {
+        policyFlags |= NMMP_POLICY_ENFORCE;
+        check(nmmpProtectionPolicyInitialize(nullptr, nullptr));
+        stackResult = NMMP_CHECK_SIGNAL;
+        testNow += UINT64_C(5000000000);
+        pauseRead = true;
+        realWorker = true;
+        check(!nmmpProtectionVerifySensitiveCall(nullptr));
+        {
+            std::unique_lock<std::mutex> lock(mutex);
+            changed.wait(lock, [] { return reading; });
+        }
+        check(!nmmpProtectionVerifySensitiveCall(nullptr));
+        {
+            std::lock_guard<std::mutex> lock(mutex);
+            resumeRead = true;
+        }
+        changed.notify_all();
+        while (__atomic_load_n(&gSampling, __ATOMIC_ACQUIRE)) std::this_thread::yield();
+        check(nmmpProtectionLastState() == NMMP_PROTECTION_SUSPICIOUS);
+        check(nmmpProtectionLastReasons() & NMMP_REASON_CALLER_STACK);
     } else if (!std::strcmp(argv[1], "art-debug-preserved")) {
         policyFlags = NMMP_POLICY_CHECK_DEBUG | NMMP_POLICY_ENFORCE;
         artResult = NMMP_NATIVE_UNAVAILABLE;

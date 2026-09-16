@@ -29,6 +29,42 @@ typedef struct {
     bool allowed;
 } NmmpProtectionDecision;
 
+// The public state values remain stable. Only the in-memory decision word is
+// encoded so no valid decision is all-zero and either 32-bit half validates
+// the other before it is trusted.
+#define NMMP_DECISION_VALUE_COOKIE UINT32_C(0x6d4d4d50)
+#define NMMP_DECISION_CHECK_COOKIE UINT32_C(0xa3c59ac3)
+#define NMMP_DECISION_PAYLOAD(state, reasons) \
+    ((((uint32_t)(reasons)) << 2U) | (uint32_t)(state))
+#define NMMP_ENCODED_DECISION(state, reasons) \
+    (((uint64_t)((~NMMP_DECISION_PAYLOAD((state), (reasons))) \
+                 ^ NMMP_DECISION_CHECK_COOKIE) << 32U) \
+     | (uint64_t)(NMMP_DECISION_PAYLOAD((state), (reasons)) \
+                  ^ NMMP_DECISION_VALUE_COOKIE))
+
+static inline uint64_t nmmpProtectionEncodeDecision(NmmpProtectionState state,
+                                                     uint32_t reasons) {
+    return NMMP_ENCODED_DECISION(state, reasons);
+}
+
+static inline bool nmmpProtectionDecodeDecision(uint64_t encoded,
+                                                 NmmpProtectionState *state,
+                                                 uint32_t *reasons) {
+    const uint32_t payload = (uint32_t)encoded ^ NMMP_DECISION_VALUE_COOKIE;
+    const uint32_t inverse = (uint32_t)(encoded >> 32U) ^ NMMP_DECISION_CHECK_COOKIE;
+    const uint32_t decodedState = payload & 3U;
+    const uint32_t decodedReasons = payload >> 2U;
+    if (inverse != ~payload
+            || (decodedReasons & ~NMMP_REASON_ALL)
+            || (decodedState == NMMP_PROTECTION_CLEAN && decodedReasons)
+            || (decodedState == NMMP_PROTECTION_SUSPICIOUS && !decodedReasons)
+            || (decodedState == NMMP_PROTECTION_INTEGRITY_FAILURE
+                && !(decodedReasons & NMMP_REASON_INTEGRITY))) return false;
+    *state = (NmmpProtectionState)decodedState;
+    *reasons = decodedReasons;
+    return true;
+}
+
 static inline NmmpProtectionDecision nmmpProtectionClassify(
         uint32_t policyFlags,
         bool integrityFailure,
@@ -51,19 +87,20 @@ static inline NmmpProtectionDecision nmmpProtectionClassify(
     result.state = result.reasons ? NMMP_PROTECTION_SUSPICIOUS
                                   : (applicable && (evidence.valid & applicable) == applicable
                                              ? NMMP_PROTECTION_CLEAN : NMMP_PROTECTION_UNKNOWN);
-    // Policy v5: enforce restricts explicit debugger evidence. Environment
-    // clues alone only request integrity verification; they do not deny calls.
-    result.allowed = !(policyFlags & NMMP_POLICY_ENFORCE) || !(result.reasons & NMMP_REASON_DEBUG);
+    // ENFORCE is fail-closed for every confirmed suspicious signal. UNKNOWN
+    // remains distinct so an unavailable check is not treated as a detection.
+    result.allowed = !(policyFlags & NMMP_POLICY_ENFORCE)
+                     || result.state != NMMP_PROTECTION_SUSPICIOUS;
     return result;
 }
 
 static inline bool nmmpProtectionAllowState(uint32_t policyFlags,
                                             NmmpProtectionState state,
                                             uint32_t reasons) {
+    (void)reasons;
     if (state == NMMP_PROTECTION_INTEGRITY_FAILURE) return false;
     return !(policyFlags & NMMP_POLICY_ENFORCE)
-           || state != NMMP_PROTECTION_SUSPICIOUS
-           || !(reasons & (NMMP_REASON_DEBUG | NMMP_REASON_ART_RUNTIME_MODIFIED));
+           || state != NMMP_PROTECTION_SUSPICIOUS;
 }
 
 #endif

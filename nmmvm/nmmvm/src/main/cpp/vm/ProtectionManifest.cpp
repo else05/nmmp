@@ -15,7 +15,7 @@ const size_t kHeaderSize = 96;
 const size_t kEntrySize = 120;
 const size_t kMaximumManifestSize = 64U * 1024U;
 const uint32_t kMaximumEntries = 256;
-const uint32_t kPolicyVersion = 7;
+const uint32_t kPolicyVersion = 8;
 const uint32_t kAllowedPolicyFlags = 15;
 const uint8_t kKeyXorMask[32] = {
         0x91, 0x37, 0xe4, 0x2b, 0x6d, 0xa8, 0x53, 0xc1,

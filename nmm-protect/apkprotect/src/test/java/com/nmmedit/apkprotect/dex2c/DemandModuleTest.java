@@ -275,11 +275,29 @@ public class DemandModuleTest {
         pool.writeTo(store);
         DexBackedDexFile dex = new DexBackedDexFile(Opcodes.forApi(26), store.getData());
         ClassAnalyzer analyzer = new ClassAnalyzer(); analyzer.loadDexFile(dex);
-        StringWriter source = new StringWriter();
-        JniCodeGenerator generator = new JniCodeGenerator(dex, analyzer, new NoneInstructionRewriter(),
-                new ProtectionContext(ROOT), MODULE);
-        generator.generate(new DexConfig(new File("."), "classes.dex"), new StringWriter(), source);
-        String code = source.toString();
+        Path sensitiveMethods = Files.createTempFile("nmmp-sensitive-methods", ".txt");
+        Files.write(sensitiveMethods, Collections.singletonList("LTest;->run()V"), StandardCharsets.UTF_8);
+        String previousSensitiveMethods = System.getProperty("nmmp.sensitiveMethodsFile");
+        String code;
+        try {
+            System.setProperty("nmmp.sensitiveMethodsFile", sensitiveMethods.toString());
+            StringWriter source = new StringWriter();
+            JniCodeGenerator generator = new JniCodeGenerator(dex, analyzer, new NoneInstructionRewriter(),
+                    new ProtectionContext(ROOT), MODULE);
+            generator.generate(new DexConfig(new File("."), "classes.dex"), new StringWriter(), source);
+            code = source.toString();
+        } finally {
+            if (previousSensitiveMethods == null) System.clearProperty("nmmp.sensitiveMethodsFile");
+            else System.setProperty("nmmp.sensitiveMethodsFile", previousSensitiveMethods);
+            Files.deleteIfExists(sensitiveMethods);
+        }
+        int wrapperStart = code.indexOf("    bool nmmp_entry_allowed;");
+        int wrapperEnd = code.indexOf("    regptr_t regs[", wrapperStart);
+        assertTrue(wrapperStart >= 0 && wrapperEnd > wrapperStart);
+        String wrapper = code.substring(wrapperStart, wrapperEnd);
+        assertTrue(wrapper.contains("if (!nmmp_vm_require_ready())"));
+        assertTrue(wrapper.contains("if (!nmmpProtectionVerifySensitiveCall(env))"));
+        assertFalse(wrapper.contains("nmmp_require_ready(env)"));
         assertFalse(code.contains("vmExecute(env,"));
         assertFalse(code.contains("vmEncodedCode"));
         assertTrue(code.indexOf("static vmDemandModule nmmpModule;") < code.indexOf("vmExecuteToken("));

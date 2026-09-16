@@ -63,9 +63,9 @@ if (NMMP_POLICY_RUNTIME_TESTS)
     target_include_directories(policy_runtime_test PRIVATE "${NMMP_VM_SOURCE}" "${NMMP_VM_SOURCE}/include" ${JNI_INCLUDE_DIRS})
     target_compile_features(policy_runtime_test PRIVATE cxx_std_11)
     target_link_libraries(policy_runtime_test PRIVATE Threads::Threads)
-    foreach (CASE truncation integrity-race interval stages single-sampler async-single-worker worker-create-failure art-runtime-policy maps-tail maps-invalid
+    foreach (CASE truncation integrity-race decision-zero decision-complement integrity-latch native-required interval stages single-sampler async-single-worker worker-create-failure art-runtime-policy maps-tail maps-invalid
             jni-pending jni-method-error jni-call-error app-debug-retained native-mismatch native-unavailable environment-startup
-            clock-startup clock-periodic clock-acquired clock-completion art-diagnostic art-debug-preserved)
+            clock-startup clock-periodic clock-acquired clock-completion art-diagnostic caller-stack art-debug-preserved)
         add_test(NAME protection_policy_runtime_${CASE} COMMAND policy_runtime_test ${CASE})
         set_tests_properties(protection_policy_runtime_${CASE} PROPERTIES TIMEOUT 10)
     endforeach ()

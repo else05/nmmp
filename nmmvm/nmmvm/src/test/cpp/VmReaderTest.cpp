@@ -25,6 +25,14 @@ int main() {
         CHECK(!encoded.target(1)); // operand is not an executable instruction
         VmReader bad(vectorCode, sizeof(vectorCode), nullptr, 0, vectorBoundaries, vectorSeed);
         bad.operand(0, 2); CHECK(bad.failed()); // crosses into the next instruction
+
+        VmReader cached(vectorCode, sizeof(vectorCode), vectorTries, sizeof(vectorTries),
+                        vectorBoundaries, vectorSeed);
+        for (unsigned pass = 0; pass < 64; ++pass) {
+            CHECK(cached.instruction(0) == (vectorPlain[0] | (uint16_t(vectorPlain[1]) << 8)));
+            CHECK(cached.operand(0, 1) == (vectorPlain[2] | (uint16_t(vectorPlain[3]) << 8)));
+        }
+        CHECK(cached.cacheMisses() == 2); // FETCH and OPERAND retain independent cache lines.
     }
     const uint8_t bytes[] = {0x12,0xab,0xff,0xff,0x01,0x80,0x23,0x45};
     VmReader r(bytes, sizeof(bytes));

@@ -1,6 +1,7 @@
 #include <assert.h>
 #include <pthread.h>
 #include <string.h>
+#include <sys/mman.h>
 #include <time.h>
 static unsigned clockCalls;
 static time_t seconds = 10;
@@ -29,11 +30,16 @@ int main(void) {
     int allowed;
     NMMP_CHECK_PROTECTION_ENTRIES(allowed);
     assert(!allowed);
+    NmmpProtectionEntryBaseline *baseline = mmap(0, sizeof(*baseline),
+            PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+    assert(baseline != MAP_FAILED);
     for (unsigned i = 0; i < NMMP_ENTRY_GUARD_COUNT; ++i) {
         memset(code[i], i + 1, sizeof(code[i]));
-        nmmpProtectionEntryGuard.addresses[i] = (uintptr_t)code[i];
-        memcpy(nmmpProtectionEntryGuard.expected[i], code[i], sizeof(code[i]));
+        baseline->addresses[i] = (uintptr_t)code[i];
+        memcpy(baseline->expected[i], code[i], sizeof(code[i]));
     }
+    assert(!mprotect(baseline, sizeof(*baseline), PROT_READ));
+    nmmpProtectionEntryGuard.baseline = baseline;
     nmmpProtectionEntryGuard.ready = 1;
     pthread_t threads[32];
     pthread_barrier_init(&barrier, 0, 32);
@@ -60,5 +66,6 @@ int main(void) {
     clockFails = 1;
     NMMP_CHECK_PROTECTION_ENTRIES(allowed);
     assert(!allowed && !nmmpProtectionEntryGuard.failed && !nmmpProtectionEntryGuard.busy);
+    assert(!munmap(baseline, sizeof(*baseline)));
     return 0;
 }

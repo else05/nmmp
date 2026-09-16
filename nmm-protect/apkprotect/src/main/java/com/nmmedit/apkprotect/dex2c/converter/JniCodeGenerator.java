@@ -193,15 +193,24 @@ public class JniCodeGenerator {
                 + "        }\n"
                 + (returnType.equals("V") ? "        return;\n" : "        return 0;\n")
                 + "    }\n");
-        writer.write("    if (!nmmp_require_ready(env)) return" + (returnType.equals("V") ? ";\n" : " 0;\n"));
         if (sensitive) {
-            writer.write("    if (!nmmpProtectionVerifySensitiveCall(env)) {\n"
+            writer.write("    if (!nmmp_vm_require_ready()) {\n"
+                    + "        nmmp_vm_fail();\n"
+                    + "        if (!(*env)->ExceptionCheck(env)) {\n"
+                    + "            jclass error = (*env)->FindClass(env, \"java/lang/InternalError\");\n"
+                    + "            if (error) { (*env)->ThrowNew(env, error, \"Protected execution unavailable\"); (*env)->DeleteLocalRef(env, error); }\n"
+                    + "        }\n"
+                    + (returnType.equals("V") ? "        return;\n" : "        return 0;\n")
+                    + "    }\n"
+                    + "    if (!nmmpProtectionVerifySensitiveCall(env)) {\n"
                     + "        if (!(*env)->ExceptionCheck(env)) {\n"
                     + "            jclass error = (*env)->FindClass(env, \"java/lang/InternalError\");\n"
                     + "            if (error) { (*env)->ThrowNew(env, error, \"Sensitive operation unavailable\"); (*env)->DeleteLocalRef(env, error); }\n"
                     + "        }\n"
                     + (returnType.equals("V") ? "        return;\n" : "        return 0;\n")
                     + "    }\n");
+        } else {
+            writer.write("    if (!nmmp_require_ready(env)) return" + (returnType.equals("V") ? ";\n" : " 0;\n"));
         }
 
         writer.append(regsAssign);

@@ -22,8 +22,10 @@ public:
     VmReader(const VmReader &) = delete;
     VmReader &operator=(const VmReader &) = delete;
     ~VmReader() {
-        volatile uint64_t *wipe = cache_;
-        for (unsigned i = 0; i < 8; ++i) wipe[i] = 0;
+        for (unsigned domain = 0; domain < CACHE_DOMAIN_COUNT; ++domain) {
+            volatile uint64_t *wipe = cache_[domain];
+            for (unsigned slot = 0; slot < 8; ++slot) wipe[slot] = 0;
+        }
         volatile uint64_t *seed = &seed_; *seed = 0;
     }
 
@@ -89,8 +91,13 @@ public:
     }
     uint32_t uleb(uint32_t &cursor) { return leb(cursor, false); }
     int32_t sleb(uint32_t &cursor) { return int32_t(leb(cursor, true)); }
+#if defined(NMMP_VM_READER_TEST)
+    uint32_t cacheMisses() const { return cacheMisses_; }
+#endif
 
 private:
+    static const unsigned CACHE_DOMAIN_COUNT = NMMP_READER_TRIES;
+
     unsigned kind(uint32_t pc) const { return (boundaries_[pc / 2] >> ((pc & 1) * 4)) & 15; }
     static uint64_t mix(uint64_t x) {
         x = (x ^ (x >> 30)) * UINT64_C(0xbf58476d1ce4e5b9);
@@ -99,18 +106,22 @@ private:
     }
     uint8_t decode(uint8_t byte, uint32_t pos, uint32_t domain) {
         if (!boundaries_) return byte;
+        const unsigned cacheDomain = domain - NMMP_READER_FETCH;
         uint32_t window = pos & ~uint32_t(63);
-        if (cacheDomain_ != domain || cacheWindow_ != window) {
-            cacheDomain_ = domain; cacheWindow_ = window;
-            cacheValid_ = 0;
+        if (cacheWindow_[cacheDomain] != window) {
+            cacheWindow_[cacheDomain] = window;
+            cacheValid_[cacheDomain] = 0;
         }
         unsigned slot = (pos & 63) / 8;
-        if (!(cacheValid_ & (1u << slot))) {
+        if (!(cacheValid_[cacheDomain] & (1u << slot))) {
+#if defined(NMMP_VM_READER_TEST)
+            ++cacheMisses_;
+#endif
             uint64_t input = seed_ ^ (uint64_t(domain) * UINT64_C(0xd6e8feb86659fd93));
-            cache_[slot] = mix(input ^ (pos / 8));
-            cacheValid_ |= 1u << slot;
+            cache_[cacheDomain][slot] = mix(input ^ (pos / 8));
+            cacheValid_[cacheDomain] |= 1u << slot;
         }
-        return byte ^ uint8_t(cache_[slot] >> ((pos & 7) * 8));
+        return byte ^ uint8_t(cache_[cacheDomain][slot] >> ((pos & 7) * 8));
     }
     uint16_t word(int64_t pc, uint32_t domain) {
         if (pc < 0 || !code_ || !range(uint64_t(pc) * 2, 2, codeBytes_)) {
@@ -144,10 +155,12 @@ private:
     const uint8_t *boundaries_ = nullptr;
     const uint8_t *row_ = nullptr;
     uint64_t seed_ = 0;
-    uint64_t cache_[8] = {};
-    uint32_t cacheWindow_ = 0;
-    uint32_t cacheDomain_ = 0;
-    uint8_t cacheValid_ = 0;
+    uint64_t cache_[CACHE_DOMAIN_COUNT][8] = {};
+    uint32_t cacheWindow_[CACHE_DOMAIN_COUNT] = {};
+    uint8_t cacheValid_[CACHE_DOMAIN_COUNT] = {};
+#if defined(NMMP_VM_READER_TEST)
+    uint32_t cacheMisses_ = 0;
+#endif
 };
 
 #endif

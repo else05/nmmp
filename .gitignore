@@ -2,3 +2,6 @@ demo/*
 .serena
 .idea
 docs
+nmm-protect/scripts/windows/nmmp.env
+nmm-protect/scripts/windows/artifact-private.pk8
+nmm-protect/scripts/windows/artifact-public.spki

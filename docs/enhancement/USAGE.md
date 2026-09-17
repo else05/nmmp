@@ -8,23 +8,11 @@
 
 当前源码不再包含 legacy 执行模式。如需复查旧版本，应使用历史提交和对应产物；不要把旧模板或生成目录混入当前构建。template5 用于拒绝旧模板，codec3 数据布局保持不变。
 
-## 本轮构建入口
+## 当前构建入口
 
-本轮单路径保护器位于 `nmm-protect/build/codec3-only-20260913/delivery/vm-protect.jar`。本轮未覆盖 `D:/Android/SDK_WSL/nmmp/vm-protect.jar` 或 `E:/env-tool/nmmp-wsl.sh`，继续使用这些旧入口不会自动切换到此版本。验收记录见 [兼容路径清理](CODEC3_ONLY.md)。
+当前版本使用 Windows 原生脚本，不再通过 WSL 或 O-MVLL 构建。JAR、native 模板同步、env 配置项、构建部署步骤与命令行参数见 [Windows 原生构建与配置说明](../../nmm-protect/scripts/windows/README.md)。修改 native 源码后必须先运行 `nmm-protect/mksrc/build-src.ps1` 重建正式模板；部署 JAR 时也必须同步目标目录的 `tools/vmsrc.zip`，避免外部旧模板覆盖 JAR 内资源。
 
-先将新 JAR 和输入 APK 复制到新的本地工作目录，避免重复写入历史生成目录或混用旧 `tools/vmsrc.zip`。在已配置的 WSL 环境中执行：
-
-```bash
-source /mnt/d/Android/SDK_WSL/nmmp-env.sh
-unset NMMP_TEST_SEED
-export CMAKE_BUILD_PARALLEL_LEVEL=5
-java -jar /path/to/new-run/vm-protect.jar apk \
-  /path/to/new-run/input.apk \
-  /mnt/d/AndroidProjects/sync-ui/app/convertRules.txt \
-  /mnt/d/AndroidProjects/sync-ui/app/build/outputs/mapping/release/mapping.txt
-```
-
-生成的 `build/input-protect.apk` 仍需使用已授权本机签名配置对齐、签名。不要把密码或私钥写入报告。修改 native 源码后，通过 `nmm-protect/mksrc/build-src.sh` 同步正式模板，再构建 JAR；仅编译 Android 测试工程不会更新保护器模板。
+生成的 `build/input-protect.apk` 仍需使用已授权本机签名配置对齐、签名。不要把密码或私钥写入报告；仅编译 Android 测试工程不会更新保护器模板。
 
 本轮 APK 输出为 `nmm-protect/build/codec3-only-20260913/delivery/protected-signed.apk`。此前 `on-demand-20260912` 目录及 [S5结果](S5_RESULTS.md)、[最终擦除审查](POST_REVIEW.md) 都是历史产物和历史性能记录，保持不变，不能当作本轮完整性能验收。
 

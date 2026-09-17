@@ -16,7 +16,11 @@ function Import-EnvFile([string]$Path) {
         $name = $text.Substring(0, $separator).Trim()
         $value = $text.Substring($separator + 1).Trim()
         if ($name -notmatch '^[A-Za-z_][A-Za-z0-9_]*$') { throw "Invalid env name: $name" }
-        [Environment]::SetEnvironmentVariable($name, $value, 'Process')
+        if ($value.Length -eq 0) {
+            Remove-Item -Path "Env:$name" -ErrorAction SilentlyContinue
+        } else {
+            [Environment]::SetEnvironmentVariable($name, $value, 'Process')
+        }
     }
 }
 

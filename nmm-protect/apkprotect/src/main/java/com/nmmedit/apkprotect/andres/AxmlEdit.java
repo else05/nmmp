@@ -8,6 +8,8 @@ import java.util.List;
 
 public class AxmlEdit {
 
+    private static final String ANDROID_NAMESPACE = "http://schemas.android.com/apk/res/android";
+
     @Nonnull
     public static String getApplicationName(@Nonnull byte[] manifestBytes) {
         ResourceFile file = new ResourceFile(manifestBytes);
@@ -51,6 +53,35 @@ public class AxmlEdit {
         }
         //最低按安卓5
         return 21;
+    }
+
+    public static boolean isExtractNativeLibsFalse(@Nonnull byte[] manifestBytes) {
+        ResourceFile file = new ResourceFile(manifestBytes);
+        for (Chunk chunk : file.getChunks()) {
+            if (!(chunk instanceof XmlChunk)) {
+                continue;
+            }
+            XmlChunk xmlChunk = (XmlChunk) chunk;
+            for (Chunk subChunk : xmlChunk.getChunks().values()) {
+                if (!(subChunk instanceof XmlStartElementChunk)) {
+                    continue;
+                }
+                XmlStartElementChunk startElement = (XmlStartElementChunk) subChunk;
+                if (!"application".equals(startElement.getName())) {
+                    continue;
+                }
+                for (XmlAttribute attribute : startElement.getAttributes()) {
+                    ResourceValue value = attribute.typedValue();
+                    if ("extractNativeLibs".equals(attribute.name())
+                            && ANDROID_NAMESPACE.equals(attribute.namespace())
+                            && value.type() == ResourceValue.Type.INT_BOOLEAN) {
+                        return value.data() == 0;
+                    }
+                }
+                return false;
+            }
+        }
+        return false;
     }
 
     @Nonnull

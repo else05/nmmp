@@ -37,6 +37,7 @@ public class ApkProtect {
     public static final String ANDROID_MANIFEST_XML = "AndroidManifest.xml";
     public static final String ANDROID_APP_APPLICATION = "android.app.Application";
     private static final String GENERATED_APPLICATION = "com.google.libc.NativeApplication";
+    static final long NATIVE_LIBRARY_ALIGNMENT = 4L * 1024L;
     private final ApkFolders apkFolders;
     private final InstructionRewriter instructionRewriter;
     private final ClassAndMethodFilter filter;
@@ -69,6 +70,7 @@ public class ApkProtect {
                 //错误apk文件
                 throw new RuntimeException("Not is apk");
             }
+            final boolean storeNativeLibraries = AxmlEdit.isExtractNativeLibsFalse(manifestBytes);
 
             final String packageName = AxmlEdit.getPackageName(manifestBytes);
             final ProtectionContext protectionContext = ProtectionContext.createBound(
@@ -201,13 +203,8 @@ public class ApkProtect {
                 for (Map.Entry<String, Map<File, File>> entry : nativeLibs.entrySet()) {
                     final String abi = entry.getKey();
                     for (File file : entry.getValue().values()) {
-                        //最小sdk如果不小于23,且AndroidManifest.xml里面没有android:extractNativeLibs="true", so不能压缩,且需要页对齐
-//                        final Source source = Sources.from(file, "lib/" + abi + "/" + file.getName(), Deflater.NO_COMPRESSION);
-//                        source.align(4*1024);
-                        //todo 增加处理不需要压缩的.so文件
-                        final Source source = Sources.from(file, "lib/" + abi + "/" + file.getName(), Deflater.DEFAULT_COMPRESSION);
-                        source.align(4);
-                        zipArchive.add(source);
+                        zipArchive.add(nativeLibrarySource(
+                                file, "lib/" + abi + "/" + file.getName(), storeNativeLibraries));
                     }
 
                 }
@@ -482,6 +479,14 @@ public class ApkProtect {
             //2. 对不能压缩的文件,其中如果是png图片使用其他png压缩工具, https://github.com/depsypher/pngtastic.git
         }
         outArchive.add(zipSource);
+    }
+
+    static Source nativeLibrarySource(File file, String entryName,
+                                      boolean storeNativeLibraries) throws IOException {
+        final Source source = Sources.from(file, entryName,
+                storeNativeLibraries ? Deflater.NO_COMPRESSION : Deflater.DEFAULT_COMPRESSION);
+        source.align(storeNativeLibraries ? NATIVE_LIBRARY_ALIGNMENT : 4);
+        return source;
     }
 
 

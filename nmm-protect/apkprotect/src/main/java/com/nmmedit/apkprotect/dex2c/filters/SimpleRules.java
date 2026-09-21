@@ -115,6 +115,11 @@ public class SimpleRules {
     private Set<MethodRule> methodRules;
 
     public boolean matchClass(@Nonnull String classType, @Nullable String supperType, @Nonnull List<String> ifacTypes) {
+        methodRules = findMethodRules(classType, supperType, ifacTypes);
+        return methodRules != null;
+    }
+
+    private Set<MethodRule> findMethodRules(String classType, String supperType, List<String> ifacTypes) {
         for (ClassRule rule : convertRules.keySet()) {
             final String typeRegex = toRegex(classNameToType(rule.className));
             if (classType.matches(typeRegex)) {// match classType
@@ -122,8 +127,7 @@ public class SimpleRules {
                     if (supperType != null) {
                         final String type = classNameToType(rule.supperName);
                         if (supperType.equals(type)) {
-                            methodRules = convertRules.get(rule);
-                            return true;
+                            return convertRules.get(rule);
                         }
                     }
                     continue;
@@ -131,21 +135,26 @@ public class SimpleRules {
                 if (!"".equals(rule.interfaceName)) {//interface name not empty
                     for (String iface : ifacTypes) {
                         if (iface.equals(classNameToType(rule.interfaceName))) {
-                            methodRules = convertRules.get(rule);
-                            return true;
+                            return convertRules.get(rule);
                         }
                     }
                     continue;
                 }
-                methodRules = convertRules.get(rule);
-                return true;
+                return convertRules.get(rule);
             }
         }
-        methodRules = null;
-        return false;
+        return null;
+    }
+
+    public boolean matchMethod(String classType, String superclass, List<String> interfaces, String methodName) {
+        return matchMethod(findMethodRules(classType, superclass, interfaces), methodName);
     }
 
     public boolean matchMethod(String methodName) {
+        return matchMethod(methodRules, methodName);
+    }
+
+    private boolean matchMethod(Set<MethodRule> methodRules, String methodName) {
         if (methodRules == null || methodName == null) {
             return false;
         }

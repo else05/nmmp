@@ -22,6 +22,7 @@ set(VM_SRC_FILES
         Sha256.cpp
         ProtectionManifest.cpp
         ProtectionPolicy.cpp
+        ProtectionMarker.cpp
         ProcessMaps.cpp
         ModuleOrigins.cpp
         NativeIntegrity.cpp

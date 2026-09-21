@@ -6,14 +6,14 @@ set(NMMP_JNI_REGISTRATION_FIXTURE "" CACHE PATH "Directory exported by JniRegist
 if (NMMP_JNI_REGISTRATION_FIXTURE)
     find_package(JNI REQUIRED)
     add_executable(jni_registration_test jni_registration_test.c)
-    target_include_directories(jni_registration_test PRIVATE ${JNI_INCLUDE_DIRS} "${NMMP_JNI_REGISTRATION_FIXTURE}")
+    target_include_directories(jni_registration_test PRIVATE ${JNI_INCLUDE_DIRS} "${NMMP_JNI_REGISTRATION_FIXTURE}" "${NMMP_VM_SOURCE}/include")
     if (NOT ANDROID)
         target_link_libraries(jni_registration_test PRIVATE pthread)
     endif ()
     foreach (CASE negative past-end huge oom missing-class register-error register-exception pending small-ok large-ok
             bound-setup-missing unbound-setup-missing bound-setup-error unbound-setup-error
             bound-setup-pending unbound-setup-pending activation-missing-field activation-context-exception
-            activation-failure activation-pending activation-no-context)
+            activation-failure activation-pending activation-no-context decode-name decode-signature decode-partial)
         add_test(NAME jni_registration_${CASE} COMMAND jni_registration_test ${CASE})
     endforeach ()
 endif ()

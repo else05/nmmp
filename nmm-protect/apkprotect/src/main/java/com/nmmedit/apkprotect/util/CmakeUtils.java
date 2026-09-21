@@ -139,8 +139,8 @@ public class CmakeUtils {
                     "loader/Envelope.c", "loader/Envelope.h", "loader/Loader.c", "loader/Loader.h",
                     "loader/Once.c", "loader/Once.h", "loader/Stage0.h", "loader/Seal.java",
                     "loader/inner.exports", "loader/outer.exports",
-                    "vm/ProtectionManifest.cpp", "vm/ProtectionPolicy.cpp",
-                    "vm/include/ProtectionManifest.h", "vm/include/ProtectionPolicy.h",
+                    "vm/ProtectionManifest.cpp", "vm/ProtectionPolicy.cpp", "vm/ProtectionMarker.cpp",
+                    "vm/include/ProtectionManifest.h", "vm/include/ProtectionPolicy.h", "vm/include/ProtectionMarker.h",
                     "vm/include/ProtectionPolicyTypes.h", "vm/include/ProtectionPolicyInternal.h",
                     "vm/include/ProtectionManifestConfig.h",
                     "vm/JavaEnvironmentChecks.cpp", "vm/include/JavaEnvironmentChecks.h",
@@ -193,7 +193,8 @@ public class CmakeUtils {
             final ZipEntry vmCmakeEntry = requireZipEntry(zipFile, "vm/CMakeLists.txt", vmsrcFile);
             final String vmCmake = readZipEntry(zipFile, vmCmakeEntry);
             if (!vmCmake.contains("ProtectionManifest.cpp")
-                    || !vmCmake.contains("ProtectionPolicy.cpp") || !vmCmake.contains("ArtifactSignature.cpp")
+                    || !vmCmake.contains("ProtectionPolicy.cpp") || !vmCmake.contains("ProtectionMarker.cpp")
+                    || !vmCmake.contains("ArtifactSignature.cpp")
                     || !vmCmake.contains("JavaEnvironmentChecks.cpp") || !vmCmake.contains("ModuleOrigins.cpp")
                     || !vmCmake.contains("OuterIntegrity.cpp")
                     || !vmCmake.contains("OuterImports.cpp")

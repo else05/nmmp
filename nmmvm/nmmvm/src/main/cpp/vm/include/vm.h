@@ -69,6 +69,9 @@ typedef struct {
     //const_string指令加载的字符串对象
     jstring (*dvmConstantString)(JNIEnv *env, u4 idx);
 
+    // Optional for resolvers returning owned temporary type strings.
+    void (*dvmReleaseTypeUtf)(const char *type);
+
 } vmResolver;
 
 

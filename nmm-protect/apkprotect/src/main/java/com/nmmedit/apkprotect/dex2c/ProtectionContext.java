@@ -15,7 +15,7 @@ import com.android.tools.smali.dexlib2.iface.Method;
 public final class ProtectionContext {
 
     public static final int CODEC_VERSION = 3;
-    public static final int TEMPLATE_VERSION = 7;
+    public static final int TEMPLATE_VERSION = 9;
 
     public int getCodecVersion() { return CODEC_VERSION; }
     public String getDecodeMode() { return "on-demand-v1"; }

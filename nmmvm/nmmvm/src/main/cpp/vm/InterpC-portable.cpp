@@ -842,7 +842,7 @@ FINISH(2);
         ScopedLocalRef<jclass> arrayClass(env,                              \
                 dvmResolver->dvmFindClass(env, _type));                     \
         if (arrayClass.get() == NULL) {                                     \
-            GOTO_exceptionThrown();                                         \
+            newArray = NULL; break;                                         \
         }                                                                   \
         newArray = wrapper->NewObjectArray(env, (_len), arrayClass.get(), NULL);     \
         break;                                                              \
@@ -1629,6 +1629,7 @@ jvalue vmInterpretReader(JNIEnv *env, const vmCode *code,
         }
 
         NEW_ARRAY(type[1], type + 1, length);
+        if (dvmResolver->dvmReleaseTypeUtf) dvmResolver->dvmReleaseTypeUtf(type);
 
         if (newArray == NULL) {
             GOTO_exceptionThrown();
@@ -3023,6 +3024,7 @@ HANDLE_OP_SHX_INT_LIT8(OP_USHR_INT_LIT8, "ushr", (u4), >>)
         LOGVV("+++ filled-new-array type is '%s'", type);
         typeCh = type[1];
         if (typeCh == 'D' || typeCh == 'J') {
+            if (dvmResolver->dvmReleaseTypeUtf) dvmResolver->dvmReleaseTypeUtf(type);
             /* category 2 primitives not allowed */
             dvmThrowRuntimeException(env,
                                      "bad filled array req");
@@ -3030,10 +3032,12 @@ HANDLE_OP_SHX_INT_LIT8(OP_USHR_INT_LIT8, "ushr", (u4), >>)
         } else if (typeCh != 'Z' && typeCh != 'B' && typeCh != 'C'
                 && typeCh != 'S' && typeCh != 'I' && typeCh != 'F'
                 && typeCh != 'L' && typeCh != '[') {
+            if (dvmResolver->dvmReleaseTypeUtf) dvmResolver->dvmReleaseTypeUtf(type);
             dvmThrowInternalError(env, "bad filled array type");
             GOTO_exceptionThrown();
         }
         NEW_ARRAY(typeCh, type + 1, vsrc1);
+        if (dvmResolver->dvmReleaseTypeUtf) dvmResolver->dvmReleaseTypeUtf(type);
 
 
         if (newArray == NULL)

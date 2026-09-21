@@ -500,6 +500,21 @@ public class JniCodeGenerator {
         //当前dex下所有处理过的class对应的本地方法注册
         final String funName = MyMethodUtil.getJniFunctionName(config.getRegisterNativesClassName(),
                 config.getRegisterNativesMethodName(), Collections.singletonList("I"), "V");
+        writer.write("static void nmmp_release_registration(JNINativeMethod *methods, u4 count) {\n"
+                + "    for (u4 i = 0; i < count; ++i) {\n"
+                + "        vmStringRelease(methods[i].name); vmStringRelease(methods[i].signature);\n"
+                + "        methods[i].name = NULL; methods[i].signature = NULL;\n"
+                + "    }\n}\n"
+                + "static bool nmmp_decode_registration(JNIEnv *env, JNINativeMethod *methods, u4 offset, u4 count) {\n"
+                + "    memset(methods, 0, sizeof(*methods) * count);\n"
+                + "    for (u4 i = 0; i < count; ++i) {\n"
+                + "        MyNativeMethod value = gNativeMethods[offset + i];\n"
+                + "        methods[i].name = nmmp_decode_string(env, value.nameIdx);\n"
+                + "        if (!methods[i].name) { nmmp_release_registration(methods, count); return false; }\n"
+                + "        methods[i].signature = nmmp_decode_string(env, value.sigIdx);\n"
+                + "        if (!methods[i].signature) { nmmp_release_registration(methods, count); return false; }\n"
+                + "        methods[i].fnPtr = value.fnPtr;\n"
+                + "    }\n    return true;\n}\n\n");
         if (protectionContext.isSignatureBound()) {
             generateBoundRegisterCode(config, writer, funName, dataOff);
             return;
@@ -521,24 +536,22 @@ public class JniCodeGenerator {
                         "        methods = methodBuf;\n" +
                         "    }\n" +
                         "\n" +
-                        "    jclass clazz = (*env)->FindClass(env, STRING_BY_CLASS_ID(data.classIdx));\n" +
+                        "    jclass clazz = dvmResolveClass(env, data.classIdx);\n" +
                         "    if (clazz == NULL) {\n" +
                         "        if (methods != methodBuf) free(methods);\n" +
                         "        nmmp_vm_fail(); nmmp_require_ready(env);\n" +
                         "        return;\n" +
                         "    }\n" +
-                        "    for (int midx = 0; midx < data.count; ++midx) {\n" +
-                        "        MyNativeMethod myNativeMethod = gNativeMethods[data.offset + midx];\n" +
-                        "\n" +
-                        "        JNINativeMethod *method = methods + midx;\n" +
-                        "        method->name = STRING_BY_ID(myNativeMethod.nameIdx);\n" +
-                        "        method->signature = STRING_BY_ID(myNativeMethod.sigIdx);\n" +
-                        "        method->fnPtr = myNativeMethod.fnPtr;\n" +
+                        "    if (!nmmp_decode_registration(env, methods, data.offset, data.count)) {\n" +
+                        "        (*env)->DeleteLocalRef(env, clazz);\n" +
+                        "        if (methods != methodBuf) free(methods);\n" +
+                        "        nmmp_vm_fail(); nmmp_require_ready(env); return;\n" +
                         "    }\n" +
                         "\n" +
                         "    const jint result = (*env)->RegisterNatives(env, clazz, methods, data.count);\n" +
                         "    const bool artValid = result == JNI_OK && !(*env)->ExceptionCheck(env)\n" +
                         "            && nmmp_register_sensitive(env, clazz, methods, data.offset, data.count);\n" +
+                        "    nmmp_release_registration(methods, data.count);\n" +
                         "\n" +
                         "    (*env)->DeleteLocalRef(env, clazz);\n" +
                         "\n" +
@@ -577,21 +590,21 @@ public class JniCodeGenerator {
                         + "    } else {\n"
                         + "        methods = methodBuf;\n"
                         + "    }\n"
-                        + "    jclass clazz = (*env)->FindClass(env, STRING_BY_CLASS_ID(data.classIdx));\n"
+                        + "    jclass clazz = dvmResolveClass(env, data.classIdx);\n"
                         + "    if (clazz == NULL) {\n"
                         + "        if (methods != methodBuf) free(methods);\n"
                         + "        return false;\n"
                         + "    }\n"
-                        + "    for (int midx = 0; midx < data.count; ++midx) {\n"
-                        + "        MyNativeMethod value = gNativeMethods[data.offset + midx];\n"
-                        + "        methods[midx].name = STRING_BY_ID(value.nameIdx);\n"
-                        + "        methods[midx].signature = STRING_BY_ID(value.sigIdx);\n"
-                        + "        methods[midx].fnPtr = value.fnPtr;\n"
+                        + "    if (!nmmp_decode_registration(env, methods, data.offset, data.count)) {\n"
+                        + "        (*env)->DeleteLocalRef(env, clazz);\n"
+                        + "        if (methods != methodBuf) free(methods);\n"
+                        + "        return false;\n"
                         + "    }\n");
         writer.write(
                 "    const jint result = (*env)->RegisterNatives(env, clazz, methods, data.count);\n"
                         + "    const bool artValid = result == JNI_OK && !(*env)->ExceptionCheck(env)\n"
                         + "            && nmmp_register_sensitive(env, clazz, methods, data.offset, data.count);\n"
+                        + "    nmmp_release_registration(methods, data.count);\n"
                         + "    (*env)->DeleteLocalRef(env, clazz);\n"
                         + "    if (methods != methodBuf) free(methods);\n"
                         + "    return artValid && !(*env)->ExceptionCheck(env);\n"

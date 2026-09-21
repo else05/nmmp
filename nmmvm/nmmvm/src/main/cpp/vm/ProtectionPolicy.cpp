@@ -14,6 +14,7 @@
 #include "VmCodecConfig.h"
 #include "CheckLog.h"
 #include "ProtectionEntryGuard.h"
+#include "ProtectionMarker.h"
 #include "PrivateLoaderState.h"
 
 #include <cerrno>
@@ -501,6 +502,9 @@ static void sample(JNIEnv *env, jobject context) {
         result.reasons |= NMMP_REASON_CALLER_STACK;
     }
     applyArtEvidence(&result);
+    if ((flags & NMMP_POLICY_ENFORCE) && (result.reasons & NMMP_REASON_DEBUG)) {
+        nmmpProtectionMarkerPersist();
+    }
     const bool initialized = __atomic_load_n(&gInitialized, __ATOMIC_ACQUIRE) != 0;
     const bool fullNative = !initialized || evidence.signals || (result.reasons & NMMP_REASON_ART_ENTRY);
     NmmpNativeIntegrityResult native;
@@ -640,6 +644,7 @@ extern "C" bool nmmpProtectionPolicyInitialize(JNIEnv *env, jobject context) {
     NMMP_CHECK_TIMER("StartupInitialize");
     if (env && env->ExceptionCheck()) return false;
     if (nmmpProtectionRecheckMillis() == 0) return false;
+    if (nmmpProtectionMarkerPresent()) return false;
     if (env && env->GetJavaVM(&gJavaVm) != JNI_OK) return false;
     // Capture before trusted image verification; publish only after it passes.
     const uintptr_t entries[NMMP_ENTRY_GUARD_COUNT] = {

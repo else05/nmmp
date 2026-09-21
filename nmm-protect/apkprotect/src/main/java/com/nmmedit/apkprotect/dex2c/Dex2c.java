@@ -22,6 +22,7 @@ import com.nmmedit.apkprotect.dex2c.converter.structs.RegisterNativesCallerClass
 import com.nmmedit.apkprotect.dex2c.converter.structs.ApplicationInitClassDef;
 import com.nmmedit.apkprotect.dex2c.filters.ClassAndMethodFilter;
 import com.nmmedit.apkprotect.dex2c.filters.MethodConversionReporter;
+import com.nmmedit.apkprotect.dex2c.filters.ProguardMappingConfig;
 import com.nmmedit.apkprotect.util.Pair;
 
 import javax.annotation.Nonnull;
@@ -160,6 +161,9 @@ public class Dex2c {
                                       @Nonnull File outDir,
                                       @Nonnull ProtectionContext protectionContext) throws IOException {
         if (!outDir.exists()) outDir.mkdirs();
+        if (filter instanceof ProguardMappingConfig) {
+            ((ProguardMappingConfig) filter).setClassAnalyzer(classAnalyzer);
+        }
         DexConfig config = splitDex(dex, dexFileName, filter, classAnalyzer, outDir);
 
 

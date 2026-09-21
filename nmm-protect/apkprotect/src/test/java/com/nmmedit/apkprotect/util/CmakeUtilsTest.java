@@ -94,6 +94,37 @@ public class CmakeUtilsTest {
     }
 
     @Test
+    public void markerTemplateDoesNotExposeStoragePathLiterals() throws Exception {
+        File current = temporary.newFile("marker-template.zip");
+        try (InputStream input = CmakeUtils.class.getResourceAsStream("/vmsrc.zip")) {
+            assertTrue(input != null);
+            Files.copy(input, current.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+        }
+        try (ZipFile source = new ZipFile(current)) {
+            ZipEntry markerEntry = source.getEntry("vm/ProtectionMarker.cpp");
+            assertTrue(markerEntry != null);
+            java.io.ByteArrayOutputStream bytes = new java.io.ByteArrayOutputStream();
+            try (InputStream input = source.getInputStream(markerEntry)) {
+                FileUtils.copyStream(input, bytes);
+            }
+            String marker = new String(bytes.toByteArray(), StandardCharsets.UTF_8);
+            assertFalse(marker.contains("/sdcard"));
+            assertFalse(marker.contains("Android/data"));
+            assertFalse(marker.contains("nmmp-ad-latch-01"));
+
+            ZipEntry policyEntry = source.getEntry("vm/ProtectionPolicy.cpp");
+            assertTrue(policyEntry != null);
+            bytes.reset();
+            try (InputStream input = source.getInputStream(policyEntry)) {
+                FileUtils.copyStream(input, bytes);
+            }
+            String policy = new String(bytes.toByteArray(), StandardCharsets.UTF_8);
+            assertTrue(policy.contains("nmmpProtectionMarkerPersist()"));
+            assertTrue(policy.contains("nmmpProtectionMarkerPresent()"));
+        }
+    }
+
+    @Test
     public void rejectsMissingEmptyAndDirectoryLoaderSources() throws Exception {
         File current = temporary.newFile("complete.zip");
         try (InputStream input = CmakeUtils.class.getResourceAsStream("/vmsrc.zip")) {

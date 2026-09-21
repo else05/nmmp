@@ -76,12 +76,20 @@ void vmCodecTransform(uint8_t *data,
                       uint32_t size,
                       uint32_t id,
                       uint32_t domain) {
+    vmCodecTransformRange(data, size, id, domain, 0);
+}
+
+extern "C"
+bool vmCodecTransformRange(uint8_t *data, uint32_t size, uint32_t id,
+                           uint32_t domain, uint32_t offset) {
+    if ((!data && size) || size > UINT32_MAX - offset) return false;
     uint64_t seed = 0;
-    if (!vmCodecGetSeed(&seed)) return;
+    if (!vmCodecGetSeed(&seed)) return false;
     for (uint32_t i = 0; i < size; ++i) {
-        data[i] ^= vmCodecKeyByte(seed, id, domain, i);
+        data[i] ^= vmCodecKeyByte(seed, id, domain, offset + i);
     }
     wipe(&seed, sizeof(seed));
+    return true;
 }
 
 extern "C"

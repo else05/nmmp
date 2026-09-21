@@ -27,6 +27,10 @@ void vmCodecTransform(uint8_t *data,
                       uint32_t id,
                       uint32_t domain);
 
+// Decode a bounded slice without materializing the rest of its pool.
+bool vmCodecTransformRange(uint8_t *data, uint32_t size, uint32_t id,
+                           uint32_t domain, uint32_t offset);
+
 bool vmCodecActivate(uint64_t bindingMask);
 
 bool vmCodecIsActivated(void);

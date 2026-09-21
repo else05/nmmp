@@ -14,8 +14,7 @@ typedef struct { u4 nameIdx, sigIdx, entryId; void *fnPtr; } MyNativeMethod;
 static const NativeMethodData gNativeRegisterData[] = {{0, 0, 1}, {0, 0, 9}};
 static const MyNativeMethod gNativeMethods[9] = {{0}};
 #define NMMP_REGISTER_DATA_COUNT 2u
-#define STRING_BY_CLASS_ID(i) "test/Class"
-#define STRING_BY_ID(i) "test"
+static int failDecodeAfter = -1;
 static bool pending, failed, noMemory, missingClass, registrationError, registrationException;
 static int allocations, registrations, lookups;
 static bool missingField, contextException, activationError, emptyContext;
@@ -65,6 +64,22 @@ static void *testMalloc(size_t size) {
 static void testFree(void *pointer) { if (pointer) --allocations; free(pointer); }
 #define malloc testMalloc
 #define free testFree
+#include "VmString.h"
+static char *nmmp_decode_string(JNIEnv *env, u4 index) {
+    (void)env; (void)index;
+    if (failDecodeAfter == 0) { pending = true; return NULL; }
+    if (failDecodeAfter > 0) --failDecodeAfter;
+    size_t *allocation = malloc(sizeof(size_t) + 5);
+    if (!allocation) { pending = true; return NULL; }
+    *allocation = 5;
+    memcpy(allocation + 1, "test", 5);
+    return (char *)(allocation + 1);
+}
+static jclass dvmResolveClass(JNIEnv *env, u4 index) { (void)index; return findClass(env, "test/Class"); }
+static bool nmmp_register_sensitive(JNIEnv *env, jclass clazz, const JNINativeMethod *methods, u4 offset, u4 count) {
+    (void)env; (void)clazz; (void)methods; (void)offset; (void)count; return true;
+}
+#include "registration_strings.inc"
 #include "register.inc"
 #include "bound_register.inc"
 #include "unbound_setup.inc"
@@ -109,6 +124,9 @@ int main(int argc, char **argv) {
     else if (!strcmp(scenario, "pending")) pending = true;
     else if (!strcmp(scenario, "small-ok")) index = 0;
     else if (!strcmp(scenario, "large-ok")) index = 1;
+    else if (!strcmp(scenario, "decode-name")) failDecodeAfter = 0;
+    else if (!strcmp(scenario, "decode-signature")) failDecodeAfter = 1;
+    else if (!strcmp(scenario, "decode-partial")) failDecodeAfter = 5;
     else if (strstr(scenario, "setup-")) {
         missingClass = strstr(scenario, "missing") != NULL;
         registrationError = strstr(scenario, "error") != NULL;

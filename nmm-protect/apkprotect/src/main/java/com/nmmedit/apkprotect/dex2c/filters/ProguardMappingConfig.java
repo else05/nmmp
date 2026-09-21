@@ -10,6 +10,7 @@ import com.google.common.collect.Sets;
 import com.nmmedit.apkprotect.deobfus.MappingProcessor;
 import com.nmmedit.apkprotect.deobfus.MappingReader;
 import com.nmmedit.apkprotect.dex2c.converter.MyMethodUtil;
+import com.nmmedit.apkprotect.dex2c.converter.ClassAnalyzer;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -33,6 +34,31 @@ public class ProguardMappingConfig implements ClassAndMethodFilter, MappingProce
     private final Set<MethodReference> convertedInlineSourceMethods = Sets.newHashSet();
     private final Set<MethodReference> convertedInlineResidualMethods = Sets.newHashSet();
     private final SimpleRules simpleRules;
+    private ClassAnalyzer classAnalyzer;
+    private final Map<String, ClassDef> visitedClasses = Maps.newHashMap();
+    private final Set<MethodReference> convertedCrossClassSources = Sets.newHashSet();
+    private final Set<MethodReference> convertedCrossClassResiduals = Sets.newHashSet();
+
+    public void setClassAnalyzer(ClassAnalyzer classAnalyzer) {
+        this.classAnalyzer = classAnalyzer;
+    }
+
+    private boolean matchesOriginal(MethodReference reference) {
+        if (simpleRules == null) return false;
+        String owner = reference.getDefiningClass();
+        String mappedOwner = oldTypeNewTypeMap.get(owner);
+        String actualOwner = mappedOwner == null ? owner : mappedOwner;
+        ClassDef definition = classAnalyzer == null ? null : classAnalyzer.getClassDef(actualOwner);
+        if (definition == null) definition = visitedClasses.get(actualOwner);
+        List<String> interfaces = new ArrayList<>();
+        String superclass = null;
+        // Mapping alone cannot recover the hierarchy of a removed source class.
+        if (definition != null && owner.equals(getOriginClassType(definition.getType()))) {
+            superclass = getOriginClassType(definition.getSuperclass());
+            for (String type : definition.getInterfaces()) interfaces.add(getOriginClassType(type));
+        }
+        return simpleRules.matchMethod(owner, superclass, interfaces, reference.getName());
+    }
 
     public ProguardMappingConfig(ClassAndMethodFilter filter,
                                  MappingReader mappingReader,
@@ -100,6 +126,7 @@ public class ProguardMappingConfig implements ClassAndMethodFilter, MappingProce
 
     @Override
     public final boolean acceptClass(ClassDef classDef) {
+        visitedClasses.put(classDef.getType(), classDef);
         //先处理上游的过滤规则,如果上游不通过则直接返回不再处理,如果上游通过再处理当前的过滤规则
         if (filter != null && !filter.acceptClass(classDef)) {
             return false;
@@ -114,10 +141,14 @@ public class ProguardMappingConfig implements ClassAndMethodFilter, MappingProce
             ifacs.add(getOriginClassType(ifac));
         }
 
-        return simpleRules != null && simpleRules.matchClass(
+        if (simpleRules != null && simpleRules.matchClass(
                 oldType,
                 getOriginClassType(classDef.getSuperclass()),
-                ifacs);
+                ifacs)) return true;
+        for (Method method : classDef.getMethods()) {
+            if (acceptMethod(method)) return true;
+        }
+        return false;
     }
 
 
@@ -142,14 +173,11 @@ public class ProguardMappingConfig implements ClassAndMethodFilter, MappingProce
 
 
         for (MethodReference reference : oldMethodRefSet) {
-            if (oldType.equals(reference.getDefiningClass())) {
-                if (simpleRules != null && simpleRules.matchMethod(reference.getName())) {
-                    return true;
-                }
-            }
+            if (matchesOriginal(reference)) return true;
         }
 
-        return simpleRules != null && simpleRules.matchMethod(method.getName());
+        return matchesOriginal(new ImmutableMethodReference(oldType, method.getName(),
+                method.getParameterTypes(), method.getReturnType()));
     }
 
     @Override
@@ -161,22 +189,25 @@ public class ProguardMappingConfig implements ClassAndMethodFilter, MappingProce
         if (residualOriginalRef == null) {
             return;
         }
-        final String oldType = getOriginClassType(method.getDefiningClass());
         final ImmutableMethodReference residualRef = new ImmutableMethodReference(
                 method.getDefiningClass(),
                 method.getName(),
                 method.getParameterTypes(),
                 method.getReturnType());
         for (MethodReference originalRef : newMethodRefMap.get(method)) {
-            if (!oldType.equals(originalRef.getDefiningClass())
-                    || residualOriginalRef.equals(originalRef)
-                    || !simpleRules.matchMethod(originalRef.getName())) {
+            if (residualOriginalRef.equals(originalRef) || !matchesOriginal(originalRef)) {
                 continue;
             }
             if (convertedInlineMatches.put(residualRef, originalRef)) {
                 convertedInlineSourceMethods.add(originalRef);
                 convertedInlineResidualMethods.add(residualRef);
-                System.out.printf("[nmmp] R8 inline match: %s => %s%n",
+                boolean crossClass = !residualOriginalRef.getDefiningClass().equals(originalRef.getDefiningClass());
+                if (crossClass) {
+                    convertedCrossClassSources.add(originalRef);
+                    convertedCrossClassResiduals.add(residualRef);
+                }
+                System.out.printf(crossClass ? "[nmmp] R8 cross-class inline match: %s => %s%n"
+                                : "[nmmp] R8 inline match: %s => %s%n",
                         formatMethod(originalRef), formatMethod(residualRef));
             }
         }
@@ -186,6 +217,8 @@ public class ProguardMappingConfig implements ClassAndMethodFilter, MappingProce
     public void printReport() {
         System.out.printf("[nmmp] R8 inline:     source methods=%d, residual methods=%d%n",
                 getInlineSourceMethodCount(), getInlineResidualMethodCount());
+        System.out.printf("[nmmp] R8 cross-class inline: source methods=%d, residual methods=%d%n",
+                convertedCrossClassSources.size(), convertedCrossClassResiduals.size());
     }
 
     int getInlineSourceMethodCount() {

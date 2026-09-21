@@ -38,5 +38,15 @@ int main() {
             NMMP_VM_DOMAIN_CODE);
     if (memcmp(data, plain, sizeof(data)) != 0) return 3;
 
+    // Non-aligned slices must use the original pool offset, not restart the stream.
+    for (uint32_t offset = 0; offset < sizeof(expected); ++offset) {
+        uint8_t slice[sizeof(expected)];
+        uint32_t length = sizeof(expected) - offset;
+        memcpy(slice, expected + offset, length);
+        if (!vmCodecTransformRange(slice, length, UINT32_C(0x10203040), NMMP_VM_DOMAIN_CODE, offset)
+                || memcmp(slice, plain + offset, length)) return 5;
+    }
+    if (vmCodecTransformRange(data, 2, 1, NMMP_VM_DOMAIN_STRING, UINT32_MAX)) return 6;
+
     return 0;
 }

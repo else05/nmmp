@@ -49,6 +49,7 @@ public class ResolverCodeGenerator {
         writer.write("#include \"GlobalCache.h\"\n");
         writer.write("#include \"ConstantPool.h\"\n");
         writer.write("#include \"VmCodec.h\"\n");
+        writer.write("#include \"VmString.h\"\n");
         writer.write("#include \"VmCodecConfig.h\"\n\n");
         writer.write("#include \"Sha256.h\"\n");
         writer.write("#include \"ProtectionManifest.h\"\n\n");
@@ -115,14 +116,12 @@ public class ResolverCodeGenerator {
                 references.getFieldPool().size(), references.getMethodPool().size(), references.getConstantStringPool().size()};
         for (int i = 0; i < names.length; ++i) writer.write("#define " + names[i] + "_COUNT " + counts[i] + "u\n");
         writer.write("static bool nmmp_validate_resolver(void) {\n"
-                + "    for (u4 i=0; i<gStringIds_COUNT; ++i) { u4 off=gStringIds[i].off; if (off>=gStringPoolByteSize || !memchr(gBaseStrPtr+off, 0, gStringPoolByteSize-off)) return false; }\n");
+                + "    for (u4 i=0; i<gStringIds_COUNT; ++i) { u4 off=gStringIds[i].off; if (off>=gStringPoolByteSize || (i && off<=gStringIds[i-1].off)) return false; }\n");
         for (String name : new String[]{"gTypeIds", "gClassIds", "gSignatureIds", "gStringConstantIds"})
             writer.write("    for (u4 i=0; i<" + name + "_COUNT; ++i) if (" + name + "[i].idx>=gStringIds_COUNT) return false;\n");
         writer.write("    if (gTypeIds_COUNT != gClassIds_COUNT) return false;\n"
                 + "    for (u4 i=0; i<gFieldIds_COUNT; ++i) { FieldId f=gFieldIds[i]; if(f.classIdx>=gClassIds_COUNT || f.typeIdx>=gTypeIds_COUNT || f.nameIdx>=gStringIds_COUNT) return false; }\n"
                 + "    for (u4 i=0; i<gMethodIds_COUNT; ++i) { MethodId m=gMethodIds[i]; if(m.classIdx>=gClassIds_COUNT || m.sigIdx>=gSignatureIds_COUNT || m.nameIdx>=gStringIds_COUNT || m.shortyIdx>=gStringIds_COUNT) return false;\n"
-                + "        const char *s=(const char *)gBaseStrPtr+gStringIds[m.shortyIdx].off; if(!*s || !strchr(\"VZBCSIJFDL\", *s)) return false;\n"
-                + "        for (++s; *s; ++s) if(!strchr(\"ZBCSIJFDL\", *s)) return false;\n"
                 + "    }\n    return true;\n}\n");
         writer.write("static bool nmmp_verify_resolver_manifest(const uint8_t expected[32]) {\n"
                 + "    NmmpSha256Context hash; uint8_t digest[32];\n"
@@ -153,19 +152,15 @@ public class ResolverCodeGenerator {
     private void generateResolver(Writer writer) throws IOException {
         writer.write("static pthread_mutex_t gResolverPublishMutex = PTHREAD_MUTEX_INITIALIZER;\n" +
                 "\n" +
-                "static void decodeStringPool(void) {\n" +
+                "static void validateStringPool(void) {\n" +
                 "    if (gStringPoolCodecVersion != NMMP_VM_CODEC_VERSION) return;\n" +
-                "    vmCodecTransform(gBaseStrPtr,\n" +
-                "                     gStringPoolByteSize,\n" +
-                "                     gStringPoolDexId,\n" +
-                "                     NMMP_VM_DOMAIN_STRING);\n" +
                 "    if (vmCodecHash(gBaseStrPtr, gStringPoolByteSize) != gStringPoolHash) return;\n" +
                 "    if (!nmmp_validate_resolver()) return;\n" +
                 "    gStringPoolReady = true;\n" +
                 "}\n" +
                 "\n" +
                 "static bool resolver_init(JNIEnv *env) {\n" +
-                "    int result = pthread_once(&gStringPoolOnce, decodeStringPool);\n" +
+                "    int result = pthread_once(&gStringPoolOnce, validateStringPool);\n" +
                 "    if (result != 0 || !gStringPoolReady) {\n" +
                 "        (*env)->ThrowNew(env, gVm.exInternalError, \"string pool decode failed\");\n" +
                 "        return false;\n" +
@@ -174,13 +169,18 @@ public class ResolverCodeGenerator {
                 "}\n" +
                 "\n" +
                 "#define NMMP_INDEX(_idx, _array) do { if ((u4)(_idx) >= _array##_COUNT) { if (!(*env)->ExceptionCheck(env)) (*env)->ThrowNew(env, gVm.exInternalError, \"Invalid VM reference index\"); return NULL; } } while (0)\n" +
-                "#define STRING_BY_ID(_idx) ((const char *) (gBaseStrPtr + gStringIds[_idx].off))\n" +
+                "static char *nmmp_decode_string(JNIEnv *env, u4 idx) {\n" +
+                "    NMMP_INDEX(idx, gStringIds);\n" +
+                "    u4 off = gStringIds[idx].off;\n" +
+                "    u4 end = idx + 1 < gStringIds_COUNT ? gStringIds[idx + 1].off : gStringPoolByteSize;\n" +
+                "    char *text = off < end && end <= gStringPoolByteSize\n" +
+                "            ? vmStringDecode(gBaseStrPtr + off, end - off, gStringPoolDexId, off) : NULL;\n" +
+                "    if (!text && !(*env)->ExceptionCheck(env))\n" +
+                "        (*env)->ThrowNew(env, gVm.exInternalError, \"string decode failed\");\n" +
+                "    return text;\n" +
+                "}\n" +
                 "\n" +
-                "#define STRING_BY_TYPE_ID(_idx) (STRING_BY_ID(gTypeIds[_idx].idx))\n" +
-                "\n" +
-                "#define STRING_BY_CLASS_ID(_idx) (STRING_BY_ID(gClassIds[_idx].idx))\n" +
-                "\n" +
-                "#define STRING_BY_SIGNATURE_ID(_idx) (STRING_BY_ID(gSignatureIds[_idx].idx))\n" +
+                "static jclass dvmResolveClass(JNIEnv *env, u4 idx);\n" +
                 "\n" +
                 "#define FIND_CLASS_BY_NAME(_className)                          \\\n" +
                 "    clazz = (*env)->FindClass(env, _className);                 \\\n" +
@@ -215,11 +215,13 @@ public class ResolverCodeGenerator {
                 "    NMMP_INDEX(fieldId.nameIdx, gStringIds);\n" +
                 "    NMMP_INDEX(gClassIds[fieldId.classIdx].idx, gStringIds);\n" +
                 "    NMMP_INDEX(gTypeIds[fieldId.typeIdx].idx, gStringIds);\n" +
-                "    jclass clazz;\n" +
-                "    FIND_CLASS_BY_NAME(STRING_BY_CLASS_ID(fieldId.classIdx));\n" +
+                "    NMMP_TEMP_STRING type = nmmp_decode_string(env, gTypeIds[fieldId.typeIdx].idx);\n" +
+                "    if (!type) return NULL;\n" +
+                "    NMMP_TEMP_STRING name = nmmp_decode_string(env, fieldId.nameIdx);\n" +
+                "    if (!name) return NULL;\n" +
+                "    jclass clazz = dvmResolveClass(env, fieldId.classIdx);\n" +
+                "    if (!clazz) return NULL;\n" +
                 "\n" +
-                "    const char *type = STRING_BY_TYPE_ID(fieldId.typeIdx);\n" +
-                "    const char *name = STRING_BY_ID(fieldId.nameIdx);\n" +
                 "    vmField candidate = {\n" +
                 "            .classIdx = fieldId.classIdx,\n" +
                 "            .type = (*type == '[') ? 'L' : *type,\n" +
@@ -260,14 +262,21 @@ public class ResolverCodeGenerator {
                 "    NMMP_INDEX(methodId.shortyIdx, gStringIds);\n" +
                 "    NMMP_INDEX(gClassIds[methodId.classIdx].idx, gStringIds);\n" +
                 "    NMMP_INDEX(gSignatureIds[methodId.sigIdx].idx, gStringIds);\n" +
-                "    jclass clazz;\n" +
-                "    FIND_CLASS_BY_NAME(STRING_BY_CLASS_ID(methodId.classIdx));\n" +
+                "    NMMP_TEMP_STRING name = nmmp_decode_string(env, methodId.nameIdx);\n" +
+                "    if (!name) return NULL;\n" +
+                "    NMMP_TEMP_STRING sig = nmmp_decode_string(env, gSignatureIds[methodId.sigIdx].idx);\n" +
+                "    if (!sig) return NULL;\n" +
+                "    NMMP_TEMP_STRING shorty = nmmp_decode_string(env, methodId.shortyIdx);\n" +
+                "    if (!shorty) return NULL;\n" +
+                "    bool valid = *shorty && strchr(\"VZBCSIJFDL\", *shorty);\n" +
+                "    for (const char *s = shorty + (*shorty != 0); *s; ++s) if (!strchr(\"ZBCSIJFDL\", *s)) valid = false;\n" +
+                "    if (!valid) { (*env)->ThrowNew(env, gVm.exInternalError, \"Invalid method shorty\"); return NULL; }\n" +
+                "    jclass clazz = dvmResolveClass(env, methodId.classIdx);\n" +
+                "    if (!clazz) return NULL;\n" +
                 "\n" +
-                "    const char *name = STRING_BY_ID(methodId.nameIdx);\n" +
-                "    const char *sig = STRING_BY_SIGNATURE_ID(methodId.sigIdx);\n" +
                 "    vmMethod candidate = {\n" +
                 "            .classIdx = methodId.classIdx,\n" +
-                "            .shorty = STRING_BY_ID(methodId.shortyIdx),\n" +
+                "            .shorty = shorty,\n" +
                 "            .methodId = NULL\n" +
                 "    };\n" +
                 "    if (isStatic) {\n" +
@@ -287,6 +296,7 @@ public class ResolverCodeGenerator {
                 "    pthread_mutex_lock(&gResolverPublishMutex);\n" +
                 "    if (!__atomic_load_n(&gMethodReady[idx], __ATOMIC_RELAXED)) {\n" +
                 "        *method = candidate;\n" +
+                "        shorty = NULL; /* Cache only invocation types, never names or full signatures. */\n" +
                 "        __atomic_store_n(&gMethodReady[idx], 1, __ATOMIC_RELEASE);\n" +
                 "    }\n" +
                 "    pthread_mutex_unlock(&gResolverPublishMutex);\n" +
@@ -300,7 +310,10 @@ public class ResolverCodeGenerator {
                 "        return (jstring) (*env)->NewLocalRef(env, gStringConstants[idx]);\n" +
                 "    }\n" +
                 "\n" +
-                "    jstring local = (*env)->NewStringUTF(env, STRING_BY_ID(gStringConstantIds[idx].idx));\n" +
+                "    NMMP_TEMP_STRING text = nmmp_decode_string(env, gStringConstantIds[idx].idx);\n" +
+                "    if (!text) return NULL;\n" +
+                "    jstring local = (*env)->NewStringUTF(env, text);\n" +
+                "    vmStringCleanup(&text);\n" +
                 "    if (local == NULL) return NULL;\n" +
                 "    jstring candidate = (jstring) (*env)->NewGlobalRef(env, local);\n" +
                 "    if (candidate == NULL) {\n" +
@@ -327,7 +340,7 @@ public class ResolverCodeGenerator {
                 "static const char *dvmResolveTypeUtf(JNIEnv *env, u4 idx) {\n" +
                 "    NMMP_INDEX(idx, gTypeIds);\n" +
                 "    NMMP_INDEX(gTypeIds[idx].idx, gStringIds);\n" +
-                "    return STRING_BY_TYPE_ID(idx);\n" +
+                "    return nmmp_decode_string(env, gTypeIds[idx].idx);\n" +
                 "}\n" +
                 "\n" +
                 "static jclass dvmResolveClass(JNIEnv *env, u4 idx) {\n" +
@@ -335,27 +348,46 @@ public class ResolverCodeGenerator {
                 "    NMMP_INDEX(idx, gClassIds);\n" +
                 "    NMMP_INDEX(gTypeIds[idx].idx, gStringIds);\n" +
                 "    NMMP_INDEX(gClassIds[idx].idx, gStringIds);\n" +
-                "    jclass clazz = getCacheClass(env, STRING_BY_TYPE_ID(idx));\n" +
-                "    if (clazz != NULL) {\n" +
-                "        return (jclass) (*env)->NewLocalRef(env, clazz);\n" +
+                "    if (__atomic_load_n(&gClassReady[idx], __ATOMIC_ACQUIRE))\n" +
+                "        return (jclass) (*env)->NewLocalRef(env, gClasses[idx]);\n" +
+                "    NMMP_TEMP_STRING type = nmmp_decode_string(env, gTypeIds[idx].idx);\n" +
+                "    if (!type) return NULL;\n" +
+                "    jclass cached = getCacheClass(env, type);\n" +
+                "    jclass clazz = NULL;\n" +
+                "    if (cached) clazz = (jclass) (*env)->NewLocalRef(env, cached);\n" +
+                "    else {\n" +
+                "        NMMP_TEMP_STRING name = nmmp_decode_string(env, gClassIds[idx].idx);\n" +
+                "        if (!name) return NULL;\n" +
+                "        FIND_CLASS_BY_NAME(name);\n" +
                 "    }\n" +
-                "\n" +
-                "    FIND_CLASS_BY_NAME(STRING_BY_CLASS_ID(idx));\n" +
-                "\n" +
+                "    if (!clazz) return NULL;\n" +
+                "    jclass candidate = (jclass) (*env)->NewGlobalRef(env, clazz);\n" +
+                "    if (!candidate) { (*env)->DeleteLocalRef(env, clazz); return NULL; }\n" +
+                "    pthread_mutex_lock(&gResolverPublishMutex);\n" +
+                "    if (!__atomic_load_n(&gClassReady[idx], __ATOMIC_RELAXED)) {\n" +
+                "        gClasses[idx] = candidate; candidate = NULL;\n" +
+                "        __atomic_store_n(&gClassReady[idx], 1, __ATOMIC_RELEASE);\n" +
+                "    }\n" +
+                "    pthread_mutex_unlock(&gResolverPublishMutex);\n" +
+                "    if (candidate) (*env)->DeleteGlobalRef(env, candidate);\n" +
                 "    return clazz;\n" +
                 "}\n\n");
 
-        //因为类型需要去掉开头的'L'和结尾的';',所以最大最大class名不需要再加1表示字符串结尾
-        writer.write(String.format(
+        // Object descriptors need a temporary class name without 'L' and ';'.
+        writer.write(
                 "static jclass dvmFindClass(JNIEnv *env, const char *type) {\n" +
                         "    jclass clazz = getCacheClass(env, type);\n" +
                         "    if (clazz != NULL) {\n" +
                         "        return (jclass) (*env)->NewLocalRef(env, clazz);\n" +
                         "    }\n" +
                         "    if (*type == 'L') {\n" +
-                        "        char clazzName[%d];\n" +
                         "        size_t len = strlen(type);\n" +
-                        "        strncpy(clazzName, type + 1, len - 2);\n" +
+                        "        if (len < 2 || type[len - 1] != ';') { (*env)->ThrowNew(env, gVm.exInternalError, \"Invalid class descriptor\"); return NULL; }\n" +
+                        "        size_t *allocation = (size_t *)malloc(sizeof(size_t) + len - 1);\n" +
+                        "        if (!allocation) { (*env)->ThrowNew(env, gVm.exInternalError, \"class name allocation failed\"); return NULL; }\n" +
+                        "        *allocation = len - 1;\n" +
+                        "        NMMP_TEMP_STRING clazzName = (char *)(allocation + 1);\n" +
+                        "        memcpy(clazzName, type + 1, len - 2);\n" +
                         "        clazzName[len - 2] = 0;\n" +
                         "\n" +
                         "        FIND_CLASS_BY_NAME(clazzName);\n" +
@@ -366,7 +398,7 @@ public class ResolverCodeGenerator {
                         "    FIND_CLASS_BY_NAME(type);\n" +
                         "\n" +
                         "    return clazz;\n" +
-                        "}\n\n", references.getMaxTypeLen()));
+                        "}\n\n");
         writer.write(
                 "static const vmResolver dvmResolver = {\n" +
                         "        .dvmResolveField = dvmResolveField,\n" +
@@ -375,6 +407,7 @@ public class ResolverCodeGenerator {
                         "        .dvmResolveClass = dvmResolveClass,\n" +
                         "        .dvmFindClass = dvmFindClass,\n" +
                         "        .dvmConstantString = dvmConstantString,\n" +
+                        "        .dvmReleaseTypeUtf = vmStringRelease,\n" +
                         "};\n" +
                         "\n");
     }
@@ -504,7 +537,7 @@ public class ResolverCodeGenerator {
         for (int i = 0; i < strOffsets.size(); ++i) manifestStringOffsets[i] = strOffsets.get(i);
 
         writer.write(String.format(
-                "static u1 gBaseStrPtr[%d] = {\n",
+                "static const u1 gBaseStrPtr[%d] = {\n",
                 Math.max(1, encodedBytes.length)));
         if (encodedBytes.length == 0) {
             writer.write("    0x00,\n");
@@ -528,7 +561,7 @@ public class ResolverCodeGenerator {
                 dexId));
         writer.write(String.format(
                 "static const u4 gStringPoolHash = 0x%08x;\n",
-                MethodCodec.hash(plainBytes)));
+                MethodCodec.hash(encodedBytes)));
         writer.write(String.format(
                 "static const u2 gStringPoolCodecVersion = %d;\n",
                 protectionContext.getCodecVersion()));
@@ -659,6 +692,8 @@ public class ResolverCodeGenerator {
         }
         writer.write("};\n");
         writer.write("//ends class name ids\n\n");
+        writer.write(String.format("static jclass gClasses[%d];\nstatic u1 gClassReady[%d];\n",
+                Math.max(1, references.getClassNamePool().size()), Math.max(1, references.getClassNamePool().size())));
     }
 
     private void generateSignaturePool(Writer writer) throws IOException {

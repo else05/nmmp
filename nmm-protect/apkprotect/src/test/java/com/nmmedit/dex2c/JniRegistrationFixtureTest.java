@@ -43,6 +43,10 @@ public class JniRegistrationFixtureTest {
             assertTrue(matcher.find());
             String callback = matcher.group(1);
             if (!bound) {
+                int helpers = source.indexOf("static void nmmp_release_registration(");
+                assertTrue(helpers >= 0);
+                Files.write(new File(root, "registration_strings.inc").toPath(),
+                        source.substring(helpers, matcher.start()).getBytes(StandardCharsets.UTF_8));
                 Files.write(new File(root, "register.inc").toPath(),
                         function(source, matcher.start()).replace(callback, "fixture_register")
                                 .getBytes(StandardCharsets.UTF_8));

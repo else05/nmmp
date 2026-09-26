@@ -11,6 +11,7 @@ import com.nmmedit.apkprotect.deobfus.MappingProcessor;
 import com.nmmedit.apkprotect.deobfus.MappingReader;
 import com.nmmedit.apkprotect.dex2c.converter.MyMethodUtil;
 import com.nmmedit.apkprotect.dex2c.converter.ClassAnalyzer;
+import org.objectweb.asm.Type;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -28,6 +29,7 @@ public class ProguardMappingConfig implements ClassAndMethodFilter, MappingProce
     private final Map<String, String> newTypeOldTypeMap = Maps.newHashMap();
     private final Map<String, String> oldTypeNewTypeMap = Maps.newHashMap();
     private final List<MethodMapping> methodMappings = new ArrayList<>();
+    private final Map<MethodReference, String> residualSignatures = Maps.newHashMap();
     private final HashMultimap<MethodReference, MethodReference> newMethodRefMap = HashMultimap.create();
     private final Map<MethodReference, MethodReference> newMethodResidualRefMap = Maps.newHashMap();
     private final HashMultimap<MethodReference, MethodReference> convertedInlineMatches = HashMultimap.create();
@@ -67,26 +69,46 @@ public class ProguardMappingConfig implements ClassAndMethodFilter, MappingProce
         this.simpleRules = simpleRules;
         mappingReader.parse(this);
 
-        final Map<MethodGroupKey, List<MethodMapping>> methodGroups = Maps.newLinkedHashMap();
+        for (MethodMapping methodMapping : methodMappings) {
+            if (methodMapping.residualSignature != null) {
+                residualSignatures.put(rawResidualRef(methodMapping), methodMapping.residualSignature);
+            }
+        }
+
+        List<MethodMapping> group = null;
+        MethodGroupKey groupKey = null;
         for (MethodMapping methodMapping : methodMappings) {
             if (methodMapping.hasNewLineRange()) {
-                final MethodGroupKey groupKey = new MethodGroupKey(methodMapping);
-                List<MethodMapping> group = methodGroups.get(groupKey);
-                if (group == null) {
+                final MethodGroupKey nextKey = new MethodGroupKey(methodMapping);
+                if (group == null || !nextKey.equals(groupKey)) {
+                    if (group != null) addMethodGroup(group);
                     group = new ArrayList<>();
-                    methodGroups.put(groupKey, group);
+                    groupKey = nextKey;
                 }
                 group.add(methodMapping);
             } else {
+                if (group != null) {
+                    addMethodGroup(group);
+                    group = null;
+                    groupKey = null;
+                }
                 addMethodMapping(methodMapping, methodMapping);
             }
         }
-        for (List<MethodMapping> group : methodGroups.values()) {
-            final MethodMapping residualMethod = group.get(group.size() - 1);
-            for (MethodMapping originalMethod : group) {
-                addMethodMapping(residualMethod, originalMethod);
-            }
+        if (group != null) addMethodGroup(group);
+    }
+
+    private void addMethodGroup(List<MethodMapping> group) {
+        final MethodMapping residualMethod = group.get(group.size() - 1);
+        for (MethodMapping originalMethod : group) {
+            addMethodMapping(residualMethod, originalMethod);
         }
+    }
+
+    private ImmutableMethodReference rawResidualRef(MethodMapping methodMapping) {
+        return new ImmutableMethodReference(javaType2jvm(methodMapping.newClassName),
+                methodMapping.newMethodName, parseArgs(methodMapping.args),
+                javaType2jvm(methodMapping.returnType));
     }
 
     private void addMethodMapping(MethodMapping residualMethod, MethodMapping originalMethod) {
@@ -97,11 +119,17 @@ public class ProguardMappingConfig implements ClassAndMethodFilter, MappingProce
                 originalArgs,
                 javaType2jvm(originalMethod.returnType));
 
-        final List<String> residualArgs = getNewArgs(parseArgs(residualMethod.args));
+        List<String> residualArgs = getNewArgs(parseArgs(residualMethod.args));
         final String oldRetType = javaType2jvm(residualMethod.returnType);
-        String newRetType = oldTypeNewTypeMap.get(oldRetType);
-        if (newRetType == null) {
-            newRetType = oldRetType;
+        String newRetType = oldTypeNewTypeMap.getOrDefault(oldRetType, oldRetType);
+        final String signature = residualSignatures.get(rawResidualRef(residualMethod));
+        if (signature != null) {
+            final Type[] argumentTypes = Type.getArgumentTypes(signature);
+            residualArgs = new ArrayList<>(argumentTypes.length);
+            for (Type argumentType : argumentTypes) {
+                residualArgs.add(argumentType.getDescriptor());
+            }
+            newRetType = Type.getReturnType(signature).getDescriptor();
         }
         final ImmutableMethodReference newMethodRef = new ImmutableMethodReference(
                 javaType2jvm(residualMethod.newClassName),
@@ -342,6 +370,11 @@ public class ProguardMappingConfig implements ClassAndMethodFilter, MappingProce
         methodMappings.add(mapping);
     }
 
+    @Override
+    public void processMethodResidualSignature(String signature) {
+        methodMappings.get(methodMappings.size() - 1).residualSignature = signature;
+    }
+
     private static final class MethodMapping {
         private final String className;
         private final String methodName;
@@ -351,6 +384,7 @@ public class ProguardMappingConfig implements ClassAndMethodFilter, MappingProce
         private final String returnType;
         private final int newFirstLineNumber;
         private final int newLastLineNumber;
+        private String residualSignature;
 
         private MethodMapping(String className, String methodName,
                               String newClassName, String newMethodName,

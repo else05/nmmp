@@ -28,6 +28,52 @@ import static org.junit.Assert.assertTrue;
 public class ProguardMappingConfigTest {
 
     @Test
+    public void testResidualSignatureKeepsInlineSourcesAndOverloadsSeparate() throws IOException {
+        final String mapping =
+                "example.Loader -> x.A:\n"
+                        + "    0:9:byte[] readBounded(java.io.File,x.Cancel):0:0 -> a\n"
+                        + "      # {\"id\":\"com.android.tools.r8.residualsignature\",\"signature\":\"(Ljava/io/File;Lx/B;)[B\"}\n"
+                        + "    10:12:byte[] example.Loader.readBounded(java.io.File,example.Cancel):42:42 -> a\n"
+                        + "    10:12:byte[] example.Inlined.readBounded(java.io.File,example.Cancel):43:43 -> a\n"
+                        + "    10:12:byte[] readBounded(java.io.File,x.Cancel):0 -> a\n"
+                        + "    0:9:byte[] ignored(java.io.File,x.Other):0:0 -> a\n"
+                        + "      # {\"id\":\"com.android.tools.r8.residualsignature\",\"signature\":\"(Ljava/io/File;Lx/C;)[B\"}\n"
+                        + "    10:12:byte[] ignored(java.io.File,x.Other):42:42 -> a\n"
+                        + "    10:12:byte[] ignored(java.io.File,x.Other):0 -> a\n"
+                        + "example.Cancel -> x.B:\n"
+                        + "example.Other -> x.C:\n";
+        final SimpleRules rules = new SimpleRules();
+        rules.parse(new StringReader("class example.Loader { readBounded; }\n"
+                + "class example.Inlined { readBounded; }"));
+        final ProguardMappingConfig filter = new ProguardMappingConfig(new BasicKeepConfig(),
+                new MappingReader(new ByteArrayInputStream(mapping.getBytes(StandardCharsets.UTF_8))), rules);
+
+        final ImmutableMethod target = new ImmutableMethod("Lx/A;", "a",
+                Arrays.asList(
+                        new ImmutableMethodParameter("Ljava/io/File;", Collections.emptySet(), null),
+                        new ImmutableMethodParameter("Lx/B;", Collections.emptySet(), null)),
+                "[B", AccessFlags.PUBLIC.getValue() | AccessFlags.STATIC.getValue(),
+                Collections.emptySet(), Collections.emptySet(), null);
+        final ImmutableMethod overload = new ImmutableMethod("Lx/A;", "a",
+                Arrays.asList(
+                        new ImmutableMethodParameter("Ljava/io/File;", Collections.emptySet(), null),
+                        new ImmutableMethodParameter("Lx/C;", Collections.emptySet(), null)),
+                "[B", AccessFlags.PUBLIC.getValue() | AccessFlags.STATIC.getValue(),
+                Collections.emptySet(), Collections.emptySet(), null);
+
+        assertTrue(filter.acceptMethod(target));
+        assertFalse(filter.acceptMethod(overload));
+        filter.onMethodConverted(target);
+        assertEquals(2, filter.getInlineSourceMethodCount());
+
+        final String control = mapping.replace("x.Cancel", "example.Cancel")
+                .replace("      # {\"id\":\"com.android.tools.r8.residualsignature\",\"signature\":\"(Ljava/io/File;Lx/B;)[B\"}\n", "");
+        final ProguardMappingConfig controlFilter = new ProguardMappingConfig(new BasicKeepConfig(),
+                new MappingReader(new ByteArrayInputStream(control.getBytes(StandardCharsets.UTF_8))), rules);
+        assertTrue(controlFilter.acceptMethod(target));
+    }
+
+    @Test
     public void testMatchesMethodWithObfuscatedOwner() throws IOException {
         final String mapping =
                 "org.example.Original -> a.b:\n"

@@ -1,5 +1,8 @@
 package com.nmmedit.apkprotect.deobfus;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
@@ -31,20 +34,38 @@ public class MappingReader {
         try (BufferedReader reader = new BufferedReader(getMappingReader())
         ) {
             ClassMapping classMapping = null;
+            boolean previousWasMethod = false;
             String line;
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
                 if (line.startsWith("#")) {
+                    if (previousWasMethod && line.contains("com.android.tools.r8.residualsignature")) {
+                        String signature = null;
+                        try {
+                            JsonObject metadata = JsonParser.parseString(line.substring(1).trim()).getAsJsonObject();
+                            if ("com.android.tools.r8.residualsignature".equals(metadata.get("id").getAsString())) {
+                                signature = metadata.get("signature").getAsString();
+                            }
+                        } catch (RuntimeException ignored) {
+                            // Optional metadata does not prevent parsing the mapping body.
+                        }
+                        if (signature != null && signature.startsWith("(")) {
+                            processor.processMethodResidualSignature(signature);
+                        }
+                    }
                     continue;
                 }
                 if (line.endsWith(":")) {
                     classMapping = processClassMapping(line, processor);
+                    previousWasMethod = false;
                 } else if (classMapping != null) {
-                    processClassMemberMapping(
+                    previousWasMethod = processClassMemberMapping(
                             classMapping.className,
                             classMapping.newClassName,
                             line,
                             processor);
+                } else {
+                    previousWasMethod = false;
                 }
             }
 
@@ -83,7 +104,7 @@ public class MappingReader {
      * Parses the given line with a class member mapping and processes the
      * results with the given mapping processor.
      */
-    private void processClassMemberMapping(String className,
+    private boolean processClassMemberMapping(String className,
                                            String newClassName,
                                            String line,
                                            MappingProcessor mappingProcessor) {
@@ -111,7 +132,7 @@ public class MappingReader {
 
         if (spaceIndex < 0 ||
                 arrowIndex < 0) {
-            return;
+            return false;
         }
 
         // Extract the elements.
@@ -166,8 +187,10 @@ public class MappingReader {
                         newFirstLineNumber,
                         newLastLineNumber,
                         newName);
+                return true;
             }
         }
+        return false;
     }
 
     private static final class ClassMapping {

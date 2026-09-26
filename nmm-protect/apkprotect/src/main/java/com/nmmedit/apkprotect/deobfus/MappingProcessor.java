@@ -55,4 +55,8 @@ public interface MappingProcessor {
                               int newFirstLineNumber,
                               int newLastLineNumber,
                               String newMethodName);
+
+    /** Called when R8 records the final descriptor for the preceding method mapping. */
+    default void processMethodResidualSignature(String signature) {
+    }
 }
